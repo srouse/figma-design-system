@@ -1,0 +1,13 @@
+
+.base {
+  
+}
+
+  .base-prefix {
+    width: 60px;
+    margin-right: 10px;
+  }
+
+  .base-full-name {
+    flex: 1;
+  }
