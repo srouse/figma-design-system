@@ -1,5 +1,5 @@
-import { TokenSetType } from "../../enums";
-import { defaultDesignSystemModel, TokenSet } from "../../types";
+import { TokenSetType } from "../../shared/enums";
+import { defaultDesignSystemModel, TokenSet } from "../../shared/types";
 import baseSatellite from "./base";
 import colorsSatellite from "./colors";
 import componentsSatellite from "./components";
@@ -7,10 +7,12 @@ import effectsSatellite from "./effects";
 import iconsSatellite from "./icons";
 import typographySatellite from "./typography";
 import defaultSatellite from "./default";
+import spacingSatellite from "./spacing";
+import layoutSatellite from "./layout";
+import columnLayoutSatellite from "./columnLayout";
 
 const { widget } = figma;
 const {
-  AutoLayout,
   Text,
   useSyncedState,
   useWidgetId
@@ -46,8 +48,13 @@ export default function satelliteSwitch(tokenset: TokenSet | undefined) {
       return effectsSatellite();
     case TokenSetType.ComponentSet:
       return componentsSatellite();
+    case TokenSetType.Spacing:
+      return spacingSatellite();
+    case TokenSetType.LayoutSet:
+      return layoutSatellite();
+    case TokenSetType.ColumnLayoutSet:
+      return columnLayoutSatellite();
     default:
-      // return <Text>Type Not Found</Text>;
       return defaultSatellite();
   }
 }

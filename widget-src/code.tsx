@@ -1,9 +1,9 @@
 import { 
   defaultDesignSystemModel
-} from "../types";
+} from "../shared/types";
 import {
   MessageTypes
-} from "../enums";
+} from "../shared/enums";
 import designSystem from "./designSystem";
 import modelUpdate, { changeTokenSetType } from "./actions/modelUpdate";
 const { widget } = figma;
@@ -13,7 +13,6 @@ function Widget() {
 
   useEffect(() => {
     figma.ui.onmessage = (message) => {
-      console.log("MESAGE", message);
       if (message.name === MessageTypes.modelUpdate) {
         modelUpdate(message.designSystemModel);
       }else if (message.name === MessageTypes.modelUpdateAndClose) {

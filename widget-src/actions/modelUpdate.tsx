@@ -1,5 +1,5 @@
-import { TokenSetType } from '../../enums';
-import { DesignSystemModel, TokenSet } from '../../types';
+import { TokenSetType } from '../../shared/enums';
+import { DesignSystemModel, TokenSet } from '../../shared/types';
 import { findBaseWidget, findWidget } from '../utils';
 import { triggerBaseRefresh } from './baseActions';
 

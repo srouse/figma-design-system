@@ -1,6 +1,8 @@
-import { TokenSetType } from "../../enums";
-import { defaultDesignSystemModel } from "../../types";
+import { TokenSetType } from "../../shared/enums";
+import { defaultDesignSystemModel } from "../../shared/types";
 import { changeTokenSetType } from "../actions/modelUpdate";
+import { colors } from '../../shared/styles';
+import button from "../components/button";
 
 const { widget } = figma;
 const {
@@ -12,8 +14,6 @@ const {
 
 export default function defaultSatellite() {
 
-  
-
   return (
     <AutoLayout 
       name="base-page"
@@ -22,20 +22,27 @@ export default function defaultSatellite() {
       direction="vertical"
       horizontalAlignItems="center"
       verticalAlignItems="start"
-      spacing={10}>
-      {renderButton('Color Set', TokenSetType.ColorSet)}
-      {renderButton('Typography Set', TokenSetType.TypographySet)}
-      {renderButton('Effects', TokenSetType.EffectSet)}
-      {renderButton('Icons', TokenSetType.IconSet)}
-      {renderButton('Spacing', TokenSetType.Spacing)}
-      {renderButton('Components', TokenSetType.ComponentSet)}
+      spacing={8}>
+      <Text
+        fontSize={12}
+        fill={colors.textColor}>
+        Choose what type of Token set you would like to create.
+      </Text>
+      {button('Color Set', clickTypeButton( TokenSetType.ColorSet ))}
+      {button('Typography Set', clickTypeButton( TokenSetType.TypographySet ))}
+      {button('Effects', clickTypeButton( TokenSetType.EffectSet ))}
+      {button('Icons', clickTypeButton( TokenSetType.IconSet ))}
+      {button('Spacing', clickTypeButton( TokenSetType.Spacing ))}
+      {button('Components', clickTypeButton( TokenSetType.ComponentSet ))}
+      {button('Layouts', clickTypeButton( TokenSetType.LayoutSet ))}
+      {button('Columns Spacing', clickTypeButton( TokenSetType.ColumnLayoutSet ))}
     </AutoLayout>
   );
 }
 
-function renderButton(
-  label: string,
-  tokenSetType: TokenSetType
+// need to return a function so nodeId can be found
+function clickTypeButton(
+  tokensetType: TokenSetType
 ) {
   const nodeId = useWidgetId();
 
@@ -44,31 +51,12 @@ function renderButton(
     defaultDesignSystemModel
   );
 
-  return (
-    <AutoLayout 
-      name="Button Large"
-      width="fill-parent"
-      height={43}
-      direction="horizontal"
-      horizontalAlignItems="center"
-      verticalAlignItems="center"
-      spacing={10}
-      padding={{top: 12,left: 163,bottom: 12,right: 163}}
-      fill="#018ef4"
-      cornerRadius={6}
-      onClick={() => {
-        changeTokenSetType( tokenSetType, nodeId, false, setDesignSystemModel );
-      }}>
-      <Text 
-        name="Label"
-        fontFamily="Inter"
-        fontWeight="semi-bold"
-        fontSize={16}
-        width="hug-contents"
-        height="hug-contents"
-        fill="#ffffff">
-        {label}
-      </Text>
-    </AutoLayout>
-  );
+  return () => {
+    changeTokenSetType(
+      tokensetType,
+      nodeId,
+      false,
+      setDesignSystemModel
+    );
+  }
 }

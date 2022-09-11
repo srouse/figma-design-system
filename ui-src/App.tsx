@@ -1,10 +1,10 @@
 import React, { ChangeEvent } from "react";
 import "./App.css";
-import { DesignSystemModel, State } from '../types';
+import { DesignSystemModel, State } from '../shared/types';
 import { findWidgetTokenset } from '../widget-src/actions/tokensetActions';
-import { MessageTypes, TokenSetType } from "../enums";
+import { MessageTypes, TokenSetType } from "../shared/enums";
 
-import Switch from "./satellites/switch";
+import SwitchUI from "./satellites/switchUI";
 
 export default class App extends React.Component <{}> {
 
@@ -31,9 +31,15 @@ export default class App extends React.Component <{}> {
       name: MessageTypes.modelUpdate,
       designSystemModel,
     } }, "*");
+    // make sure state has latest info...
+    const tokenset = findWidgetTokenset(
+      this.state.nodeId || '', 
+      designSystemModel
+    );
     this.setState({
       ...this.state,
-      designSystemModel
+      designSystemModel,
+      tokenset
     })
   }
 
@@ -50,43 +56,15 @@ export default class App extends React.Component <{}> {
   }
 
   render() {
-
-
     return (
       <div className="App">
         <div id="editor">
-          <Switch 
+          <SwitchUI
             tokenset={this.state.tokenset}
             designSystemModel={this.state.designSystemModel}
             sendToWidget={this.sendToWidget} />
-         {this.state.nodeId}
-         <label>
-            Token Set Type
-            
-            <select
-              name="statue"
-              value={this.state.tokenset?.type}
-              onChange={this.onTokenSetTypeChange}>
-              {Object.keys(TokenSetType).map(tokenSetTypeKey => {
-                if (tokenSetTypeKey === TokenSetType.Base) {
-                  return;
-                }
-                return (
-                  <option
-                    value={tokenSetTypeKey}
-                    key={`tokentset-type-${tokenSetTypeKey}`}>
-                    {tokenSetTypeKey.replace(/([A-Z])/g, ' $1')}
-                  </option>
-                );
-              })}
-            </select>
-          </label>
-          <div onClick={() => {
-            console.log( document.querySelector('Input') );
-          }}>clcik me</div>
         </div>
       </div>
     );
   }
 }
-

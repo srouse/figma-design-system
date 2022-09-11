@@ -1,15 +1,15 @@
-import { TokenSetType } from "../enums";
+import { TokenSetType } from "../shared/enums";
 import {
   defaultDesignSystemModel,
   DesignSystemWidget,
-} from "../types";
+} from "../shared/types";
 import {
   establishBase,
   refreshFromBase,
   triggerBaseRefresh
 } from "./actions/baseActions";
 import { findWidgetTokenset } from "./actions/tokensetActions";
-import header from "./header";
+import header from "./components/header";
 import satelliteSwitch from "./satellites/switch";
 import {
   findBaseWidget,
@@ -75,6 +75,18 @@ export default function designSystem() {
       // con sole.log(`[useEffect: ${nodeId}] not base, stopping`);
       return;
     }
+
+    // BASE ONLY ACTIONS
+
+    /* These events don't seem to work...
+    figma.on("currentpagechange", () => {
+      console.log("currentpagechange");
+    });
+
+    figma.on("selectionchange", () => {
+      console.log("selectionchange");
+    });
+    */
 
     // only update during an active refresh request
     if (thisWidget.getPluginData('doRefresh') === 'yes') {

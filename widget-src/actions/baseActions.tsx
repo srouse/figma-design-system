@@ -1,6 +1,6 @@
 import {
   DesignSystemWidget
-} from "../../types";
+} from "../../shared/types";
 import {
   findAllWidgets,
   findBaseWidget,
@@ -75,10 +75,18 @@ export function establishBase(
 ) {
   const baseWidget = findBaseWidget();
   if (!baseWidget) {
+    const thisWidget = findWidget(widget.nodeId);
+    const newBaseWidget = thisWidget.cloneWidget({});
+    widget.setDesignSystemModel({
+      ...widget.designSystemModel,
+      baseId: newBaseWidget.id
+    });
+    /*
     widget.setDesignSystemModel({
       ...widget.designSystemModel,
       baseId: widget.nodeId
     });
+    */
   }
 }
 
@@ -114,8 +122,10 @@ export function refreshFromBase(
   if (!baseWidget) return;
   baseWidget.setPluginData('doRefresh', 'no');
 
-  console.log(
+  /*
+  con sole.log(
     `[refreshFromBase: ${widget.nodeId}] Base DesignSystemModel`,
     baseWidget.widgetSyncedState.designSystemModel
   );
+  */
 }

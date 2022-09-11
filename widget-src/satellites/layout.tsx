@@ -7,7 +7,7 @@ const {
   useSyncedState
 } = widget;
 
-export default function colorsSatellite() {
+export default function layoutSatellite() {
 
   const [designSystemModel, setDesignSystemModel] = useSyncedState(
     'designSystemModel',
@@ -24,7 +24,7 @@ export default function colorsSatellite() {
       spacing={14}
       padding={{top: 0,left: 0,bottom: 0,right: 0}}
       cornerRadius={10}>
-      <Text>Colors</Text>
+      <Text>Layout</Text>
     </AutoLayout>
   );
 }

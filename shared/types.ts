@@ -21,6 +21,11 @@ export interface TokenSet {
   sortIndex: number
 }
 
+export interface TokenSetCategory {
+  type: TokenSetType,
+  tokensets: TokenSet[]
+}
+
 // DesignSystemWidget
 export interface SetterString {
   (newValue: string | ((currValue: string) => string)): void;

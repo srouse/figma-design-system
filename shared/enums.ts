@@ -11,7 +11,9 @@ export enum TokenSetType {
   TypographySet = 'TypographySet',
   EffectSet = 'EffectSet',
   IconSet = 'IconSet',
-  Spacing = 'Spacing',
   ComponentSet = 'ComponentSet',
+  Spacing = 'Spacing',
+  LayoutSet = 'LayoutSet',
+  ColumnLayoutSet = 'ColumnLayoutSet',
   Undetermined = 'Undetermined'
 }

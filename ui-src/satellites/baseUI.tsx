@@ -1,14 +1,14 @@
 import React from "react";
-import "./base.css";
+import "./baseUI.css";
 import Input from "../components/input";
-import { DesignSystemModel } from "../../types";
+import { DesignSystemModel } from "../../shared/types";
 
 interface BaseProps {
   designSystemModel: DesignSystemModel | undefined,
   sendToWidget: (dsys: DesignSystemModel) => void
 }
 
-export default class Base extends React.Component <BaseProps> {
+export default class BaseUI extends React.Component <BaseProps> {
 
   constructor(props: BaseProps | Readonly<BaseProps>) {
     super(props);
@@ -45,7 +45,6 @@ export default class Base extends React.Component <BaseProps> {
           </div>
           ddd
       </div>
-      
     );
   }
 }

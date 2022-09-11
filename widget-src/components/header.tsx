@@ -1,10 +1,11 @@
-import { TokenSetType } from "../enums";
-import { defaultDesignSystemModel, TokenSet } from "../types";
+import { TokenSetType } from "../../shared/enums";
+import { defaultDesignSystemModel, TokenSet } from "../../shared/types";
 import {
   openEditor,
-  triggerBaseRefresh,
-} from "./actions/baseActions";
-import nodeToImage from "./actions/nodeToImage";
+} from "../actions/baseActions";
+import designSystemClassName from '../../shared/designSystemClassName';
+import { findBaseWidget, findNodeParentPage } from "../utils";
+import { typography } from "../../shared/styles";
 
 const { widget } = figma;
 const {
@@ -37,16 +38,23 @@ export default function header(tokenset: TokenSet | undefined) {
   );
 
   let title = tokenset?.name || 'No Name Found';
-  let subtitle = 'Design System Base';
+  let subtitle = '';
   switch( tokenset?.type ) {
     case TokenSetType.Base:
       title = designSystemModel?.fullName || '';
+      subtitle = 'Design System';
+      break;
+    case TokenSetType.Undetermined:
+      title = designSystemModel?.fullName || '';
+      subtitle = 'Design System';
       break;
     case TokenSetType.ColorSet:
-      subtitle = 'Color Set';
-      break;
     case TokenSetType.TypographySet:
-      subtitle = 'Typography Set';
+    default :
+      subtitle = designSystemClassName(
+        designSystemModel,
+        tokenset,
+      );
       break;
   }
 
@@ -72,14 +80,23 @@ export default function header(tokenset: TokenSet | undefined) {
         cornerRadius={0}>
         <Text 
           name="SCU"
-          fontFamily="Roboto Mono"
+          fontFamily={typography.primaryFont}
           fontWeight="bold"
-          fontSize={16}
-          rotation={-1.5308806722812968e-22}
+          fontSize={15}
           width="hug-contents"
           height="hug-contents"
           fill="#ffffff"
-          onClick={() => { triggerBaseRefresh(); }}>
+          onClick={() => {
+            // focus on base
+            const base = findBaseWidget();
+            if (base) {
+              const basePage = findNodeParentPage(base);
+              if (basePage) {
+                figma.currentPage = basePage;
+              }
+              figma.viewport.scrollAndZoomIntoView([base]);
+            }
+          }}>
           {designSystemModel.prefix?.toUpperCase()}
         </Text>
         <Rectangle 
@@ -98,7 +115,7 @@ export default function header(tokenset: TokenSet | undefined) {
           cornerRadius={0}>
           <Text 
             name="Title"
-            fontFamily="Roboto"
+            fontFamily={typography.primaryFont}
             fontWeight="semi-bold"
             fontSize={14}
             width="fill-parent"
@@ -108,8 +125,8 @@ export default function header(tokenset: TokenSet | undefined) {
           </Text>
           <Text 
             name="Set Type"
-            fontFamily="Roboto"
-            fontWeight="normal"
+            fontFamily={typography.primaryFont}
+            fontWeight="medium"
             fontSize={12}
             width="fill-parent"
             height="hug-contents"
@@ -143,7 +160,7 @@ export default function header(tokenset: TokenSet | undefined) {
         cornerRadius={0}>
         <Text 
           name="name"
-          fontFamily="Roboto"
+          fontFamily={typography.primaryFont}
           fontWeight="normal"
           fontSize={10}
           horizontalAlignText="right"
@@ -159,7 +176,7 @@ export default function header(tokenset: TokenSet | undefined) {
         </Text>
         <Text 
           name="name"
-          fontFamily="Roboto"
+          fontFamily={typography.primaryFont}
           fontWeight="normal"
           fontSize={10}
           horizontalAlignText="right"

@@ -1,5 +1,5 @@
-import { TokenSetType } from "../../enums";
-import { DesignSystemModel, TokenSet, widgetVersion } from "../../types";
+import { TokenSetType } from "../../shared/enums";
+import { DesignSystemModel, TokenSet, widgetVersion } from "../../shared/types";
 import { findAllWidgets, findBaseWidget, findWidget } from "../utils";
 import { findWidgetTokenset } from "./tokensetActions";
 
