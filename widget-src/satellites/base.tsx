@@ -6,10 +6,10 @@ import {
   defaultDesignSystemModel,
   DesignSystemModel,
   TokenSet,
-  TokenSetCategory
-} from "../../shared/types";
+  TokenSetCategory,
+  TokenSetType
+} from "../../shared/types/types";
 import designSystemClassName from '../../shared/designSystemClassName';
-import { TokenSetType } from "../../shared/enums";
 import tokensetTypeToName from '../../shared/tokensetTypeToName';
 import {
   findNodeParentPage,
@@ -42,7 +42,7 @@ export default function baseSatellite() {
       verticalAlignItems="start"
       spacing={26}>
       {renderWidgetList(designSystemModel)}
-      {button('Refresh', () => triggerBaseRefresh())}
+      {button('Refresh All', () => triggerBaseRefresh())}
     </AutoLayout>
   );
 }

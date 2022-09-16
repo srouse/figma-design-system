@@ -1,8 +1,12 @@
 import React, { ChangeEvent } from "react";
 import "./App.css";
-import { DesignSystemModel, State } from '../shared/types';
+import {
+  DesignSystemModel,
+  State,
+  MessageTypes,
+  TokenSetType
+} from '../shared/types/types';
 import { findWidgetTokenset } from '../widget-src/actions/tokensetActions';
-import { MessageTypes, TokenSetType } from "../shared/enums";
 
 import SwitchUI from "./satellites/switchUI";
 
@@ -30,7 +34,9 @@ export default class App extends React.Component <{}> {
     parent?.postMessage?.({ pluginMessage: {
       name: MessageTypes.modelUpdate,
       designSystemModel,
+      tokenset: this.state.tokenset
     } }, "*");
+
     // make sure state has latest info...
     const tokenset = findWidgetTokenset(
       this.state.nodeId || '', 

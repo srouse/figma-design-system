@@ -1,4 +1,4 @@
-import { DesignSystemModel } from "../../shared/types";
+import { DesignSystemModel } from "../../shared/types/types";
 
 export function findWidgetTokenset(
   nodeId: string,

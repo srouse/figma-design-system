@@ -1,4 +1,4 @@
-import { defaultDesignSystemModel } from "../../shared/types";
+import { defaultDesignSystemModel } from "../../shared/types/types";
 
 const { widget } = figma;
 const {

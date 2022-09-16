@@ -1,7 +1,7 @@
 import React from "react";
 import "./baseUI.css";
 import Input from "../components/input";
-import { DesignSystemModel } from "../../shared/types";
+import { DesignSystemModel } from "../../shared/types/types";
 
 interface BaseProps {
   designSystemModel: DesignSystemModel | undefined,

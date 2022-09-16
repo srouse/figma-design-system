@@ -1,4 +1,4 @@
-import { TokenSet, TokenSetCategory } from "../shared/types";
+import { TokenSet, TokenSetCategory } from "../shared/types/types";
 
 figma.skipInvisibleInstanceChildren = true;
 

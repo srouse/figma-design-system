@@ -1,8 +1,8 @@
-import { TokenSetType } from "../shared/enums";
 import {
   defaultDesignSystemModel,
   DesignSystemWidget,
-} from "../shared/types";
+  TokenSetType,
+} from "../shared/types/types";
 import {
   establishBase,
   refreshFromBase,
@@ -76,8 +76,7 @@ export default function designSystem() {
       return;
     }
 
-    // BASE ONLY ACTIONS
-
+    // ===== BASE ONLY ACTIONS ==========
     /* These events don't seem to work...
     figma.on("currentpagechange", () => {
       console.log("currentpagechange");
@@ -89,7 +88,7 @@ export default function designSystem() {
     */
 
     // only update during an active refresh request
-    if (thisWidget.getPluginData('doRefresh') === 'yes') {
+    if (thisWidget.getPluginData('doRefresh') !== 'no') {
       // con sole.log(`[useEffect: ${nodeId}] refreshFromBase`);
       refreshFromBase(widget);
       return;

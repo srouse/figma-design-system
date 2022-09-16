@@ -1,16 +1,24 @@
-import { TokenSetType } from '../../shared/enums';
-import { DesignSystemModel, TokenSet } from '../../shared/types';
+import {
+  DesignSystemModel,
+  TokenSet,
+  TokenSetType
+} from '../../shared/types/types';
 import { findBaseWidget, findWidget } from '../utils';
 import { triggerBaseRefresh } from './baseActions';
 
-export default function modelUpdate(designSystemModel: DesignSystemModel) {
+export default function modelUpdate(
+  designSystemModel: DesignSystemModel,
+  tokenset?: TokenSet,
+) {
   const baseWidget = findBaseWidget();
   if (baseWidget) {
     baseWidget.setWidgetSyncedState({
       ...baseWidget.widgetSyncedState,
       designSystemModel,
     });
-    triggerBaseRefresh();
+    triggerBaseRefresh(
+      tokenset
+    );
   }
 }
 

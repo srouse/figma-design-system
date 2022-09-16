@@ -1,9 +1,6 @@
 import { 
-  defaultDesignSystemModel
-} from "../shared/types";
-import {
-  MessageTypes
-} from "../shared/enums";
+  MessageTypes,
+} from "../shared/types/types";
 import designSystem from "./designSystem";
 import modelUpdate, { changeTokenSetType } from "./actions/modelUpdate";
 const { widget } = figma;
@@ -14,7 +11,10 @@ function Widget() {
   useEffect(() => {
     figma.ui.onmessage = (message) => {
       if (message.name === MessageTypes.modelUpdate) {
-        modelUpdate(message.designSystemModel);
+        modelUpdate(
+          message.designSystemModel,
+          message.tokenset
+        );
       }else if (message.name === MessageTypes.modelUpdateAndClose) {
         // setDesignSystemModel(message.designSystemModel);
         figma.closePlugin();
@@ -27,11 +27,6 @@ function Widget() {
       }
     }
   })
-
-  const [designSystemModel, setDesignSystemModel] = useSyncedState(
-    'designSystemModel',
-    defaultDesignSystemModel
-  );
 
   return designSystem();
 }

@@ -1,6 +1,5 @@
 import React from "react";
-import { TokenSetType } from "../../shared/enums";
-import { DesignSystemModel, TokenSet } from "../../shared/types";
+import { DesignSystemModel, TokenSet, TokenSetType } from "../../shared/types/types";
 import BaseUI from "./baseUI";
 import ColorsUI from "./colorsUI";
 import ColumnLayoutUI from "./columnLayoutUI";

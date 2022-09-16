@@ -1,7 +1,7 @@
 import React from "react";
-import { DesignSystemModel, TokenSet } from "../../shared/types";
+import { DesignSystemModel, TokenSet } from "../../shared/types/types";
 import "./spacingUI.css";
-import SatelliteHeaderUI from "./satelliteHeaderUI";
+import SatelliteHeaderUI from "../components/satelliteHeaderUI";
 
 interface SpacingUIProps {
   tokenset: TokenSet | undefined,

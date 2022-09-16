@@ -1,5 +1,4 @@
-import { TokenSetType } from "../../shared/enums";
-import { defaultDesignSystemModel } from "../../shared/types";
+import { defaultDesignSystemModel, TokenSetType } from "../../shared/types/types";
 import { changeTokenSetType } from "../actions/modelUpdate";
 import { colors } from '../../shared/styles';
 import button from "../components/button";

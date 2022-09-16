@@ -1,7 +1,7 @@
-import { TokenSetType } from './enums';
+import { TokenSetType } from './types/types';
 import {
   TokenSet, TokenSetCategory
-} from './types';
+} from './types/types';
 
 export default function tokensetTypeToName(
   tokenset: TokenSet | TokenSetCategory) {

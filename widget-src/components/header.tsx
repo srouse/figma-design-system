@@ -1,11 +1,14 @@
-import { TokenSetType } from "../../shared/enums";
-import { defaultDesignSystemModel, TokenSet } from "../../shared/types";
+import {
+  defaultDesignSystemModel,
+  TokenSet,
+  TokenSetType
+} from "../../shared/types/types";
 import {
   openEditor,
 } from "../actions/baseActions";
 import designSystemClassName from '../../shared/designSystemClassName';
 import { findBaseWidget, findNodeParentPage } from "../utils";
-import { typography } from "../../shared/styles";
+import { colors, typography } from "../../shared/styles";
 
 const { widget } = figma;
 const {
@@ -30,6 +33,11 @@ export default function header(tokenset: TokenSet | undefined) {
   const [designSystemModel, setDesignSystemModel] = useSyncedState(
     'designSystemModel',
     defaultDesignSystemModel
+  );
+
+  const [touch, setTouch] = useSyncedState(
+    'touch',
+    0
   );
 
   const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
@@ -58,6 +66,8 @@ export default function header(tokenset: TokenSet | undefined) {
       break;
   }
 
+  title = `${title} | ${touch}`;
+
   return (
     <AutoLayout 
       name="token-set-header"
@@ -68,7 +78,7 @@ export default function header(tokenset: TokenSet | undefined) {
       verticalAlignItems="center"
       spacing={9}
       padding={{top: 16,left: 20,bottom: 16,right: 20}}
-      fill={isWindowUIOpen ? "#028EF5" : "#1e1e1e"}>
+      fill={isWindowUIOpen ? colors.primary : colors.headerBG}>
       <AutoLayout 
         name="Header Titles"
         width="fill-parent"
@@ -76,16 +86,14 @@ export default function header(tokenset: TokenSet | undefined) {
         direction="horizontal"
         horizontalAlignItems="start"
         verticalAlignItems="center"
-        spacing={12}
+        spacing={8}
         cornerRadius={0}>
-        <Text 
-          name="SCU"
-          fontFamily={typography.primaryFont}
-          fontWeight="bold"
-          fontSize={15}
-          width="hug-contents"
-          height="hug-contents"
-          fill="#ffffff"
+        <AutoLayout
+          padding={6}
+          cornerRadius={4}
+          hoverStyle={{
+            fill: isWindowUIOpen ? colors.hoverColorLight : colors.hoverColorDark
+          }}
           onClick={() => {
             // focus on base
             const base = findBaseWidget();
@@ -97,8 +105,17 @@ export default function header(tokenset: TokenSet | undefined) {
               figma.viewport.scrollAndZoomIntoView([base]);
             }
           }}>
-          {designSystemModel.prefix?.toUpperCase()}
-        </Text>
+          <Text 
+            name="SCU"
+            fontFamily={typography.primaryFont}
+            fontWeight="bold"
+            fontSize={15}
+            width="hug-contents"
+            height="hug-contents"
+            fill="#ffffff">
+            {designSystemModel.prefix?.toUpperCase()}
+          </Text>
+        </AutoLayout>
         <Rectangle 
           name="line"
           width={2}
@@ -112,7 +129,8 @@ export default function header(tokenset: TokenSet | undefined) {
           direction="vertical"
           horizontalAlignItems="start"
           verticalAlignItems="start"
-          cornerRadius={0}>
+          cornerRadius={0}
+          padding={{left: 4}}>
           <Text 
             name="Title"
             fontFamily={typography.primaryFont}
@@ -134,59 +152,23 @@ export default function header(tokenset: TokenSet | undefined) {
             {subtitle}
           </Text>
         </AutoLayout>
-        <SVG
-          src={buttonSvgSrc}
+        <AutoLayout
+          padding={6}
+          cornerRadius={4}
+          hoverStyle={{
+            fill: isWindowUIOpen ? colors.hoverColorLight : colors.hoverColorDark
+          }}
           onClick={async () => {
             // nodeToImage();
             setIsWindowUIOpen(true);
             return openEditor(nodeId);
-          }}
-        />
+          }}>
+          <SVG
+            src={buttonSvgSrc}
+          />
+        </AutoLayout>
       </AutoLayout>
     </AutoLayout>
 
   );
-
-  /*
-  return (
-    <AutoLayout 
-        name="properties"
-        width="fill-parent"
-        height="hug-contents"
-        direction="vertical"
-        horizontalAlignItems="start"
-        verticalAlignItems="start"
-        padding={{top: 10,left: 30,bottom: 10,right: 30}}
-        cornerRadius={0}>
-        <Text 
-          name="name"
-          fontFamily={typography.primaryFont}
-          fontWeight="normal"
-          fontSize={10}
-          horizontalAlignText="right"
-          width="hug-contents"
-          height="hug-contents"
-          fill="#757575"
-          onClick={async () => {
-            return openEditor(nodeId);
-          }}>
-          node id: {`${nodeId}`}
-          &nbsp;base:{`${designSystemModel.baseId}`}
-          &nbsp;touch: {`${touch}`}
-        </Text>
-        <Text 
-          name="name"
-          fontFamily={typography.primaryFont}
-          fontWeight="normal"
-          fontSize={10}
-          horizontalAlignText="right"
-          width="hug-contents"
-          height="hug-contents"
-          fill="#757575"
-          onClick={() => { triggerBaseRefresh(); }}>
-          Run
-        </Text>
-      </AutoLayout>
-  );
-  */
 }

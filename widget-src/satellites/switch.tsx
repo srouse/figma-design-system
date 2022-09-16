@@ -1,5 +1,8 @@
-import { TokenSetType } from "../../shared/enums";
-import { defaultDesignSystemModel, TokenSet } from "../../shared/types";
+import {
+  defaultDesignSystemModel,
+  TokenSet,
+  TokenSetType
+} from "../../shared/types/types";
 import baseSatellite from "./base";
 import colorsSatellite from "./colors";
 import componentsSatellite from "./components";

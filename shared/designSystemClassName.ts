@@ -1,7 +1,7 @@
 import {
   DesignSystemModel,
   TokenSet
-} from './types';
+} from './types/types';
 import toKebabCase from './toKebobCase';
 
 export default function designSystemClassName(

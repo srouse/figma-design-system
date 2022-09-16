@@ -1,6 +1,6 @@
 import {
-  DesignSystemWidget
-} from "../../shared/types";
+  DesignSystemWidget, TokenSet
+} from "../../shared/types/types";
 import {
   findAllWidgets,
   findBaseWidget,
@@ -31,8 +31,6 @@ export async function openEditor(
     });
   }
 
-  // setHasOpenWindowUI(true);
-
   // open ui via a promise so state stays open
   return new Promise((resolve) => {
     figma.showUI(
@@ -46,12 +44,17 @@ export async function openEditor(
   });
 }
 
-export function triggerBaseRefresh() {
+export function triggerBaseRefresh(
+  tokensetTrigger?: TokenSet
+) {
   let baseWidget = findBaseWidget();
   if (!baseWidget) return;
   // plugin data doesn't trigger a refresh, so this tells 
   // base to go ahead and redo everything
-  baseWidget.setPluginData('doRefresh', 'yes');
+  baseWidget.setPluginData(
+    'doRefresh',
+    tokensetTrigger ? tokensetTrigger.nodeId : 'yes'
+  );
 
   // take this time to make the design system model coherent
   // relative to widgets
@@ -60,7 +63,10 @@ export function triggerBaseRefresh() {
   );
   baseWidget = findBaseWidget();
   if (!baseWidget) return;
-  baseWidget.setPluginData('doRefresh', 'yes');
+  baseWidget.setPluginData(
+    'doRefresh',
+    tokensetTrigger ? tokensetTrigger.nodeId : 'yes'
+  );
 
   // touch state to trigger refresh
   baseWidget.setWidgetSyncedState({
@@ -75,18 +81,19 @@ export function establishBase(
 ) {
   const baseWidget = findBaseWidget();
   if (!baseWidget) {
+    /* !!!!KEEP!!! not working smoothly enough...
     const thisWidget = findWidget(widget.nodeId);
     const newBaseWidget = thisWidget.cloneWidget({});
     widget.setDesignSystemModel({
       ...widget.designSystemModel,
       baseId: newBaseWidget.id
     });
-    /*
+    */
+    
     widget.setDesignSystemModel({
       ...widget.designSystemModel,
       baseId: widget.nodeId
     });
-    */
   }
 }
 
@@ -104,19 +111,31 @@ export function refreshFromBase(
 
   // walk through all satellites and update their model
   const baseDSysModel = baseWidget.widgetSyncedState.designSystemModel;
+  let totalProcess = 0;
+  const refreshNodeId = baseWidget.getPluginData('doRefresh');
   allWidgets.map(satelliteWidget => {
     // don't want to operate on base widget
     if (satelliteWidget === baseWidget) {
       return;
     }
 
+    if (refreshNodeId !== 'yes') {
+      if (satelliteWidget.id !== refreshNodeId) {
+        return;
+      }
+    }
+
     // update all satellites to base design system model
+    totalProcess++;
     satelliteWidget.setWidgetSyncedState({
       ...satelliteWidget.widgetSyncedState,
       designSystemModel: {...baseDSysModel},
       touch: satelliteWidget.widgetSyncedState.touch + 1
     });
   });
+
+  // cons ole.log(`[refreshFromBase: ${widget.nodeId}] 
+  //    refreshed ${totalProcess} widgets`);
 
   baseWidget = findBaseWidget();
   if (!baseWidget) return;

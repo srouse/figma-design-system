@@ -1,8 +1,7 @@
 import React from "react";
-import { DesignSystemModel, TokenSet } from "../../shared/types";
-import Input from "../components/input";
+import { DesignSystemModel, TokenSet } from "../../shared/types/types";
+import Input from "./input";
 import "./satelliteHeaderUI.css";
-import toKebabCase from '../../shared/toKebobCase';
 import designSystemClassName from '../../shared/designSystemClassName';
 
 interface SatelliteHeaderProps {
