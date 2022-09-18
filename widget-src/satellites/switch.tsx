@@ -1,5 +1,6 @@
 import {
-  defaultDesignSystemModel,
+  defaultDesignTokensModel,
+  defaultTokenGroup,
   TokenSet,
   TokenSetType
 } from "../../shared/types/types";
@@ -13,49 +14,37 @@ import defaultSatellite from "./default";
 import spacingSatellite from "./spacing";
 import layoutSatellite from "./layout";
 import columnLayoutSatellite from "./columnLayout";
+import { DSysGroupType } from "../../shared/types/designSystemTypes";
 
 const { widget } = figma;
 const {
-  Text,
   useSyncedState,
-  useWidgetId
 } = widget;
 
 export default function satelliteSwitch(tokenset: TokenSet | undefined) {
-  const nodeId = useWidgetId();
-
-  const [designSystemModel, setDesignSystemModel] = useSyncedState(
-    'designSystemModel',
-    defaultDesignSystemModel
+  const [tokenGroup, setTokenGroup] = useSyncedState(
+    'tokenGroup',
+    defaultTokenGroup
   );
 
-  if (!tokenset) {
-    return (
-      <Text
-        fill="#aaaaaa">
-        processing
-      </Text>
-    );
-  }
-
-  switch (tokenset.type) {
-    case TokenSetType.Base:
+  switch (tokenGroup.type) {
+    case DSysGroupType.Base:
       return baseSatellite();
-    case TokenSetType.ColorSet:
+    case DSysGroupType.ColorSet:
       return colorsSatellite();
-    case TokenSetType.TypographySet:
+    case DSysGroupType.TypographySet:
       return typographySatellite();
-    case TokenSetType.IconSet:
+    case DSysGroupType.IconSet:
       return iconsSatellite();
-    case TokenSetType.EffectSet:
+    case DSysGroupType.EffectSet:
       return effectsSatellite();
-    case TokenSetType.ComponentSet:
+    case DSysGroupType.ComponentSet:
       return componentsSatellite();
-    case TokenSetType.Spacing:
+    case DSysGroupType.Spacing:
       return spacingSatellite();
-    case TokenSetType.LayoutSet:
+    case DSysGroupType.LayoutSet:
       return layoutSatellite();
-    case TokenSetType.ColumnLayoutSet:
+    case DSysGroupType.ColumnLayoutSet:
       return columnLayoutSatellite();
     default:
       return defaultSatellite();

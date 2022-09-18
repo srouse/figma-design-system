@@ -1,5 +1,5 @@
 import {
-  DesignSystemModel,
+  DesignTokensModel,
   TokenSet,
   TokenSetType,
   widgetVersion
@@ -7,14 +7,14 @@ import {
 import { findAllWidgets, findBaseWidget, findWidget } from "../utils";
 import { findWidgetTokenset } from "./tokensetActions";
 
-export default function normalizeDesignSystemModel(
-  designSystemModel: DesignSystemModel
+export default function normalizeDesignTokensModel(
+  designTokensModel: DesignTokensModel
 ) {
-  const newDSysModel = {...designSystemModel};
+  const newDSysModel = {...designTokensModel};
   // refreshWidgetsVersion(newDSysModel);
 
   const baseWidget = findBaseWidget();
-  if (!baseWidget) return designSystemModel;
+  if (!baseWidget) return designTokensModel;
 
   const allWidgets = findAllWidgets();
 
@@ -28,7 +28,6 @@ export default function normalizeDesignSystemModel(
         type: (baseWidget === satelliteWidget) ?
           TokenSetType.Base : TokenSetType.Undetermined,
         nodeId: satelliteWidget.id,
-        sortIndex: newDSysModel.tokensets.length
       })
     }
   });
@@ -49,9 +48,10 @@ export default function normalizeDesignSystemModel(
   return newDSysModel;
 }
 
+// DONT DELETE....
 // For when versioning becomes an issue...
 function refreshWidgetsVersion(
-  designSystemModel: DesignSystemModel
+  designTokensModel: DesignTokensModel
 ) {
   const baseWidget = findBaseWidget();
   if (!baseWidget) return;
@@ -60,7 +60,7 @@ function refreshWidgetsVersion(
   allWidgets.map(satelliteWidget => {
     const widgetTokenset = findWidgetTokenset(
       satelliteWidget.id,
-      designSystemModel
+      designTokensModel
     );
     if (!widgetTokenset) return;
     const newWidget = satelliteWidget.cloneWidget({});
@@ -71,8 +71,8 @@ function refreshWidgetsVersion(
     newWidget.x = satelliteWidget.x;
     newWidget.y = satelliteWidget.y;
     widgetTokenset.nodeId = newWidget.id;
-    if (satelliteWidget.id === designSystemModel.baseId) {
-      designSystemModel.baseId = newWidget.id;
+    if (satelliteWidget.id === designTokensModel.baseId) {
+      designTokensModel.baseId = newWidget.id;
     }
     satelliteWidget.remove();
   });
@@ -80,6 +80,6 @@ function refreshWidgetsVersion(
   // now update everyone's widget data...
   allWidgets = findAllWidgets();
   allWidgets.map(satelliteWidget => {
-    satelliteWidget.setWidgetSyncedState({designSystemModel});
+    satelliteWidget.setWidgetSyncedState({designTokensModel});
   });
 }

@@ -1,3 +1,4 @@
+import { DSysGroupType } from "../shared/types/designSystemTypes";
 import { TokenSet, TokenSetCategory } from "../shared/types/types";
 
 figma.skipInvisibleInstanceChildren = true;
@@ -23,10 +24,19 @@ export function findWidget(nodeId: string) {
 }
 
 export function findBaseWidget() {
+  return findFirstWidgetOfType(DSysGroupType.Base);
+}
+
+export function findUndeterminedWidget() {
+  return findFirstWidgetOfType(DSysGroupType.Undetermined);
+}
+
+export function findFirstWidgetOfType(type: DSysGroupType) {
   const allWidgets = _findAllWidgets();
   const baseWidget = allWidgets.find(widget => {
-    const widgetModelBaseId = widget.widgetSyncedState.designSystemModel?.baseId;
-    if ( widgetModelBaseId && widgetModelBaseId === widget.id ) {
+    const tokenGroup = widget.widgetSyncedState.tokenGroup;
+    // if (!tokenGroup) widget.remove();// clean up stragglers
+    if (tokenGroup?.type === type) {
       return widget;
     }
     return false;

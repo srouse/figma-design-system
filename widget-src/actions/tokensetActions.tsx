@@ -1,15 +1,15 @@
-import { DesignSystemModel } from "../../shared/types/types";
+import { DesignTokensModel } from "../../shared/types/types";
 
 export function findWidgetTokenset(
   nodeId: string,
-  designSystemModel: DesignSystemModel
+  designTokensModel: DesignTokensModel
 ) {
-  if (!designSystemModel) return;
+  if (!designTokensModel) return;
 
-  if (!designSystemModel.tokensets) {
-    designSystemModel.tokensets = [];
+  if (!designTokensModel.tokensets) {
+    designTokensModel.tokensets = [];
   }
-  const tokenset = designSystemModel.tokensets.find(tokenset => {
+  const tokenset = designTokensModel.tokensets.find(tokenset => {
     return tokenset.nodeId === nodeId;
   })
   return tokenset;

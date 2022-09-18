@@ -1,12 +1,12 @@
 import React from "react";
-import { DesignSystemModel, TokenSet } from "../../shared/types/types";
+import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import "./iconsUI.css";
 import SatelliteHeaderUI from "../components/satelliteHeaderUI";
 
 interface IconsUIProps {
   tokenset: TokenSet | undefined,
-  designSystemModel: DesignSystemModel | undefined,
-  sendToWidget: (dsys: DesignSystemModel) => void
+  designTokensModel: DesignTokensModel | undefined,
+  sendToWidget: (dsys: DesignTokensModel) => void
 }
 
 export default class IconsUI extends React.Component <IconsUIProps> {
@@ -17,10 +17,10 @@ export default class IconsUI extends React.Component <IconsUIProps> {
 
   render() { 
     return (
-      <div>
+      <div className="satellite">
         <SatelliteHeaderUI
           tokenset={this.props.tokenset}
-          designSystemModel={this.props.designSystemModel}
+          designTokensModel={this.props.designTokensModel}
           sendToWidget={this.props.sendToWidget}
            />
         Icons

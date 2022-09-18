@@ -50,7 +50,6 @@ export interface DSysSheet {
   undetermined?: DSysUndeterminedGroup,
 };
 
-
 // ALL THE GROUPS
 export enum DSysGroupType {
   Base = 'Base',
@@ -109,7 +108,6 @@ export type DSysUndeterminedGroup = DSysGroup<
   DSysGroupType.Undetermined,
   DSysUndeterminedTokenset
 >;
-
 
 // ---------- GROUP -----------------------
 interface DSysGroupExtensions<GroupType> {

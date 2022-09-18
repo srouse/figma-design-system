@@ -1,12 +1,12 @@
 import React from "react";
-import { DesignSystemModel, TokenSet } from "../../shared/types/types";
+import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import "./layoutUI.css";
 import SatelliteHeaderUI from "../components/satelliteHeaderUI";
 
 interface LayoutUIProps {
   tokenset: TokenSet | undefined,
-  designSystemModel: DesignSystemModel | undefined,
-  sendToWidget: (dsys: DesignSystemModel) => void
+  designTokensModel: DesignTokensModel | undefined,
+  sendToWidget: (dsys: DesignTokensModel) => void
 }
 
 export default class LayoutUI extends React.Component <LayoutUIProps> {
@@ -17,10 +17,10 @@ export default class LayoutUI extends React.Component <LayoutUIProps> {
 
   render() { 
     return (
-      <div>
+      <div className="satellite">
         <SatelliteHeaderUI
           tokenset={this.props.tokenset}
-          designSystemModel={this.props.designSystemModel}
+          designTokensModel={this.props.designTokensModel}
           sendToWidget={this.props.sendToWidget}
            />
         layout

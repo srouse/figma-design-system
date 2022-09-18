@@ -1,5 +1,5 @@
 import {
-  DesignSystemModel,
+  DesignTokensModel,
   TokenSet,
   TokenSetType
 } from '../../shared/types/types';
@@ -7,14 +7,14 @@ import { findBaseWidget, findWidget } from '../utils';
 import { triggerBaseRefresh } from './baseActions';
 
 export default function modelUpdate(
-  designSystemModel: DesignSystemModel,
+  designTokensModel: DesignTokensModel,
   tokenset?: TokenSet,
 ) {
   const baseWidget = findBaseWidget();
   if (baseWidget) {
     baseWidget.setWidgetSyncedState({
       ...baseWidget.widgetSyncedState,
-      designSystemModel,
+      designTokensModel,
     });
     triggerBaseRefresh(
       tokenset
@@ -22,19 +22,25 @@ export default function modelUpdate(
   }
 }
 
+
+/*
 export function changeTokenSetType(
-  newTokenSetType: TokenSetType,
+  newTokenGroupType: DSysGroupType,
   nodeId: string,
   fromUI: boolean = false,
-  setDesignSystemModel?: (newValue: DesignSystemModel | ((currValue: DesignSystemModel) => DesignSystemModel)) => void
+  setDesignTokensModel?: 
+    (
+      newValue: DesignTokensModel |
+      ((currValue: DesignTokensModel) => DesignTokensModel)
+    ) => void
 ) {
   const theBase = findBaseWidget();
   if (!theBase) return;
 
-  const newDesignSystemModel = {
-    ...theBase.widgetSyncedState.designSystemModel
+  const newDesignTokensModel = {
+    ...theBase.widgetSyncedState.designTokensModel
   };
-  const newTokensets = newDesignSystemModel.tokensets.map(
+  const newTokensets = newDesignTokensModel.tokensets.map(
     (tokenset : TokenSet) => {
       if (tokenset.nodeId === nodeId) {
         const newTokenset = {...tokenset};
@@ -45,22 +51,23 @@ export function changeTokenSetType(
       }
     }
   );
-  newDesignSystemModel.tokensets = newTokensets;
+  newDesignTokensModel.tokensets = newTokensets;
 
   // setting local state first avoids error:
   // "Error: Scene has diverged from the expected state. figma" 
-  if (setDesignSystemModel) {
-    setDesignSystemModel(newDesignSystemModel);
+  if (setDesignTokensModel) {
+    setDesignTokensModel(newDesignTokensModel);
   }
   
   // centralize change
-  modelUpdate(newDesignSystemModel);
+  modelUpdate(newDesignTokensModel);
 
   // refresh the UI if there is one...
   if (fromUI) {
     figma.ui.postMessage({
       nodeId,
-      designSystemModel: newDesignSystemModel
+      designTokensModel: newDesignTokensModel
     });
   }
 }
+*/

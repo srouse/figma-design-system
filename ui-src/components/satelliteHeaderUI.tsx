@@ -1,13 +1,13 @@
 import React from "react";
-import { DesignSystemModel, TokenSet } from "../../shared/types/types";
+import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import Input from "./input";
 import "./satelliteHeaderUI.css";
 import designSystemClassName from '../../shared/designSystemClassName';
 
 interface SatelliteHeaderProps {
   tokenset: TokenSet | undefined,
-  designSystemModel: DesignSystemModel | undefined,
-  sendToWidget: (dsys: DesignSystemModel) => void
+  designTokensModel: DesignTokensModel | undefined,
+  sendToWidget: (dsys: DesignTokensModel) => void
 }
 
 export default class SatelliteHeaderUI extends React.Component <SatelliteHeaderProps> {
@@ -24,12 +24,12 @@ export default class SatelliteHeaderUI extends React.Component <SatelliteHeaderP
           label="Name" 
           value={this.props.tokenset?.name}
           feedbackValue={designSystemClassName(
-            this.props.designSystemModel,
+            this.props.designTokensModel,
             this.props.tokenset,
           )}
           onChange={(value: string) => {
-            if (this.props.designSystemModel) {
-              const newTokenSets = this.props.designSystemModel?.tokensets.map(
+            if (this.props.designTokensModel) {
+              const newTokenSets = this.props.designTokensModel?.tokensets.map(
                 (tokenSet : TokenSet) => {
                   if (tokenSet.nodeId === this.props.tokenset?.nodeId) {
                     return {
@@ -41,7 +41,7 @@ export default class SatelliteHeaderUI extends React.Component <SatelliteHeaderP
                 }
               )
               this.props.sendToWidget({
-                ...this.props.designSystemModel,
+                ...this.props.designTokensModel,
                 tokensets: newTokenSets || [],
               })
             }

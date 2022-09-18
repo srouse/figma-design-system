@@ -1,11 +1,12 @@
 import React from "react";
 import "./baseUI.css";
 import Input from "../components/input";
-import { DesignSystemModel } from "../../shared/types/types";
+import { DesignTokensModel } from "../../shared/types/types";
+import DTButton from "../components/DTButton";
 
 interface BaseProps {
-  designSystemModel: DesignSystemModel | undefined,
-  sendToWidget: (dsys: DesignSystemModel) => void
+  designTokensModel: DesignTokensModel | undefined,
+  sendToWidget: (dsys: DesignTokensModel) => void
 }
 
 export default class BaseUI extends React.Component <BaseProps> {
@@ -16,16 +17,16 @@ export default class BaseUI extends React.Component <BaseProps> {
 
   render() { 
     return (
-      <div className="base">
+      <div className="base satellite">
         <div className="editor-header">
           <Input
             className="base-prefix"
             label="Prefix" 
-            value={this.props.designSystemModel?.prefix} 
+            value={this.props.designTokensModel?.prefix} 
             onChange={(value: string) => {
-              if (this.props.designSystemModel) {
+              if (this.props.designTokensModel) {
                 this.props.sendToWidget({
-                  ...this.props.designSystemModel,
+                  ...this.props.designTokensModel,
                   prefix: value,
                 })
               }
@@ -33,17 +34,19 @@ export default class BaseUI extends React.Component <BaseProps> {
           <Input
             className="base-full-name"
             label="Full Name" 
-            value={this.props.designSystemModel?.fullName} 
+            value={this.props.designTokensModel?.fullName} 
             onChange={(value: string) => {
-              if (this.props.designSystemModel) {
+              if (this.props.designTokensModel) {
                 this.props.sendToWidget({
-                  ...this.props.designSystemModel,
+                  ...this.props.designTokensModel,
                   fullName: value,
                 })
               }
             }} />
           </div>
-          ddd
+          <DTButton
+            label="click this"
+            onClick={(evt) => console.log(evt)} />
       </div>
     );
   }

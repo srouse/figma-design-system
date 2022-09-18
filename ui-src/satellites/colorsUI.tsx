@@ -1,12 +1,12 @@
 import React from "react";
-import { DesignSystemModel, TokenSet } from "../../shared/types/types";
+import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import "./colorsUI.css";
 import SatelliteHeaderUI from "../components/satelliteHeaderUI";
 
 interface SwitchProps {
   tokenset: TokenSet | undefined,
-  designSystemModel: DesignSystemModel | undefined,
-  sendToWidget: (dsys: DesignSystemModel) => void
+  designTokensModel: DesignTokensModel | undefined,
+  sendToWidget: (dsys: DesignTokensModel) => void
 }
 
 export default class ColorsUI extends React.Component <SwitchProps> {
@@ -20,7 +20,7 @@ export default class ColorsUI extends React.Component <SwitchProps> {
       <div>
         <SatelliteHeaderUI
           tokenset={this.props.tokenset}
-          designSystemModel={this.props.designSystemModel}
+          designTokensModel={this.props.designTokensModel}
           sendToWidget={this.props.sendToWidget}
            />
         colors

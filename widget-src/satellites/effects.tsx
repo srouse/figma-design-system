@@ -1,4 +1,4 @@
-import { defaultDesignSystemModel } from "../../shared/types/types";
+import { defaultDesignTokensModel } from "../../shared/types/types";
 
 const { widget } = figma;
 const {
@@ -9,9 +9,9 @@ const {
 
 export default function effectsSatellite() {
 
-  const [designSystemModel, setDesignSystemModel] = useSyncedState(
-    'designSystemModel',
-    defaultDesignSystemModel
+  const [designTokensModel, setDesignTokensModel] = useSyncedState(
+    'designTokensModel',
+    defaultDesignTokensModel
   );
 
   return (

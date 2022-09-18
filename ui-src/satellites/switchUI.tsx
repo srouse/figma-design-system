@@ -1,5 +1,5 @@
 import React from "react";
-import { DesignSystemModel, TokenSet, TokenSetType } from "../../shared/types/types";
+import { DesignTokensModel, TokenSet, TokenSetType } from "../../shared/types/types";
 import BaseUI from "./baseUI";
 import ColorsUI from "./colorsUI";
 import ColumnLayoutUI from "./columnLayoutUI";
@@ -13,8 +13,8 @@ import TypographyUI from "./typographyUI";
 
 interface SwitchProps {
   tokenset: TokenSet | undefined,
-  designSystemModel: DesignSystemModel | undefined,
-  sendToWidget: (dsys: DesignSystemModel) => void
+  designTokensModel: DesignTokensModel | undefined,
+  sendToWidget: (dsys: DesignTokensModel) => void
 }
 
 export default class SwitchUI extends React.Component <SwitchProps> {
@@ -28,68 +28,66 @@ export default class SwitchUI extends React.Component <SwitchProps> {
       case TokenSetType.Base :
         return (
           <BaseUI
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.ColorSet :
         return (
           <ColorsUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.TypographySet :
         return (
           <TypographyUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.EffectSet :
         return (
           <EffectsUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.IconSet :
         return (
           <IconsUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.ComponentSet :
         return (
           <ComponentsUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.Spacing :
         return (
           <SpacingUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.LayoutSet :
         return (
           <LayoutUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
       case TokenSetType.ColumnLayoutSet :
         return (
           <ColumnLayoutUI
             tokenset={this.props.tokenset}
-            designSystemModel={this.props.designSystemModel}
+            designTokensModel={this.props.designTokensModel}
             sendToWidget={this.props.sendToWidget} />
         );
     }
-
-
     return ( <div>no token type found</div> );
   }
 }

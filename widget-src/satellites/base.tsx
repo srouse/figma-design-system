@@ -3,8 +3,8 @@ import {
   typography
 } from "../../shared/styles";
 import {
-  defaultDesignSystemModel,
-  DesignSystemModel,
+  defaultDesignTokensModel,
+  DesignTokensModel,
   TokenSet,
   TokenSetCategory,
   TokenSetType
@@ -28,9 +28,9 @@ const {
 } = widget;
 
 export default function baseSatellite() {
-  const [designSystemModel, setDesignSystemModel] = useSyncedState(
-    'designSystemModel',
-    defaultDesignSystemModel
+  const [designTokensModel, setDesignTokensModel] = useSyncedState(
+    'designTokensModel',
+    defaultDesignTokensModel
   );
   return (
     <AutoLayout 
@@ -41,16 +41,16 @@ export default function baseSatellite() {
       horizontalAlignItems="start"
       verticalAlignItems="start"
       spacing={26}>
-      {renderWidgetList(designSystemModel)}
+      {renderWidgetList(designTokensModel)}
       {button('Refresh All', () => triggerBaseRefresh())}
     </AutoLayout>
   );
 }
 
 function renderWidgetList(
-  designSystemModel: DesignSystemModel
+  designTokensModel: DesignTokensModel
 ) {
-  const categorizedTokensets = sortIntoCategories(designSystemModel.tokensets);
+  const categorizedTokensets = sortIntoCategories(designTokensModel.tokensets);
 
   const html: any[] = [];
   categorizedTokensets.map((tokensetCategory: TokenSetCategory) => {
@@ -133,7 +133,7 @@ function renderWidgetList(
                     width="fill-parent"
                     fill={colors.textColor}>
                     {designSystemClassName(
-                      designSystemModel,
+                      designTokensModel,
                       tokenset )}
                   </Text>
                 </AutoLayout>

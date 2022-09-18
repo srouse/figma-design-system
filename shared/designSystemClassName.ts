@@ -1,18 +1,18 @@
 import {
-  DesignSystemModel,
+  DesignTokensModel,
   TokenSet
 } from './types/types';
 import toKebabCase from './toKebobCase';
 
 export default function designSystemClassName(
-  designSystemModel: DesignSystemModel | undefined,
+  designTokensModel: DesignTokensModel | undefined,
   tokenset: TokenSet | undefined
 ) {
-  if (!designSystemModel || !tokenset) {
+  if (!designTokensModel || !tokenset) {
     return '';
   }
-  const prefix = designSystemModel.prefix ? 
-    designSystemModel.prefix.toLowerCase() : '';
+  const prefix = designTokensModel.prefix ? 
+    designTokensModel.prefix.toLowerCase() : '';
   let name = tokenset.name || '';
   name = toKebabCase(name);
   return `${prefix}-${name}-[...]`;// [area]-[step]`;

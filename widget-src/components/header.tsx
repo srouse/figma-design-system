@@ -1,5 +1,5 @@
 import {
-  defaultDesignSystemModel,
+  defaultDesignTokensModel,
   TokenSet,
   TokenSetType
 } from "../../shared/types/types";
@@ -30,9 +30,9 @@ const buttonSvgSrc = `
 export default function header(tokenset: TokenSet | undefined) {
   const nodeId = useWidgetId();
 
-  const [designSystemModel, setDesignSystemModel] = useSyncedState(
-    'designSystemModel',
-    defaultDesignSystemModel
+  const [designTokensModel, setDesignTokensModel] = useSyncedState(
+    'designTokensModel',
+    defaultDesignTokensModel
   );
 
   const [touch, setTouch] = useSyncedState(
@@ -49,18 +49,18 @@ export default function header(tokenset: TokenSet | undefined) {
   let subtitle = '';
   switch( tokenset?.type ) {
     case TokenSetType.Base:
-      title = designSystemModel?.fullName || '';
+      title = designTokensModel?.fullName || '';
       subtitle = 'Design System';
       break;
     case TokenSetType.Undetermined:
-      title = designSystemModel?.fullName || '';
+      title = designTokensModel?.fullName || '';
       subtitle = 'Design System';
       break;
     case TokenSetType.ColorSet:
     case TokenSetType.TypographySet:
     default :
       subtitle = designSystemClassName(
-        designSystemModel,
+        designTokensModel,
         tokenset,
       );
       break;
@@ -113,7 +113,7 @@ export default function header(tokenset: TokenSet | undefined) {
             width="hug-contents"
             height="hug-contents"
             fill="#ffffff">
-            {designSystemModel.prefix?.toUpperCase()}
+            {designTokensModel.prefix?.toUpperCase()}
           </Text>
         </AutoLayout>
         <Rectangle 

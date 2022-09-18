@@ -1,0 +1,68 @@
+
+
+.dtbutton {
+  font-weight: 600;
+  display: inline-block;
+  padding: 10px 12px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.dtbutton:hover {
+  cursor: pointer;
+}
+
+  .dtbutton.useIcon {
+    display: inline-flex;
+    flex-direction: row;
+  }
+    .dtbutton.useIcon .icon {
+      position: absolute;
+      left: 10px; top: 0; bottom: 0;
+      width: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+  .dtbutton.label,
+  .dtbutton .label {
+    text-align: center;
+    font-size: 14px;
+    flex: 1;
+  }
+
+.dtbutton.primary.solid {
+  background-color: var( --primary );
+  color: var( --text-color-white );
+}
+  .dtbutton.primary.solid:hover {
+    background-color: var( --primary-dark );
+  }
+
+.dtbutton.primary.border {
+  background-color: var( --text-color-white );
+  border: 1px solid var( --primary );
+  color: var( --primary );
+}
+  .dtbutton.primary.border:hover {
+    border-color: var( --primary-light );
+  }
+
+.dtbutton.grey.solid {
+  background-color: var( --grey-dark );
+  color: var( --text-color-white );
+}
+  .dtbutton.grey-solid:hover {
+    background-color: var( --grey-dark );
+  }
+
+.dtbutton.grey.border {
+  background-color: var( --text-color-white );
+  border: 1px solid var( --grey-light );
+  color: var( --text-color );
+}
+  .dtbutton.grey-border:hover {
+    border-color: var( --grey );
+  }

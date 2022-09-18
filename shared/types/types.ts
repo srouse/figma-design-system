@@ -3,7 +3,6 @@ import {
   DSysGroupType,
   DSysTokenset
 } from './designSystemTypes';
-import { DTToken } from './designTokenTypes';
 
 export enum MessageTypes {
   modelUpdate = 'modelUpdate',
@@ -25,13 +24,13 @@ export enum TokenSetType {
 }
 
 export interface State {
-  designSystemModel?: DesignSystemModel, // everything, base is source of truth
+  designTokensModel?: DesignTokensModel, // everything, base is source of truth
   nodeId?: string, // the id of this widget's node
   tokenset?: TokenSet, // pulled from dSysModel, easier to work with locally
   dsysTokens?: DSys,
 }
 
-export interface DesignSystemModel {
+export interface DesignTokensModel {
   fullName?: string,
   prefix?: string,
   colorIdentifier?: string,// for header background
@@ -41,34 +40,26 @@ export interface DesignSystemModel {
   tokenGroups?: TokenGroup[],// will take over tokensets...
 }
 
-  export interface TokenSet {
-    type: TokenSetType,
-    nodeId: string,
-    name?: string,
-    sortIndex: number,
-    values?: string[];
-  }
-
+  // TODO: Change TokenSet to "TokenGroup" and store tokensets within each widget
   export interface TokenGroup {
     type: DSysGroupType,
-    nodeId: string,
+    // nodeId: string,
     name?: string,
     // all the various widgets are responsible for well formatted DSysTokensets
     tokensets: DSysTokenset[];
   }
 
+  export interface TokenSet {
+    type: TokenSetType,
+    nodeId: string,
+    name?: string,
+  }
 
 // ======= A UI CONSTRUCT ========
-
 export interface TokenSetCategory {
   type: TokenSetType,
   tokensets: TokenSet[]
 }
-
-
-
-
-
 
 // ========== DesignSystemWidget ========================
 export interface SetterString {
@@ -90,19 +81,24 @@ export interface SetterStringArray {
 export interface DesignSystemWidget {
   nodeId: string;
   
-  designSystemModel: DesignSystemModel;
-  setDesignSystemModel: (
-    newValue: DesignSystemModel | 
-    ((currValue: DesignSystemModel) => DesignSystemModel)) => void;
+  designTokensModel: DesignTokensModel;
+  setDesignTokensModel: (
+    newValue: DesignTokensModel | 
+    ((currValue: DesignTokensModel) => DesignTokensModel)) => void;
 
   touch: number;
   setTouch: SetterNumber;
 }
 
 // ============== DEFAULTS ====================
-
-export const defaultDesignSystemModel : DesignSystemModel = {
+export const defaultDesignTokensModel : DesignTokensModel = {
   baseId: null,
+  tokensets: [],
+}
+
+export const defaultTokenGroup : TokenGroup = {
+  type: DSysGroupType.Undetermined,
+  name: '',
   tokensets: [],
 }
 

@@ -1,13 +1,14 @@
 import React, { ChangeEvent } from "react";
 import "./App.css";
+import "./satellites/satellites.css";
 import {
-  DesignSystemModel,
+  DesignTokensModel,
   State,
   MessageTypes,
   TokenSetType
 } from '../shared/types/types';
 import { findWidgetTokenset } from '../widget-src/actions/tokensetActions';
-
+import { renderCssVariables } from './utils/renderCssVariables';
 import SwitchUI from "./satellites/switchUI";
 
 export default class App extends React.Component <{}> {
@@ -17,7 +18,10 @@ export default class App extends React.Component <{}> {
     this.state = {};
     window.onmessage = (evt: any) => {
       const msg = evt.data.pluginMessage;
-      const tokenset = findWidgetTokenset(msg.nodeId, msg.designSystemModel);
+      const tokenset = findWidgetTokenset(
+        msg.nodeId,
+        msg.designTokensModel
+      );
       this.setState({
         ...this.state,
         ...msg,
@@ -25,40 +29,30 @@ export default class App extends React.Component <{}> {
       });
     }
     this.sendToWidget = this.sendToWidget.bind(this);
-    this.onTokenSetTypeChange = this.onTokenSetTypeChange.bind(this);
+
+    // inject css vars once
+    renderCssVariables();
   }
 
   state: State;
 
-  sendToWidget(designSystemModel: DesignSystemModel) {
+  sendToWidget(designTokensModel: DesignTokensModel) {
     parent?.postMessage?.({ pluginMessage: {
       name: MessageTypes.modelUpdate,
-      designSystemModel,
+      designTokensModel,
       tokenset: this.state.tokenset
     } }, "*");
 
     // make sure state has latest info...
     const tokenset = findWidgetTokenset(
       this.state.nodeId || '', 
-      designSystemModel
+      designTokensModel
     );
     this.setState({
       ...this.state,
-      designSystemModel,
+      designTokensModel,
       tokenset
     })
-  }
-
-  onTokenSetTypeChange(evt: ChangeEvent) {
-    // centralized this to the widget since it needs to do the same 
-    // thing when in default mode...
-    const newTokenSetType =
-      (evt.target as HTMLSelectElement).value as TokenSetType;
-    parent?.postMessage?.({ pluginMessage: {
-      name: MessageTypes.tokenSetTypeChange,
-      newTokenSetType,
-      nodeId: this.state.nodeId
-    } }, "*");
   }
 
   render() {
@@ -67,7 +61,7 @@ export default class App extends React.Component <{}> {
         <div id="editor">
           <SwitchUI
             tokenset={this.state.tokenset}
-            designSystemModel={this.state.designSystemModel}
+            designTokensModel={this.state.designTokensModel}
             sendToWidget={this.sendToWidget} />
         </div>
       </div>

@@ -1,5 +1,7 @@
+import { DSysGroupType } from "../shared/types/designSystemTypes";
 import {
-  defaultDesignSystemModel,
+  defaultDesignTokensModel,
+  defaultTokenGroup,
   DesignSystemWidget,
   TokenSetType,
 } from "../shared/types/types";
@@ -13,6 +15,7 @@ import header from "./components/header";
 import satelliteSwitch from "./satellites/switch";
 import {
   findBaseWidget,
+  findUndeterminedWidget,
   findWidget
 } from "./utils";
 
@@ -27,9 +30,9 @@ const {
 export default function designSystem() {
   const nodeId = useWidgetId();
 
-  const [designSystemModel, setDesignSystemModel] = useSyncedState(
-    'designSystemModel',
-    defaultDesignSystemModel
+  const [designTokensModel, setDesignTokensModel] = useSyncedState(
+    'designTokensModel',
+    defaultDesignTokensModel
   );
 
   const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
@@ -42,26 +45,32 @@ export default function designSystem() {
     0
   );
 
+  const [tokenGroup, setTokenGroup] = useSyncedState(
+    'tokenGroup',
+    defaultTokenGroup
+  );
+
   const widget : DesignSystemWidget = {
     nodeId,
-    designSystemModel, setDesignSystemModel,
+    designTokensModel, setDesignTokensModel,
     touch, setTouch
   };
 
   useEffect(() => {
-    figma.on("close", () => setIsWindowUIOpen(false));
+    figma.on("close",() => setIsWindowUIOpen(false));
 
     // if there is no base, we need to find one
     const baseWidget = findBaseWidget();
     if (!baseWidget) {
-      // con sole.log(`[useEffect: ${nodeId}] establishBase`);
-      establishBase(widget);
+      console.log(`[useEffect: ${nodeId}] establishBase`);
+      establishBase();
     }
 
+    /*
     // could be a new widget...
     const thisTokenset = findWidgetTokenset(
       nodeId,
-      baseWidget?.widgetSyncedState.designSystemModel
+      baseWidget?.widgetSyncedState.designTokensModel
     );
     if (!thisTokenset) {
       // con sole.log(`[useEffect: ${nodeId}] no tokenset, refreshing from base`);
@@ -76,28 +85,18 @@ export default function designSystem() {
       return;
     }
 
-    // ===== BASE ONLY ACTIONS ==========
-    /* These events don't seem to work...
-    figma.on("currentpagechange", () => {
-      console.log("currentpagechange");
-    });
-
-    figma.on("selectionchange", () => {
-      console.log("selectionchange");
-    });
-    */
-
     // only update during an active refresh request
     if (thisWidget.getPluginData('doRefresh') !== 'no') {
       // con sole.log(`[useEffect: ${nodeId}] refreshFromBase`);
       refreshFromBase(widget);
       return;
     }
+    */
 
     // con sole.log(`[useEffect: ${nodeId}] did nothing`);
   });
 
-  const tokenset = findWidgetTokenset(nodeId, designSystemModel);
+  const tokenset = findWidgetTokenset(nodeId, designTokensModel);
 
   let width = 390;
   switch (tokenset?.type) {
@@ -125,7 +124,7 @@ export default function designSystem() {
         "showShadowBehindNode":false
       }] : []}
       stroke="#E0E0E0"
-      fill={designSystemModel ? '#ffffff' : '#f2f2f2'}
+      fill={designTokensModel ? '#ffffff' : '#f2f2f2'}
       cornerRadius={10}>
       {header(tokenset)}
       <AutoLayout 

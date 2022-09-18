@@ -1,12 +1,14 @@
+import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import {
   DesignSystemWidget, TokenSet
 } from "../../shared/types/types";
 import {
   findAllWidgets,
   findBaseWidget,
+  findUndeterminedWidget,
   findWidget
 } from "../utils";
-import normalizeDesignSystemModel from "./baseNormalization";
+import normalizeDesignTokensModel from "./baseNormalization";
 import { findWidgetTokenset } from "./tokensetActions";
 
 
@@ -18,7 +20,7 @@ export async function openEditor(
   const thisWidget = findWidget(nodeId);
   const thisTokenset = findWidgetTokenset(
     nodeId,
-    thisWidget.widgetSyncedState.designSystemModel
+    thisWidget.widgetSyncedState.designTokensModel
   );
 
   if (!thisTokenset) {
@@ -35,11 +37,11 @@ export async function openEditor(
   return new Promise((resolve) => {
     figma.showUI(
       __html__,
-      {width: 400, height: 500, themeColors: true}
+      {width: 400, height: 716, themeColors: true}
     );
     figma.ui.postMessage({
       nodeId,
-      designSystemModel: thisWidget.widgetSyncedState.designSystemModel
+      designTokensModel: thisWidget.widgetSyncedState.designTokensModel
     });
   });
 }
@@ -58,8 +60,8 @@ export function triggerBaseRefresh(
 
   // take this time to make the design system model coherent
   // relative to widgets
-  const normalDSysModel = normalizeDesignSystemModel(
-    baseWidget.widgetSyncedState.designSystemModel
+  const normalDSysModel = normalizeDesignTokensModel(
+    baseWidget.widgetSyncedState.designTokensModel
   );
   baseWidget = findBaseWidget();
   if (!baseWidget) return;
@@ -71,29 +73,57 @@ export function triggerBaseRefresh(
   // touch state to trigger refresh
   baseWidget.setWidgetSyncedState({
     ...baseWidget.widgetSyncedState,
-    designSystemModel: normalDSysModel,
+    designTokensModel: normalDSysModel,
     touch: baseWidget.widgetSyncedState.touch + 1
   });
 }
 
-export function establishBase(
-  widget: DesignSystemWidget
-) {
+export function establishBase() {
   const baseWidget = findBaseWidget();
   if (!baseWidget) {
+    const undeterminedWidget = findUndeterminedWidget();
+    if (undeterminedWidget) {
+      undeterminedWidget.setWidgetSyncedState({
+        ...undeterminedWidget.widgetSyncedState,
+        tokenGroup: {
+          type: DSysGroupType.Base,
+          name: undeterminedWidget.widgetSyncedState.tokenGroup.name,
+          tokensets: [],
+        }
+      });
+    }else{
+      // create a new widget as base...
+      const allWidgets = findAllWidgets();
+      if (allWidgets.length > 0) {
+        const aWidget = allWidgets[0];
+        const newBase = aWidget.clone();
+        newBase.x = aWidget.x - 400;
+        newBase.setWidgetSyncedState({
+          ...newBase.widgetSyncedState,
+          tokenGroup: {
+            type: DSysGroupType.Base,
+            name: 'New Base',
+            tokensets: [],
+          }
+        });
+      }
+    }
+
     /* !!!!KEEP!!! not working smoothly enough...
     const thisWidget = findWidget(widget.nodeId);
     const newBaseWidget = thisWidget.cloneWidget({});
-    widget.setDesignSystemModel({
-      ...widget.designSystemModel,
+    widget.setDesignTokensModel({
+      ...widget.designTokensModel,
       baseId: newBaseWidget.id
     });
     */
     
-    widget.setDesignSystemModel({
-      ...widget.designSystemModel,
+    /*
+    widget.setDesignTokensModel({
+      ...widget.designTokensModel,
       baseId: widget.nodeId
     });
+    */
   }
 }
 
@@ -110,7 +140,7 @@ export function refreshFromBase(
   }
 
   // walk through all satellites and update their model
-  const baseDSysModel = baseWidget.widgetSyncedState.designSystemModel;
+  const baseDSysModel = baseWidget.widgetSyncedState.designTokensModel;
   let totalProcess = 0;
   const refreshNodeId = baseWidget.getPluginData('doRefresh');
   allWidgets.map(satelliteWidget => {
@@ -129,7 +159,7 @@ export function refreshFromBase(
     totalProcess++;
     satelliteWidget.setWidgetSyncedState({
       ...satelliteWidget.widgetSyncedState,
-      designSystemModel: {...baseDSysModel},
+      designTokensModel: {...baseDSysModel},
       touch: satelliteWidget.widgetSyncedState.touch + 1
     });
   });
@@ -143,8 +173,8 @@ export function refreshFromBase(
 
   /*
   con sole.log(
-    `[refreshFromBase: ${widget.nodeId}] Base DesignSystemModel`,
-    baseWidget.widgetSyncedState.designSystemModel
+    `[refreshFromBase: ${widget.nodeId}] Base DesignTokensModel`,
+    baseWidget.widgetSyncedState.designTokensModel
   );
   */
 }

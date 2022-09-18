@@ -1,10 +1,10 @@
 import { 
   MessageTypes,
 } from "../shared/types/types";
-import designSystem from "./designSystem";
-import modelUpdate, { changeTokenSetType } from "./actions/modelUpdate";
+import designSystem from "./designTokens";
+import modelUpdate from "./actions/modelUpdate";
 const { widget } = figma;
-const { useEffect, useSyncedState } = widget;
+const { useEffect } = widget;
 
 function Widget() {
 
@@ -12,18 +12,12 @@ function Widget() {
     figma.ui.onmessage = (message) => {
       if (message.name === MessageTypes.modelUpdate) {
         modelUpdate(
-          message.designSystemModel,
+          message.designTokensModel,
           message.tokenset
         );
       }else if (message.name === MessageTypes.modelUpdateAndClose) {
-        // setDesignSystemModel(message.designSystemModel);
+        // setDesignTokensModel(message.designTokensModel);
         figma.closePlugin();
-      }else if (message.name === MessageTypes.tokenSetTypeChange) {
-        changeTokenSetType(
-          message.newTokenSetType,
-          message.nodeId,
-          true,
-        );
       }
     }
   })
