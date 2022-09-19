@@ -11,7 +11,7 @@ const exampleDesignSystem: DSys = {
     $extensions: {
       'dsys.level': DSysLevel.sheet,
       'dsys.prefix' : 'scu',
-      'dsys.fullName': 'Summit Design System',
+      'dsys.fullName': 'Summit Design Tokens',
       'dsys.baseId': 'G:333',
     },
     colors: {

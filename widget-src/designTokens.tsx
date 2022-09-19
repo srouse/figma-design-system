@@ -1,22 +1,19 @@
 import { DSysGroupType } from "../shared/types/designSystemTypes";
 import {
   defaultDesignTokensModel,
+  defaultGlobalData,
   defaultTokenGroup,
   DesignSystemWidget,
   TokenSetType,
 } from "../shared/types/types";
 import {
   establishBase,
-  refreshFromBase,
-  triggerBaseRefresh
 } from "./actions/baseActions";
 import { findWidgetTokenset } from "./actions/tokensetActions";
 import header from "./components/header";
 import satelliteSwitch from "./satellites/switch";
 import {
   findBaseWidget,
-  findUndeterminedWidget,
-  findWidget
 } from "./utils";
 
 const { widget } = figma;
@@ -48,6 +45,11 @@ export default function designSystem() {
   const [tokenGroup, setTokenGroup] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
+  );
+
+  const [globalInfo, setGlobalInfo] = useSyncedState(
+    'globalInfo',
+    defaultGlobalData
   );
 
   const widget : DesignSystemWidget = {

@@ -50,11 +50,11 @@ export default function header(tokenset: TokenSet | undefined) {
   switch( tokenset?.type ) {
     case TokenSetType.Base:
       title = designTokensModel?.fullName || '';
-      subtitle = 'Design System';
+      subtitle = 'Design Tokens';
       break;
     case TokenSetType.Undetermined:
       title = designTokensModel?.fullName || '';
-      subtitle = 'Design System';
+      subtitle = 'Design Tokens';
       break;
     case TokenSetType.ColorSet:
     case TokenSetType.TypographySet:

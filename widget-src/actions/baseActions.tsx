@@ -127,6 +127,7 @@ export function establishBase() {
   }
 }
 
+/*
 export function refreshFromBase(
   widget: DesignSystemWidget
 ) {
@@ -176,5 +177,6 @@ export function refreshFromBase(
     `[refreshFromBase: ${widget.nodeId}] Base DesignTokensModel`,
     baseWidget.widgetSyncedState.designTokensModel
   );
-  */
+  * /
 }
+*/
