@@ -100,21 +100,5 @@ export function establishBase() {
         });
       }
     }
-
-    /* !!!!KEEP!!! not working smoothly enough...
-    const thisWidget = findWidget(widget.nodeId);
-    const newBaseWidget = thisWidget.cloneWidget({});
-    widget.setDesignTokensModel({
-      ...widget.designTokensModel,
-      baseId: newBaseWidget.id
-    });
-    */
-    
-    /*
-    widget.setDesignTokensModel({
-      ...widget.designTokensModel,
-      baseId: widget.nodeId
-    });
-    */
   }
 }

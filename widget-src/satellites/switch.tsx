@@ -1,9 +1,7 @@
 import {
   defaultTokenGroup,
-  TokenGroup,
-  TokenGroupLookup,
 } from "../../shared/types/types";
-import baseSatellite from "./base";
+import base from "../base/base";
 import colorsSatellite from "./colors";
 import componentsSatellite from "./components";
 import effectsSatellite from "./effects";
@@ -28,7 +26,7 @@ export default function satelliteSwitch() {
 
   switch (tokenGroup.type) {
     case DSysGroupType.Base:
-      return baseSatellite();
+      return base();
     case DSysGroupType.ColorSet:
       return colorsSatellite();
     case DSysGroupType.TypographySet:

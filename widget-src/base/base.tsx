@@ -9,12 +9,11 @@ const { widget } = figma;
 const {
   AutoLayout,
   Text,
-  Rectangle,
   useWidgetId,
   useSyncedState,
 } = widget;
 
-export default function baseSatellite() {
+export default function base() {
 
   const nodeId = useWidgetId();
 
