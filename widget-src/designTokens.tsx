@@ -1,15 +1,10 @@
-import { DSysGroupType } from "../shared/types/designSystemTypes";
 import {
-  defaultDesignTokensModel,
   defaultGlobalData,
-  defaultTokenGroup,
-  DesignSystemWidget,
-  TokenSetType,
+  defaultTokenGroupLookup,
 } from "../shared/types/types";
 import {
   establishBase,
 } from "./actions/baseActions";
-import { findWidgetTokenset } from "./actions/tokensetActions";
 import header from "./components/header";
 import satelliteSwitch from "./satellites/switch";
 import {
@@ -27,36 +22,25 @@ const {
 export default function designSystem() {
   const nodeId = useWidgetId();
 
-  const [designTokensModel, setDesignTokensModel] = useSyncedState(
-    'designTokensModel',
-    defaultDesignTokensModel
-  );
-
   const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
     'isWindowUIOpen',
     false
   );
 
-  const [touch, setTouch] = useSyncedState(
-    'touch',
-    0
-  );
-
-  const [tokenGroup, setTokenGroup] = useSyncedState(
-    'tokenGroup',
-    defaultTokenGroup
-  );
-
-  const [globalInfo, setGlobalInfo] = useSyncedState(
-    'globalInfo',
+  const [globalData, setGlobalData] = useSyncedState(
+    'globalData',
     defaultGlobalData
   );
 
-  const widget : DesignSystemWidget = {
-    nodeId,
-    designTokensModel, setDesignTokensModel,
-    touch, setTouch
-  };
+  const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
+    'tokenGroupLookup',
+    defaultTokenGroupLookup
+  );
+
+  const [initialized, setInitialized] = useSyncedState(
+    'initialized',
+    false
+  );
 
   useEffect(() => {
     figma.on("close",() => setIsWindowUIOpen(false));
@@ -68,44 +52,23 @@ export default function designSystem() {
       establishBase();
     }
 
-    /*
-    // could be a new widget...
-    const thisTokenset = findWidgetTokenset(
-      nodeId,
-      baseWidget?.widgetSyncedState.designTokensModel
-    );
-    if (!thisTokenset) {
-      // con sole.log(`[useEffect: ${nodeId}] no tokenset, refreshing from base`);
-      triggerBaseRefresh();
-      return;
+    if (!initialized) {
+      console.log('new widget', nodeId);
+      setInitialized(true);
+      if (baseWidget) {
+        setGlobalData({
+          ...baseWidget.widgetSyncedState.globalData,
+        })
+      }
     }
-
-    // only the base can update things...
-    const thisWidget = findWidget(nodeId);
-    if (thisWidget.id !== baseWidget?.id) {
-      // con sole.log(`[useEffect: ${nodeId}] not base, stopping`);
-      return;
-    }
-
-    // only update during an active refresh request
-    if (thisWidget.getPluginData('doRefresh') !== 'no') {
-      // con sole.log(`[useEffect: ${nodeId}] refreshFromBase`);
-      refreshFromBase(widget);
-      return;
-    }
-    */
-
-    // con sole.log(`[useEffect: ${nodeId}] did nothing`);
   });
 
-  const tokenset = findWidgetTokenset(nodeId, designTokensModel);
-
   let width = 390;
-  switch (tokenset?.type) {
+  /* switch (tokenset?.type) {
     case TokenSetType.TypographySet:
       width = 450;
       break;
-  }
+  }*/
 
   return (
     <AutoLayout 
@@ -126,9 +89,9 @@ export default function designSystem() {
         "showShadowBehindNode":false
       }] : []}
       stroke="#E0E0E0"
-      fill={designTokensModel ? '#ffffff' : '#f2f2f2'}
+      fill={globalData ? '#ffffff' : '#f2f2f2'}
       cornerRadius={10}>
-      {header(tokenset)}
+      {header()}
       <AutoLayout 
         name="properties"
         width="fill-parent"
@@ -137,7 +100,7 @@ export default function designSystem() {
         horizontalAlignItems="start"
         verticalAlignItems="start"
         padding={{top: 10,left: 20,bottom: 0,right: 20}}>
-        {satelliteSwitch(tokenset)}
+        {satelliteSwitch()}
       </AutoLayout>
     </AutoLayout>
   );

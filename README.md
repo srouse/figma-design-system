@@ -1,19 +1,60 @@
-# @figma/create-widget
+# Figma Design Tokens Widget
+<!-- 
+  Do not edit directly, built using contentful-readme-generator.
+  Content details in Build Information below.
+-->
 
-This repo was created by @figma/create-widget
+- [Description](#description)
+- [How To Use](#how-to-use)
+  * [`yarn start`](#yarn-start)
+  * [`yarn build`](#yarn-build)
+  * [`yarn test`](#yarn-test)
+- [Organization](#organization)
+- [How To Deploy](#how-to-deploy)
+- [Build Information](#build-information)
 
-## Getting started
+---
 
-Run the following command to start building your widget
 
-```bash
-npm run dev
-```
+__Project Abbreviation__: scu-figma-design-tokens-widget
 
-1. Log in to your account and open the Figma desktop app
-2. You can open any existing FigJam document or create a new one.
-3. Go to Menu > Widgets > Development > "Import widget from manifest..."
-4. Select the manifest.json in this folder
+__URL Slug__: readme-project/figma-design-tokens-widget
+
+__Developer Emails__: scott.rouse@summitcreditunion.com
+
+__Repo URL__: https://bitbucket.org/summitcu/figma-design-system
+
+__Design File__: https://www.figma.com/file/6wQ9i846LX5us14gANKrH4/Figma-Design-System?node-id=0%3A1
+
+__Services Utilized__: 
+
+- Figma, https://www.figma.com/
+
+## Description
+
+Figma Design Tokens Widget is a Figma Widget that takes values created and managed in Figma and creates compliant Design Tokens. 
+
+[w3 Design Tokens Community](https://www.w3.org/community/design-tokens/)
+[Design Tokens Home](https://www.designtokens.org/)
+[Design Tokens Proposed Tokens Format](https://second-editors-draft.tr.designtokens.org/format/)
+
+## How To Use
+
+### `yarn start`
+
+This is the only command you need to run in development. It will start the following processes for you:
+
+- bundling (both widget and iframe code)
+- typechecking (both widget and iframe code)
+- vite dev server (for iframe development)
+
+### `yarn build`
+
+This runs bundling with minification turned on. You should run this command before releasing your widget.
+
+### `yarn test`
+
+This runs typechecking and makes sure that your widget builds without errors.
 
 ## Organization
 
@@ -26,21 +67,26 @@ This widget uses:
 | file/folder   | description                                                                      |
 | ------------- | -------------------------------------------------------------------------------- |
 | manifest.json | The widget's [manifest.json](https://www.figma.com/widget-docs/widget-manifest/) |
+| shared        | Contains code shared by both widget and iframe code                              |
 | widget-src/   | Contains the widget code                                                         |
 | ui-src/       | Contains the iframe code                                                         |
 
-### `npm run dev`
+## How To Deploy
 
-This is the only command you need to run in development. It will start the following processes for you:
+Deployed via Figma Widgets.
 
-- bundling (both widget and iframe code)
-- typechecking (both widget and iframe code)
-- vite dev server (for iframe development)
+## Build Information
 
-### `npm run build`
+*Dynamically built using contentful-readme-generator. Do not edit directly.*
 
-This runs bundling with minification turned on. You should run this command before releasing your widget.
+*__updated__: 9/19/2022, 1:59:24 PM*
 
-### `npm run test`
+*__built__: 9/19/2022, 2:05:36 PM*
 
-This runs typechecking and makes sure that your widget builds without errors.
+*__space__: 7gg213tt004u*
+
+*__environment__: sandbox*
+
+*__entity id__: 1sLAcBpHGHrYx0LlBVYd3m*
+
+[Edit Contentful Entry](https://app.contentful.com/spaces/7gg213tt004u/environments/sandbox/entries/1sLAcBpHGHrYx0LlBVYd3m)

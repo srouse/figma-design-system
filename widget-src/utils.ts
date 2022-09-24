@@ -1,16 +1,19 @@
 import { DSysGroupType } from "../shared/types/designSystemTypes";
-import { TokenSet, TokenSetCategory } from "../shared/types/types";
 
 figma.skipInvisibleInstanceChildren = true;
 
-export function findAllWidgets(excludeId: string = ''): WidgetNode[] {
-  const widgetNodes = _findAllWidgets();
+export function findAllWidgets(
+  excludeId: string = ''
+): WidgetNode[] {
+  let widgetNodes = _findAllWidgets();
 
-  const myWidgetNodes: WidgetNode[] = widgetNodes.filter(node => {
-    return node.widgetId === figma.widgetId
-  });
+  if (excludeId) {
+    widgetNodes = widgetNodes.filter(node => {
+      return node.id !== excludeId;
+    });
+  }
 
-  return myWidgetNodes;
+  return widgetNodes;
 }
 
 export function findWidget(nodeId: string) {
@@ -35,7 +38,6 @@ export function findFirstWidgetOfType(type: DSysGroupType) {
   const allWidgets = _findAllWidgets();
   const baseWidget = allWidgets.find(widget => {
     const tokenGroup = widget.widgetSyncedState.tokenGroup;
-    // if (!tokenGroup) widget.remove();// clean up stragglers
     if (tokenGroup?.type === type) {
       return widget;
     }
@@ -56,6 +58,10 @@ function _findAllWidgets() {
       ...pageWidgetNodes
     ]
   });
+  // now take only those that are design token widgets
+  widgetNodes = widgetNodes.filter(node => {
+    return node.widgetId === figma.widgetId;
+  });
   return widgetNodes;
 }
 
@@ -70,11 +76,13 @@ export function findNodeParentPage(node: BaseNode) {
   return parent;
 }
 
+/*
 export function sortIntoCategories(
-  tokensets: TokenSet[]
+  widgets: WidgetNode,
 ) : TokenSetCategory[] {
   const categorizedTokensets: TokenSetCategory[] = [];
   const createdCategories: {[key:string]: TokenSetCategory} = {};
+  
   tokensets.map((tokenset: TokenSet) => {
     if (!createdCategories[tokenset.type]) {
       const category: TokenSetCategory = {
@@ -95,3 +103,4 @@ export function sortIntoCategories(
   });
   return categorizedTokensets;
 }
+*/

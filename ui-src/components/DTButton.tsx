@@ -23,7 +23,7 @@ interface DTButtonProps {
   style?: object
 }
 
-export default class DTButton extends React.Component <DTButtonProps> {
+export default class DTButton extends React.Component<DTButtonProps> {
 
   constructor(props: DTButtonProps | Readonly<DTButtonProps>) {
     super(props);

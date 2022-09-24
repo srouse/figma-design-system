@@ -5,21 +5,96 @@ import {
 } from './designSystemTypes';
 
 export enum MessageTypes {
-  modelUpdate = 'modelUpdate',
-  modelUpdateAndClose = 'modelUpdateAndClose',
-  tokenSetTypeChange = 'tokenSetTypeChange',
+  globalDataUpdate = 'globalDataUpdate',
+  tokenGroupUpdate = 'tokenGroupUpdate',
 }
-
-// =========START V1======================
 
 // ---------- UI -----------------
 export interface State {
-  designTokensModel?: DesignTokensModel, // everything, base is source of truth
   nodeId?: string, // the id of this widget's node
-  tokenset?: TokenSet, // pulled from dSysModel, easier to work with locally
+  tokenGroup?: TokenGroup,
+  globalData?: GlobalData,
   dsysTokens?: DSys,
 }
 
+export type CoreProps = {
+  tokenGroup?: TokenGroup,
+  globalData?: GlobalData,
+  updateGlobalData: (globalData: GlobalData) => void,
+  updateTokenGroup: (tokenGroup: TokenGroup) => void,
+}
+
+export interface GlobalData {
+  prefix: string,
+  fullName: string,
+}
+
+export interface TokenGroup {
+  type: DSysGroupType,
+  // nodeId: string,
+  name?: string,
+  // all the various widgets are responsible for well formatted DSysTokensets
+  tokensets: DSysTokenset[];
+}
+
+export type TokenGroupLookup = {
+  widgetId: string,
+  tokenGroupName: string | undefined,
+}
+
+// ========== DesignSystemWidget ========================
+export interface SetterString {
+  (newValue: string | ((currValue: string) => string)): void;
+}
+
+export interface SetterNumber {
+  (newValue: number | ((currValue: number) => number)): void
+}
+
+export interface SetterBoolean {
+  (newValue: boolean | ((currValue: boolean) => boolean)): void
+}
+
+export interface SetterStringArray {
+(newValue: never[] | ((currValue: never[]) => never[])): void
+}
+
+export interface DesignSystemWidget {
+  nodeId: string;
+  
+  /*
+  designTokensModel: DesignTokensModel;
+  setDesignTokensModel: (
+    newValue: DesignTokensModel | 
+    ((currValue: DesignTokensModel) => DesignTokensModel)) => void;
+  */
+
+  globalData: GlobalData;
+
+  touch: number;
+  setTouch: SetterNumber;
+}
+
+// ============== DEFAULTS ====================
+
+export const defaultTokenGroup : TokenGroup = {
+  type: DSysGroupType.Undetermined,
+  name: '',
+  tokensets: [],
+}
+
+export const defaultGlobalData: GlobalData = {
+  prefix: '',
+  fullName: '',
+}
+
+export const defaultTokenGroupLookup: TokenGroupLookup[] = [];
+
+export const widgetVersion = 3;
+
+
+
+// =========START V1======================
 // ----------- WIDGET --------------
 export interface DesignTokensModel {
   fullName?: string,
@@ -46,71 +121,10 @@ export interface DesignTokensModel {
     ColumnLayoutSet = 'ColumnLayoutSet',
     Undetermined = 'Undetermined'
   }
-// =========END V1======================
-
-export interface GlobalData {
-  prefix: string,
-  fullName: string,
-}
-
-export interface TokenGroup {
-  type: DSysGroupType,
-  // nodeId: string,
-  name?: string,
-  // all the various widgets are responsible for well formatted DSysTokensets
-  tokensets: DSysTokenset[];
-}
 
 // ======= A UI CONSTRUCT ========
 export interface TokenSetCategory {
   type: TokenSetType,
   tokensets: TokenSet[]
 }
-
-// ========== DesignSystemWidget ========================
-export interface SetterString {
-  (newValue: string | ((currValue: string) => string)): void;
-}
-
-export interface SetterNumber {
-  (newValue: number | ((currValue: number) => number)): void
-}
-
-export interface SetterBoolean {
-  (newValue: boolean | ((currValue: boolean) => boolean)): void
-}
-
-export interface SetterStringArray {
-(newValue: never[] | ((currValue: never[]) => never[])): void
-}
-
-export interface DesignSystemWidget {
-  nodeId: string;
-  
-  designTokensModel: DesignTokensModel;
-  setDesignTokensModel: (
-    newValue: DesignTokensModel | 
-    ((currValue: DesignTokensModel) => DesignTokensModel)) => void;
-
-  touch: number;
-  setTouch: SetterNumber;
-}
-
-// ============== DEFAULTS ====================
-export const defaultDesignTokensModel : DesignTokensModel = {
-  baseId: null,
-  tokensets: [],
-}
-
-export const defaultTokenGroup : TokenGroup = {
-  type: DSysGroupType.Undetermined,
-  name: '',
-  tokensets: [],
-}
-
-export const defaultGlobalData: GlobalData = {
-  prefix: '',
-  fullName: '',
-}
-
-export const widgetVersion = 3;
+// =========END V1======================

@@ -1,9 +1,10 @@
 import React from "react";
-import { DesignTokensModel, TokenSet, TokenSetType } from "../../shared/types/types";
+import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import BaseUI from "./baseUI";
 import ColorsUI from "./colorsUI";
 import ColumnLayoutUI from "./columnLayoutUI";
 import ComponentsUI from "./componentsUI";
+import { CoreProps } from "../../shared/types/types";
 import EffectsUI from "./effectsUI";
 import IconsUI from "./iconsUI";
 import LayoutUI from "./layoutUI";
@@ -11,81 +12,50 @@ import SpacingUI from "./spacingUI";
 import "./switchUI.css";
 import TypographyUI from "./typographyUI";
 
-interface SwitchProps {
-  tokenset: TokenSet | undefined,
-  designTokensModel: DesignTokensModel | undefined,
-  sendToWidget: (dsys: DesignTokensModel) => void
-}
+export default class SwitchUI extends React.Component<CoreProps> {
 
-export default class SwitchUI extends React.Component <SwitchProps> {
-
-  constructor(props: SwitchProps | Readonly<SwitchProps>) {
+  constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
   }
 
   render() { 
-    switch (this.props.tokenset?.type) {
-      case TokenSetType.Base :
+    if (!this.props.globalData) return '';
+    switch (this.props.tokenGroup?.type) {
+      case DSysGroupType.Base :
         return (
-          <BaseUI
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <BaseUI {...this.props} />
         );
-      case TokenSetType.ColorSet :
+      case DSysGroupType.ColorSet :
         return (
-          <ColorsUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <ColorsUI {...this.props} />
         );
-      case TokenSetType.TypographySet :
+      case DSysGroupType.TypographySet :
         return (
-          <TypographyUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <TypographyUI {...this.props} />
         );
-      case TokenSetType.EffectSet :
+      case DSysGroupType.EffectSet :
         return (
-          <EffectsUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <EffectsUI {...this.props} />
         );
-      case TokenSetType.IconSet :
+      case DSysGroupType.IconSet :
         return (
-          <IconsUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <IconsUI {...this.props} />
         );
-      case TokenSetType.ComponentSet :
+      case DSysGroupType.ComponentSet :
         return (
-          <ComponentsUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <ComponentsUI {...this.props} />
         );
-      case TokenSetType.Spacing :
+      case DSysGroupType.Spacing :
         return (
-          <SpacingUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <SpacingUI {...this.props} />
         );
-      case TokenSetType.LayoutSet :
+      case DSysGroupType.LayoutSet :
         return (
-          <LayoutUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <LayoutUI {...this.props} />
         );
-      case TokenSetType.ColumnLayoutSet :
+      case DSysGroupType.ColumnLayoutSet :
         return (
-          <ColumnLayoutUI
-            tokenset={this.props.tokenset}
-            designTokensModel={this.props.designTokensModel}
-            sendToWidget={this.props.sendToWidget} />
+          <ColumnLayoutUI {...this.props} />
         );
     }
     return ( <div>no token type found</div> );

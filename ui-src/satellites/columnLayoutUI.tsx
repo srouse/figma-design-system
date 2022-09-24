@@ -1,17 +1,11 @@
 import React from "react";
-import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import "./columnLayoutUI.css";
 import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import { CoreProps } from "../../shared/types/types";
 
-interface ColumnLayoutUIProps {
-  tokenset: TokenSet | undefined,
-  designTokensModel: DesignTokensModel | undefined,
-  sendToWidget: (dsys: DesignTokensModel) => void
-}
+export default class ColumnLayoutUI extends React.Component<CoreProps> {
 
-export default class ColumnLayoutUI extends React.Component <ColumnLayoutUIProps> {
-
-  constructor(props: ColumnLayoutUIProps | Readonly<ColumnLayoutUIProps>) {
+  constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
   }
 
@@ -19,9 +13,10 @@ export default class ColumnLayoutUI extends React.Component <ColumnLayoutUIProps
     return (
       <div className="satellite">
         <SatelliteHeaderUI
-          tokenset={this.props.tokenset}
-          designTokensModel={this.props.designTokensModel}
-          sendToWidget={this.props.sendToWidget}
+          tokenGroup={this.props.tokenGroup}
+          globalData={this.props.globalData}
+          updateGlobalData={this.props.updateGlobalData}
+          updateTokenGroup={this.props.updateTokenGroup}
            />
         column layout
       </div>

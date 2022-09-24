@@ -6,7 +6,7 @@ interface SettingsProps {
   style?: object
 }
 
-export default class Settings extends React.Component <SettingsProps> {
+export default class Settings extends React.Component<SettingsProps> {
 
   constructor(props: SettingsProps | Readonly<SettingsProps>) {
     super(props);

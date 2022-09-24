@@ -1,27 +1,3 @@
-import {
-  DesignTokensModel,
-  TokenSet,
-  TokenSetType
-} from '../../shared/types/types';
-import { findBaseWidget, findWidget } from '../utils';
-import { triggerBaseRefresh } from './baseActions';
-
-export default function modelUpdate(
-  designTokensModel: DesignTokensModel,
-  tokenset?: TokenSet,
-) {
-  const baseWidget = findBaseWidget();
-  if (baseWidget) {
-    baseWidget.setWidgetSyncedState({
-      ...baseWidget.widgetSyncedState,
-      designTokensModel,
-    });
-    triggerBaseRefresh(
-      tokenset
-    );
-  }
-}
-
 
 /*
 export function changeTokenSetType(

@@ -1,8 +1,7 @@
 import {
-  defaultDesignTokensModel,
   defaultTokenGroup,
-  TokenSet,
-  TokenSetType
+  TokenGroup,
+  TokenGroupLookup,
 } from "../../shared/types/types";
 import baseSatellite from "./base";
 import colorsSatellite from "./colors";
@@ -21,7 +20,7 @@ const {
   useSyncedState,
 } = widget;
 
-export default function satelliteSwitch(tokenset: TokenSet | undefined) {
+export default function satelliteSwitch() {
   const [tokenGroup, setTokenGroup] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup

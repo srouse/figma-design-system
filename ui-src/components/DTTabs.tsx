@@ -9,7 +9,7 @@ interface DTTabsProps {
   style?: object
 }
 
-export default class DTTabs extends React.Component <DTTabsProps> {
+export default class DTTabs extends React.Component<DTTabsProps> {
 
   constructor(props: DTTabsProps | Readonly<DTTabsProps>) {
     super(props);

@@ -9,7 +9,7 @@ interface InputProps {
   className?: string
 }
 
-export default class Input extends React.Component <InputProps> {
+export default class Input extends React.Component<InputProps> {
 
   constructor(props: InputProps | Readonly<InputProps>) {
     super(props);

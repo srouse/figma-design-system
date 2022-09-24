@@ -1,37 +1,28 @@
-import {
-  colors,
-  typography
-} from "../../shared/styles";
-import {
-  defaultDesignTokensModel,
-  DesignTokensModel,
-  TokenSet,
-  TokenSetCategory,
-  TokenSetType
-} from "../../shared/types/types";
-import designSystemClassName from '../../shared/designSystemClassName';
-import tokensetTypeToName from '../../shared/tokensetTypeToName';
-import {
-  findNodeParentPage,
-  findWidget,
-  sortIntoCategories
-} from "../utils";
 import button from "../components/button";
-import { triggerBaseRefresh } from "../actions/baseActions";
+import { triggerAllWidgetRefresh } from "../actions/baseActions";
+import { findNodeParentPage, findWidget } from "../utils";
+import { colors, typography } from "../../shared/styles";
+import { defaultGlobalData, defaultTokenGroupLookup, TokenGroupLookup } from "../../shared/types/types";
+import processClassName from "../../shared/processClassName";
 
 const { widget } = figma;
 const {
   AutoLayout,
   Text,
   Rectangle,
+  useWidgetId,
   useSyncedState,
 } = widget;
 
 export default function baseSatellite() {
-  const [designTokensModel, setDesignTokensModel] = useSyncedState(
-    'designTokensModel',
-    defaultDesignTokensModel
+
+  const nodeId = useWidgetId();
+
+  const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
+    'tokenGroupLookup',
+    defaultTokenGroupLookup
   );
+
   return (
     <AutoLayout 
       name="base-page"
@@ -41,18 +32,75 @@ export default function baseSatellite() {
       horizontalAlignItems="start"
       verticalAlignItems="start"
       spacing={26}>
-      {renderWidgetList(designTokensModel)}
-      {button('Refresh All', () => triggerBaseRefresh())}
+      <Text>hello</Text>
+      {renderWidgetList(tokenGroupLookup, nodeId)}
+      {button('Refresh All', () => triggerAllWidgetRefresh())}
     </AutoLayout>
   );
 }
 
+
 function renderWidgetList(
-  designTokensModel: DesignTokensModel
+  allTokenGroups: TokenGroupLookup[],
+  nodeId: string,
 ) {
-  const categorizedTokensets = sortIntoCategories(designTokensModel.tokensets);
+
+  const [globalData, setGlobalData] = useSyncedState(
+    'globalData',
+    defaultGlobalData
+  );
 
   const html: any[] = [];
+  allTokenGroups?.map(tokenGroup => {
+    if (tokenGroup.widgetId === nodeId) return;
+    html.push(
+      <AutoLayout
+        width="fill-parent"
+        height="hug-contents"
+        direction="vertical"
+        horizontalAlignItems="start"
+        verticalAlignItems="start"
+        spacing={2}
+        padding={{horizontal: 4, vertical: 6}}
+        cornerRadius={4}
+        key={`list-${tokenGroup.widgetId}`}
+        hoverStyle={{
+          fill: colors.hoverColor,
+        }}
+        onClick={() => {
+          const widget = findWidget(tokenGroup.widgetId);
+          const page = findNodeParentPage(widget);
+          if (page) {
+            figma.currentPage = page;
+          }
+          figma.viewport.scrollAndZoomIntoView([widget]);
+        }}>
+        <Text
+          fontFamily={typography.primaryFont}
+          fontWeight="medium"
+          fontSize={14}
+          width="fill-parent"
+          fill={colors.textColor}>
+          {tokenGroup.tokenGroupName}
+        </Text>
+        <Text
+          fontFamily={typography.primaryFont}
+          fontWeight="normal"
+          fontSize={11}
+          width="fill-parent"
+          fill={colors.textColor}>
+          {processClassName(
+            globalData.prefix,
+            tokenGroup.tokenGroupName
+            )}
+        </Text>
+      </AutoLayout>
+    );
+  });
+
+  return html;
+
+  /*
   categorizedTokensets.map((tokensetCategory: TokenSetCategory) => {
     if (tokensetCategory.type === TokenSetType.Base) {
       return;
@@ -111,12 +159,14 @@ function renderWidgetList(
                     fill: colors.hoverColor,
                   }}
                   onClick={() => {
+                    /*
                     const widget = findWidget(tokenset.nodeId);
                     const page = findNodeParentPage(widget);
                     if (page) {
                       figma.currentPage = page;
                     }
                     figma.viewport.scrollAndZoomIntoView([widget]);
+                    * /
                   }}>
                   <Text
                     fontFamily={typography.primaryFont}
@@ -132,9 +182,9 @@ function renderWidgetList(
                     fontSize={11}
                     width="fill-parent"
                     fill={colors.textColor}>
-                    {designSystemClassName(
+                    {/*designSystemClassName(
                       designTokensModel,
-                      tokenset )}
+                    tokenset )* /}
                   </Text>
                 </AutoLayout>
               );
@@ -142,10 +192,7 @@ function renderWidgetList(
         </AutoLayout>
       </AutoLayout>
     ));
-
-
-    
   });
-  return html;
+  */
 }
 

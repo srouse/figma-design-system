@@ -6,7 +6,7 @@ interface DeploymentProps {
   style?: object
 }
 
-export default class Deployment extends React.Component <DeploymentProps> {
+export default class Deployment extends React.Component<DeploymentProps> {
 
   constructor(props: DeploymentProps | Readonly<DeploymentProps>) {
     super(props);

@@ -1,18 +1,14 @@
 import React from "react";
-import { DesignTokensModel, TokenSet } from "../../shared/types/types";
+import {
+  CoreProps,
+} from "../../shared/types/types";
 import Input from "./input";
 import "./satelliteHeaderUI.css";
-import designSystemClassName from '../../shared/designSystemClassName';
+import processClassName from '../../shared/processClassName';
 
-interface SatelliteHeaderProps {
-  tokenset: TokenSet | undefined,
-  designTokensModel: DesignTokensModel | undefined,
-  sendToWidget: (dsys: DesignTokensModel) => void
-}
+export default class SatelliteHeaderUI extends React.Component<CoreProps> {
 
-export default class SatelliteHeaderUI extends React.Component <SatelliteHeaderProps> {
-
-  constructor(props: SatelliteHeaderProps | Readonly<SatelliteHeaderProps>) {
+  constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
   }
 
@@ -22,31 +18,20 @@ export default class SatelliteHeaderUI extends React.Component <SatelliteHeaderP
         <Input
           className="satellite-header-name"
           label="Name" 
-          value={this.props.tokenset?.name}
-          feedbackValue={designSystemClassName(
-            this.props.designTokensModel,
-            this.props.tokenset,
+          value={this.props.tokenGroup?.name}
+          feedbackValue={processClassName(
+            this.props.globalData?.prefix,
+            this.props.tokenGroup?.name,
           )}
           onChange={(value: string) => {
-            if (this.props.designTokensModel) {
-              const newTokenSets = this.props.designTokensModel?.tokensets.map(
-                (tokenSet : TokenSet) => {
-                  if (tokenSet.nodeId === this.props.tokenset?.nodeId) {
-                    return {
-                      ...tokenSet,
-                      name: value,
-                    }
-                  }
-                  return tokenSet;
-                }
-              )
-              this.props.sendToWidget({
-                ...this.props.designTokensModel,
-                tokensets: newTokenSets || [],
-              })
+            if (this.props.tokenGroup) {
+              this.props.updateTokenGroup({
+                ...this.props.tokenGroup,
+                name: value,
+              });
             }
           }} />
-        </div>
+     </div>
     );
   }
 }

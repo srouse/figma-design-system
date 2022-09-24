@@ -1,17 +1,11 @@
 import React from "react";
-import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import "./spacingUI.css";
 import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import { CoreProps } from "../../shared/types/types";
 
-interface SpacingUIProps {
-  tokenset: TokenSet | undefined,
-  designTokensModel: DesignTokensModel | undefined,
-  sendToWidget: (dsys: DesignTokensModel) => void
-}
+export default class SpacingUI extends React.Component<CoreProps> {
 
-export default class SpacingUI extends React.Component <SpacingUIProps> {
-
-  constructor(props: SpacingUIProps | Readonly<SpacingUIProps>) {
+  constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
   }
 
@@ -19,9 +13,7 @@ export default class SpacingUI extends React.Component <SpacingUIProps> {
     return (
       <div className="satellite">
         <SatelliteHeaderUI
-          tokenset={this.props.tokenset}
-          designTokensModel={this.props.designTokensModel}
-          sendToWidget={this.props.sendToWidget}
+          {...this.props}
            />
         spacing
       </div>

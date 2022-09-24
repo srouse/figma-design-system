@@ -1,19 +1,10 @@
-import { defaultDesignTokensModel } from "../../shared/types/types";
-
 const { widget } = figma;
 const {
   AutoLayout,
   Text,
-  useSyncedState
 } = widget;
 
 export default function colorsSatellite() {
-
-  const [designTokensModel, setDesignTokensModel] = useSyncedState(
-    'designTokensModel',
-    defaultDesignTokensModel
-  );
-
   return (
     <AutoLayout 
       name="base-page"

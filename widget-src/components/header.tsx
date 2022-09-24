@@ -1,14 +1,14 @@
 import {
-  defaultDesignTokensModel,
-  TokenSet,
-  TokenSetType
+  defaultGlobalData,
+  defaultTokenGroup,
 } from "../../shared/types/types";
 import {
   openEditor,
 } from "../actions/baseActions";
-import designSystemClassName from '../../shared/designSystemClassName';
+import processClassName from '../../shared/processClassName';
 import { findBaseWidget, findNodeParentPage } from "../utils";
 import { colors, typography } from "../../shared/styles";
+import { DSysGroupType } from "../../shared/types/designSystemTypes";
 
 const { widget } = figma;
 const {
@@ -27,12 +27,18 @@ const buttonSvgSrc = `
   </svg>
 `;
 
-export default function header(tokenset: TokenSet | undefined) {
+export default function header() {
   const nodeId = useWidgetId();
 
-  const [designTokensModel, setDesignTokensModel] = useSyncedState(
-    'designTokensModel',
-    defaultDesignTokensModel
+
+  const [tokenGroup, setTokenGroup] = useSyncedState(
+    'tokenGroup',
+    defaultTokenGroup
+  );
+
+  const [globalData, setGlobalData] = useSyncedState(
+    'globalData',
+    defaultGlobalData
   );
 
   const [touch, setTouch] = useSyncedState(
@@ -45,23 +51,23 @@ export default function header(tokenset: TokenSet | undefined) {
     false
   );
 
-  let title = tokenset?.name || 'No Name Found';
+  let title = tokenGroup?.name || 'No Name Found';
   let subtitle = '';
-  switch( tokenset?.type ) {
-    case TokenSetType.Base:
-      title = designTokensModel?.fullName || '';
+  switch( tokenGroup?.type ) {
+    case DSysGroupType.Base:
+      title = globalData?.fullName || '';
       subtitle = 'Design Tokens';
       break;
-    case TokenSetType.Undetermined:
-      title = designTokensModel?.fullName || '';
+    case DSysGroupType.Undetermined:
+      title = globalData?.fullName || '';
       subtitle = 'Design Tokens';
       break;
-    case TokenSetType.ColorSet:
-    case TokenSetType.TypographySet:
+    case DSysGroupType.ColorSet:
+    case DSysGroupType.TypographySet:
     default :
-      subtitle = designSystemClassName(
-        designTokensModel,
-        tokenset,
+      subtitle = processClassName(
+        globalData.prefix,
+        tokenGroup.name,
       );
       break;
   }
@@ -92,7 +98,8 @@ export default function header(tokenset: TokenSet | undefined) {
           padding={6}
           cornerRadius={4}
           hoverStyle={{
-            fill: isWindowUIOpen ? colors.hoverColorLight : colors.hoverColorDark
+            fill: isWindowUIOpen ? 
+              colors.hoverColorLight : colors.hoverColorDark
           }}
           onClick={() => {
             // focus on base
@@ -113,7 +120,7 @@ export default function header(tokenset: TokenSet | undefined) {
             width="hug-contents"
             height="hug-contents"
             fill="#ffffff">
-            {designTokensModel.prefix?.toUpperCase()}
+            {globalData.prefix?.toUpperCase()}
           </Text>
         </AutoLayout>
         <Rectangle 
@@ -152,21 +159,24 @@ export default function header(tokenset: TokenSet | undefined) {
             {subtitle}
           </Text>
         </AutoLayout>
-        <AutoLayout
-          padding={6}
-          cornerRadius={4}
-          hoverStyle={{
-            fill: isWindowUIOpen ? colors.hoverColorLight : colors.hoverColorDark
-          }}
-          onClick={async () => {
-            // nodeToImage();
-            setIsWindowUIOpen(true);
-            return openEditor(nodeId);
-          }}>
-          <SVG
-            src={buttonSvgSrc}
-          />
-        </AutoLayout>
+        {tokenGroup.type !== DSysGroupType.Undetermined ? 
+          (<AutoLayout
+            padding={6}
+            cornerRadius={4}
+            hoverStyle={{
+              fill: isWindowUIOpen ? 
+                colors.hoverColorLight : colors.hoverColorDark
+            }}
+            onClick={async () => {
+              // nodeToImage();
+              setIsWindowUIOpen(true);
+              return openEditor(nodeId);
+            }}>
+            <SVG
+              src={buttonSvgSrc}
+            />
+          </AutoLayout>) : null
+        }
       </AutoLayout>
     </AutoLayout>
 

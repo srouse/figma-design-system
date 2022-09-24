@@ -1,34 +1,29 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import "./App.css";
 import "./satellites/satellites.css";
 import {
-  DesignTokensModel,
   State,
   MessageTypes,
-  TokenSetType
+  GlobalData,
+  TokenGroup
 } from '../shared/types/types';
-import { findWidgetTokenset } from '../widget-src/actions/tokensetActions';
 import { renderCssVariables } from './utils/renderCssVariables';
 import SwitchUI from "./satellites/switchUI";
 
-export default class App extends React.Component <{}> {
+export default class App extends React.Component<{}> {
 
   constructor(props: {} | Readonly<{}>) {
     super(props);
     this.state = {};
     window.onmessage = (evt: any) => {
       const msg = evt.data.pluginMessage;
-      const tokenset = findWidgetTokenset(
-        msg.nodeId,
-        msg.designTokensModel
-      );
       this.setState({
         ...this.state,
         ...msg,
-        tokenset
       });
     }
-    this.sendToWidget = this.sendToWidget.bind(this);
+    this.updateGlobalData = this.updateGlobalData.bind(this);
+    this.updateTokenGroup = this.updateTokenGroup.bind(this);
 
     // inject css vars once
     renderCssVariables();
@@ -36,33 +31,44 @@ export default class App extends React.Component <{}> {
 
   state: State;
 
-  sendToWidget(designTokensModel: DesignTokensModel) {
-    parent?.postMessage?.({ pluginMessage: {
-      name: MessageTypes.modelUpdate,
-      designTokensModel,
-      tokenset: this.state.tokenset
-    } }, "*");
+  updateGlobalData(
+    globalData: GlobalData,
+  ) {
+    parent?.postMessage?.({pluginMessage: {
+      name: MessageTypes.globalDataUpdate,
+      globalData
+    }}, "*");
 
-    // make sure state has latest info...
-    const tokenset = findWidgetTokenset(
-      this.state.nodeId || '', 
-      designTokensModel
-    );
     this.setState({
       ...this.state,
-      designTokensModel,
-      tokenset
+      globalData
+    })
+  }
+
+  updateTokenGroup(
+    tokenGroup: TokenGroup,
+  ) {
+    parent?.postMessage?.({pluginMessage: {
+      name: MessageTypes.tokenGroupUpdate,
+      tokenGroup
+    }}, "*");
+
+    this.setState({
+      ...this.state,
+      tokenGroup
     })
   }
 
   render() {
+    if (!this.state.tokenGroup) return '';
     return (
       <div className="App">
         <div id="editor">
           <SwitchUI
-            tokenset={this.state.tokenset}
-            designTokensModel={this.state.designTokensModel}
-            sendToWidget={this.sendToWidget} />
+            tokenGroup={this.state.tokenGroup}
+            globalData={this.state.globalData}
+            updateGlobalData={this.updateGlobalData}
+            updateTokenGroup={this.updateTokenGroup} />
         </div>
       </div>
     );

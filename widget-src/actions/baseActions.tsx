@@ -1,37 +1,17 @@
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
-import {
-  DesignSystemWidget, TokenSet
-} from "../../shared/types/types";
+import { TokenGroupLookup } from "../../shared/types/types";
 import {
   findAllWidgets,
   findBaseWidget,
   findUndeterminedWidget,
   findWidget
 } from "../utils";
-import normalizeDesignTokensModel from "./baseNormalization";
-import { findWidgetTokenset } from "./tokensetActions";
-
 
 export async function openEditor(
   nodeId: string,
 ) {
-
   // could be a new widget...they don't refresh immediately
   const thisWidget = findWidget(nodeId);
-  const thisTokenset = findWidgetTokenset(
-    nodeId,
-    thisWidget.widgetSyncedState.designTokensModel
-  );
-
-  if (!thisTokenset) {
-    triggerBaseRefresh();
-    // tick for things to update
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, 100);
-    });
-  }
 
   // open ui via a promise so state stays open
   return new Promise((resolve) => {
@@ -41,41 +21,53 @@ export async function openEditor(
     );
     figma.ui.postMessage({
       nodeId,
-      designTokensModel: thisWidget.widgetSyncedState.designTokensModel
+      // designTokensModel: thisWidget.widgetSyncedState.designTokensModel,
+      globalData: thisWidget.widgetSyncedState.globalData,
+      tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
     });
   });
 }
 
-export function triggerBaseRefresh(
-  tokensetTrigger?: TokenSet
-) {
-  let baseWidget = findBaseWidget();
-  if (!baseWidget) return;
-  // plugin data doesn't trigger a refresh, so this tells 
-  // base to go ahead and redo everything
-  baseWidget.setPluginData(
-    'doRefresh',
-    tokensetTrigger ? tokensetTrigger.nodeId : 'yes'
-  );
+export function triggerBaseRefresh() {
+  const baseWidget = findBaseWidget();
+  if (baseWidget) {
+    baseWidget.setWidgetSyncedState({
+      ...baseWidget.widgetSyncedState,
+      touch: baseWidget.widgetSyncedState.touch + 1,
+    });
+  }
+}
 
-  // take this time to make the design system model coherent
-  // relative to widgets
-  const normalDSysModel = normalizeDesignTokensModel(
-    baseWidget.widgetSyncedState.designTokensModel
-  );
-  baseWidget = findBaseWidget();
-  if (!baseWidget) return;
-  baseWidget.setPluginData(
-    'doRefresh',
-    tokensetTrigger ? tokensetTrigger.nodeId : 'yes'
-  );
-
-  // touch state to trigger refresh
-  baseWidget.setWidgetSyncedState({
-    ...baseWidget.widgetSyncedState,
-    designTokensModel: normalDSysModel,
-    touch: baseWidget.widgetSyncedState.touch + 1
+export function triggerAllWidgetRefresh() {
+  const allWidgets = findAllWidgets();
+  const baseWidget = findBaseWidget();
+  allWidgets.map(widget => {
+    if (widget === baseWidget) return;
+    widget.setWidgetSyncedState({
+      ...widget.widgetSyncedState,
+      touch: widget.widgetSyncedState.touch + 1,
+    })
   });
+  updateBaseWidgetTokenGroupLookup();
+}
+
+export function updateBaseWidgetTokenGroupLookup() {
+  const baseWidget = findBaseWidget();
+  if (baseWidget) {
+    const newTokenGroupLookup: TokenGroupLookup[] = [];
+    const allOtherWidgets = findAllWidgets();
+    allOtherWidgets.map(widget => {
+      newTokenGroupLookup.push({
+        widgetId: widget.id,
+        tokenGroupName: widget.widgetSyncedState.tokenGroup?.name,
+      });
+    });
+    baseWidget?.setWidgetSyncedState({
+      ...baseWidget.widgetSyncedState,
+      tokenGroupLookup: newTokenGroupLookup,
+      touch: baseWidget.widgetSyncedState.touch + 1,
+    });
+  }
 }
 
 export function establishBase() {
@@ -126,57 +118,3 @@ export function establishBase() {
     */
   }
 }
-
-/*
-export function refreshFromBase(
-  widget: DesignSystemWidget
-) {
-  let baseWidget = findBaseWidget();
-  if (!baseWidget) return;
-  
-  const allWidgets = findAllWidgets();
-  if (baseWidget.id !== widget.nodeId ) {
-    triggerBaseRefresh();
-    return;// stop and tell base to go
-  }
-
-  // walk through all satellites and update their model
-  const baseDSysModel = baseWidget.widgetSyncedState.designTokensModel;
-  let totalProcess = 0;
-  const refreshNodeId = baseWidget.getPluginData('doRefresh');
-  allWidgets.map(satelliteWidget => {
-    // don't want to operate on base widget
-    if (satelliteWidget === baseWidget) {
-      return;
-    }
-
-    if (refreshNodeId !== 'yes') {
-      if (satelliteWidget.id !== refreshNodeId) {
-        return;
-      }
-    }
-
-    // update all satellites to base design system model
-    totalProcess++;
-    satelliteWidget.setWidgetSyncedState({
-      ...satelliteWidget.widgetSyncedState,
-      designTokensModel: {...baseDSysModel},
-      touch: satelliteWidget.widgetSyncedState.touch + 1
-    });
-  });
-
-  // cons ole.log(`[refreshFromBase: ${widget.nodeId}] 
-  //    refreshed ${totalProcess} widgets`);
-
-  baseWidget = findBaseWidget();
-  if (!baseWidget) return;
-  baseWidget.setPluginData('doRefresh', 'no');
-
-  /*
-  con sole.log(
-    `[refreshFromBase: ${widget.nodeId}] Base DesignTokensModel`,
-    baseWidget.widgetSyncedState.designTokensModel
-  );
-  * /
-}
-*/

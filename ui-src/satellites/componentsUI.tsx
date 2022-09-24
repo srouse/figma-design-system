@@ -1,17 +1,11 @@
 import React from "react";
-import { DesignTokensModel, TokenSet } from "../../shared/types/types";
 import "./componentsUI.css";
 import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import { CoreProps } from "../../shared/types/types";
 
-interface ComponentsUIProps {
-  tokenset: TokenSet | undefined,
-  designTokensModel: DesignTokensModel | undefined,
-  sendToWidget: (dsys: DesignTokensModel) => void
-}
+export default class ComponentsUI extends React.Component<CoreProps> {
 
-export default class ComponentsUI extends React.Component <ComponentsUIProps> {
-
-  constructor(props: ComponentsUIProps | Readonly<ComponentsUIProps>) {
+  constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
   }
 
@@ -19,9 +13,7 @@ export default class ComponentsUI extends React.Component <ComponentsUIProps> {
     return (
       <div className="satellite">
         <SatelliteHeaderUI
-          tokenset={this.props.tokenset}
-          designTokensModel={this.props.designTokensModel}
-          sendToWidget={this.props.sendToWidget}
+          {...this.props}
            />
         components
       </div>
