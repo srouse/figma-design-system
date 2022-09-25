@@ -1,6 +1,5 @@
 import React from "react";
 import "./colorsUI.css";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class ColorsUI extends React.Component<CoreProps> {
@@ -9,14 +8,9 @@ export default class ColorsUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div>
-        <SatelliteHeaderUI
-          {...this.props}
-           />
-        colors
-      </div>
+      <div>{this.props.tokenGroup?.type}</div>
     );
   }
 }

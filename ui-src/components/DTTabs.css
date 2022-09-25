@@ -6,6 +6,7 @@
   background-color: var( --grey-light );
   display: flex;
   flex-direction: row;
+  user-select: none;
 }
 
   .dttabs .tab {

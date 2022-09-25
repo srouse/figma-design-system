@@ -1,6 +1,5 @@
 import React from "react";
 import "./columnLayoutUI.css";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class ColumnLayoutUI extends React.Component<CoreProps> {
@@ -9,17 +8,9 @@ export default class ColumnLayoutUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div className="satellite">
-        <SatelliteHeaderUI
-          tokenGroup={this.props.tokenGroup}
-          globalData={this.props.globalData}
-          updateGlobalData={this.props.updateGlobalData}
-          updateTokenGroup={this.props.updateTokenGroup}
-           />
-        column layout
-      </div>
+      <div>{this.props.tokenGroup?.type}</div>
     );
   }
 }

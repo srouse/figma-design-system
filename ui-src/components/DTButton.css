@@ -28,6 +28,7 @@
 
   .dtbutton.label,
   .dtbutton .label {
+    user-select: none;
     text-align: center;
     font-size: 14px;
     flex: 1;

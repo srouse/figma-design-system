@@ -9,6 +9,7 @@ import processClassName from '../../shared/processClassName';
 import { findBaseWidget, findNodeParentPage } from "../utils";
 import { colors, typography } from "../../shared/styles";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
+import tokenGroupTypeToName from '../../shared/tokenGroupTypeToName';
 
 const { widget } = figma;
 const {
@@ -65,10 +66,7 @@ export default function header() {
     case DSysGroupType.ColorSet:
     case DSysGroupType.TypographySet:
     default :
-      subtitle = processClassName(
-        globalData.prefix,
-        tokenGroup.name,
-      );
+      subtitle = tokenGroupTypeToName(tokenGroup);
       break;
   }
 

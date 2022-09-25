@@ -1,6 +1,5 @@
 import React from "react";
 import "./iconsUI.css";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class IconsUI extends React.Component<CoreProps> {
@@ -9,14 +8,9 @@ export default class IconsUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div className="satellite">
-        <SatelliteHeaderUI
-          {...this.props}
-           />
-        Icons
-      </div>
+      <div>{this.props.tokenGroup?.type}</div>
     );
   }
 }

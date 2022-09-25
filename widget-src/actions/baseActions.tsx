@@ -17,7 +17,7 @@ export async function openEditor(
   return new Promise((resolve) => {
     figma.showUI(
       __html__,
-      {width: 400, height: 716, themeColors: true}
+      {width: 400, height: 677, themeColors: true}
     );
     figma.ui.postMessage({
       nodeId,

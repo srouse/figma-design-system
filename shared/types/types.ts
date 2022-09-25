@@ -27,6 +27,15 @@ export type CoreProps = {
 export interface GlobalData {
   prefix: string,
   fullName: string,
+  gitHubSettings: GitHubSettings
+}
+
+export type GitHubSettings = {
+  username?: string,
+  repositoryAndNPMPackageName?: string,
+  accessToken?: string,
+  version: string,// semvar
+  validated: boolean,
 }
 
 export interface TokenGroup {
@@ -41,6 +50,28 @@ export type TokenGroupLookup = {
   widgetId: string,
   tokenGroupName: string | undefined,
 }
+
+// ============== DEFAULTS ====================
+
+export const defaultTokenGroup : TokenGroup = {
+  type: DSysGroupType.Undetermined,
+  name: '',
+  tokensets: [],
+}
+
+export const defaultGlobalData: GlobalData = {
+  prefix: '',
+  fullName: '',
+  gitHubSettings: {
+    version: '0.0.0',
+    validated: false,
+  }
+}
+
+export const defaultTokenGroupLookup: TokenGroupLookup[] = [];
+
+export const widgetVersion = 3;
+
 
 // ========== DesignSystemWidget ========================
 export interface SetterString {
@@ -61,38 +92,10 @@ export interface SetterStringArray {
 
 export interface DesignSystemWidget {
   nodeId: string;
-  
-  /*
-  designTokensModel: DesignTokensModel;
-  setDesignTokensModel: (
-    newValue: DesignTokensModel | 
-    ((currValue: DesignTokensModel) => DesignTokensModel)) => void;
-  */
-
   globalData: GlobalData;
-
   touch: number;
   setTouch: SetterNumber;
 }
-
-// ============== DEFAULTS ====================
-
-export const defaultTokenGroup : TokenGroup = {
-  type: DSysGroupType.Undetermined,
-  name: '',
-  tokensets: [],
-}
-
-export const defaultGlobalData: GlobalData = {
-  prefix: '',
-  fullName: '',
-}
-
-export const defaultTokenGroupLookup: TokenGroupLookup[] = [];
-
-export const widgetVersion = 3;
-
-
 
 // =========START V1======================
 // ----------- WIDGET --------------

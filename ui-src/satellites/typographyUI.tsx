@@ -1,6 +1,5 @@
 import React from "react";
 import "./typographyUI.css";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class TypographyUI extends React.Component<CoreProps> {
@@ -9,14 +8,9 @@ export default class TypographyUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div className="satellite">
-        <SatelliteHeaderUI
-          {...this.props}
-           />
-        typography
-      </div>
+      <div>{this.props.tokenGroup?.type}</div>
     );
   }
 }

@@ -1,6 +1,5 @@
 import React from "react";
 import "./spacingUI.css";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class SpacingUI extends React.Component<CoreProps> {
@@ -9,14 +8,9 @@ export default class SpacingUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div className="satellite">
-        <SatelliteHeaderUI
-          {...this.props}
-           />
-        spacing
-      </div>
+      <div>{this.props.tokenGroup?.type}</div>
     );
   }
 }

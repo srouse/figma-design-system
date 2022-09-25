@@ -1,4 +1,13 @@
 
 .deployment {
-  background-color: #f00;
+  padding: 30px 30px;
+  overflow-y: scroll;
 }
+
+
+  .deployment-nav {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    padding: 30px;
+  }

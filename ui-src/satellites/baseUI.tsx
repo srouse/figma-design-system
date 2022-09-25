@@ -1,7 +1,5 @@
 import React from "react";
 import "./baseUI.css";
-import Input from "../components/Input";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class BaseUI extends React.Component<CoreProps> {
@@ -10,39 +8,9 @@ export default class BaseUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div className="base satellite">
-        <SatelliteHeaderUI
-          {...this.props}
-           />
-        <div className="editor-header">
-          <Input
-            className="base-prefix"
-            label="Prefix" 
-            value={this.props.globalData?.prefix} 
-            onChange={(value: string) => {
-              if (this.props.globalData) {
-                this.props.updateGlobalData({
-                  ...this.props.globalData,
-                  prefix: value,
-                });
-              }
-            }} />
-          <Input
-            className="base-full-name"
-            label="Full Name" 
-            value={this.props.globalData?.fullName} 
-            onChange={(value: string) => {
-              if (this.props.globalData) {
-                this.props.updateGlobalData({
-                  ...this.props.globalData,
-                  fullName: value,
-                });
-              }
-            }} />
-          </div>
-      </div>
+      <div>{this.props.tokenGroup?.type}</div>
     );
   }
 }

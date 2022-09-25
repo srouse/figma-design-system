@@ -1,10 +1,4 @@
 .settings {
-  padding: 22px 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-}
-
-.settings > * {
-  flex: 1;
+  padding: 30px 30px;
+  overflow-y: scroll;
 }
