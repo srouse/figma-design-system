@@ -1,6 +1,6 @@
 import React from "react";
 import "./iconsUI.css";
-import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class IconsUI extends React.Component<CoreProps> {

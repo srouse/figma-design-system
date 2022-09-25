@@ -3,11 +3,12 @@
 .inputComp {
   display: flex;
   flex-direction: column;
+  margin-bottom: 18px;
 }
 
   .inputComp-label {
     font-size: 11px;
-    color: white;
+    color: var( --text-color );
   }
 
   .inputComp-input-box {
@@ -32,3 +33,7 @@
     font-size: 12px;
     color: #A9A9A9;
   }
+
+.inputComp.dark .inputComp-label {
+  color: var( --text-color-white );
+}

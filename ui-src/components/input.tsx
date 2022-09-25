@@ -1,11 +1,12 @@
 import React from "react";
-import "./input.css";
+import "./Input.css";
 
 interface InputProps {
   label: string,
   value: string | undefined,
   feedbackValue?: string | undefined,
   onChange: (value: string) => void
+  background?: 'light' | 'dark',
   className?: string
 }
 
@@ -17,7 +18,10 @@ export default class Input extends React.Component<InputProps> {
 
   render() {
     return (
-      <div className={`${this.props.className} inputComp`}>
+      <div className={`
+        ${this.props.className}
+        ${this.props.background}
+        inputComp`}>
         <div className="inputComp-label">{this.props.label}</div>
         <div className="inputComp-input-box">
           <input

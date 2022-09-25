@@ -1,6 +1,6 @@
 import React from "react";
 import "./effectsUI.css";
-import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import DTTabs from "../components/DTTabs";
 import Deployment from "../deployment/deployment";
 import Settings from "../settings/settings";
@@ -11,7 +11,7 @@ export default class EffectsUI extends React.Component<CoreProps> {
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
     this.state = {
-      page: 'tokens'
+      page: 'settings',// 'tokens'
     };
   }
 
@@ -23,10 +23,15 @@ export default class EffectsUI extends React.Component<CoreProps> {
       case 'tokens':
         break;
       case 'deployment' :
-        content = (<Deployment style={{flex: 1}} />);
+        content = (
+          <Deployment
+            style={{flex: 1}} />);
         break;
       case 'settings' :
-        content = (<Settings style={{flex: 1}} />)
+        content = (
+          <Settings
+            style={{flex: 1}}
+            {...this.props} />)
         break;
     }
     return (

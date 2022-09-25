@@ -2,9 +2,9 @@ import React from "react";
 import {
   CoreProps,
 } from "../../shared/types/types";
-import Input from "./input";
-import "./satelliteHeaderUI.css";
-import processClassName from '../../shared/processClassName';
+import Input from "./Input";
+import "./SatelliteHeaderUI.css";
+import tokenGroupTypeToName from '../../shared/tokenGroupTypeToName';
 
 export default class SatelliteHeaderUI extends React.Component<CoreProps> {
 
@@ -14,23 +14,18 @@ export default class SatelliteHeaderUI extends React.Component<CoreProps> {
 
   render() { 
     return (
-      <div className="editor-header">
-        <Input
-          className="satellite-header-name"
-          label="Name" 
-          value={this.props.tokenGroup?.name}
-          feedbackValue={processClassName(
-            this.props.globalData?.prefix,
-            this.props.tokenGroup?.name,
-          )}
-          onChange={(value: string) => {
-            if (this.props.tokenGroup) {
-              this.props.updateTokenGroup({
-                ...this.props.tokenGroup,
-                name: value,
-              });
-            }
-          }} />
+      <div className="satellite-header">
+        <div className="prefix">
+          {this.props.globalData?.prefix}
+        </div>
+        <div className="groupSummary">
+          <div className="name">
+            {this.props.tokenGroup?.name}
+          </div>
+          <div className="type">
+            {tokenGroupTypeToName(this.props.tokenGroup)}
+          </div>
+        </div>
      </div>
     );
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import "./baseUI.css";
-import Input from "../components/input";
-import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import Input from "../components/Input";
+import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class BaseUI extends React.Component<CoreProps> {

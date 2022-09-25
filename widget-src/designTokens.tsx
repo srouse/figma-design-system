@@ -48,12 +48,10 @@ export default function designSystem() {
     // if there is no base, we need to find one
     const baseWidget = findBaseWidget();
     if (!baseWidget) {
-      console.log(`[useEffect: ${nodeId}] establishBase`);
       establishBase();
     }
 
     if (!initialized) {
-      console.log('new widget', nodeId);
       setInitialized(true);
       if (baseWidget) {
         setGlobalData({

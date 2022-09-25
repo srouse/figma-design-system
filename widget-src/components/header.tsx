@@ -72,27 +72,29 @@ export default function header() {
       break;
   }
 
-  title = `${title} | ${touch}`;
+  title = `${title}`;// | ${touch}`;
 
   return (
     <AutoLayout 
       name="token-set-header"
       width="fill-parent"
-      height={65}
+      height="hug-contents"
       direction="vertical"
       horizontalAlignItems="center"
       verticalAlignItems="center"
-      spacing={9}
-      padding={{top: 16,left: 20,bottom: 16,right: 20}}
+      spacing={6}
+      padding={{
+        top: 16, bottom: 16,
+        left: 16,right: 16}}
       fill={isWindowUIOpen ? colors.primary : colors.headerBG}>
       <AutoLayout 
         name="Header Titles"
         width="fill-parent"
-        height={33}
+        height="hug-contents"
         direction="horizontal"
         horizontalAlignItems="start"
         verticalAlignItems="center"
-        spacing={8}
+        spacing={6}
         cornerRadius={0}>
         <AutoLayout
           padding={6}
@@ -142,7 +144,7 @@ export default function header() {
             name="Title"
             fontFamily={typography.primaryFont}
             fontWeight="semi-bold"
-            fontSize={14}
+            fontSize={13}
             width="fill-parent"
             height="hug-contents"
             fill="#ffffff">

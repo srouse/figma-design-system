@@ -1,6 +1,6 @@
 import React from "react";
 import "./colorsUI.css";
-import SatelliteHeaderUI from "../components/satelliteHeaderUI";
+import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import { CoreProps } from "../../shared/types/types";
 
 export default class ColorsUI extends React.Component<CoreProps> {
