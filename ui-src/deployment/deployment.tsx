@@ -5,7 +5,9 @@ import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
 import Select from "../components/Select";
 import "./deployment.css";
-import { validate } from "./github";
+import createRelease from "./github/createRelease";
+import createRepo from "./github/createRepo";
+import validateRepo, { ValidationResponses } from "./github/validateRepo";
 
 interface DeploymentProps extends CoreProps {
   style?: object
@@ -15,7 +17,16 @@ export default class Deployment extends React.Component<DeploymentProps> {
 
   constructor(props: DeploymentProps | Readonly<DeploymentProps>) {
     super(props);
+    this.state = {
+      validateLabel: 'Validate',
+    };
   }
+
+  state: {
+    validateLabel: string,
+    error?: string,
+    feedback?: string
+  };
 
   render() { 
     let content = (<div>GitHub Deploy is not set up</div>);
@@ -127,14 +138,56 @@ export default class Deployment extends React.Component<DeploymentProps> {
     }else{
       return (
         <div className="deployment-nav">
+          {this.state.error ? (
+            <div className="deployment-error">
+              {this.state.error}
+            </div>
+          ) : (null)}
+          {this.state.feedback ? (
+            <div className="deployment-feedback">
+              {this.state.feedback}
+            </div>
+          ) : (null)}
           <DTButton
-            label="Validate"
+            label={this.state.validateLabel}
             color={DTButtonColor.grey}
             style={{width: '100%'}}
             icon="target"
-            onClick={() => {
-              if (this.props.globalData?.gitHubSettings)
-                validate(this.props.globalData?.gitHubSettings);
+            onClick={async () => {
+              this.setState({
+                validateLabel: 'loading...',
+                error: undefined
+              })
+              if (this.props.globalData?.gitHubSettings) {
+                const results = await validateRepo(
+                  this.props.globalData?.gitHubSettings,
+                  (update: string) => this.setState({
+                    feedback: update
+                  })
+                );
+                switch (results) {
+                  case ValidationResponses.BadConfig:
+                    this.setState({
+                      validateLabel: 'Validate',
+                      feedback: undefined,
+                      error: `Error. This appears to be a pre-existing
+                      repository or one not for use with the Design Tokens
+                      widget. Choose an empty repository or check the 
+                      design-tokens.config.json file {builtWith:'figma-design-tokens'}`
+                    });
+                    break;
+                  case ValidationResponses.RepoValid:
+                    await createRelease(
+                      this.props.globalData?.gitHubSettings
+                    );
+                    this.setState({
+                      validateLabel: 'Publish',
+                      feedback: undefined
+                    });
+                    break;
+                }
+                
+              }
             }}/>
         </div>
       );

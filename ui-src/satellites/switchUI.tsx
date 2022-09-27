@@ -19,7 +19,8 @@ import Settings from "../settings/settings";
 export default class SwitchUI extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
-    super(props);this.state = {
+    super(props);
+    this.state = {
       page: 'deployment',
     };
   }

@@ -4,6 +4,7 @@ export const colors = {
   textColorHover: '#6F6F6F',
   textColorLighter: '#6F6F6F',// something lighter than default
   textColorWhite: '#ffffff',
+  textColorError: '#E42222',
 
   white: '#ffffff',
 
