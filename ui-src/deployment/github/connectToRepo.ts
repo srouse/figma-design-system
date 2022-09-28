@@ -8,9 +8,11 @@ import getVersion from "./actions/getVersion";
 
 export default async function connectToRepo(
   gitHubSettings: GitHubSettings,
-  updateFeedback: (update: string) => void
+  updateFeedback: (update: string) => void,
+  updateTotalSteps: (total: number) => void,
 ) : Promise<GithubResult> {
 
+  updateTotalSteps(8);
   // see if repository exists
   updateFeedback('checking if repo exists');
   const repositoryExistsResults = await repositoryExists(gitHubSettings);
@@ -38,6 +40,8 @@ export default async function connectToRepo(
         message: uploadFilesResults.message,
       };
     }
+  }else{
+    updateTotalSteps(2);
   }
 
   // see if repository has correct config now...
@@ -63,7 +67,9 @@ export default async function connectToRepo(
     status: ResponseStatus.RepoValid,
     value: {
       ...gitHubSettings,
-      version: versionResults.value ? versionResults.value : '0.0.1',
+      version: versionResults.value ? 
+        versionResults.value.replace('v', '') :
+        '0.0.1',
     }
   }
 }

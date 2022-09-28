@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import "./Select.css";
 
 interface SelectProps {
@@ -10,13 +10,17 @@ interface SelectProps {
   className?: string,
   readOnly? : boolean,
   centerIcon? : boolean,
+  dropdown: {value:string, name: string}[],
 }
 
 export default class Select extends React.Component<SelectProps> {
 
   constructor(props: SelectProps | Readonly<SelectProps>) {
     super(props);
+    this.uid = `${Math.round(Math.random() * 1000000)}`;
   }
+
+  uid: string;
 
   render() {
     return (
@@ -34,11 +38,20 @@ export default class Select extends React.Component<SelectProps> {
             ) : (<>
               <select
                 className="selectComp-select" 
-                value="audi">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-                <option value="mercedes">Mercedes</option>
-                <option value="audi">Audi</option>
+                value={this.props.value}
+                onChange={(evt: any) => {
+                  if (this.props.onChange)
+                    this.props.onChange(evt.target.value);
+                }}>
+                {this.props.dropdown.map(dropdown => {
+                  return (
+                    <option
+                      value={dropdown.value} 
+                      key={`dropdown_${this.uid}_${dropdown.value}`}>
+                      {dropdown.name}
+                    </option> 
+                  );
+                })}
               </select>
               <svg
                 className="selectComp-icon"

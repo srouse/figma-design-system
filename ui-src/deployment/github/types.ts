@@ -31,3 +31,9 @@ export type JSONConfig = {
 export type PackageJson = {
   version: string,
 }
+
+export enum VersionIncrements {
+  major = 'major',
+  minor = 'minor',
+  patch = 'patch',
+}

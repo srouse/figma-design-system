@@ -45,7 +45,7 @@ export default async function validateConfig(
     configJson = JSON.parse(atob(results.data.content));
   }catch(error) {
     jsonError = true;
-    console.log(error);
+    console.log('validateConfig error', error);
   }
   if (jsonError) return {
     success: false,

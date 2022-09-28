@@ -12,15 +12,16 @@ export default async function uploadFiles(
   updateFeedback: (update: string) => void
 ) : Promise<GithubSuccess> {
   // update/create all the basic files with version
-  const results = await Promise.all([
-    DesignTokensConfigFile.upload(gitHubSettings, updateFeedback),
-    NpmrcFile.upload(gitHubSettings, updateFeedback),
-    PackageFile.upload(gitHubSettings, updateFeedback),
-    PackageLockFile.upload(gitHubSettings, updateFeedback),
-    WorkflowReleasePackageFile.upload(gitHubSettings, updateFeedback),
-  ]);
+  // they must be done in series...sha changes...
+  const results = [];
+  results.push( await DesignTokensConfigFile.upload(gitHubSettings, updateFeedback) );
+  results.push( await NpmrcFile.upload(gitHubSettings, updateFeedback) );
+  results.push( await PackageFile.upload(gitHubSettings, updateFeedback) );
+  results.push( await PackageLockFile.upload(gitHubSettings, updateFeedback) );
+  results.push( await WorkflowReleasePackageFile.upload(gitHubSettings, updateFeedback) );
 
   const errors = results.find((result : GithubSuccess ) => result.success === false);
+  console.log('uploadFiles', results);
   if (errors) {
     return {
       success: false,

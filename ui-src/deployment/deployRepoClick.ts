@@ -1,22 +1,29 @@
-import Deployment from "./deployment";
 import deployToRepo from "./github/deployToRepo";
 import { ResponseStatus } from "./github/types";
 import { stripIndent } from 'common-tags';
+import DeployModal from "./modal/deployModal";
 
 export default async function deployRepoClick(
-  comp: Deployment
+  comp: DeployModal
 ) {
   comp.setState({
-    deployLabel: 'loading...',
-    error: undefined
+    error: undefined,
+    percentDone: 0,
   });
   if (!comp.props.globalData?.gitHubSettings) return;
 
+  const expectedTotal = 8;
+  let total = 0;
   const results = await deployToRepo(
     comp.props.globalData?.gitHubSettings,
-    (update: string) => comp.setState({
-      feedback: update
-    })
+    comp.props.versionIncrement,
+    (update: string) => {
+      total++;
+      comp.setState({
+        feedback: update,
+        percentDone: total/expectedTotal
+      });
+    }
   );
 
   switch (results.status) {
@@ -61,11 +68,18 @@ export default async function deployRepoClick(
             ...results.value,
           }
         });
+        comp.setState({
+          feedback: `Deployed ${results.value.version}`
+        });
+      }else{
+        comp.setState({
+          feedback: `Deployed with unknown version`
+        });
       }
-      comp.setState({
-        deployLabel: 'Deploy',
-        feedback: undefined
-      });
       break;
   }
+
+  comp.setState({
+    finished: true
+  });
 }

@@ -33,7 +33,9 @@ export default async function repositoryExists(
     });
     return {
       success: exists ? true : false,
-      message: exists ? '' : 'Repository not found.'
+      message: exists ? 
+        '' : 
+        `Repository not found. If you just created it, you may need to wait a moment.`
     };
   }
   return {

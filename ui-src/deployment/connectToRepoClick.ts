@@ -1,26 +1,36 @@
-import Deployment from "./deployment";
 import connectToRepo from "./github/connectToRepo";
 import { ResponseStatus } from "./github/types";
-
+import DeployModal from "./modal/deployModal";
 
 export default async function connectToRepoClick(
-  comp: Deployment
+  comp: DeployModal
 ) {
   comp.setState({
-    validateLabel: 'loading...',
-    error: undefined
+    error: undefined,
+    percentDone: 0,
   });
   if (!comp.props.globalData?.gitHubSettings) return;
+
+  let expectedTotal = 2;
+  let total = 0;
   const results = await connectToRepo(
     comp.props.globalData?.gitHubSettings,
-    (update: string) => comp.setState({
-      feedback: update
-    })
+    (update: string) => {
+      total++;
+      console.log('total', total);
+      comp.setState({
+        feedback: update,
+        percentDone: total/expectedTotal
+      });
+    },
+    (totalSteps: number) => {
+      expectedTotal = totalSteps;
+    }
   );
+
   switch (results.status) {
     case ResponseStatus.BadConfig:
       comp.setState({
-        validateLabel: 'Connect To Repository',
         feedback: undefined,
         error: `Error. This appears to be a pre-existing
         repository or one not for use with the Design Tokens
@@ -34,7 +44,6 @@ export default async function connectToRepoClick(
     case ResponseStatus.UploadFilesFailed:
     case ResponseStatus.VersionFailed:
         comp.setState({
-          validateLabel: 'Connect to Repository',
           feedback: undefined,
           error: results.message,
         });
@@ -50,9 +59,12 @@ export default async function connectToRepoClick(
         }
       });
       comp.setState({
-        validateLabel: 'Connect To Repository',
         feedback: undefined
       });
       break;
   }
+
+  comp.setState({
+    finished: true
+  });
 }

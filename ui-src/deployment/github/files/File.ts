@@ -17,20 +17,10 @@ export default class File {
     updateFeedback: (update: string) => void
   ) : Promise<GithubSuccess> {
     updateFeedback(`uploading file: ${this.path}`);
-    let success = true;
-    let message = '';
-    await uploadFile(
+    return uploadFile(
       gitHubSettings,
       this.path,
       this.getContent(gitHubSettings),
-    ).catch((err: Error) => {
-      success = false;
-      message = err.message;
-    });
-
-    return {
-      success,
-      message,
-    }
+    );
   }
 }

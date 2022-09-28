@@ -4,11 +4,9 @@ import DTButton, { DTButtonColor } from "../components/DTButton";
 import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
 import Select from "../components/Select";
-import connectToRepoClick from "./connectToRepoClick";
 import "./deployment.css";
-import deployRepoClick from "./deployRepoClick";
-import connectToRepo from "./github/connectToRepo";
-import { ResponseStatus } from "./github/types";
+import { VersionIncrements } from "./github/types";
+import DeployModal, { DeploymentModalActions } from "./modal/deployModal";
 
 interface DeploymentProps extends CoreProps {
   style?: object
@@ -19,19 +17,17 @@ export default class Deployment extends React.Component<DeploymentProps> {
   constructor(props: DeploymentProps | Readonly<DeploymentProps>) {
     super(props);
     this.state = {
-      validateLabel: 'Connect To Repository',
-      deployLabel: 'Deploy',
+      modalAction: DeploymentModalActions.closed,
+      versionLevel: VersionIncrements.patch,
     };
   }
 
   state: {
-    validateLabel: string,
-    deployLabel: string,
     error?: string,
-    feedback?: string
+    feedback?: string,
+    modalAction: DeploymentModalActions,
+    versionLevel: VersionIncrements,
   };
-
-  
 
   render() { 
     let content = (<div>GitHub Deploy is not set up</div>);
@@ -50,6 +46,17 @@ export default class Deployment extends React.Component<DeploymentProps> {
           label="GitHub Deploy"
           linkLabel="How Does This Work?"
           onLinkClick={() => console.log('do something')} />
+        {this.state.modalAction !== DeploymentModalActions.closed ? (
+          <DeployModal 
+            {...this.props}
+            action={this.state.modalAction}
+            versionIncrement={this.state.versionLevel}
+            onClose={() => {
+              this.setState({
+                modalAction: DeploymentModalActions.closed,
+              });
+            }} />
+        ) : null}
         {content}
       </div>
     );
@@ -74,7 +81,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
           readOnly
           value={`v${this.props.globalData?.gitHubSettings?.version}`} />
         <DTButton
-          label="Disconnect From Repo"
+          label="Detach"
           color={DTButtonColor.grey}
           style={{width: '100%'}}
           icon="unlink"
@@ -155,14 +162,26 @@ export default class Deployment extends React.Component<DeploymentProps> {
           ) : (null)}
           <Select
             label="Version Increment"
-            value={'Minor'} />
+            value={this.state.versionLevel}
+            onChange={(value: string) => {
+              this.setState({
+                versionLevel: value,
+              })
+            }}
+            dropdown={[
+              {name: 'Major', value: VersionIncrements.major},
+              {name: 'Minor', value: VersionIncrements.minor},
+              {name: 'Patch', value: VersionIncrements.patch},
+            ]} />
           <DTButton
-            label={this.state.deployLabel}
+            label="Deploy"
             color={DTButtonColor.grey}
             style={{width: '100%'}}
             icon="deploy"
             onClick={async () => {
-              deployRepoClick(this);
+              this.setState({
+                modalAction: DeploymentModalActions.deploy,
+              });
             }}/>
         </div>
       );
@@ -180,12 +199,14 @@ export default class Deployment extends React.Component<DeploymentProps> {
             </div>
           ) : (null)}
           <DTButton
-            label={this.state.validateLabel}
+            label="Connect To Repository"
             color={DTButtonColor.grey}
             style={{width: '100%'}}
             icon="target"
             onClick={async () => {
-              connectToRepoClick(this);
+              this.setState({
+                modalAction: DeploymentModalActions.connect,
+              });
             }}/>
         </div>
       );

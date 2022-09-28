@@ -3,12 +3,13 @@ import repositoryExists from "./actions/repositoryExists";
 import validateConfig from "./actions/validateConfig";
 import uploadFiles from "./actions/uploadFiles";
 import createRelease from "./actions/createRelease";
-import { GithubResult, ResponseStatus } from "./types";
+import { GithubResult, ResponseStatus, VersionIncrements } from "./types";
 import getVersion from "./actions/getVersion";
 import semvar from "./semver";
 
 export default async function deployToRepo(
   gitHubSettings: GitHubSettings,
+  versionLevel: VersionIncrements,
   updateFeedback: (update: string) => void
 ) : Promise<GithubResult> {
 
@@ -32,7 +33,9 @@ export default async function deployToRepo(
   }
 
   // get the package file and increment version
-  const versionResults = await getVersion(gitHubSettings);
+  const versionResults = await getVersion(
+    gitHubSettings
+  );
   if (!versionResults) {
     return {
       status: ResponseStatus.VersionFailed,
@@ -45,7 +48,7 @@ export default async function deployToRepo(
     ...gitHubSettings,
     version: semvar(
       versionResults.value,
-      {major:0, minor:0, patch:1}
+      versionLevel,
     )
   };
 

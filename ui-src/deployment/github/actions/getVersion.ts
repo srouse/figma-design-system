@@ -45,7 +45,7 @@ export default async function getVersion(
     packageJson = JSON.parse(atob(results.data.content));
   }catch(error) {
     jsonError = true;
-    console.log(error);
+    console.log('getVersion error', error);
   }
   if (jsonError) return {
     success: false,
