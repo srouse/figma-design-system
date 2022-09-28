@@ -4,10 +4,11 @@ import DTButton, { DTButtonColor } from "../components/DTButton";
 import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
 import Select from "../components/Select";
+import connectToRepoClick from "./connectToRepoClick";
 import "./deployment.css";
-import createRelease from "./github/createRelease";
-import createRepo from "./github/createRepo";
-import validateRepo, { ValidationResponses } from "./github/validateRepo";
+import deployRepoClick from "./deployRepoClick";
+import connectToRepo from "./github/connectToRepo";
+import { ResponseStatus } from "./github/types";
 
 interface DeploymentProps extends CoreProps {
   style?: object
@@ -18,20 +19,23 @@ export default class Deployment extends React.Component<DeploymentProps> {
   constructor(props: DeploymentProps | Readonly<DeploymentProps>) {
     super(props);
     this.state = {
-      validateLabel: 'Validate',
+      validateLabel: 'Connect To Repository',
+      deployLabel: 'Deploy',
     };
   }
 
   state: {
     validateLabel: string,
+    deployLabel: string,
     error?: string,
     feedback?: string
   };
 
+  
+
   render() { 
     let content = (<div>GitHub Deploy is not set up</div>);
     if (this.props.globalData?.gitHubSettings) {
-      
       content = (<>
         {this.renderContent()}
         {this.renderBottomNav()}
@@ -52,11 +56,10 @@ export default class Deployment extends React.Component<DeploymentProps> {
   }
 
   renderContent() {
-    if (this.props.globalData?.gitHubSettings.validated) {
+    if (this.props.globalData?.gitHubSettings.connected === true) {
       const settings = this.props.globalData?.gitHubSettings;
       const repository = `https://github.com/${settings.username}/${settings.repositoryAndNPMPackageName}`;
       const npmPackage = `https://github.com/${settings.username}/${settings.repositoryAndNPMPackageName}/pkgs/npm/${settings.repositoryAndNPMPackageName}`;
-
       return (<>
         <Input
           label="Repository" 
@@ -70,6 +73,22 @@ export default class Deployment extends React.Component<DeploymentProps> {
           label="Version" 
           readOnly
           value={`v${this.props.globalData?.gitHubSettings?.version}`} />
+        <DTButton
+          label="Disconnect From Repo"
+          color={DTButtonColor.grey}
+          style={{width: '100%'}}
+          icon="unlink"
+          onClick={async () => {
+            if (!this.props.globalData) return;
+            this.props.updateGlobalData({
+              ...this.props.globalData,
+              gitHubSettings: {
+                ...this.props.globalData.gitHubSettings,
+                connected: false,
+                version: '0.0.0',
+              }
+            })
+          }}/>
       </>);
     }else{
       return (<>
@@ -121,18 +140,30 @@ export default class Deployment extends React.Component<DeploymentProps> {
   }
 
   renderBottomNav() {
-    if (this.props.globalData?.gitHubSettings.validated) {
+    if (this.props.globalData?.gitHubSettings.connected === true) {
       return (
         <div className="deployment-nav">
+          {this.state.error ? (
+            <div className="deployment-error">
+              {this.state.error}
+            </div>
+          ) : (null)}
+          {this.state.feedback ? (
+            <div className="deployment-feedback">
+              {this.state.feedback}
+            </div>
+          ) : (null)}
           <Select
             label="Version Increment"
             value={'Minor'} />
           <DTButton
-            label="Deploy"
+            label={this.state.deployLabel}
             color={DTButtonColor.grey}
             style={{width: '100%'}}
-            icon="publish"
-            onClick={() => console.log('publish')}/>
+            icon="deploy"
+            onClick={async () => {
+              deployRepoClick(this);
+            }}/>
         </div>
       );
     }else{
@@ -154,40 +185,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
             style={{width: '100%'}}
             icon="target"
             onClick={async () => {
-              this.setState({
-                validateLabel: 'loading...',
-                error: undefined
-              })
-              if (this.props.globalData?.gitHubSettings) {
-                const results = await validateRepo(
-                  this.props.globalData?.gitHubSettings,
-                  (update: string) => this.setState({
-                    feedback: update
-                  })
-                );
-                switch (results) {
-                  case ValidationResponses.BadConfig:
-                    this.setState({
-                      validateLabel: 'Validate',
-                      feedback: undefined,
-                      error: `Error. This appears to be a pre-existing
-                      repository or one not for use with the Design Tokens
-                      widget. Choose an empty repository or check the 
-                      design-tokens.config.json file {builtWith:'figma-design-tokens'}`
-                    });
-                    break;
-                  case ValidationResponses.RepoValid:
-                    await createRelease(
-                      this.props.globalData?.gitHubSettings
-                    );
-                    this.setState({
-                      validateLabel: 'Publish',
-                      feedback: undefined
-                    });
-                    break;
-                }
-                
-              }
+              connectToRepoClick(this);
             }}/>
         </div>
       );

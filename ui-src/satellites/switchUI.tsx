@@ -54,7 +54,7 @@ export default class SwitchUI extends React.Component<CoreProps> {
         <DTTabs 
           tabs={[
             {name: 'Tokens', value: 'tokens'},
-            {name: 'Deployment', value: 'deployment'},
+            {name: 'Deploy', value: 'deployment'},
             {name: 'Settings', value: 'settings'},
           ]}
           value={this.state.page}

@@ -35,7 +35,7 @@ export type GitHubSettings = {
   repositoryAndNPMPackageName?: string,
   accessToken?: string,
   version: string,// semvar
-  validated: boolean,
+  connected: boolean,
 }
 
 export interface TokenGroup {
@@ -64,7 +64,7 @@ export const defaultGlobalData: GlobalData = {
   fullName: '',
   gitHubSettings: {
     version: '0.0.0',
-    validated: false,
+    connected: false,
   }
 }
 

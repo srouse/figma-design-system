@@ -1,20 +1,26 @@
-import { GitHubSettings } from "../../../shared/types/types";
-import gitHubClient from "./gitHubClient";
+import { GitHubSettings } from "../../../../shared/types/types";
+import gitHubClient from "../gitHubClient";
+import { GithubSuccess, JSONConfig } from "../types";
 
 export default async function validateConfig(
   gitHubSettings: GitHubSettings
-) {
+) : Promise<GithubSuccess> {
   if (
     !gitHubSettings.username ||
     !gitHubSettings.repositoryAndNPMPackageName ||
     !gitHubSettings.version
-  ) return;
+  ) return {
+    success: false,
+    message: 'Misconfigured for validateConfig',
+  };
 
   const Octokit = await gitHubClient();  
   const octokit = new Octokit({
     auth: gitHubSettings.accessToken,
   });
 
+  let loadSuccess = true;
+  let loadMessage = '';
   const results = await octokit.request(
     'GET /repos/{owner}/{repo}/contents/{path}',
     { 
@@ -22,7 +28,16 @@ export default async function validateConfig(
       repo: gitHubSettings.repositoryAndNPMPackageName,
       path: 'design-tokens.config.json'
     }
-  ).catch((err: any) => console.log('error', err));
+  ).catch((err: Error) => {
+    loadSuccess = false;
+    loadMessage = err.message;
+  });
+  if (!loadSuccess) {
+    return {
+      success: false,
+      message: loadMessage,
+    }
+  }
 
   let jsonError = false;
   let configJson : JSONConfig | undefined;
@@ -32,15 +47,17 @@ export default async function validateConfig(
     jsonError = true;
     console.log(error);
   }
-  if (jsonError) return false;
-  
-  console.log('Configuration', configJson);
-  if (configJson && configJson.builtWith === 'figma-design-tokens') {
-    return true;
+  if (jsonError) return {
+    success: false,
+    message: 'Configuration file did not parse correctly (json).',
   }
-  return false;
+  
+  if (configJson && configJson.builtWith === 'figma-design-tokens') {
+    return {success: true}
+  }
+  return {
+    success: false,
+    message: 'The builtWith property was not for figma-design-tokens',
+  };
 }
 
-type JSONConfig = {
-  builtWith: string,
-}

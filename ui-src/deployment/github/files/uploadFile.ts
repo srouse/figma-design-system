@@ -1,6 +1,6 @@
-import { GitHubSettings } from "../../../shared/types/types";
+import { GitHubSettings } from "../../../../shared/types/types";
 import { Base64 } from 'js-base64';
-import gitHubClient from "./gitHubClient";
+import gitHubClient from "../gitHubClient";
 
 export default async function uploadFile(
   gitHubSettings: GitHubSettings,
