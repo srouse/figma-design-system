@@ -10,7 +10,7 @@ export default class IconsUI extends React.Component<CoreProps> {
 
   render() {
     return (
-      <div>{this.props.tokenGroup?.type}</div>
+      <div style={this.props.style}>{this.props.tokenGroup?.type}</div>
     );
   }
 }

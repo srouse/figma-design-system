@@ -2,13 +2,17 @@ import {
   defaultGlobalData,
   defaultTokenGroup,
   defaultTokenGroupLookup,
-  MessageTypes,
-  TokenGroupLookup,
+  MessageName,
+  MessageRequest,
 } from "../shared/types/types";
-import { triggerBaseRefresh, updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
+import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
+import getStyles, { getColorStyles, getEffectStyles, getTextStyles } from "./actions/getStyles";
 import designSystem from "./designTokens";
-import { findAllWidgets, findBaseWidget, findWidget } from "./utils";
-const { widget } = figma;
+import { findAllWidgets, findWidget } from "./utils";
+import bounceBack from "./utils/postMessagePromise";
+const { 
+  widget,
+} = figma;
 const {
   useEffect,
   useSyncedState,
@@ -44,7 +48,7 @@ function Widget() {
       figma.ui.onmessage = (message) => {
         console.log('RECIEVE MSG', nodeId, message);
         switch (message.name) {
-          case MessageTypes.globalDataUpdate:
+          case MessageName.globalDataUpdate:
             setGlobalData(message.globalData);
             // distribute to others...
             const allWidgets = findAllWidgets(nodeId);
@@ -55,7 +59,7 @@ function Widget() {
               })
             });
             break;
-          case MessageTypes.tokenGroupUpdate:
+          case MessageName.tokenGroupUpdate:
             // update base's token group lookup for index display...
             // tell the base something changed
             let doUpdate = false;
@@ -67,10 +71,33 @@ function Widget() {
             ) {
               doUpdate = true;
             }
-            
             // update local token group
             setTokenGroup(message.tokenGroup);
             if (doUpdate) updateBaseWidgetTokenGroupLookup();
+            break;
+          case MessageName.promiseBounce :
+            switch (message.request) {
+              case MessageRequest.stateUpdate:
+                const thisWidget = findWidget(nodeId);
+                bounceBack(message, {
+                  nodeId,
+                  globalData: thisWidget.widgetSyncedState.globalData,
+                  tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
+                });
+                break;
+              case MessageRequest.getStyles:
+                getStyles(message);
+                break;
+              case MessageRequest.getColorStyles:
+                getColorStyles(message);
+                break;
+              case MessageRequest.getTextStyles:
+                getTextStyles(message);
+                break;
+              case MessageRequest.getEffectStyles:
+                getEffectStyles(message);
+                break;
+            }
             break;
         }
       }

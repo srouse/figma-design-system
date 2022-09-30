@@ -4,27 +4,17 @@ import {
   findAllWidgets,
   findBaseWidget,
   findUndeterminedWidget,
-  findWidget
 } from "../utils";
 
 export async function openEditor(
   nodeId: string,
 ) {
-  // could be a new widget...they don't refresh immediately
-  const thisWidget = findWidget(nodeId);
-
   // open ui via a promise so state stays open
-  return new Promise((resolve) => {
+  return new Promise(() => {
     figma.showUI(
       __html__,
       {width: 400, height: 677, themeColors: true}
     );
-    figma.ui.postMessage({
-      nodeId,
-      // designTokensModel: thisWidget.widgetSyncedState.designTokensModel,
-      globalData: thisWidget.widgetSyncedState.globalData,
-      tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
-    });
   });
 }
 

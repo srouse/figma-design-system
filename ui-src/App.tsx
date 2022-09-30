@@ -3,25 +3,28 @@ import "./App.css";
 import "./satellites/satellites.css";
 import {
   State,
-  MessageTypes,
+  MessageName,
   GlobalData,
-  TokenGroup
+  TokenGroup,
+  MessageRequest
 } from '../shared/types/types';
 import { renderCssVariables } from './utils/renderCssVariables';
 import SwitchUI from "./satellites/switchUI";
+import postMessagePromise from "./utils/postMessagePromise";
 
 export default class App extends React.Component<{}> {
 
   constructor(props: {} | Readonly<{}>) {
     super(props);
     this.state = {};
-    window.onmessage = (evt: any) => {
-      const msg = evt.data.pluginMessage;
+    postMessagePromise(
+      MessageRequest.stateUpdate
+    ).then((result) => {
       this.setState({
         ...this.state,
-        ...msg,
+        ...(result as object),
       });
-    }
+    });
     this.updateGlobalData = this.updateGlobalData.bind(this);
     this.updateTokenGroup = this.updateTokenGroup.bind(this);
 
@@ -35,7 +38,7 @@ export default class App extends React.Component<{}> {
     globalData: GlobalData,
   ) {
     parent?.postMessage?.({pluginMessage: {
-      name: MessageTypes.globalDataUpdate,
+      name: MessageName.globalDataUpdate,
       globalData
     }}, "*");
 
@@ -49,7 +52,7 @@ export default class App extends React.Component<{}> {
     tokenGroup: TokenGroup,
   ) {
     parent?.postMessage?.({pluginMessage: {
-      name: MessageTypes.tokenGroupUpdate,
+      name: MessageName.tokenGroupUpdate,
       tokenGroup
     }}, "*");
 

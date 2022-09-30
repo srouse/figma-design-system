@@ -4,9 +4,18 @@ import {
   DSysTokenset
 } from './designSystemTypes';
 
-export enum MessageTypes {
+export enum MessageName {
   globalDataUpdate = 'globalDataUpdate',
   tokenGroupUpdate = 'tokenGroupUpdate',
+  promiseBounce = 'promiseBounce',
+}
+
+export enum MessageRequest {
+  stateUpdate = 'stateUpdate',
+  getStyles = 'getStyles',
+  getColorStyles = 'getColorStyles',
+  getTextStyles = 'getTextStyles',
+  getEffectStyles = 'getEffectStyles',
 }
 
 // ---------- UI -----------------
@@ -22,6 +31,7 @@ export type CoreProps = {
   globalData?: GlobalData,
   updateGlobalData: (globalData: GlobalData) => void,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
+  style?: {},
 }
 
 export interface GlobalData {

@@ -11,7 +11,8 @@ export default class ComponentsUI extends React.Component<CoreProps> {
 
   render() { 
     return (
-      <div className="satellite">
+      <div className="satellite"
+        style={this.props.style}>
         <SatelliteHeaderUI
           {...this.props}
            />

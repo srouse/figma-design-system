@@ -1,7 +1,7 @@
 import React from "react";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import BaseUI from "./baseUI";
-import ColorsUI from "./colorsUI";
+import ColorsUI from "./colors/colorsUI";
 import ColumnLayoutUI from "./columnLayoutUI";
 import ComponentsUI from "./componentsUI";
 import { CoreProps } from "../../shared/types/types";
@@ -21,14 +21,14 @@ export default class SwitchUI extends React.Component<CoreProps> {
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
     this.state = {
-      page: 'deployment',
+      page: 'tokens',
     };
   }
 
   state: {page: string};
 
   render() {
-    let content = (<div>default content</div>);
+    /*let content = (<div>default content</div>);
     switch (this.state.page) {
       case 'tokens':
         content = this.renderTokenContent();
@@ -45,7 +45,7 @@ export default class SwitchUI extends React.Component<CoreProps> {
             style={{flex: 1}}
             {...this.props} />)
         break;
-    }
+    }*/
     return (
       <div className="satellite">
         <SatelliteHeaderUI
@@ -59,7 +59,19 @@ export default class SwitchUI extends React.Component<CoreProps> {
           ]}
           value={this.state.page}
           onValueChange={(value: string) => this.setState({page:value})} />
-        {content}
+        {this.renderTokenContent()}
+        <Deployment
+          style={{
+            flex: 1, 
+            display: this.state.page === 'deployment' ? 'block' : 'none',
+          }}
+          {...this.props} />
+        <Settings
+            style={{
+              flex: 1,
+              display: this.state.page === 'settings' ? 'block' : 'none',
+            }}
+            {...this.props} />
       </div>
     );
   }
@@ -69,41 +81,73 @@ export default class SwitchUI extends React.Component<CoreProps> {
     switch (this.props.tokenGroup?.type) {
       case DSysGroupType.Base :
         return (
-          <BaseUI {...this.props} />
+          <BaseUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.ColorSet :
         return (
-          <ColorsUI {...this.props} />
+          <ColorsUI
+          style={{
+            display: this.state.page === 'tokens' ? 'block' : 'none',
+          }} {...this.props} />
         );
       case DSysGroupType.TypographySet :
         return (
-          <TypographyUI {...this.props} />
+          <TypographyUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.EffectSet :
         return (
-          <EffectsUI {...this.props} />
+          <EffectsUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.IconSet :
         return (
-          <IconsUI {...this.props} />
+          <IconsUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.ComponentSet :
         return (
-          <ComponentsUI {...this.props} />
+          <ComponentsUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.Spacing :
         return (
-          <SpacingUI {...this.props} />
+          <SpacingUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.LayoutSet :
         return (
-          <LayoutUI {...this.props} />
+          <LayoutUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
       case DSysGroupType.ColumnLayoutSet :
         return (
-          <ColumnLayoutUI {...this.props} />
+          <ColumnLayoutUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
     }
-    return ( <div>no token type found</div> );
+    return ( 
+      <div
+        style={{
+          display: this.state.page === 'tokens' ? 'block' : 'none',
+        }} {...this.props}>no token type found</div>
+    );
   }
 }
