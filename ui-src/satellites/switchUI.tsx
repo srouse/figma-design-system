@@ -28,24 +28,6 @@ export default class SwitchUI extends React.Component<CoreProps> {
   state: {page: string};
 
   render() {
-    /*let content = (<div>default content</div>);
-    switch (this.state.page) {
-      case 'tokens':
-        content = this.renderTokenContent();
-        break;
-      case 'deployment' :
-        content = (
-          <Deployment
-            style={{flex: 1}}
-            {...this.props} />);
-        break;
-      case 'settings' :
-        content = (
-          <Settings
-            style={{flex: 1}}
-            {...this.props} />)
-        break;
-    }*/
     return (
       <div className="satellite">
         <SatelliteHeaderUI

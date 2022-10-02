@@ -8,6 +8,7 @@
   align-items: center;
   padding: 14px 18px;
   color: var( --text-color-white );
+  height: var( --satellite-header-height );
 }
 
   .satellite-header .prefix {

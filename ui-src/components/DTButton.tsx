@@ -15,7 +15,7 @@ export enum DTButtonDesign {
 
 interface DTButtonProps {
   label: string,
-  onClick: (event: React.MouseEvent<HTMLDivElement>) => void,
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
   design?: DTButtonDesign,
   color?: DTButtonColor,
   icon?: string,
@@ -43,7 +43,7 @@ export default class DTButton extends React.Component<DTButtonProps> {
       }
       const iconSvg = getIcon(this.props.icon, color);
       return (
-        <div
+        <button
           className={`
             ${this.props.className || ''}
             ${this.props.design || DTButtonDesign.solid}
@@ -54,21 +54,21 @@ export default class DTButton extends React.Component<DTButtonProps> {
           <div className="icon"
             dangerouslySetInnerHTML={{__html: iconSvg}}></div>
           <div className="label">{this.props.label}</div>
-        </div>
+        </button>
       );
     }
 
     return (
-      <div
+      <button
         className={`
           ${this.props.className || ''}
           ${this.props.design || DTButtonDesign.solid}
           ${this.props.color || DTButtonColor.primary}
-          dtbutton label`}
+          dtbutton`}
         style={this.props.style || {}}
         onClick={this.props.onClick}>
-        {this.props.label}
-      </div>
+        <div className="label">{this.props.label}</div>
+      </button>
     );
   }
 }

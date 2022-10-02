@@ -18,7 +18,7 @@ export default class InputHeader extends React.Component<InputHeaderProps> {
   render() {
     return (
       <div className={`
-        ${this.props.className}
+        ${this.props.className || ''}
         inputHeader`}>
         <div className="inputHeader-label">
           {this.props.label}

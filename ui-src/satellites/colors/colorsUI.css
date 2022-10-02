@@ -1,5 +1,6 @@
 
 
 .colors {
-  padding: 30px;
+  flex: 1;
+  position: relative;
 }

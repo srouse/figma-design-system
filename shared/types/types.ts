@@ -16,6 +16,7 @@ export enum MessageRequest {
   getColorStyles = 'getColorStyles',
   getTextStyles = 'getTextStyles',
   getEffectStyles = 'getEffectStyles',
+  getFinalTokens = 'getFinalTokens',
 }
 
 // ---------- UI -----------------
@@ -50,8 +51,9 @@ export type GitHubSettings = {
 
 export interface TokenGroup {
   type: DSysGroupType,
-  // nodeId: string,
+  nodeId: string,
   name?: string,
+  steps? : string,
   // all the various widgets are responsible for well formatted DSysTokensets
   tokensets: DSysTokenset[];
 }
@@ -66,6 +68,7 @@ export type TokenGroupLookup = {
 export const defaultTokenGroup : TokenGroup = {
   type: DSysGroupType.Undetermined,
   name: '',
+  nodeId: 'not set',
   tokensets: [],
 }
 

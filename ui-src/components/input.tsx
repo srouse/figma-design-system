@@ -10,6 +10,8 @@ interface InputProps {
   className?: string,
   password? : boolean,
   readOnly? : boolean,
+  hideLabel? : boolean,
+  helpText? : string,
 }
 
 export default class Input extends React.Component<InputProps> {
@@ -24,7 +26,11 @@ export default class Input extends React.Component<InputProps> {
         ${this.props.className}
         ${this.props.background}
         inputComp`}>
-        <div className="inputComp-label">{this.props.label}</div>
+        {this.props.hideLabel ? null : (
+          <div className="inputComp-label">
+            {this.props.label}
+          </div>
+        )}
         <div className="inputComp-input-box">
           {this.props.readOnly ? (
               <div className="inputComp-readonly">
@@ -45,9 +51,16 @@ export default class Input extends React.Component<InputProps> {
               </input>
             )
           }
-          <div className="inputComp-feedback-value">
-            {this.props.feedbackValue}
-          </div>
+          {this.props.feedbackValue ? (
+            <div className="inputComp-feedback-value">
+              {this.props.feedbackValue}
+            </div>
+          ) : null }
+          {this.props.helpText ? (
+            <div className="inputComp-help-text">
+              {this.props.helpText}
+            </div>
+          ) : null }
         </div>
       </div>
     );

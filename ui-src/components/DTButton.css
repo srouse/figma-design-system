@@ -6,6 +6,8 @@
   padding: 10px 12px;
   border-radius: 6px;
   position: relative;
+  min-height: var( --button-min-height );
+  border: none;
 }
 
 .dtbutton:hover {

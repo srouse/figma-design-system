@@ -1,7 +1,7 @@
 
 
 .dttabs {
-  height: 50px;
+  height: var( --dttabs-height );
   width: 100%;
   background-color: var( --grey-light );
   display: flex;

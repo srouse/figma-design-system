@@ -2,7 +2,6 @@ import React from "react";
 import tokenGroupTypeToName from "../../shared/tokenGroupTypeToName";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import { CoreProps } from "../../shared/types/types";
-import DTButton, { DTButtonColor } from "../components/DTButton";
 import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
 import "./settings.css";
@@ -117,7 +116,7 @@ export default class Settings extends React.Component<SettingsProps> {
           color={DTButtonColor.grey}
           style={{width: '100%'}}
           icon="target"
-          onClick={() => console.log('h9i')}/>
+          onClick={() => conso le.log('h9i')}/>
         */}
       </div>
     );

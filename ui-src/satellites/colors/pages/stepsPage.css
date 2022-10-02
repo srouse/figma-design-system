@@ -1,0 +1,22 @@
+
+
+.steps-page {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0; top: calc( -1 * var( --dttabs-height ) );
+  background-color: var( --white );
+  padding: var( --page-padding );
+  /* padding-top: 120px;*/
+
+  display: flex;
+  flex-direction: column;
+  
+}
+
+  .steps-page-description {
+    font-size: 12px;
+    color: var( --text-color-lighter );
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 20px;
+  }

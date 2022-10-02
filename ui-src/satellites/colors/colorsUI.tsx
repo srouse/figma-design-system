@@ -1,8 +1,12 @@
 import React from "react";
 import "./colorsUI.css";
-import { CoreProps, MessageRequest } from "../../../shared/types/types";
+import {
+  CoreProps,
+  MessageRequest,
+} from "../../../shared/types/types";
 import postMessagePromise from "../../utils/postMessagePromise";
-import firstRun from "./firstRun";
+import StepsPage from "./pages/stepsPage";
+import EditColor from "./pages/editColor";
 
 export default class ColorsUI extends React.Component<CoreProps> {
 
@@ -11,7 +15,6 @@ export default class ColorsUI extends React.Component<CoreProps> {
     postMessagePromise(
       MessageRequest.getColorStyles
     ).then((results: any) => {
-      console.log('colors ui', results);
       this.setState({
         colorStyles: results.paint,
       })
@@ -20,20 +23,29 @@ export default class ColorsUI extends React.Component<CoreProps> {
 
   state: {
     colorStyles?: any,
-    page: 'firstPage' | 'chooseSteps' | 'pullFromStyles' | 'steps'
-  } = {
-    page: 'firstPage',
-  };
+  } = {};
 
   render() {
-    console.log(this.props.tokenGroup)
     return (
       <div
         className="colors"
         style={this.props.style}>
-        {firstRun()}
+        {this.renderPage()}
       </div>
     );
   }
 
+  renderPage() {
+    if (!this.props.tokenGroup?.name) {
+      return (
+        <StepsPage {...this.props} />
+      );
+    }else{
+      return (
+        <EditColor {...this.props} />
+      );
+    }
+  }
 }
+
+

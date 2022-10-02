@@ -13,7 +13,6 @@ export default class SatelliteHeaderUI extends React.Component<CoreProps> {
   }
 
   render() {
-
     let title = this.props.tokenGroup?.name;
     let subtitle = tokenGroupTypeToName(this.props.tokenGroup);
 

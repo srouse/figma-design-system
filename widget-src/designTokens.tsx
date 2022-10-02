@@ -1,5 +1,6 @@
 import {
   defaultGlobalData,
+  defaultTokenGroup,
   defaultTokenGroupLookup,
 } from "../shared/types/types";
 import {
@@ -42,6 +43,11 @@ export default function designSystem() {
     false
   );
 
+  const [tokenGroup, setTokenGroup] = useSyncedState(
+    'tokenGroup',
+    defaultTokenGroup
+  );
+
   useEffect(() => {
     figma.on("close",() => setIsWindowUIOpen(false));
 
@@ -52,6 +58,10 @@ export default function designSystem() {
     }
 
     if (!initialized) {
+      setTokenGroup({
+        ...tokenGroup,
+        nodeId
+      });
       setInitialized(true);
       if (baseWidget) {
         setGlobalData({

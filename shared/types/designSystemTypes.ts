@@ -229,6 +229,7 @@ export interface DSysColorToken extends DTColorToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysDimensionToken extends DTDimensionToken {

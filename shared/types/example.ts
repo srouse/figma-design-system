@@ -33,6 +33,7 @@ const exampleDesignSystem: DSys = {
           $extensions: {
             'dsys.level': DSysLevel.token,
             'dsys.name': '01',
+            'dsys.index' : 0,
           },
           $value: '#44444',
           $type: DTTokenType.color

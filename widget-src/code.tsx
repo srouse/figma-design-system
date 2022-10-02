@@ -72,7 +72,9 @@ function Widget() {
               doUpdate = true;
             }
             // update local token group
-            setTokenGroup(message.tokenGroup);
+            setTokenGroup({
+              ...message.tokenGroup,
+            });
             if (doUpdate) updateBaseWidgetTokenGroupLookup();
             break;
           case MessageName.promiseBounce :
@@ -96,6 +98,9 @@ function Widget() {
                 break;
               case MessageRequest.getEffectStyles:
                 getEffectStyles(message);
+                break;
+              case MessageRequest.getFinalTokens:
+                console.log(message);
                 break;
             }
             break;
