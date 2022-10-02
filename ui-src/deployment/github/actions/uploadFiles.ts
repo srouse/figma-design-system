@@ -1,5 +1,6 @@
 import { GitHubSettings } from "../../../../shared/types/types";
 import DesignTokensConfigFile from "../files/DesignTokensConfigFile";
+import DesignTokensFile from "../files/DesignTokensFile";
 import NpmrcFile from "../files/NpmrcFile";
 import PackageFile from "../files/PackageFile";
 import PackageLockFile from "../files/PackageLockFile";
@@ -19,9 +20,9 @@ export default async function uploadFiles(
   results.push( await PackageFile.upload(gitHubSettings, updateFeedback) );
   results.push( await PackageLockFile.upload(gitHubSettings, updateFeedback) );
   results.push( await WorkflowReleasePackageFile.upload(gitHubSettings, updateFeedback) );
+  results.push( await DesignTokensFile.upload(gitHubSettings, updateFeedback) );
 
   const errors = results.find((result : GithubSuccess ) => result.success === false);
-  console.log('uploadFiles', results);
   if (errors) {
     return {
       success: false,

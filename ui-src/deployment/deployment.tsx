@@ -1,6 +1,6 @@
 import React from "react";
 import { CoreProps } from "../../shared/types/types";
-import DTButton, { DTButtonColor } from "../components/DTButton";
+import DTButton, { DTButtonColor, DTButtonDesign } from "../components/DTButton";
 import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
 import Select from "../components/Select";
@@ -83,6 +83,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
         <DTButton
           label="Detach"
           color={DTButtonColor.grey}
+          design={DTButtonDesign.border}
           style={{width: '100%'}}
           icon="unlink"
           onClick={async () => {
@@ -175,7 +176,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
             ]} />
           <DTButton
             label="Deploy"
-            color={DTButtonColor.grey}
+            color={DTButtonColor.primary}
             style={{width: '100%'}}
             icon="deploy"
             onClick={async () => {

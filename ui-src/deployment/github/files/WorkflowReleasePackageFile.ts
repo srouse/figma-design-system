@@ -7,9 +7,9 @@ class WorkflowReleasePackageFile extends File {
   // requires workflow permissions....
   path: string = '.github/workflows/release-package.yml';
 
-  getContent(
+  async getContent(
     gitHubSettings: GitHubSettings,
-  ) : string {
+  ) : Promise<string> {
     return stripIndent`
       name: Node.js Package
 

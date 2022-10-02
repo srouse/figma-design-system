@@ -31,7 +31,7 @@ export default function base() {
       horizontalAlignItems="start"
       verticalAlignItems="start"
       spacing={26}>
-      <Text>hello</Text>
+      <Text>Base Widget</Text>
       {renderWidgetList(tokenGroupLookup, nodeId)}
       {button('Refresh All', () => triggerAllWidgetRefresh())}
     </AutoLayout>

@@ -6,9 +6,9 @@ class DesignTokensConfigFile extends File {
 
   path: string = 'design-tokens.config.json';
 
-  getContent(
+  async getContent(
     gitHubSettings: GitHubSettings,
-  ) : string {
+  ) : Promise<string> {
     return stripIndent`
     {
       "name":       "${gitHubSettings.repositoryAndNPMPackageName}",

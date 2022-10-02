@@ -17,7 +17,6 @@ export default async function connectToRepoClick(
     comp.props.globalData?.gitHubSettings,
     (update: string) => {
       total++;
-      console.log('total', total);
       comp.setState({
         feedback: update,
         percentDone: total/expectedTotal

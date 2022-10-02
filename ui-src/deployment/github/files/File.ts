@@ -6,9 +6,9 @@ export default class File {
 
   path: string = '';
 
-  getContent(
+  async getContent(
     gitHubSettings: GitHubSettings,
-  ) : string {
+  ) : Promise<string> {
     return `no content ${gitHubSettings.version}`;
   }
 
@@ -17,10 +17,11 @@ export default class File {
     updateFeedback: (update: string) => void
   ) : Promise<GithubSuccess> {
     updateFeedback(`uploading file: ${this.path}`);
+    const content = await this.getContent(gitHubSettings);
     return uploadFile(
       gitHubSettings,
       this.path,
-      this.getContent(gitHubSettings),
+      content,
     );
   }
 }

@@ -12,7 +12,7 @@ export default async function connectToRepo(
   updateTotalSteps: (total: number) => void,
 ) : Promise<GithubResult> {
 
-  updateTotalSteps(8);
+  updateTotalSteps(9);
   // see if repository exists
   updateFeedback('checking if repo exists');
   const repositoryExistsResults = await repositoryExists(gitHubSettings);

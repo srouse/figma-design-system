@@ -6,6 +6,7 @@ import {
   MessageRequest,
 } from "../shared/types/types";
 import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
+import createDesignTokens from "./actions/createDesignTokens";
 import getStyles, { getColorStyles, getEffectStyles, getTextStyles } from "./actions/getStyles";
 import designSystem from "./designTokens";
 import { findAllWidgets, findWidget } from "./utils";
@@ -101,6 +102,12 @@ function Widget() {
                 break;
               case MessageRequest.getFinalTokens:
                 console.log(message);
+                (async () => {
+                  const tokens = await createDesignTokens();
+                  bounceBack(message, {
+                    tokens,
+                  });
+                })();
                 break;
             }
             break;

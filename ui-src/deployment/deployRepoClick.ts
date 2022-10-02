@@ -12,7 +12,7 @@ export default async function deployRepoClick(
   });
   if (!comp.props.globalData?.gitHubSettings) return;
 
-  const expectedTotal = 8;
+  const expectedTotal = 9;
   let total = 0;
   const results = await deployToRepo(
     comp.props.globalData?.gitHubSettings,

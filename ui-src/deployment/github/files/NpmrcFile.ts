@@ -6,9 +6,9 @@ class NpmrcFile extends File {
 
   path: string = '.npmrc';
 
-  getContent(
+  async getContent(
     gitHubSettings: GitHubSettings,
-  ) : string {
+  ) : Promise<string> {
     return stripIndent`
       @${gitHubSettings.username}:registry=https://npm.pkg.github.com
     `;

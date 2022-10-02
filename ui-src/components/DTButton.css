@@ -2,7 +2,9 @@
 
 .dtbutton {
   font-weight: 600;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 12px;
   border-radius: 6px;
   position: relative;

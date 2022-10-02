@@ -6,9 +6,9 @@ class NpmrcFile extends File {
 
   path: string = 'package.json';
 
-  getContent(
+  async getContent(
     gitHubSettings: GitHubSettings,
-  ) : string {
+  ) : Promise<string> {
     return stripIndent`
       {
         "name": "@${gitHubSettings.username}/${gitHubSettings.repositoryAndNPMPackageName}",
