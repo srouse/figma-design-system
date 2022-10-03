@@ -7,9 +7,13 @@ const messagePromiseCallbacks: {[key:string]:(msg:any) => void} = {};
 let promiseBounceId = 0;
 export default async function postMessagePromise(
   request: MessageRequest,
-  args = {},
+  args: any = {},
 ) {
   if (!parent?.postMessage) return;
+  if (args['name'] !== undefined) {
+    console.error('Can not send "name" to messagePromise');
+    return;
+  }
   return new Promise((resolve) => {
     const promiseId = `promise_${promiseBounceId++}`;
     messagePromiseCallbacks[promiseId] = (msg) => resolve(msg);

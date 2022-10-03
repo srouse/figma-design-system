@@ -30,9 +30,11 @@
       }
 
     .edit-color-step {
-      font-size: 16px;
+      font-size: 15px;
       text-align: left;
+      font-weight: 300;
       padding: 0 6px;
+      padding-left: 10px;
     }
 
       .edit-color-step i {

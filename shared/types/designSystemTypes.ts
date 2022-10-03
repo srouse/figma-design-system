@@ -236,84 +236,98 @@ export interface DSysDimensionToken extends DTDimensionToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysTypographyToken extends DTTypographyToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysFontFamilyToken extends DTFontFamilyToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysFontWeightToken extends DTFontWeightToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysFontStyleToken extends DTFontStyleToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysStrokeStyleToken extends DTStrokeStyleToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysBorderToken extends DTBorderToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysDurationToken extends DTDurationToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysCubicBezierToken extends DTCubicBezierToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysShadowToken extends DTShadowToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysTransitionToken extends DTTransitionToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysGradientToken extends DTGradientToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysPercentToken extends DTPercentToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 export interface DSysFileToken extends DTFileToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
+    'dsys.index' : number,
   },
 }
 

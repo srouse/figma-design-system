@@ -4,6 +4,7 @@ import {
   defaultTokenGroupLookup,
   MessageName,
   MessageRequest,
+  MessageRequestStyle,
 } from "../shared/types/types";
 import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
 import createDesignTokens from "./actions/createDesignTokens";
@@ -101,13 +102,31 @@ function Widget() {
                 getEffectStyles(message);
                 break;
               case MessageRequest.getFinalTokens:
-                console.log(message);
                 (async () => {
                   const tokens = await createDesignTokens();
                   bounceBack(message, {
                     tokens,
                   });
                 })();
+                break;
+              case MessageRequest.createStyle: 
+                console.log('createStyle', message);
+                if (message.style) {
+                  if (message.style.type === MessageRequestStyle.color) {
+                    const style = figma.createPaintStyle();
+                    style.paints = [
+                      {
+                        type: "SOLID",
+                        color: {
+                          r: message.style.value.r/255,
+                          g: message.style.value.g/255,
+                          b: message.style.value.b/255,
+                        }
+                      }
+                    ];
+                    style.name = message.style.name;
+                  }
+                }
                 break;
             }
             break;

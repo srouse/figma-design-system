@@ -17,6 +17,13 @@ export enum MessageRequest {
   getTextStyles = 'getTextStyles',
   getEffectStyles = 'getEffectStyles',
   getFinalTokens = 'getFinalTokens',
+  createStyle = 'createStyle',
+}
+
+export enum MessageRequestStyle {
+  color = 'color',
+  text = 'text',
+  effect = 'effect',
 }
 
 // ---------- UI -----------------

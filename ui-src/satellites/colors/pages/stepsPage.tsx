@@ -1,12 +1,13 @@
 import React from "react";
 import { DSysGroupType, DSysLevel, DSysTokenset } from "../../../../shared/types/designSystemTypes";
 import { DTTokenType } from "../../../../shared/types/designTokenTypes";
-import { CoreProps } from "../../../../shared/types/types";
+import { CoreProps, MessageRequest, MessageRequestStyle } from "../../../../shared/types/types";
 import Checkbox from "../../../components/Checkbox";
 import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import InputHeader from "../../../components/InputHeader";
 import Select from "../../../components/Select";
+import postMessagePromise from "../../../utils/postMessagePromise";
 import {
   get10StepsInfo,
   get10ColorStepsInfo,
@@ -186,11 +187,11 @@ export default class StepsPage extends React.Component<CoreProps> {
               $extensions: {
                 'dsys.level': DSysLevel.tokenset,
                 'dsys.type': DSysGroupType.ColorSet,
-                'dsys.name': tg.name || '',
+                'dsys.name': this.state.name || '',
                 "dsys.nodeId": tg.nodeId,
               },
               $description:
-                `Color tokens with the named ${tg.name} and steps ${this.state.steps}`,
+                `Color tokens with the named ${this.state.name} and steps ${this.state.steps}`,
             };
 
             results.steps?.map((stepResult, index) => {
@@ -203,7 +204,22 @@ export default class StepsPage extends React.Component<CoreProps> {
                 },
                 $value: stepResult.hex,
                 $type: DTTokenType.color
-              }
+              };
+
+              const name = this.state.name ? 
+                this.state.name.toLowerCase() : '';
+              const stepName = stepResult.step ?
+                `-${stepResult.step.toLowerCase()}` : ''
+              postMessagePromise(
+                MessageRequest.createStyle,
+                {
+                  style: {
+                    type: MessageRequestStyle.color,
+                    name: `${name}/${name}${stepName}`,
+                    value: stepResult,
+                  }
+                }
+              );
             });
 
             this.props.updateTokenGroup({

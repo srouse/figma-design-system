@@ -31,7 +31,6 @@ const buttonSvgSrc = `
 export default function header() {
   const nodeId = useWidgetId();
 
-
   const [tokenGroup, setTokenGroup] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
