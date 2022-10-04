@@ -12,6 +12,7 @@ interface InputProps {
   readOnly? : boolean,
   hideLabel? : boolean,
   helpText? : string,
+  textAlign? : 'left' | 'right' | 'center'
 }
 
 export default class Input extends React.Component<InputProps> {
@@ -43,6 +44,7 @@ export default class Input extends React.Component<InputProps> {
                 autoCorrect="off" 
                 className="inputComp-input"
                 type={this.props.password ? 'password' : 'text'}
+                style={{textAlign: this.props.textAlign || 'left'}}
                 onChange={(evt: any) => {
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);

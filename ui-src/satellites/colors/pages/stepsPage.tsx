@@ -171,7 +171,7 @@ export default class StepsPage extends React.Component<CoreProps> {
         
         <div style={{flex: "1"}}></div>
         <DTButton
-          label="Create Color Steps"
+          label="Create"
           color={DTButtonColor.primary}
           onClick={() => {
             const steps = this.state.steps.split(',');

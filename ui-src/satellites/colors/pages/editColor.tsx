@@ -7,6 +7,7 @@ import { CoreProps } from "../../../../shared/types/types";
 import Input from "../../../components/Input";
 import "./editColor.css";
 import cleanAndSortTokens from '../../../../shared/utils/cleanAndSortTokens';
+import validColor, { returnValidColor } from '../../../../shared/utils/validColor';
 
 export default class EditColor extends React.Component<CoreProps> {
 
@@ -36,22 +37,27 @@ export default class EditColor extends React.Component<CoreProps> {
     const html = tokens.map((entry) => {
       const prop = entry[0];
       const value = entry[1] as DSysColorToken;
+      const finalColor = returnValidColor(value.$value);
       return (
         <tr>
           <td className="edit-color-color-chip-td">
             <div className="edit-color-color-chip"
-              style={{backgroundColor: `${value.$value}`}}></div>
+              style={{backgroundColor: `${finalColor}`}}>
+              {validColor(value.$value) ? '' : (
+                <div>!!</div>
+              )}
+            </div>
           </td>
-          <td className="edit-color-step">
-            {tokenset.$extensions["dsys.name"] ?
-              tokenset.$extensions["dsys.name"].toLowerCase() : ''
-            }{prop ? `-${prop}` : null}
+          <td className="edit-color-step"
+            style={{textAlign: 'center'}}>
+            {prop}
           </td>
           <td>
             <Input
               className="edit-color-value-input"
               label="color" hideLabel
               value={`${value.$value}`}
+              textAlign="right"
               onChange={(value: string) => {
                 // find the token in the tokengroup
                 if (!this.props.tokenGroup) return;
