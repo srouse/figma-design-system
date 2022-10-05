@@ -58,6 +58,10 @@ export default class SwitchUI extends React.Component<CoreProps> {
     );
   }
 
+  renderSettings() {
+    
+  }
+
   renderTokenContent() {
     if (!this.props.globalData) return (<div>no global data</div>);
     switch (this.props.tokenGroup?.type) {

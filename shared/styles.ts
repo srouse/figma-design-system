@@ -21,6 +21,7 @@ export const colors = {
   greyBgLight: '#F3F3F3',
 
   borderGrey: '#DCDCDC',
+  borderError: '#FBACBA',
 
   hoverColor: '#F0E7FE',
   hoverColorLight: '#C49FF9',

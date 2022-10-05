@@ -1,7 +1,17 @@
 import React from "react";
-import { DSysGroupType, DSysLevel, DSysTokenset } from "../../../../shared/types/designSystemTypes";
+import {
+  DSysGroupType,
+  DSysLevel,
+  DSysTokenset
+} from "../../../../shared/types/designSystemTypes";
 import { DTTokenType } from "../../../../shared/types/designTokenTypes";
-import { CoreProps, MessageRequest, MessageRequestStyle } from "../../../../shared/types/types";
+import {
+  CoreProps,
+  MessageRequest,
+  MessageRequestStyle,
+} from "../../../../shared/types/types";
+import validColor from "../../../../shared/utils/validColor";
+import Validator from "../../../../shared/validator/Validator";
 import Checkbox from "../../../components/Checkbox";
 import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import Input from "../../../components/Input";
@@ -15,26 +25,30 @@ import {
   getLightestStepsInfo,
   ColorStepTypes,
   getSingleColorInfo,
+  StepsInformation,
 } from "../utils/getStepsArray";
 import stepBaseColor from "../utils/stepBaseColor";
-import "./stepsPage.css";
+import "./firstRun.css";
 
-export default class StepsPage extends React.Component<CoreProps> {
+export default class FirstRun extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
     const config = this.procesStepsInfoConfig();
     this.state = {
       name: this.props.tokenGroup?.name,
-      stepsType: config.stepsType,
+      stepsType: config.stepsType as ColorStepTypes | 'none',
       includeBlackAndWhite: config.includeBlackAndWhite,
       steps: config.steps,
     }
+    this.validator = new Validator();
   }
+
+  validator: Validator;
 
   state: {
     name: string | undefined,
-    stepsType: ColorStepTypes,
+    stepsType: ColorStepTypes | 'none',
     baseColor?: string,
     steps: string,
     includeBlackAndWhite: boolean
@@ -42,7 +56,7 @@ export default class StepsPage extends React.Component<CoreProps> {
 
   procesStepsInfoConfig() {
     // figure out local state from steps...
-    let newStepsTypes = ColorStepTypes.step10Step;
+    let newStepsTypes = 'none';// ColorStepTypes.step10Step;
     let newIncludeBlackAndWhite = true;
     let stepsStr = get10StepsInfo().steps;
     if (this.props.tokenGroup?.steps) {
@@ -90,7 +104,7 @@ export default class StepsPage extends React.Component<CoreProps> {
 
   render() {
     return (
-      <div className="steps-page">
+      <div className="first-run">
         <InputHeader
           label="Create Color Tokens" />
         <Input
@@ -98,17 +112,39 @@ export default class StepsPage extends React.Component<CoreProps> {
           value={this.state.name}
           onChange={(name: string) => {
             this.setState({name});
-          }} />
+          }}
+          onValidate={
+            this.validator.register(() => {
+              return {
+                success: this.state.name ? true : false,
+                message: this.state.name ? '' : 'Name is required'
+              }
+            })
+          } />
         <Input
-          label="Base Color ( Center of Steps )"
+          label="Center Color (hex #ff0000)"
           value={this.state.baseColor}
+          helpText="Color at the center of the steps that determines all others"
           onChange={(baseColor: string) => {
             this.setState({baseColor});
-          }} />
+          }}
+          onValidateBlur={
+            this.validator.register(() => {
+              const isValidColor = validColor(this.state.baseColor);
+              return {
+                success: isValidColor,
+                message: isValidColor ? '' : 'Must be a color'
+              }
+            })
+          } />
         <Select
           label="Step Pattern"
           value={this.state.stepsType}
           dropdown={[
+            {
+              name: 'Choose a Step Pattern',
+              value: 'none'
+            },
             {
               name: '10 Step',
               value: ColorStepTypes.step10Step
@@ -131,7 +167,7 @@ export default class StepsPage extends React.Component<CoreProps> {
             },
           ]}
           onChange={(stepsType: string) => {
-            let stepsInfo = getCustomStepsInfo();
+            let stepsInfo : StepsInformation | undefined;
             if (stepsType === ColorStepTypes.step10Step) {
               stepsInfo = get10StepsInfo();
             }else if (stepsType === ColorStepTypes.stepLightestToDarkest) {
@@ -140,13 +176,24 @@ export default class StepsPage extends React.Component<CoreProps> {
               stepsInfo = get10ColorStepsInfo();
             }else if (stepsType === ColorStepTypes.stepSingleColor) {
               stepsInfo = getSingleColorInfo();
+            }else if (stepsType === ColorStepTypes.stepCustom) {
+              stepsInfo = getCustomStepsInfo();
             }
             this.setState({
-              stepsType : stepsInfo.type,
-              steps: stepsInfo.steps,
-              includeBlackAndWhite: stepsInfo.includeBlackAndWhite 
+              stepsType : stepsType,
+              steps: stepsInfo?.steps || undefined,
+              includeBlackAndWhite: stepsInfo?.includeBlackAndWhite || false
             });
-          }}>
+          }}
+          onValidate={
+            this.validator.register(() => {
+              const valid = this.state.stepsType !== 'none';
+              return {
+                success: valid,
+                message: valid ? '' : 'Step pattern is required'
+              }
+            })
+          }>
         </Select>
         {this.state.stepsType === ColorStepTypes.stepCustom ? (<>
           <Input
@@ -160,6 +207,13 @@ export default class StepsPage extends React.Component<CoreProps> {
               this.setState({
                 steps
               })
+            }}
+            validator={this.validator}
+            onValidate={() => {
+              return {
+                success: this.state.steps ? false : false,
+                message: this.state.steps ? '' : 'Steps are required'
+              }
             }} />
             <Checkbox
               label="include black and white ( usually grey steps )"
@@ -174,6 +228,11 @@ export default class StepsPage extends React.Component<CoreProps> {
           label="Create"
           color={DTButtonColor.primary}
           onClick={() => {
+            const validation = this.validator.validateAll();
+            if (validation.length > 0) {
+              return;
+            }
+
             const steps = this.state.steps.split(',');
             const results = stepBaseColor(
               this.state.baseColor,
@@ -226,7 +285,7 @@ export default class StepsPage extends React.Component<CoreProps> {
               ...tg,
               name: this.state.name,
               tokensets: [newTokenSet]
-            })
+            });
           }}></DTButton>
       </div>
     );

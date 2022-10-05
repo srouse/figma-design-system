@@ -1,6 +1,6 @@
 
 
-.steps-page {
+.first-run {
   position: absolute;
   left: 0; right: 0;
   bottom: 0; top: calc( -1 * var( --dttabs-height ) );
@@ -13,7 +13,7 @@
   
 }
 
-  .steps-page-description {
+  .first-run-description {
     font-size: 12px;
     color: var( --text-color-lighter );
     text-align: center;

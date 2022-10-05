@@ -5,11 +5,11 @@ import {
 } from "../../../../shared/types/designSystemTypes";
 import { CoreProps } from "../../../../shared/types/types";
 import Input from "../../../components/Input";
-import "./editColor.css";
+import "./colorSteps.css";
 import cleanAndSortTokens from '../../../../shared/utils/cleanAndSortTokens';
 import validColor, { returnValidColor } from '../../../../shared/utils/validColor';
 
-export default class EditColor extends React.Component<CoreProps> {
+export default class ColorSteps extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);

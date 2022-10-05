@@ -65,59 +65,6 @@ export default class Settings extends React.Component<SettingsProps> {
               });
             }
           }} />
-        {/*
-        <InputHeader
-          label="GitHub Deploy" />
-        <Input
-          label="GitHub Username" 
-          value={this.props.globalData?.gitHubSettings?.username}
-          onChange={(value: string) => {
-            if (this.props.globalData) {
-              this.props.updateGlobalData({
-                ...this.props.globalData,
-                gitHubSettings: {
-                  ...this.props.globalData?.gitHubSettings,
-                  username: value,
-                },
-              });
-            }
-          }} />
-        <Input
-          label="Repository / NPM Package Name (ex: my-design-tokens)" 
-          value={this.props.globalData?.gitHubSettings?.repositoryAndNPMPackageName}
-          onChange={(value: string) => {
-            if (this.props.globalData) {
-              this.props.updateGlobalData({
-                ...this.props.globalData,
-                gitHubSettings: {
-                  ...this.props.globalData?.gitHubSettings,
-                  repositoryAndNPMPackageName: value,
-                },
-              });
-            }
-          }} />
-        <Input
-          label="GitHub Access Token"
-          password
-          value={this.props.globalData?.gitHubSettings?.accessToken}
-          onChange={(value: string) => {
-            if (this.props.globalData) {
-              this.props.updateGlobalData({
-                ...this.props.globalData,
-                gitHubSettings: {
-                  ...this.props.globalData?.gitHubSettings,
-                  accessToken: value,
-                },
-              });
-            }
-          }} />
-        <DTButton
-          label="Validate Deployment"
-          color={DTButtonColor.grey}
-          style={{width: '100%'}}
-          icon="target"
-          onClick={() => conso le.log('h9i')}/>
-        */}
       </div>
     );
   }

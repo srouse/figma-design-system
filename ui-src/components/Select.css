@@ -37,6 +37,11 @@
       font-weight: 300;
     }
 
+    .selectComp.invalid .selectComp-select {
+      border: 1px solid var( --border-error );
+      outline: 1px solid var( --border-error );
+    }
+
     .selectComp-icon {
       position: absolute;
       bottom: 6px; right: 6px;

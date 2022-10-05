@@ -9,6 +9,8 @@
   font-weight: 300;
 }
 
+
+
   .inputComp-label {
     font-size: 11px;
     color: var( --text-color-lighter );
@@ -36,6 +38,11 @@
       font-family: var( --primary-ui-font );
       color: var( --text-color );
       font-weight: 300;
+    }
+
+    .inputComp.invalid .inputComp-input {
+      border: 1px solid var( --border-error );
+      outline: 1px solid var( --border-error );
     }
 
   .inputComp-feedback-value {

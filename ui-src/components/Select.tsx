@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+import { ValidatorRegistration } from "../../shared/validator/Validator";
 import "./Select.css";
 
 interface SelectProps {
@@ -10,6 +11,7 @@ interface SelectProps {
   className?: string,
   readOnly? : boolean,
   centerIcon? : boolean,
+  onValidate? : ValidatorRegistration,
   dropdown: {value:string, name: string}[],
 }
 
@@ -18,9 +20,30 @@ export default class Select extends React.Component<SelectProps> {
   constructor(props: SelectProps | Readonly<SelectProps>) {
     super(props);
     this.uid = `${Math.round(Math.random() * 1000000)}`;
+    this.state = {
+      valid: true,
+    };
+
+    this.props.onValidate?.validator.registerComponent(
+      this.uid,
+      () => {
+        if (!this.props.onValidate) return {success:true};
+        const results = this.props.onValidate.validation();
+        this.setState({valid: results.success});
+        return results;
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    if (this.props.onValidate)
+      this.props.onValidate.validator.unregister(this.uid);
   }
 
   uid: string;
+  state : {
+    valid: boolean,
+  }
 
   render() {
     return (
@@ -28,6 +51,7 @@ export default class Select extends React.Component<SelectProps> {
         ${this.props.className}
         ${this.props.background}
         ${this.props.centerIcon ? 'center-icon' : ''}
+        ${this.state.valid ? 'valid' : 'invalid'}
         selectComp`}>
         <div className="selectComp-label">{this.props.label}</div>
         <div className="selectComp-select-box">
@@ -42,6 +66,10 @@ export default class Select extends React.Component<SelectProps> {
                 onChange={(evt: any) => {
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);
+                  
+                  setTimeout(() => {
+                    this.props.onValidate?.validator.validate(this.uid)
+                  }, 0);
                 }}>
                 {this.props.dropdown.map(dropdown => {
                   return (

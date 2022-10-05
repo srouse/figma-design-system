@@ -8,7 +8,7 @@ export enum ColorStepTypes {
   stepSingleColor = 'step-single-color',
 }
 
-type StepsInformation = {
+export type StepsInformation = {
   steps: string,
   includeBlackAndWhite: boolean,
   type: ColorStepTypes,

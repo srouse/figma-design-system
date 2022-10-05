@@ -5,8 +5,8 @@ import {
   MessageRequest,
 } from "../../../shared/types/types";
 import postMessagePromise from "../../utils/postMessagePromise";
-import StepsPage from "./pages/stepsPage";
-import EditColor from "./pages/editColor";
+import FirstRun from "./pages/firstRun";
+import ColorSteps from "./pages/colorSteps";
 
 export default class ColorsUI extends React.Component<CoreProps> {
 
@@ -38,11 +38,11 @@ export default class ColorsUI extends React.Component<CoreProps> {
   renderPage() {
     if (!this.props.tokenGroup?.name) {
       return (
-        <StepsPage {...this.props} />
+        <FirstRun {...this.props} />
       );
     }else{
       return (
-        <EditColor {...this.props} />
+        <ColorSteps {...this.props} />
       );
     }
   }
