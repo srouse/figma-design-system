@@ -117,6 +117,24 @@ export interface DesignSystemWidget {
   setTouch: SetterNumber;
 }
 
+// ============= FIGMA ======
+export type FigmaPaintStyle = {
+  id: string,
+  name: string,
+  type: 'PAINT',
+  paints: readonly {
+    blendMode: 'NORMAL',
+    color: {
+      r: number,
+      g: number,
+      b: number,
+    },
+    opacity: number,
+    type: 'SOLID',
+    visible: boolean,
+  }[]
+}
+
 // =========START V1======================
 // ----------- WIDGET --------------
 export interface DesignTokensModel {

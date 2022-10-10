@@ -65,7 +65,7 @@
 
 .dtbutton.grey.border {
   background-color: var( --text-color-white );
-  border: 1px solid var( --grey-light );
+  border: 1px solid var( --grey-lightest );
   color: var( --text-color );
 }
   .dtbutton.grey-border:hover {

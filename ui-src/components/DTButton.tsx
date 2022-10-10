@@ -1,7 +1,10 @@
 import React from "react";
 import "./DTButton.css";
-import getIcon from '../../shared/icons';
-import {colors} from '../../shared/styles';
+import {
+  colors,
+  getIcon,
+  Icons
+} from '../../shared/index';
 
 export enum DTButtonColor {
   primary = 'primary',
@@ -18,7 +21,7 @@ interface DTButtonProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
   design?: DTButtonDesign,
   color?: DTButtonColor,
-  icon?: string,
+  icon?: Icons,
   className?: string,
   style?: object
 }

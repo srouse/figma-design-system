@@ -35,7 +35,10 @@ const exampleDesignSystem: DSys = {
             'dsys.name': '01',
             'dsys.index' : 0,
           },
-          $value: '#44444',
+          $value: { // don't presume how alpha gets utilized...
+            hex: '#444444',
+            alpha: 0.5,
+          },
           $type: DTTokenType.color
         }
       }
@@ -57,6 +60,7 @@ const exampleDesignSystem: DSys = {
           $extensions: {
             'dsys.level': DSysLevel.token,
             'dsys.name': '10',
+            'dsys.index' : 0,
           },
           $value: {
             fontFamily: 'dd',
@@ -84,6 +88,7 @@ const exampleDesignSystem: DSys = {
           $extensions: {
             'dsys.level': DSysLevel.token,
             'dsys.name': '32',
+            'dsys.index' : 0,
           },
           $value: {
             url: 'url of svg',
@@ -127,3 +132,5 @@ const exampleDesignSystem: DSys = {
     },
   }
 }
+
+export default exampleDesignSystem;

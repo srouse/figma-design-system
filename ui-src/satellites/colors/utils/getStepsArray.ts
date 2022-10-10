@@ -24,7 +24,7 @@ export function getCustomStepsInfo() : StepsInformation {
 
 export function getLightestStepsInfo() : StepsInformation {
   return {
-    steps: 'lightest, lighter, light, [base], dark, dark, darkest',
+    steps: 'lightest, lighter, light, [base], dark, darker, darkest',
     includeBlackAndWhite: false,
     type: ColorStepTypes.stepLightestToDarkest,
   }

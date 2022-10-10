@@ -1,41 +1,52 @@
-import { colors, typography } from "../../shared/styles";
-import { DSysToken } from "../../shared/types/designSystemTypes";
-import { defaultTokenGroup } from "../../shared/types/types";
-import cleanAndSortTokens from '../../shared/utils/cleanAndSortTokens';
-import colorContrastAda from '../../shared/utils/adaCompliance';
-import adaIcons from "./adaIcons";
-import validColor, { returnValidColor } from '../../shared/utils/validColor';
+import { 
+  mergeNames,
+  colorContrastAda,
+  cleanAndSortTokens,
+  defaultTokenGroup,
+  DSysToken,
+  colors,
+  typography,
+  validColor,
+  getIcon,
+  Icons,
+  dtColorToCss,
+  DTColor,
+  stylesToDSysTokenset,
+ } from '../../shared/index';
+import { paintStyles } from '../actions/getStyles';
 
 const { widget } = figma;
 const {
   AutoLayout,
   Text,
   Rectangle,
-  Input,
   SVG,
   useSyncedState,
+  useEffect,
 } = widget;
 
-function renderAda(color: string, id: string) {
+function renderAda(color: DTColor, id: string) {
   const ada = colorContrastAda(color);
   if (!ada) return null;
 
   const results = [];
 
   if (ada.white.aaaSmallText) {
-    results.push(<SVG key={`ada_wt_aaa_${id}`} src={adaIcons.white.aaa} />);
+    results.push(<SVG 
+      key={`ada_wt_aaa_${id}`}
+      src={getIcon(Icons.adaWhiteaaa)} />);
   }else if (ada.white.aaSmallText) {
-    results.push(<SVG key={`ada_wt_aa_${id}`} src={adaIcons.white.aa} />);
+    results.push(<SVG key={`ada_wt_aa_${id}`} src={getIcon(Icons.adaWhiteaa)} />);
   }else if (ada.white.aaLargeText) {
-    results.push(<SVG key={`ada_wt_AA_${id}`} src={adaIcons.white.AA} />);
+    results.push(<SVG key={`ada_wt_AA_${id}`} src={getIcon(Icons.adaWhiteAA)} />);
   }
 
   if (ada.black.aaaSmallText) {
-    results.push(<SVG key={`ada_bk_aaa_${id}`} src={adaIcons.black.aaa} />);
+    results.push(<SVG key={`ada_bk_aaa_${id}`} src={getIcon(Icons.adaBlackaaa)} />);
   }else if (ada.black.aaSmallText) {
-    results.push(<SVG key={`ada_bk_aa_${id}`} src={adaIcons.black.aa} />);
+    results.push(<SVG key={`ada_bk_aa_${id}`} src={getIcon(Icons.adaBlackaa)} />);
   }else if (ada.black.aaLargeText) {
-    results.push(<SVG key={`ada_bk_AA_${id}`} src={adaIcons.black.AA} />);
+    results.push(<SVG key={`ada_bk_AA_${id}`} src={getIcon(Icons.adaBlackAA)} />);
   }
 
   return (
@@ -44,7 +55,13 @@ function renderAda(color: string, id: string) {
       direction="vertical"
       width={40}
       horizontalAlignItems="end"
-      spacing={2}>
+      effect={{
+        type: "drop-shadow",
+        color: '#aaaaaa77',
+        offset: {x: 0, y: 0},
+        blur: 8,
+      }}
+      overflow="visible">
       {results}
     </AutoLayout>
   );
@@ -57,11 +74,32 @@ export default function colorsSatellite() {
     defaultTokenGroup
   );
 
+  const [colorsInitialized, setColorsInitialized] = useSyncedState(
+    'colorsInitialized',
+    false
+  );
+
+  useEffect(() => {
+    if (!colorsInitialized) {
+      setColorsInitialized(true);
+      return async () => {
+        const styles = await paintStyles();
+        const stylesTokenGroup = stylesToDSysTokenset(styles, tokenGroup.name);
+        if (!stylesTokenGroup) return;
+        setTokenGroup({
+          ...tokenGroup,
+          tokensets: [stylesTokenGroup],
+        });
+      };
+    }
+  });
+
   const tokenset = tokenGroup.tokensets[0];
   const tokens = cleanAndSortTokens(tokenset);
   const tokenOutput = tokens.map(
     (tokenInfo, index) => {
     const token = tokenInfo[1] as DSysToken;
+    const color = token.$value as DTColor;
     return (
       <AutoLayout
         height="hug-contents"
@@ -74,7 +112,7 @@ export default function colorsSatellite() {
           token.$extensions["dsys.index"]
         }`}>
         <AutoLayout
-          height={48}
+          height={54}
           verticalAlignItems="center"
           spacing={4}
           width="fill-parent"
@@ -86,54 +124,57 @@ export default function colorsSatellite() {
             verticalAlignItems="center"
             spacing={20}>
             <AutoLayout
-              width={26}
-              height={26}
-              fill={returnValidColor(token.$value as string)}
+              width={34}
+              height={34}
+              fill={dtColorToCss(color)}
               horizontalAlignItems="center"
               verticalAlignItems="center"
-              cornerRadius={16}
+              cornerRadius={30}
               effect={{
                 type: 'drop-shadow',
-                color: '#aaaaaa',
+                color: '#aaaaaa77',
                 offset: {x: 0, y: 0},
-                blur: 10,
+                blur: 8,
               }}
             >
-              {validColor(token.$value as string) ? null : (
+              {validColor(color) ? null : (
                 <Text
                   fontFamily={typography.primaryFont}
-                  fontWeight="bold"
-                  fontSize={12}
+                  fontWeight="normal"
+                  fontSize={10}
                   fill={colors.textColorError}
                   horizontalAlignText="center"
                   width="fill-parent"
                   height="hug-contents">
-                  !!
+                  error
                 </Text>
               )}
             </AutoLayout>
             <Text
               fontFamily={typography.primaryFont}
-              fontWeight="semi-bold"
-              fontSize={16}
+              fontWeight="normal"
+              fontSize={14}
               fill={colors.textColor}
               width="fill-parent"
               height="hug-contents">
-              {token.$extensions["dsys.name"]}
+              {mergeNames(
+                tokenGroup.name,
+                token.$extensions["dsys.name"]
+              )}
             </Text>
           </AutoLayout>
           <Text
-            fontFamily={typography.primaryFont}
+            fontFamily={typography.monotype}
             fontWeight="light"
-            fontSize={13}
+            fontSize={12}
             fill={colors.textColor}
             horizontalAlignText="right"
-            width="fill-parent"
+            width="hug-contents"
             height="hug-contents">
-            {token.$value as string}
+            {color.hex} {Math.round(color.alpha * 100)}%
           </Text>
           {renderAda(
-            token.$value as string, 
+            color, 
             `${
               token.$extensions["dsys.name"]}${
               token.$extensions["dsys.index"]
@@ -164,22 +205,6 @@ export default function colorsSatellite() {
           left: 20, right: 20
         }}
         overflow="visible">
-        <AutoLayout 
-          height="hug-contents"
-          width="fill-parent"
-          direction="vertical"
-          horizontalAlignItems="start"
-          verticalAlignItems="start"
-          spacing={4}
-          overflow="visible">
-          <Text
-            fontFamily={typography.primaryFont}
-            fontWeight="light"
-            fontSize={22}
-            fill={colors.textColor}>
-            {tokenGroup.name}
-          </Text>
-        </AutoLayout>
         <AutoLayout 
           height="hug-contents"
           direction="vertical"

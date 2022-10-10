@@ -24,7 +24,7 @@ export default class Select extends React.Component<SelectProps> {
       valid: true,
     };
 
-    this.props.onValidate?.validator.registerComponent(
+    /*this.props.onValidate?.validator.registerComponent(
       this.uid,
       () => {
         if (!this.props.onValidate) return {success:true};
@@ -32,12 +32,12 @@ export default class Select extends React.Component<SelectProps> {
         this.setState({valid: results.success});
         return results;
       }
-    );
+    );*/
   }
 
   componentWillUnmount() {
-    if (this.props.onValidate)
-      this.props.onValidate.validator.unregister(this.uid);
+    // if (this.props.onValidate)
+      // this.props.onValidate.validator.unregister(this.uid);
   }
 
   uid: string;
@@ -67,9 +67,9 @@ export default class Select extends React.Component<SelectProps> {
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);
                   
-                  setTimeout(() => {
+                  /* setTimeout(() => {
                     this.props.onValidate?.validator.validate(this.uid)
-                  }, 0);
+                  }, 0);*/
                 }}>
                 {this.props.dropdown.map(dropdown => {
                   return (

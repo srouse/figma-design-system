@@ -1,4 +1,4 @@
-export default function toKebabCase(str: string) {
+export default function toKebobCase(str: string) {
   let finalStr = '';
   if (str) {
     let matches = str

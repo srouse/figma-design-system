@@ -38,9 +38,15 @@ type DTTokenBase = {
   $description? : string,
 }
 
+export type DTColor = {
+  hex: string,
+  alpha: number,
+};
+
 // Color
 export interface DTColorToken extends DTTokenBase {
-  '$value': string,
+  // '$value': string,
+  '$value' : DTColor,
   '$type' : DTTokenType.color
 }
 

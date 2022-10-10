@@ -1,56 +1,153 @@
 
 .edit-color {
-  position: absolute; inset: 0;
-  background-color: var( --grey-bg-light );
-  /* padding: var( --page-padding ); */
-  padding: 16px 20px;
+  position: absolute;
+  bottom: 82px; top: 0; right: 0; left: 0;
+  background-color: var( --white );
+  padding: 16px 20px 40px 20px;
 
   display: flex;
   flex-direction: column;
-
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
-.edit-color.scroll-bar::-webkit-scrollbar-thumb {
-  border: 3px solid var( --grey-bg-light );
-}
+  /* Input resets */
+  .edit-color .inputComp {
+    margin: 0;
+  }
+
+  /* COLOR PICKER */
+  .edit-color-picker {
+    background-color: var( --white );
+    position: absolute;
+    z-index: 1000;
+    left: 0; top: 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    transition: top 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+    color-picker {
+      width: 207px;
+    }
+    .edit-color-picker-btn {
+      margin: 6px;
+    }
 
   .edit-color-table {
     width: 100%;
     border-collapse: collapse;
   }
 
-    .edit-color-color-chip-td {
-      width: 26px;
+    .edit-color-row {
+      border-bottom: 1px solid var( --grey-lightest );
+      height: 52px;
     }
-      .edit-color-color-chip {
-        width: 26px; height: 26px;
-        border-radius: 100%;
-        box-shadow: 0px 0px 6px rgb(0 0 0 / 20%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+
+      /* DRAGGER */
+      .edit-color-dragger {
+        vertical-align: middle;
+      }
+        .edit-color-dragger-icon {
+          width: 30px; height: 30px;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .edit-color-dragger-icon:hover {
+          cursor: move; /* fallback if grab cursor is unsupported */
+          cursor: grab;
+        }
+        .edit-color-dragger-icon:active {
+          cursor: grabbing;
+        }
+
+      /* NAME */
+      .edit-color-name {
+        vertical-align: middle;
+        border-right: 1px solid var( --grey-lightest );
       }
 
-        .edit-color-color-chip > * {
+      /* COLOR CHIP */
+      .edit-color-color {
+        padding: 0 0 0 10px;
+      }
+
+        .edit-color-color-chip {
+          width: 20px; height: 20px;
           font-size: 12px;
           font-weight: 700;
           color: var( --text-color-error );
+          display: flex; align-items: center; justify-content: center;
+        }
+        .edit-color-color-chip:hover {
+          cursor: pointer;
         }
 
-    .edit-color-step {
-      font-size: 16px;
-      text-align: left;
-      font-weight: 600;
-      padding: 0 6px;
-      padding-left: 10px;
-    }
-
-      .edit-color-step i {
-        color: var( --text-color-lightest );
+      /* HEX */
+      .edit-color-hex {
+        vertical-align: middle;
       }
 
-    .edit-color-value-input {
-      margin: 0;
-      margin: 1px 0;
+        .edit-color-hex-input {
+          width: 90px;
+        }
+
+      /* ALPHA 
+      .edit-color-alpha {
+
+      }*/
+
+        .edit-color-alpha-input {
+          width: 60px;
+        }
+
+      /* ADA 
+      .edit-color-ada {
+
+      }*/
+
+      /* DELETING */
+      .edit-color-deleting {
+        width: 0;
+        transition: width 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+
+        .edit-color-deleting-icon {
+          width: 46px;
+          transition: width 0.3s;
+          overflow: hidden;
+          background-color: var( --error-lightest );
+          position: absolute; 
+          left: 2px; top: 0; bottom: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.25);
+        }
+
+        .edit-color-deleting-icon:hover {
+          cursor: pointer;
+        }
+
+        .is-deleting .edit-color-deleting {
+          width: 46px;
+        }
+
+  /* NAVIGATION */
+  .edit-color-navigation {
+    position: absolute;
+    bottom: 0; right: 0; left: 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+    display: flex;
+    padding: 20px 30px;
+    background-color: var( --white );
+  }
+
+    .edit-color-navigation > * {
+      flex: 1;
+    }
+
+    .edit-color-navigation > *:first-child {
+      margin-right: 10px;
     }

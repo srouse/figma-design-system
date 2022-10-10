@@ -10,12 +10,14 @@ interface InputProps {
   label: string,
   value: string | undefined,
   feedbackValue?: string | undefined,
+  onFocus?: () => void,
   onChange?: (value: string) => void,
   background?: 'light' | 'dark',
   className?: string,
   password? : boolean,
   readOnly? : boolean,
   hideLabel? : boolean,
+  hideBorder? : boolean,
   helpText? : string,
   textAlign? : 'left' | 'right' | 'center',
   validator?: Validator,
@@ -72,8 +74,9 @@ export default class Input extends React.Component<InputProps> {
   render() {
     return (
       <div className={`
-        ${this.props.className}
-        ${this.props.background}
+        ${this.props.className || ''}
+        ${this.props.background || ''}
+        ${this.props.hideBorder ? 'hide-border' : ''}
         ${this.state.valid ? 'valid' : 'invalid'}
         inputComp`}>
         {this.props.hideLabel ? null : (
@@ -94,7 +97,10 @@ export default class Input extends React.Component<InputProps> {
                 className="inputComp-input"
                 type={this.props.password ? 'password' : 'text'}
                 style={{textAlign: this.props.textAlign || 'left'}}
-                onFocus={() => this.setState({valid: true})}
+                onFocus={() => {
+                  if (this.props.onFocus) this.props.onFocus();
+                  this.setState({valid: true});
+                }}
                 onBlur={() => {
                   this.props.validator?.validate(
                     this.uid, ValidationLocations.onValidateBlur

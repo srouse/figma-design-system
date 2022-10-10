@@ -13,7 +13,11 @@ export async function openEditor(
   return new Promise(() => {
     figma.showUI(
       __html__,
-      {width: 400, height: 690, themeColors: true}
+      {
+        width: 460,
+        height: 670,
+        themeColors: true
+      }
     );
   });
 }

@@ -14,21 +14,26 @@ export const colors = {
   primary: '#A164F9',
   primaryDark: '#8739F7',
 
-  greyLight: '#DFDFDF',
-  greyLightHover: '#E6E6E6',
+  greyLightest: '#E9E9E9',
+  greyLighter: '#BBBBBB',
+  greyLight: '#8C8C8C',
   grey: '#555555',
   greyDark: '#373737',
   greyBgLight: '#F3F3F3',
 
+  errorLightest: '#FDBCBC',
+  error: '#C90606',
+
   borderGrey: '#DCDCDC',
+  borderDark: '#8F8F8F',
   borderError: '#FBACBA',
 
-  hoverColor: '#F0E7FE',
-  hoverColorLight: '#C49FF9',
-  hoverColorDark: '#5111B1',
-
   // comp specific
-  headerBG: `#1e1e1e`,
+  headerBG: `#ffffff`,
+
+  hoverBgColor: '#EFE7FB',
+  hoverBgColorLight: '#EFE7FB',
+  hoverBgColorDark: '#BD91FD',
 
   satelliteHeaderHeight: '60px',
 
@@ -37,10 +42,10 @@ export const colors = {
 
   buttonMinHeight: '42px',
   dttabsHeight: '50px'
-
 }
 
 export const typography = {
   primaryFont: `Inter`,
   primaryUIFont: `Inter, system-ui, sans-serif`,
+  monotype: 'Courier Prime'
 }

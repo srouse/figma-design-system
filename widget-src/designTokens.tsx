@@ -71,12 +71,7 @@ export default function designSystem() {
     }
   });
 
-  let width = 390;
-  /* switch (tokenset?.type) {
-    case TokenSetType.TypographySet:
-      width = 450;
-      break;
-  }*/
+  let width = 440;
 
   return (
     <AutoLayout 
@@ -100,7 +95,7 @@ export default function designSystem() {
       fill={globalData ? '#ffffff' : '#f2f2f2'}
       cornerRadius={10}>
       {header()}
-      <AutoLayout 
+      <AutoLayout
         name="properties"
         width="fill-parent"
         height="hug-contents"

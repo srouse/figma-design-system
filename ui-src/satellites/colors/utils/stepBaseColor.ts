@@ -1,5 +1,7 @@
-import rgbToHex from '../../../../shared/utils/rgbToHex';
-import hexToRgb from '../../../../shared/utils/hexToRgb';
+import {
+  rgbToHex,
+  hexToRgb
+ } from '../../../../shared';
 
 export type StepBaseResults = {
   success: boolean,

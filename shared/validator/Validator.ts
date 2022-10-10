@@ -17,7 +17,6 @@ export enum ValidationLocations {
   onValidateBlur = 'onValidateBlur',
 }
 
-
 let validationId = 0;
 
 export function getId() {

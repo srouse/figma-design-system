@@ -3,7 +3,7 @@
 .dttabs {
   height: var( --dttabs-height );
   width: 100%;
-  background-color: var( --grey-light );
+  background-color: var( --grey-lightest );
   display: flex;
   flex-direction: row;
   user-select: none;
@@ -21,7 +21,7 @@
 
   .dttabs .tab:hover {
     cursor: pointer;
-    background-color: var( --grey-light-hover );
+    background-color: var( --grey-lightest );
   }
 
     .dttabs .tab.selected {

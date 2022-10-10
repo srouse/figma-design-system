@@ -2,28 +2,26 @@ import React from "react";
 import "./colorsUI.css";
 import {
   CoreProps,
-  MessageRequest,
 } from "../../../shared/types/types";
 import postMessagePromise from "../../utils/postMessagePromise";
 import FirstRun from "./pages/firstRun";
 import ColorSteps from "./pages/colorSteps";
+import { stylesToDSysTokenset } from "./utils/stylesUtils";
 
 export default class ColorsUI extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
-    postMessagePromise(
-      MessageRequest.getColorStyles
-    ).then((results: any) => {
-      this.setState({
-        colorStyles: results.paint,
-      })
-    });
+    this.pullStyles();
   }
 
-  state: {
+  /*state: {
     colorStyles?: any,
-  } = {};
+  } = {};*/
+
+  pullStyles() {
+    stylesToDSysTokenset('poop');
+  }
 
   render() {
     return (

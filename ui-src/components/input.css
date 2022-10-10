@@ -9,7 +9,9 @@
   font-weight: 300;
 }
 
-
+  .inputComp.hide-border .inputComp-input {
+    border: none;
+  }
 
   .inputComp-label {
     font-size: 11px;

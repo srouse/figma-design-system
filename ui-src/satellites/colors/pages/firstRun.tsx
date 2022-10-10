@@ -1,17 +1,14 @@
 import React from "react";
 import {
-  DSysGroupType,
-  DSysLevel,
-  DSysTokenset
-} from "../../../../shared/types/designSystemTypes";
-import { DTTokenType } from "../../../../shared/types/designTokenTypes";
-import {
   CoreProps,
   MessageRequest,
   MessageRequestStyle,
-} from "../../../../shared/types/types";
-import validColor from "../../../../shared/utils/validColor";
-import Validator from "../../../../shared/validator/Validator";
+  DTTokenType,
+  DSysGroupType,
+  DSysLevel,
+  DSysTokenset,
+  Validator,
+} from "../../../../shared";
 import Checkbox from "../../../components/Checkbox";
 import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import Input from "../../../components/Input";
@@ -112,7 +109,7 @@ export default class FirstRun extends React.Component<CoreProps> {
           value={this.state.name}
           onChange={(name: string) => {
             this.setState({name});
-          }}
+          }} />{/*
           onValidate={
             this.validator.register(() => {
               return {
@@ -120,14 +117,14 @@ export default class FirstRun extends React.Component<CoreProps> {
                 message: this.state.name ? '' : 'Name is required'
               }
             })
-          } />
+          } />*/}
         <Input
           label="Center Color (hex #ff0000)"
           value={this.state.baseColor}
           helpText="Color at the center of the steps that determines all others"
           onChange={(baseColor: string) => {
             this.setState({baseColor});
-          }}
+          }} />{/*
           onValidateBlur={
             this.validator.register(() => {
               const isValidColor = validColor(this.state.baseColor);
@@ -136,7 +133,7 @@ export default class FirstRun extends React.Component<CoreProps> {
                 message: isValidColor ? '' : 'Must be a color'
               }
             })
-          } />
+          } />*/}
         <Select
           label="Step Pattern"
           value={this.state.stepsType}
@@ -261,7 +258,10 @@ export default class FirstRun extends React.Component<CoreProps> {
                   'dsys.name': stepResult.step,
                   'dsys.index': index,
                 },
-                $value: stepResult.hex,
+                $value: {
+                  hex: stepResult.hex,
+                  alpha: 1,
+                },
                 $type: DTTokenType.color
               };
 

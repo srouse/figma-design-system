@@ -1,28 +1,181 @@
-import React from "react";
+import React, { DOMAttributes, MouseEvent } from "react";
 import {
   DSysColorToken,
   DSysTokenset,
-} from "../../../../shared/types/designSystemTypes";
-import { CoreProps } from "../../../../shared/types/types";
+  CoreProps,
+  cleanAndSortTokens,
+  returnValidColor,
+  validColor,
+  colors,
+  getIcon,
+  Icons,
+  dtColorToCss,
+  DTColor,
+} from "../../../../shared";
+import DTButton, { DTButtonColor, DTButtonDesign } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import "./colorSteps.css";
-import cleanAndSortTokens from '../../../../shared/utils/cleanAndSortTokens';
-import validColor, { returnValidColor } from '../../../../shared/utils/validColor';
+import renderAda from "./renderAda";
+import 'color-picker-web-component';
+
+type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
+type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      ['color-picker']: CustomElement<any, 'input' | 'change'>;
+    }
+  }
+}
+
+function getOffset(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  return {
+    left: rect.left + window.scrollX,
+    top: rect.top + window.scrollY
+  };
+}
+
+// 110 is top...
 
 export default class ColorSteps extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
+    this.state = {
+      isDeleting: false,
+      pickerLeft: '0px',
+      pickerTop: '0px',
+      pickerColor: '#eeeeee'
+    }
+  }
+
+  componentDidMount(): void {
+    this.picker?.addEventListener("change", this.handlePickerChange);
+  }
+
+  componentWillUnmount() {
+    this.picker?.removeEventListener("change", this.handlePickerChange);
+  }
+
+  handlePickerChange = (event: any) => {
+    if (!this.picker || !this.state.focusedToken) return;
+    const hex = `#${this.picker.hex}`;
+    this.changeColor(
+      hex,
+      this.state.focusedToken.$extensions['dsys.name']
+    );
+    this.setState({
+      pickerColor: hex,
+    })
+    this.fixMessedUpPicker();
+  }
+
+  changeColor = (color: string, name: string) => {
+    // find the token in the tokengroup
+    if (!this.props.tokenGroup) return;
+    const tokenset = this.props.tokenGroup.tokensets[0];
+    if (!tokenset) return;
+    const tokenEntry = Object.entries(tokenset).find(entry => {
+      return entry[0] === name;
+    });
+    if (!tokenEntry) return;
+    const token = tokenEntry[1];
+    if (!token) return;
+
+    const newToken: DSysColorToken = {
+      ...token,
+      $value: {
+        hex: color,
+        alpha: 1,
+      }
+    };
+    const newTokenSet : DSysTokenset = {
+      ...tokenset
+    };
+    newTokenSet[name] = newToken;
+    // now weave back together...
+    this.props.updateTokenGroup({
+      ...this.props.tokenGroup,
+      tokensets: [newTokenSet],
+    });
+  }
+
+  fixMessedUpPicker() {
+    // there is a timing issue within the component...
+    setTimeout(() => {
+      const picker = (this.picker as any);
+      picker.value = this.state.pickerColor;
+      picker.shadowRoot.querySelector('#gridInput')
+        .setAttribute(
+          'style',
+          `background: ${picker._gridBackground}`
+        );
+      },10);
+  }
+
+  picker?: any;
+
+  state : {
+    isDeleting: boolean,
+    focusedToken?: DSysColorToken,
+    pickerTop: string,
+    pickerLeft: string,
+    pickerColor: string,
   }
 
   render() {
-    return (
-      <div className="edit-color scroll-bar">
+    return (<>
+      <div className={`
+        edit-color scroll-bar
+        ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <table className="edit-color-table">
           {this.renderColorSteps()}
         </table>
       </div>
-    );
+      <div
+        className="edit-color-picker"
+        style={{
+          left: this.state.pickerLeft,
+          top: this.state.pickerTop,
+          display: this.state.focusedToken ? 'flex' : 'none',
+        }}>
+        <color-picker
+          ref={(picker: any) => this.picker = picker}
+          formats="hex"
+          selectedformat="hex"
+        ></color-picker>
+        <DTButton
+          className="edit-color-picker-btn"
+          design={DTButtonDesign.border}
+          color={DTButtonColor.grey}
+          label="Close" 
+          onClick={() => { 
+            this.setState({
+              focusedToken: undefined
+            })
+          }} />
+      </div>
+      <div className="edit-color-navigation">
+        <DTButton
+          label="Delete"
+          design={DTButtonDesign.border}
+          color={DTButtonColor.grey}
+          icon={Icons.delete}
+          onClick={() => {
+            this.setState({
+              isDeleting: !this.state.isDeleting
+            })
+          }} />
+        <DTButton
+          label="Add Color"
+          design={DTButtonDesign.solid}
+          color={DTButtonColor.grey}
+          onClick={() => {}}
+          icon={Icons.add} />
+      </div>
+    </>);
   }
 
   renderColorSteps() {
@@ -37,59 +190,87 @@ export default class ColorSteps extends React.Component<CoreProps> {
     const html = tokens.map((entry) => {
       const prop = entry[0];
       const value = entry[1] as DSysColorToken;
-      const finalColor = returnValidColor(value.$value);
+      const color = value.$value as DTColor;
       return (
-        <tr>
-          <td className="edit-color-color-chip-td">
+        <tr className="edit-color-row">
+          <td className="edit-color-dragger">
+            <div className="edit-color-dragger-icon"
+              dangerouslySetInnerHTML={{ __html: 
+                getIcon(Icons.drag, colors.greyLight) 
+              }}></div>
+          </td>
+          <td className="edit-color-name">
+            <Input
+              hideLabel hideBorder
+              label="property"
+              value={prop}
+              onChange={() => {}} />
+          </td>
+          <td className="edit-color-color">
             <div className="edit-color-color-chip"
-              style={{backgroundColor: `${finalColor}`}}>
-              {validColor(value.$value) ? '' : (
-                <div>!!</div>
-              )}
+              style={{backgroundColor: `${color.hex}`}}
+              onClick={(evt: MouseEvent) => {
+                const pickerSize = {width: 240, height: 294};
+                const viewSize = {width: 460, height: 560};
+                const absTop = 110;
+                const chipOffset = getOffset( evt.target as HTMLElement );
+                this.setState({
+                  focusedToken: value,
+                  pickerColor: color.hex,
+                  pickerTop: `${
+                    Math.min(
+                      viewSize.height - pickerSize.height,
+                      chipOffset.top - absTop - 15
+                    )
+                  }px`
+                });
+                this.fixMessedUpPicker();
+              }}>
+              {validColor(color) ? '' : '!!'}
             </div>
           </td>
-          <td className="edit-color-step"
-            style={{textAlign: 'center'}}>
-            {prop}
-          </td>
-          <td>
+          <td className="edit-color-hex">
             <Input
-              className="edit-color-value-input"
-              label="color" hideLabel
-              value={`${value.$value}`}
-              textAlign="right"
+              className="edit-color-hex-input"
+              label="color" 
+              hideLabel hideBorder
+              value={`${color.hex}`}
+              textAlign="left"
+              onFocus={() => {
+                this.setState({
+                  focusedToken: undefined,
+                });
+              }}
               onChange={(value: string) => {
-                // find the token in the tokengroup
-                if (!this.props.tokenGroup) return;
-                const tokenset = this.props.tokenGroup.tokensets[0];
-                if (!tokenset) return;
-                const tokenEntry = Object.entries(tokenset).find(entry => {
-                  return entry[0] === prop;
-                });
-                if (!tokenEntry) return;
-                const token = tokenEntry[1];
-                if (!token) return;
-
-                const newToken: DSysColorToken = {
-                  ...token,
-                  $value: value,
-                };
-                const newTokenSet : DSysTokenset = {
-                  ...tokenset
-                };
-                newTokenSet[prop] = newToken;
-                // now weave back together...
-                this.props.updateTokenGroup({
-                  ...this.props.tokenGroup,
-                  tokensets: [newTokenSet],
-                });
+                this.changeColor(value, prop);
               }} />
+          </td>
+          <td className="edit-color-alpha">
+            <Input
+              className="edit-color-alpha-input"
+              label="color alpha" 
+              hideLabel hideBorder
+              value="100%"
+              textAlign="left"
+              onChange={(value: string) => {
+                
+              }} />
+          </td>
+          <td className="edit-color-ada">
+            {renderAda(
+              color,
+              this.props.tokenGroup?.nodeId || tokenset.$extensions['dsys.name']
+            )}
+          </td>
+          <td className="edit-color-deleting">
+            <div className="edit-color-deleting-icon"
+              dangerouslySetInnerHTML={{ __html: 
+                getIcon(Icons.delete, colors.error) 
+              }}></div>
           </td>
         </tr>
       );
     });
     return html;
-
-    return (<div>not yet</div>);
   }
 }

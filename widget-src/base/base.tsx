@@ -64,7 +64,7 @@ function renderWidgetList(
         cornerRadius={4}
         key={`list-${tokenGroup.widgetId}`}
         hoverStyle={{
-          fill: colors.hoverColor,
+          fill: colors.hoverBgColor,
         }}
         onClick={() => {
           const widget = findWidget(tokenGroup.widgetId);

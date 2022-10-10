@@ -1,5 +1,5 @@
-import hexToRgb from './hexToRgb';
-
+import { DTColor } from '../types/designTokenTypes';
+import { hexToRgb } from './colorUtils';
 
 export type AdaColorContrastResult = {
   whiteRatio: number,
@@ -19,13 +19,13 @@ export type AdaColorContrastResult = {
 }
 
 export default function colorContrastAda(
-  color: string
+  color: DTColor
 ) : AdaColorContrastResult | false {
-  const rgb = hexToRgb(color);
+  const rgb = hexToRgb(color.hex);
   if (!rgb) return false;
 
-  const onWhiteContrast = checkContrast(color, '#ffffff');
-  const onBlackContrast = checkContrast(color, '#000000');
+  const onWhiteContrast = checkContrast(color.hex, '#ffffff');
+  const onBlackContrast = checkContrast(color.hex, '#000000');
 
   /*
   // aaa -> aa lg -> aa -> nothing

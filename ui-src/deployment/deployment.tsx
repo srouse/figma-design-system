@@ -1,5 +1,8 @@
 import React from "react";
-import { CoreProps } from "../../shared/types/types";
+import {
+  Icons,
+  CoreProps
+} from "../../shared";
 import DTButton, { DTButtonColor, DTButtonDesign } from "../components/DTButton";
 import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
@@ -85,7 +88,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
           color={DTButtonColor.grey}
           design={DTButtonDesign.border}
           style={{width: '100%'}}
-          icon="unlink"
+          icon={Icons.unlink}
           onClick={async () => {
             if (!this.props.globalData) return;
             this.props.updateGlobalData({
@@ -178,7 +181,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
             label="Deploy"
             color={DTButtonColor.primary}
             style={{width: '100%'}}
-            icon="deploy"
+            icon={Icons.deploy}
             onClick={async () => {
               this.setState({
                 modalAction: DeploymentModalActions.deploy,
@@ -203,7 +206,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
             label="Connect To Repository"
             color={DTButtonColor.grey}
             style={{width: '100%'}}
-            icon="target"
+            icon={Icons.target}
             onClick={async () => {
               this.setState({
                 modalAction: DeploymentModalActions.connect,

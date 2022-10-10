@@ -1,3 +1,4 @@
+import { FigmaPaintStyle } from "../../shared/types/types";
 import bounceBack from "../utils/postMessagePromise";
 
 const { 
@@ -9,7 +10,7 @@ const {
 export default function getStyles(message: any) {
   // objects are not full when sent without mapping
   bounceBack(message, {
-    paint: _paintStyles(),
+    paint: paintStyles(),
     text: _textStyles(),
     effects: _effectStyle(),
   });
@@ -18,11 +19,11 @@ export default function getStyles(message: any) {
 export function getColorStyles(message: any) {
   // objects are not full when sent without mapping
   bounceBack(message, {
-    paint: _paintStyles(),
+    paint: paintStyles(),
   });
 }
 
-function _paintStyles() {
+export function paintStyles(): FigmaPaintStyle[] {
   return getLocalPaintStyles().map(style => {
     return {
       id: style.id,
@@ -30,7 +31,7 @@ function _paintStyles() {
       type: style.type,
       paints: style.paints
     }
-  });
+  }) as FigmaPaintStyle[];
 }
 
 export function getTextStyles(message: any) {
