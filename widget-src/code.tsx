@@ -6,6 +6,7 @@ import {
   MessageRequest,
   MessageRequestStyle,
 } from "../shared/types/types";
+import { colorTokenGroupToStyles } from "./satellites/colors/colorStyleUtils";
 import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
 import createDesignTokens from "./actions/createDesignTokens";
 import getStyles, { getColorStyles, getEffectStyles, getTextStyles } from "./actions/getStyles";
@@ -73,6 +74,9 @@ function Widget() {
             ) {
               doUpdate = true;
             }
+            // PUSH TO STYLES...
+            colorTokenGroupToStyles(message.tokenGroup);
+
             // update local token group
             setTokenGroup({
               ...message.tokenGroup,

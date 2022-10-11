@@ -2,7 +2,7 @@ import {
   defaultTokenGroup,
 } from "../../shared/types/types";
 import base from "../base/base";
-import colorsSatellite from "./colors";
+import colorsSatellite from "./colors/colors";
 import componentsSatellite from "./components";
 import effectsSatellite from "./effects";
 import iconsSatellite from "./icons";

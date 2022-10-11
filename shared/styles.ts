@@ -47,5 +47,5 @@ export const colors = {
 export const typography = {
   primaryFont: `Inter`,
   primaryUIFont: `Inter, system-ui, sans-serif`,
-  monotype: 'Courier Prime'
+  monotype: 'Roboto Mono',// 'Courier Prime'
 }

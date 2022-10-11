@@ -254,9 +254,10 @@ export default class FirstRun extends React.Component<CoreProps> {
               if (stepResult.step === undefined) return;
               newTokenSet[stepResult.step] = {
                 $extensions: {
-                  'dsys.level': DSysLevel.token,
-                  'dsys.name': stepResult.step,
-                  'dsys.index': index,
+                  'dsys.level'    : DSysLevel.token,
+                  'dsys.name'     : stepResult.step,
+                  'dsys.index'    : index,
+                  'dsys.styleId'  : '',
                 },
                 $value: {
                   hex: stepResult.hex,

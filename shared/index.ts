@@ -17,15 +17,13 @@ import {
   returnValidColor,
   hexToRgb,
   rgbToHex,
+  rgbFractionToHex,
 } from './utils/colorUtils';
 import cleanAndSortTokens from './utils/cleanAndSortTokens';
 import colorContrastAda, 
 { 
   AdaColorContrastResult,
 } from './utils/adaCompliance';
-import {
-  stylesToDSysTokenset
-} from './utils/stylesUtils';
 import {
   MessageName,
   MessageRequest,
@@ -226,10 +224,10 @@ export {
   returnValidColor,
   hexToRgb,
   rgbToHex,
+  rgbFractionToHex,
+
   cleanAndSortTokens,
   colorContrastAda,
-
-  stylesToDSysTokenset,
   
   defaultTokenGroup,
   defaultGlobalData,

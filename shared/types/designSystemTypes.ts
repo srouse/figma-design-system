@@ -227,9 +227,10 @@ export type DSysToken =
 
 export interface DSysColorToken extends DTColorToken {
   $extensions : {
-    'dsys.level' : DSysLevel.token,
-    'dsys.name'  : string,
-    'dsys.index' : number,
+    'dsys.level'    : DSysLevel.token,
+    'dsys.name'     : string,
+    'dsys.index'    : number,
+    'dsys.styleId'  : string,
   },
 }
 export interface DSysDimensionToken extends DTDimensionToken {
@@ -241,9 +242,10 @@ export interface DSysDimensionToken extends DTDimensionToken {
 }
 export interface DSysTypographyToken extends DTTypographyToken {
   $extensions : {
-    'dsys.level' : DSysLevel.token,
-    'dsys.name'  : string,
-    'dsys.index' : number,
+    'dsys.level'    : DSysLevel.token,
+    'dsys.name'     : string,
+    'dsys.index'    : number,
+    'dsys.styleId'  : string,
   },
 }
 export interface DSysFontFamilyToken extends DTFontFamilyToken {

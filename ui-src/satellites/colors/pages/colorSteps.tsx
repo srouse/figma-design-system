@@ -17,6 +17,7 @@ import Input from "../../../components/Input";
 import "./colorSteps.css";
 import renderAda from "./renderAda";
 import 'color-picker-web-component';
+import { changeColorAction, changeNameAction } from "./actions";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -36,8 +37,6 @@ function getOffset(el: HTMLElement) {
     top: rect.top + window.scrollY
   };
 }
-
-// 110 is top...
 
 export default class ColorSteps extends React.Component<CoreProps> {
 
@@ -64,6 +63,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
     const hex = `#${this.picker.hex}`;
     this.changeColor(
       hex,
+      1,
       this.state.focusedToken.$extensions['dsys.name']
     );
     this.setState({
@@ -72,34 +72,15 @@ export default class ColorSteps extends React.Component<CoreProps> {
     this.fixMessedUpPicker();
   }
 
-  changeColor = (color: string, name: string) => {
-    // find the token in the tokengroup
-    if (!this.props.tokenGroup) return;
-    const tokenset = this.props.tokenGroup.tokensets[0];
-    if (!tokenset) return;
-    const tokenEntry = Object.entries(tokenset).find(entry => {
-      return entry[0] === name;
-    });
-    if (!tokenEntry) return;
-    const token = tokenEntry[1];
-    if (!token) return;
-
-    const newToken: DSysColorToken = {
-      ...token,
-      $value: {
-        hex: color,
-        alpha: 1,
-      }
-    };
-    const newTokenSet : DSysTokenset = {
-      ...tokenset
-    };
-    newTokenSet[name] = newToken;
-    // now weave back together...
-    this.props.updateTokenGroup({
-      ...this.props.tokenGroup,
-      tokensets: [newTokenSet],
-    });
+  changeColor = (
+    color: string,
+    alpha: number,
+    name: string
+  ) => {
+    changeColorAction(
+      color, alpha, name, 
+      this.props.tokenGroup, this.props.updateTokenGroup
+    );
   }
 
   fixMessedUpPicker() {
@@ -204,11 +185,19 @@ export default class ColorSteps extends React.Component<CoreProps> {
               hideLabel hideBorder
               label="property"
               value={prop}
-              onChange={() => {}} />
+              onChange={(newName: string) => {
+                changeNameAction(
+                  newName, prop,
+                  this.props.tokenGroup, this.props.updateTokenGroup
+                );
+              }} />
           </td>
           <td className="edit-color-color">
             <div className="edit-color-color-chip"
-              style={{backgroundColor: `${color.hex}`}}
+              style={{
+                backgroundColor: color.hex,
+                opacity: color.alpha,
+              }}
               onClick={(evt: MouseEvent) => {
                 const pickerSize = {width: 240, height: 294};
                 const viewSize = {width: 460, height: 560};
@@ -242,7 +231,11 @@ export default class ColorSteps extends React.Component<CoreProps> {
                 });
               }}
               onChange={(value: string) => {
-                this.changeColor(value, prop);
+                this.changeColor(
+                  value,
+                  color.alpha,
+                  prop
+                );
               }} />
           </td>
           <td className="edit-color-alpha">
@@ -250,10 +243,16 @@ export default class ColorSteps extends React.Component<CoreProps> {
               className="edit-color-alpha-input"
               label="color alpha" 
               hideLabel hideBorder
-              value="100%"
-              textAlign="left"
+              value={`${Math.round(color.alpha * 100)}%`}
+              textAlign="right"
               onChange={(value: string) => {
-                
+                const alphaFractionStr = value.replace('%', '');
+                const alphaFraction = parseInt(alphaFractionStr)/100;
+                this.changeColor(
+                  color.hex,
+                  alphaFraction,
+                  prop
+                );
               }} />
           </td>
           <td className="edit-color-ada">

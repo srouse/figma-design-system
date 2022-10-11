@@ -23,15 +23,21 @@ export function getColorStyles(message: any) {
   });
 }
 
-export function paintStyles(): FigmaPaintStyle[] {
-  return getLocalPaintStyles().map(style => {
-    return {
+export function paintStyles(folder?: string): FigmaPaintStyle[] {
+  const styles = getLocalPaintStyles();
+  const finalStyles: FigmaPaintStyle[] = [];
+  styles.map(style => {
+    if (folder && style.name.indexOf(`${folder}/`) !== 0) {
+      return;
+    }
+    finalStyles.push({
       id: style.id,
       name: style.name,
       type: style.type,
-      paints: style.paints
-    }
-  }) as FigmaPaintStyle[];
+      paints: style.paints as any
+    });
+  });
+  return finalStyles;
 }
 
 export function getTextStyles(message: any) {

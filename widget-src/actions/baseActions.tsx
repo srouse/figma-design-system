@@ -6,9 +6,7 @@ import {
   findUndeterminedWidget,
 } from "../utils";
 
-export async function openEditor(
-  nodeId: string,
-) {
+export async function openEditor() {
   // open ui via a promise so state stays open
   return new Promise(() => {
     figma.showUI(

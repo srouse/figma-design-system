@@ -11,9 +11,11 @@ import {
   Icons,
   dtColorToCss,
   DTColor,
-  stylesToDSysTokenset,
- } from '../../shared/index';
-import { paintStyles } from '../actions/getStyles';
+  TokenGroup,
+ } from '../../../shared/index';
+import { paintStyles } from '../../actions/getStyles';
+import header from '../../components/header';
+import { colorStylesToDSysTokenset } from './colorStyleUtils';
 
 const { widget } = figma;
 const {
@@ -23,6 +25,7 @@ const {
   SVG,
   useSyncedState,
   useEffect,
+  useWidgetId,
 } = widget;
 
 function renderAda(color: DTColor, id: string) {
@@ -67,7 +70,26 @@ function renderAda(color: DTColor, id: string) {
   );
 }
 
+async function pullTokensFromColorStyles(
+  tokenGroup: TokenGroup,
+  setTokenGroup: (val:TokenGroup) => void,
+  nodeId: string,
+) {
+  const styles = await paintStyles(tokenGroup.name);
+  const stylesTokenGroup = colorStylesToDSysTokenset(
+    styles,
+    tokenGroup.name,
+    nodeId
+  );
+  if (!stylesTokenGroup) return;
+  setTokenGroup({
+    ...tokenGroup,
+    tokensets: [stylesTokenGroup],
+  });
+}
+
 export default function colorsSatellite() {
+  const nodeId = useWidgetId();
 
   const [tokenGroup, setTokenGroup] = useSyncedState(
     'tokenGroup',
@@ -82,15 +104,9 @@ export default function colorsSatellite() {
   useEffect(() => {
     if (!colorsInitialized) {
       setColorsInitialized(true);
-      return async () => {
-        const styles = await paintStyles();
-        const stylesTokenGroup = stylesToDSysTokenset(styles, tokenGroup.name);
-        if (!stylesTokenGroup) return;
-        setTokenGroup({
-          ...tokenGroup,
-          tokensets: [stylesTokenGroup],
-        });
-      };
+      pullTokensFromColorStyles(
+        tokenGroup, setTokenGroup, nodeId
+      );
     }
   });
 
@@ -107,12 +123,16 @@ export default function colorsSatellite() {
         width="fill-parent"
         overflow="visible"
         verticalAlignItems="center"
+        padding={{
+          top: 0,left: 20,
+          bottom: 0,right: 20
+        }}
         key={`row_${
           token.$extensions["dsys.name"]}${
           token.$extensions["dsys.index"]
         }`}>
         <AutoLayout
-          height={54}
+          height={60}
           verticalAlignItems="center"
           spacing={4}
           width="fill-parent"
@@ -127,6 +147,7 @@ export default function colorsSatellite() {
               width={34}
               height={34}
               fill={dtColorToCss(color)}
+              opacity={color.alpha}
               horizontalAlignItems="center"
               verticalAlignItems="center"
               cornerRadius={30}
@@ -137,18 +158,18 @@ export default function colorsSatellite() {
                 blur: 8,
               }}
             >
-              {validColor(color) ? null : (
-                <Text
-                  fontFamily={typography.primaryFont}
-                  fontWeight="normal"
-                  fontSize={10}
-                  fill={colors.textColorError}
-                  horizontalAlignText="center"
-                  width="fill-parent"
-                  height="hug-contents">
-                  error
-                </Text>
-              )}
+            {validColor(color) ? null : (
+              <Text
+                fontFamily={typography.primaryFont}
+                fontWeight="normal"
+                fontSize={10}
+                fill={colors.textColorError}
+                horizontalAlignText="center"
+                width="fill-parent"
+                height="hug-contents">
+                error
+              </Text>
+            )}
             </AutoLayout>
             <Text
               fontFamily={typography.primaryFont}
@@ -171,7 +192,17 @@ export default function colorsSatellite() {
             horizontalAlignText="right"
             width="hug-contents"
             height="hug-contents">
-            {color.hex} {Math.round(color.alpha * 100)}%
+            {color.hex}
+          </Text>
+          <Text
+            fontFamily={typography.monotype}
+            fontWeight="light"
+            fontSize={12}
+            fill={colors.textColor}
+            horizontalAlignText="right"
+            width={34}
+            height="hug-contents">
+            {Math.round(color.alpha * 100)}%
           </Text>
           {renderAda(
             color, 
@@ -200,11 +231,15 @@ export default function colorsSatellite() {
         horizontalAlignItems="start"
         verticalAlignItems="start"
         spacing={24}
-        padding={{
-          top: 0, bottom: 20,
-          left: 20, right: 20
-        }}
         overflow="visible">
+        {header(
+          () => setColorsInitialized(false),
+          async () => {
+            return pullTokensFromColorStyles(
+              tokenGroup, setTokenGroup, nodeId
+            );
+          }
+        )}
         <AutoLayout 
           height="hug-contents"
           direction="vertical"
@@ -212,6 +247,10 @@ export default function colorsSatellite() {
           horizontalAlignItems="start"
           verticalAlignItems="start"
           spacing={0}
+          padding={{
+            top: 0, bottom: 10,
+            left: 20, right: 20
+          }}
           overflow="visible">
           {tokenOutput}
         </AutoLayout>
@@ -231,6 +270,7 @@ export default function colorsSatellite() {
           left: 20, right: 20
         }}
         overflow="visible">
+        {header()}
         <Text
           fontFamily={typography.primaryFont}
           fontWeight="light"

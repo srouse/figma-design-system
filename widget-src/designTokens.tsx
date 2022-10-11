@@ -6,7 +6,7 @@ import {
 import {
   establishBase,
 } from "./actions/baseActions";
-import header from "./components/header";
+// import header from "./components/header";
 import satelliteSwitch from "./satellites/switch";
 import {
   findBaseWidget,
@@ -94,18 +94,7 @@ export default function designSystem() {
       stroke="#E0E0E0"
       fill={globalData ? '#ffffff' : '#f2f2f2'}
       cornerRadius={10}>
-      {header()}
-      <AutoLayout
-        name="properties"
-        width="fill-parent"
-        height="hug-contents"
-        direction="vertical"
-        horizontalAlignItems="start"
-        verticalAlignItems="start"
-        padding={{top: 10,left: 20,bottom: 0,right: 20}}>
-        {satelliteSwitch()}
-      </AutoLayout>
+      {satelliteSwitch()}
     </AutoLayout>
   );
 }
-

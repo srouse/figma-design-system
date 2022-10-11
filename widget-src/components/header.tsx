@@ -20,7 +20,10 @@ const {
   Rectangle,
 } = widget;
  
-export default function header() {
+export default function header(
+  refreshCallback?: () => void,
+  openEditorCallback?:  () => void
+) {
   const nodeId = useWidgetId();
 
   const [tokenGroup, setTokenGroup] = useSyncedState(
@@ -36,11 +39,6 @@ export default function header() {
   const [touch, setTouch] = useSyncedState(
     'touch',
     0
-  );
-
-  const [colorsInitialized, setColorsInitialized] = useSyncedState(
-    'colorsInitialized',
-    false
   );
 
   const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
@@ -147,7 +145,8 @@ export default function header() {
                 colors.hoverBgColorDark : colors.hoverBgColorLight
             }}
             onClick={async () => {
-              setColorsInitialized(false);
+              // setColorsInitialized(false);
+              if (refreshCallback) refreshCallback();
             }}>
             <SVG
               src={getIcon(
@@ -167,7 +166,10 @@ export default function header() {
               onClick={async () => {
                 // nodeToImage();
                 setIsWindowUIOpen(true);
-                return openEditor(nodeId);
+                if (openEditorCallback) {
+                  await openEditorCallback();
+                }
+                return openEditor();
               }}>
               <SVG
                 src={getIcon(
