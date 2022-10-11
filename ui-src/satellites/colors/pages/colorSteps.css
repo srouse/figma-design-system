@@ -153,11 +153,42 @@
     }
 
 
-
-  .dragging-over, .dragging-over * {
+  .drop-td {
+    height: 1px;
+    position: relative;
+    transition: height 0.4s;
+  }
+  .drop-td.dragging-over {
+    height: 52px;
     background-color: #eee;
+  }
+    .drop-td.dragging-over .drop {
+      position: absolute; top: -12px; right: 0; left: 0;
+      height: 64px;
+    }
+    .drop {
+      position: absolute; top: -12px; right: 0; left: 0;
+      height: 24px;
+    }
+  /*
+  .dragging-over, .dragging-over * {
+    
   }
   .dragging {
     opacity: 0.5;
     background-color: #fff;
   }
+
+  .dragging-over + .drop {
+    height: 52px;
+  }
+  .dragging-over + .drop td {
+    background-color: #eee;
+  }
+
+  .drop {
+    height: 1px;
+  }
+  .drop td {
+    background-color: #fff;
+  }*/

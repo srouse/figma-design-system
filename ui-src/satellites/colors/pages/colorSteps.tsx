@@ -111,9 +111,6 @@ export default class ColorSteps extends React.Component<CoreProps> {
         <table className="edit-color-table">
           {this.renderColorSteps()}
         </table>
-        <div>
-          {this.renderDragNDrop()}
-        </div>
       </div>
       <div
         className="edit-color-picker"
@@ -159,61 +156,6 @@ export default class ColorSteps extends React.Component<CoreProps> {
     </>);
   }
 
-  renderDragNDrop() {
-    if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
-
-    // there will only ever be one in the array...
-    const tokenset = this.props.tokenGroup.tokensets[0];
-    if (!tokenset) return (<div>No Steps Found</div>);
-    const tokens = cleanAndSortTokens(tokenset);
-
-    const html = tokens.map((entry) => {
-      // const prop = entry[0];
-      const value = entry[1] as DSysColorToken;
-      const color = value.$value as DTColor;
-      return (
-        <div
-          draggable 
-          onDragStart={(evt) => {
-            evt.dataTransfer.setData(
-              'dsys.name',
-              value.$extensions['dsys.name']
-            );
-            evt.dataTransfer.dropEffect = "move";
-            const targetDiv = evt.target as HTMLDivElement;
-            targetDiv.classList.add('dragging');
-          }}
-          onDragEnd={(evt) => {
-            const targetDiv = evt.target as HTMLDivElement;
-            targetDiv.classList.remove('dragging');
-          }}
-          onDragLeave={(evt) => {
-            const targetDiv = evt.target as HTMLDivElement;
-            targetDiv.classList.remove('dragging-over');
-          }}
-          onDragEnter={(evt) => {
-            const targetDiv = evt.target as HTMLDivElement;
-            targetDiv.classList.add('dragging-over');
-          }}
-          
-          onDrop={(evt) => {
-            evt.preventDefault();
-            console.log(
-              evt.target,
-              evt.dataTransfer.getData('dsys.name')
-            );
-            const targetDiv = evt.target as HTMLDivElement;
-            targetDiv.classList.remove('dragging-over');
-          }}
-          onDragOver={(evt) => {
-            evt.preventDefault();
-          }}>{color.hex}</div>
-      );
-    });
-    console.log(html)
-    return html;
-  }
-
   renderColorSteps() {
     if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
 
@@ -225,14 +167,10 @@ export default class ColorSteps extends React.Component<CoreProps> {
       const prop = entry[0];
       const value = entry[1] as DSysColorToken;
       const color = value.$value as DTColor;
-      return (
+      return (<>
         <tr
           className="edit-color-row"
           draggable="true"
-          id={`tr-${value.$extensions['dsys.name']}`}
-          onDragOver={(evt) => {
-            evt.preventDefault();
-          }}
           onDrop={(evt) => {
             evt.preventDefault();
             const tr = document.querySelector(`#tr-${value.$extensions['dsys.name']}`);
@@ -246,22 +184,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
             }
             console.log('hit', value.$extensions['dsys.name'], evt);
           }}
-          onDragLeave={(evt) => {
-            // const tr = document.querySelector(`#tr-${value.$extensions['dsys.name']}`);
-            // if (tr) tr.classList.remove('dragging-over');
-          }}
-          onDragEnter={(evt) => {
-            const tr = document.querySelector(`#tr-${value.$extensions['dsys.name']}`);
-            if (tr) {
-              const table = tr.parentElement;
-              if (table) {
-                [...table.children].map(
-                  tr => tr.classList.remove('dragging-over')
-                );
-              }
-              tr.classList.add('dragging-over');
-            }
-          }}>
+          >
           <td className="edit-color-dragger">
             <div className="edit-color-dragger-icon"
               dangerouslySetInnerHTML={{ __html: 
@@ -356,7 +279,26 @@ export default class ColorSteps extends React.Component<CoreProps> {
               }}></div>
           </td>
         </tr>
-      );
+        <tr><td 
+          className="drop-td"
+          id={`td-${value.$extensions['dsys.name']}`}
+          colSpan={10}>
+          <div
+            className="drop"
+            id={`drop-${value.$extensions['dsys.name']}`}
+            onDragOver={(evt) => {
+              evt.preventDefault();
+            }}
+            onDragLeave={(evt) => {
+              const tr = document.querySelector(`#td-${value.$extensions['dsys.name']}`);
+              if (tr) tr.classList.remove('dragging-over');
+            }}
+            onDragEnter={(evt) => {
+              const tr = document.querySelector(`#td-${value.$extensions['dsys.name']}`);
+              if (tr) tr.classList.add('dragging-over');
+            }}></div>
+          </td></tr>
+      </>);
     });
     return html;
   }
