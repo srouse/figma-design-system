@@ -151,3 +151,13 @@
     .edit-color-navigation > *:first-child {
       margin-right: 10px;
     }
+
+
+
+  .dragging-over, .dragging-over * {
+    background-color: #eee;
+  }
+  .dragging {
+    opacity: 0.5;
+    background-color: #fff;
+  }

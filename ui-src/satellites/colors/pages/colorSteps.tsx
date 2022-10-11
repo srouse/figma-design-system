@@ -1,15 +1,12 @@
 import React, { DOMAttributes, MouseEvent } from "react";
 import {
   DSysColorToken,
-  DSysTokenset,
   CoreProps,
   cleanAndSortTokens,
-  returnValidColor,
   validColor,
   colors,
   getIcon,
   Icons,
-  dtColorToCss,
   DTColor,
 } from "../../../../shared";
 import DTButton, { DTButtonColor, DTButtonDesign } from "../../../components/DTButton";
@@ -114,6 +111,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
         <table className="edit-color-table">
           {this.renderColorSteps()}
         </table>
+        <div>
+          {this.renderDragNDrop()}
+        </div>
       </div>
       <div
         className="edit-color-picker"
@@ -159,21 +159,109 @@ export default class ColorSteps extends React.Component<CoreProps> {
     </>);
   }
 
+  renderDragNDrop() {
+    if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
+
+    // there will only ever be one in the array...
+    const tokenset = this.props.tokenGroup.tokensets[0];
+    if (!tokenset) return (<div>No Steps Found</div>);
+    const tokens = cleanAndSortTokens(tokenset);
+
+    const html = tokens.map((entry) => {
+      // const prop = entry[0];
+      const value = entry[1] as DSysColorToken;
+      const color = value.$value as DTColor;
+      return (
+        <div
+          draggable 
+          onDragStart={(evt) => {
+            evt.dataTransfer.setData(
+              'dsys.name',
+              value.$extensions['dsys.name']
+            );
+            evt.dataTransfer.dropEffect = "move";
+            const targetDiv = evt.target as HTMLDivElement;
+            targetDiv.classList.add('dragging');
+          }}
+          onDragEnd={(evt) => {
+            const targetDiv = evt.target as HTMLDivElement;
+            targetDiv.classList.remove('dragging');
+          }}
+          onDragLeave={(evt) => {
+            const targetDiv = evt.target as HTMLDivElement;
+            targetDiv.classList.remove('dragging-over');
+          }}
+          onDragEnter={(evt) => {
+            const targetDiv = evt.target as HTMLDivElement;
+            targetDiv.classList.add('dragging-over');
+          }}
+          
+          onDrop={(evt) => {
+            evt.preventDefault();
+            console.log(
+              evt.target,
+              evt.dataTransfer.getData('dsys.name')
+            );
+            const targetDiv = evt.target as HTMLDivElement;
+            targetDiv.classList.remove('dragging-over');
+          }}
+          onDragOver={(evt) => {
+            evt.preventDefault();
+          }}>{color.hex}</div>
+      );
+    });
+    console.log(html)
+    return html;
+  }
+
   renderColorSteps() {
     if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
 
     // there will only ever be one in the array...
     const tokenset = this.props.tokenGroup.tokensets[0];
     if (!tokenset) return (<div>No Steps Found</div>);
-
     const tokens = cleanAndSortTokens(tokenset);
-
     const html = tokens.map((entry) => {
       const prop = entry[0];
       const value = entry[1] as DSysColorToken;
       const color = value.$value as DTColor;
       return (
-        <tr className="edit-color-row">
+        <tr
+          className="edit-color-row"
+          draggable="true"
+          id={`tr-${value.$extensions['dsys.name']}`}
+          onDragOver={(evt) => {
+            evt.preventDefault();
+          }}
+          onDrop={(evt) => {
+            evt.preventDefault();
+            const tr = document.querySelector(`#tr-${value.$extensions['dsys.name']}`);
+            if (tr) {
+              const table = tr.parentElement;
+              if (table) {
+                [...table.children].map(
+                  tr => tr.classList.remove('dragging-over')
+                );
+              }
+            }
+            console.log('hit', value.$extensions['dsys.name'], evt);
+          }}
+          onDragLeave={(evt) => {
+            // const tr = document.querySelector(`#tr-${value.$extensions['dsys.name']}`);
+            // if (tr) tr.classList.remove('dragging-over');
+          }}
+          onDragEnter={(evt) => {
+            const tr = document.querySelector(`#tr-${value.$extensions['dsys.name']}`);
+            if (tr) {
+              const table = tr.parentElement;
+              if (table) {
+                [...table.children].map(
+                  tr => tr.classList.remove('dragging-over')
+                );
+              }
+              tr.classList.add('dragging-over');
+            }
+          }}>
           <td className="edit-color-dragger">
             <div className="edit-color-dragger-icon"
               dangerouslySetInnerHTML={{ __html: 
