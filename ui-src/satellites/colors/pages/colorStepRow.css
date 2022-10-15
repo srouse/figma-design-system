@@ -1,0 +1,105 @@
+
+.color-step-row {
+  border-bottom: 1px solid var( --grey-lightest );
+  height: 52px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var( --white );
+  
+  position: absolute;
+  top: 0; bottom: 0; right: 0; left: 0;
+}
+
+  /* DRAGGER */
+  .color-step-row-dragger {
+    width: 34px;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+  .color-step-row-dragger:hover {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+  }
+  .color-step-row-dragger:active {
+    cursor: grabbing;
+  }
+
+  /* NAME */
+  .color-step-row-name {
+    border-right: 1px solid var( --grey-lightest );
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+
+  /* COLOR CHIP */
+  .color-step-row-color {
+    padding: 0 0 0 10px;
+  }
+
+    .color-step-row-color-chip {
+      width: 20px; height: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var( --text-color-error );
+      display: flex; align-items: center; justify-content: center;
+    }
+    .color-step-row-color-chip:hover {
+      cursor: pointer;
+    }
+
+  /* HEX */
+  .color-step-row-hex {
+    vertical-align: middle;
+  }
+
+    .color-step-row-hex-input {
+      width: 90px;
+    }
+
+  /* ALPHA 
+  .color-step-row-alpha {
+
+  }*/
+
+    .color-step-row-alpha-input {
+      width: 60px;
+    }
+
+  /* ADA 
+  .color-step-row-ada {
+
+  }*/
+
+  /* DELETING */
+  .color-step-row-deleting {
+    width: 0;
+    transition: width 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+    .color-step-row-deleting-icon {
+      width: 46px;
+      transition: width 0.3s;
+      overflow: hidden;
+      background-color: var( --error-lightest );
+      position: absolute; 
+      left: 2px; top: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.25);
+    }
+
+    .color-step-row-deleting-icon:hover {
+      cursor: pointer;
+    }
+
+    .is-deleting .color-step-row-deleting {
+      width: 46px;
+    }

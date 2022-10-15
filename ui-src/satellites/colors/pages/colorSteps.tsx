@@ -12,9 +12,11 @@ import {
 import DTButton, { DTButtonColor, DTButtonDesign } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import "./colorSteps.css";
+import "./colorStepRow.css";
 import renderAda from "./renderAda";
 import 'color-picker-web-component';
 import { changeColorAction, changeNameAction } from "./actions";
+import DragAndDropList from "../../../utils/dragAndDropList";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -104,13 +106,131 @@ export default class ColorSteps extends React.Component<CoreProps> {
   }
 
   render() {
+
+    if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
+    const tokenset = this.props.tokenGroup.tokensets[0];
+    if (!tokenset) return (<div>No Steps Found</div>);
+    const tokens = cleanAndSortTokens(tokenset);
+
     return (<>
       <div className={`
         edit-color scroll-bar
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
-        <table className="edit-color-table">
+        <DragAndDropList
+          rowHeight={52}
+          rowList={tokens}
+          rowGenerator={(
+            token, index,
+            onMouseDownCapture,
+            onMouseUpCapture) => {
+            const prop = token[0];
+            const value = token[1] as DSysColorToken;
+            const color = value.$value as DTColor;
+            return (
+              <div
+                className="color-step-row"
+                key={`color-${value.$extensions['dsys.styleId'] || index}}`}>
+                <div className="color-step-row-dragger"
+                  dangerouslySetInnerHTML={{ __html: 
+                    getIcon(Icons.drag, colors.greyLight) 
+                  }}
+                  onMouseDown={onMouseDownCapture}
+                  onMouseUp={onMouseUpCapture}>
+                </div>
+                <div className="color-step-row-name">
+                  <Input
+                    hideLabel hideBorder
+                    label="property"
+                    value={prop}
+                    onChange={(newName: string) => {
+                      changeNameAction(
+                        newName, prop,
+                        this.props.tokenGroup, this.props.updateTokenGroup
+                      );
+                    }} />
+                </div>
+                <div className="edit-color-color">
+                  <div className="edit-color-color-chip"
+                    style={{
+                      backgroundColor: color.hex,
+                      opacity: color.alpha,
+                    }}
+                    onClick={(evt: MouseEvent) => {
+                      const pickerSize = {width: 240, height: 294};
+                      const viewSize = {width: 460, height: 560};
+                      const absTop = 110;
+                      const chipOffset = getOffset( evt.target as HTMLElement );
+                      this.setState({
+                        focusedToken: value,
+                        pickerColor: color.hex,
+                        pickerTop: `${
+                          Math.min(
+                            viewSize.height - pickerSize.height,
+                            chipOffset.top - absTop - 15
+                          )
+                        }px`
+                      });
+                      this.fixMessedUpPicker();
+                    }}>
+                    {validColor(color) ? '' : '!!'}
+                  </div>
+                </div>
+                <div className="edit-color-hex">
+                  <Input
+                    className="edit-color-hex-input"
+                    label="color" 
+                    hideLabel hideBorder
+                    value={`${color.hex}`}
+                    textAlign="left"
+                    onFocus={() => {
+                      this.setState({
+                        focusedToken: undefined,
+                      });
+                    }}
+                    onChange={(value: string) => {
+                      this.changeColor(
+                        value,
+                        color.alpha,
+                        prop
+                      );
+                    }} />
+                </div>
+                <div className="edit-color-alpha">
+                  <Input
+                    className="edit-color-alpha-input"
+                    label="color alpha" 
+                    hideLabel hideBorder
+                    value={`${Math.round(color.alpha * 100)}%`}
+                    textAlign="right"
+                    onChange={(value: string) => {
+                      const alphaFractionStr = value.replace('%', '');
+                      const alphaFraction = parseInt(alphaFractionStr)/100;
+                      this.changeColor(
+                        color.hex,
+                        alphaFraction,
+                        prop
+                      );
+                    }} />
+                </div>
+                <div className="edit-color-ada">
+                  {renderAda(
+                    color,
+                    this.props.tokenGroup?.nodeId || tokenset.$extensions['dsys.name']
+                  )}
+                </div>
+                <div className="edit-color-deleting">
+                  <div className="edit-color-deleting-icon"
+                    dangerouslySetInnerHTML={{ __html: 
+                      getIcon(Icons.delete, colors.error) 
+                    }}></div>
+                </div>
+              </div>
+            );
+          }}>
+        </DragAndDropList>
+        {/*<table className="edit-color-table">
           {this.renderColorSteps()}
-        </table>
+        </table>*/}
       </div>
       <div
         className="edit-color-picker"
