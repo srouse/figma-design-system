@@ -113,8 +113,16 @@ function Widget() {
                   });
                 })();
                 break;
-              case MessageRequest.createStyle: 
-                console.log('createStyle', message);
+              case MessageRequest.deleteStyle:
+                if (message.styleId) {
+                  const style = figma.getStyleById(message.styleId);
+                  if (style) style.remove();
+                  bounceBack(message, {
+                    success: true,
+                  });
+                }
+                break
+              case MessageRequest.createStyle:
                 if (message.style) {
                   if (message.style.type === MessageRequestStyle.color) {
                     const style = figma.createPaintStyle();
@@ -129,7 +137,15 @@ function Widget() {
                       }
                     ];
                     style.name = message.style.name;
+                    bounceBack(message, {
+                      style
+                    });
+                  }else{
+                    bounceBack(message, {
+                      result: 'no style requested'
+                    });
                   }
+                  
                 }
                 break;
             }

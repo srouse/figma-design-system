@@ -37,12 +37,6 @@ export function colorStylesToDSysTokenset(
   folderStyles.map((style, index) => {
     // sans folder
     let name = style.name.substring(folderName.length+1);
-    if (
-      name.indexOf(`${folderName}-`) === 0 ||
-      name === folderName
-    ) {
-      name = name.substring(folderName.length+1);
-    }
     if (style.paints.length === 0) return;
 
     if (!name) name = '';
@@ -60,7 +54,8 @@ export function colorStylesToDSysTokenset(
       },
       $type: DTTokenType.color
     };
-  })
+  });
+
   return tokenset;
 }
 
@@ -86,6 +81,7 @@ export function colorTokenGroupToStyles(
       return 0;// otherwise it doesn't matter..
     });
 
+    // walk through tokensets
     let prevStyle : PaintStyle | null = null;
     tokensetArr.map((entry) => {
       const name : string = entry[0];
@@ -120,11 +116,7 @@ export function colorTokenGroupToStyles(
           opacity: token.$value.alpha,
         }
       ];
-      style.name = `${
-        tokenGroup.name}/${
-        tokenGroup.name}${
-        name ? `-${name}` : ''
-      }`;
+      style.name = `${tokenGroup.name}/${name}`;
 
       // move style relative to prev style (was sorted before getting here)
       figma.moveLocalPaintStyleAfter(style, prevStyle);

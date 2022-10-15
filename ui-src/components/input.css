@@ -16,6 +16,7 @@
   .inputComp-label {
     font-size: 11px;
     color: var( --text-color-lighter );
+    margin-bottom: 3px;
   }
 
   .inputComp-input-box {
@@ -32,7 +33,6 @@
     .inputComp-input {
       width: 100%;
       padding: 11px 10px;
-      margin-top: 3px;
       border-radius: 4px;
       font-size: 15px;
       border: 1px solid var( --figma-color-border );

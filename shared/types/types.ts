@@ -18,6 +18,7 @@ export enum MessageRequest {
   getEffectStyles = 'getEffectStyles',
   getFinalTokens = 'getFinalTokens',
   createStyle = 'createStyle',
+  deleteStyle = 'deleteStyle',
 }
 
 export enum MessageRequestStyle {

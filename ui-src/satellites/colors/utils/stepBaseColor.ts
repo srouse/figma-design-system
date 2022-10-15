@@ -19,12 +19,11 @@ type StepResult = {
 
 export default function stepBaseColor(
   baseColor: string | undefined,
-  steps: string[],
-  includeBlackAndWhite: boolean = true
+  steps: string[]
 ) : StepBaseResults {
 
-  let totalTintSteps = includeBlackAndWhite ? 0 : 1;
-  let totalShadeSteps = includeBlackAndWhite ? 0 : 1;
+  let totalTintSteps = 1;
+  let totalShadeSteps = 1;
   let baseIndex = -1;
   let workingOnTints = true;
   let success = true;
@@ -58,15 +57,6 @@ export default function stepBaseColor(
 
   const baseRgb = hexToRgb( baseColor );
   if (baseRgb && baseRgb.length === 3) {
-    const whiteColor: StepResult = {
-      r:255, g:255, b:255,
-      hex: '#ffffff', step: 'todo'
-    };
-    const blackColor: StepResult = {
-      r:0, g:0, b:0,
-      hex: '#000000', step: 'todo'
-    };
-  
     const rDarkStep = baseRgb[0] / totalShadeSteps;
     const gDarkStep = baseRgb[1] / totalShadeSteps;
     const bDarkStep = baseRgb[2] / totalShadeSteps;
@@ -90,9 +80,6 @@ export default function stepBaseColor(
     });
       lightStepCount++;
     }
-    if (includeBlackAndWhite)
-      finalSteps.unshift(whiteColor);
-
     
     finalSteps.push({
       r: baseRgb[0],
@@ -115,8 +102,6 @@ export default function stepBaseColor(
     });
       darkStepCount++;
     }
-    if (includeBlackAndWhite)
-      finalSteps.push(blackColor);
 
     // weave step back in...
     finalSteps.map((step, index) => {

@@ -67,7 +67,7 @@ export default class Validator {
   }
 
   validateAll() : ValidatorSuccess[] {
-    console.log(this.registrations)
+    console.log('registrations', this.registrations)
     const final = Object.values(this.registrations).map(funk => funk());
     const errors = final.filter(result => result.success === false);
     return errors;

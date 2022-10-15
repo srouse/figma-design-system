@@ -12,6 +12,7 @@ import {
   dtColorToCss,
   DTColor,
   TokenGroup,
+  DSysColorToken,
  } from '../../../shared/index';
 import { paintStyles } from '../../actions/getStyles';
 import header from '../../components/header';
@@ -114,7 +115,7 @@ export default function colorsSatellite() {
   const tokens = cleanAndSortTokens(tokenset);
   const tokenOutput = tokens.map(
     (tokenInfo, index) => {
-    const token = tokenInfo[1] as DSysToken;
+    const token = tokenInfo[1] as DSysColorToken;
     const color = token.$value as DTColor;
     return (
       <AutoLayout
@@ -128,11 +129,10 @@ export default function colorsSatellite() {
           bottom: 0,right: 20
         }}
         key={`row_${
-          token.$extensions["dsys.name"]}${
-          token.$extensions["dsys.index"]
+          token.$extensions['dsys.styleId']
         }`}>
         <AutoLayout
-          height={60}
+          height={50}
           verticalAlignItems="center"
           spacing={4}
           width="fill-parent"
@@ -144,8 +144,8 @@ export default function colorsSatellite() {
             verticalAlignItems="center"
             spacing={20}>
             <AutoLayout
-              width={34}
-              height={34}
+              width={26}
+              height={26}
               fill={dtColorToCss(color)}
               opacity={color.alpha}
               horizontalAlignItems="center"
@@ -178,10 +178,7 @@ export default function colorsSatellite() {
               fill={colors.textColor}
               width="fill-parent"
               height="hug-contents">
-              {mergeNames(
-                tokenGroup.name,
-                token.$extensions["dsys.name"]
-              )}
+              {token.$extensions["dsys.name"]}
             </Text>
           </AutoLayout>
           <Text

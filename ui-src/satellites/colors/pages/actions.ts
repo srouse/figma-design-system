@@ -2,8 +2,10 @@ import {
   DSysColorToken,
   DSysToken,
   DSysTokenset,
+  MessageRequest,
   TokenGroup
 } from "../../../../shared";
+import postMessagePromise from "../../../utils/postMessagePromise";
 
 export function changeColorAction(
   color: string,
@@ -103,6 +105,38 @@ export function changeOrder(
     }
   });
 
+  updateTokenGroup({
+    ...tokenGroup,
+    tokensets: [newTokenSet as DSysTokenset],
+  });
+}
+
+export async function deleteColorToken(
+  deletedToken: DSysColorToken,
+  tokenGroup: TokenGroup,
+  updateTokenGroup: (val: TokenGroup) => void
+) {
+  await postMessagePromise(
+    MessageRequest.deleteStyle,
+    {
+      styleId: deletedToken.$extensions['dsys.styleId'] 
+    }
+  );
+  const tokenset = tokenGroup.tokensets[0];
+  const newTokenSet: {[key:string]: any} = {};
+  Object.entries(tokenset).map(entry => {
+    const name = entry[0];
+    const value = entry[1];
+    if (
+      !value.$extensions || 
+      value.$extensions['dsys.styleId'] !== 
+      deletedToken.$extensions['dsys.styleId']
+    ) {
+      newTokenSet[name] = value;
+    }
+  });
+
+  // let the style refresh reindex things...
   updateTokenGroup({
     ...tokenGroup,
     tokensets: [newTokenSet as DSysTokenset],

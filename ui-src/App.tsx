@@ -51,10 +51,12 @@ export default class App extends React.Component<{}> {
   updateTokenGroup(
     tokenGroup: TokenGroup,
   ) {
-    parent?.postMessage?.({pluginMessage: {
-      name: MessageName.tokenGroupUpdate,
-      tokenGroup
-    }}, "*");
+    parent?.postMessage?.({
+      pluginMessage: {
+        name: MessageName.tokenGroupUpdate,
+        tokenGroup
+      }},
+    "*");
 
     this.setState({
       ...this.state,

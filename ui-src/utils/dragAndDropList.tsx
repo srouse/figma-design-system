@@ -197,6 +197,7 @@ export default class DragAndDropList extends React.Component<DnDProps> {
       return (
         <div
           data-row-index={index}
+          className="drag-and-drop-house"
           style={{
             position: 'relative',
             height: this.props.rowHeight,

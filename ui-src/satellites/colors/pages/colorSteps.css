@@ -3,7 +3,7 @@
   position: absolute;
   bottom: 82px; top: 0; right: 0; left: 0;
   background-color: var( --white );
-  padding: 16px 16px 40px 16px;
+  padding: 16px 16px 30px 16px;
 
   display: flex;
   flex-direction: column;
@@ -33,111 +33,6 @@
     .edit-color-picker-btn {
       margin: 6px;
     }
-
-  .edit-color-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-    .edit-color-row {
-      border-bottom: 1px solid var( --grey-lightest );
-      height: 52px;
-    }
-
-      /* DRAGGER */
-      .edit-color-dragger {
-        vertical-align: middle;
-      }
-
-        .edit-color-dragger-icon {
-          width: 30px; height: 30px;
-          display: flex; align-items: center; justify-content: center;
-        }
-        .edit-color-dragger-icon:hover {
-          cursor: move; /* fallback if grab cursor is unsupported */
-          cursor: grab;
-        }
-        .edit-color-dragger-icon:active {
-          cursor: grabbing;
-        }
-
-      /* NAME */
-      .edit-color-name {
-        vertical-align: middle;
-        border-right: 1px solid var( --grey-lightest );
-      }
-
-      /* COLOR CHIP */
-      .edit-color-color {
-        padding: 0 0 0 10px;
-      }
-
-        .edit-color-color-chip {
-          width: 20px; height: 20px;
-          font-size: 12px;
-          font-weight: 700;
-          color: var( --text-color-error );
-          display: flex; align-items: center; justify-content: center;
-        }
-        .edit-color-color-chip:hover {
-          cursor: pointer;
-        }
-
-      /* HEX */
-      .edit-color-hex {
-        vertical-align: middle;
-      }
-
-        .edit-color-hex-input {
-          width: 90px;
-        }
-
-      /* ALPHA 
-      .edit-color-alpha {
-
-      }*/
-
-        .edit-color-alpha-input {
-          width: 60px;
-        }
-
-      /* ADA 
-      .edit-color-ada {
-
-      }*/
-
-      /* DELETING */
-      .edit-color-deleting {
-        width: 0;
-        transition: width 0.3s;
-        position: relative;
-        overflow: hidden;
-        align-self: stretch;
-        /*position: absolute;
-        top: 0; right: 0; bottom: 0;*/
-        
-      }
-
-        .edit-color-deleting-icon {
-          width: 46px;
-          transition: width 0.3s;
-          overflow: hidden;
-          background-color: var( --error-lightest );
-          position: absolute; 
-          left: 2px; top: 0; bottom: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.25);
-        }
-
-        .edit-color-deleting-icon:hover {
-          cursor: pointer;
-        }
-
-        .is-deleting .edit-color-deleting {
-          width: 46px;
-        }
 
   /* NAVIGATION */
   .edit-color-navigation {

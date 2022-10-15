@@ -1,55 +1,50 @@
 
 
 export enum ColorStepTypes {
-  step10Step = "step-10-step",
-  step10StepColor = "step-10-step-color",
+  none = 'none',
+  step9ThreeDigit = 'step-9-three-digit',
+  step9TwoDigit = 'step-9-two-digit',
+  step9OneDigit = 'step-9-one-digit',
+  colorGroup = "color-group",
   stepLightestToDarkest ='lightest-to-darkest',
-  stepCustom = "step-custom",
-  stepSingleColor = 'step-single-color',
 }
 
 export type StepsInformation = {
   steps: string,
-  includeBlackAndWhite: boolean,
   type: ColorStepTypes,
 }
 
-export function getCustomStepsInfo() : StepsInformation {
+export function getColorGroupInfo() : StepsInformation {
   return {
-    steps: '01, 02, [base:03], 04, 05',
-    includeBlackAndWhite: false,
-    type: ColorStepTypes.stepCustom,
+    steps: '',
+    type: ColorStepTypes.colorGroup,
   }
 }
 
 export function getLightestStepsInfo() : StepsInformation {
   return {
     steps: 'lightest, lighter, light, [base], dark, darker, darkest',
-    includeBlackAndWhite: false,
     type: ColorStepTypes.stepLightestToDarkest,
   }
 }
 
-export function get10StepsInfo() : StepsInformation {
+export function getStep9OneDigitInfo() : StepsInformation {
   return {
-    steps: '00, 01, 02, 03, 04, [base:05], 06, 07, 08, 09, 10',
-    includeBlackAndWhite: true,
-    type: ColorStepTypes.step10Step,
+    steps: '1, 2, 3, 4, [base:5], 6, 7, 8, 9',
+    type: ColorStepTypes.step9OneDigit,
   }
 }
 
-export function get10ColorStepsInfo() : StepsInformation {
+export function getStep9TwoDigitInfo() : StepsInformation {
   return {
-    steps: '01, 02, 03, 04, [base:05], 06, 07, 08, 09',
-    includeBlackAndWhite: false,
-    type: ColorStepTypes.step10StepColor,
+    steps: '10, 20, 30, 40, [base:50], 60, 70, 80, 90',
+    type: ColorStepTypes.step9TwoDigit,
   }
 }
 
-export function getSingleColorInfo() : StepsInformation {
+export function getStep9ThreeDigitInfo() : StepsInformation {
   return {
-    steps: '[base]',
-    includeBlackAndWhite: false,
-    type: ColorStepTypes.stepSingleColor,
+    steps: '100, 200, 300, 400, [base:500], 600, 700, 800, 900',
+    type: ColorStepTypes.step9ThreeDigit,
   }
 }

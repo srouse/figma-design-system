@@ -1,30 +1,22 @@
 import React from "react";
 import {
   CoreProps,
-  MessageRequest,
-  MessageRequestStyle,
-  DTTokenType,
-  DSysGroupType,
-  DSysLevel,
-  DSysTokenset,
   Validator,
 } from "../../../../shared";
-import Checkbox from "../../../components/Checkbox";
 import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import InputHeader from "../../../components/InputHeader";
 import Select from "../../../components/Select";
-import postMessagePromise from "../../../utils/postMessagePromise";
+import createSteppedTokens from "../utils/createSteppedTokens";
 import {
-  get10StepsInfo,
-  get10ColorStepsInfo,
-  getCustomStepsInfo,
-  getLightestStepsInfo,
   ColorStepTypes,
-  getSingleColorInfo,
   StepsInformation,
+  getStep9OneDigitInfo,
+  getStep9TwoDigitInfo,
+  getLightestStepsInfo,
+  getColorGroupInfo,
+  getStep9ThreeDigitInfo,
 } from "../utils/getStepsArray";
-import stepBaseColor from "../utils/stepBaseColor";
 import "./firstRun.css";
 
 export default class FirstRun extends React.Component<CoreProps> {
@@ -34,8 +26,7 @@ export default class FirstRun extends React.Component<CoreProps> {
     const config = this.procesStepsInfoConfig();
     this.state = {
       name: this.props.tokenGroup?.name,
-      stepsType: config.stepsType as ColorStepTypes | 'none',
-      includeBlackAndWhite: config.includeBlackAndWhite,
+      stepsType: config.stepsType as ColorStepTypes,
       steps: config.steps,
     }
     this.validator = new Validator();
@@ -45,57 +36,31 @@ export default class FirstRun extends React.Component<CoreProps> {
 
   state: {
     name: string | undefined,
-    stepsType: ColorStepTypes | 'none',
+    stepsType: ColorStepTypes,
     baseColor?: string,
     steps: string,
-    includeBlackAndWhite: boolean
   }
 
   procesStepsInfoConfig() {
     // figure out local state from steps...
-    let newStepsTypes = 'none';// ColorStepTypes.step10Step;
-    let newIncludeBlackAndWhite = true;
-    let stepsStr = get10StepsInfo().steps;
+    let newStepsTypes = ColorStepTypes.none;
+    let stepsStr = getStep9TwoDigitInfo().steps;
     if (this.props.tokenGroup?.steps) {
       const steps = this.props.tokenGroup.steps;
       stepsStr = steps;
-      if (
-        stepsStr === get10StepsInfo().steps 
-      ) {
-        newStepsTypes = ColorStepTypes.step10Step;
-        newIncludeBlackAndWhite = get10StepsInfo().includeBlackAndWhite;
-      }else if (
-        stepsStr === get10ColorStepsInfo().steps
-      ) {
-        newStepsTypes = ColorStepTypes.step10StepColor;
-        newIncludeBlackAndWhite = get10ColorStepsInfo().includeBlackAndWhite;
-      }else if (
-        stepsStr === getLightestStepsInfo().steps 
-      ) {
-        newStepsTypes = ColorStepTypes.stepLightestToDarkest;
-        newIncludeBlackAndWhite = getLightestStepsInfo().includeBlackAndWhite;
+      if ( stepsStr === getStep9OneDigitInfo().steps ) {
+        newStepsTypes = ColorStepTypes.step9OneDigit;
+      }else if ( stepsStr === getStep9TwoDigitInfo().steps ) {
+        newStepsTypes = ColorStepTypes.step9TwoDigit;
+      }else if ( stepsStr === getStep9ThreeDigitInfo().steps ) {
+        newStepsTypes = ColorStepTypes.step9ThreeDigit;
       }else{
-        newStepsTypes = ColorStepTypes.stepCustom;
-        newIncludeBlackAndWhite = getCustomStepsInfo().includeBlackAndWhite;
+        newStepsTypes = ColorStepTypes.colorGroup;
       }
     }
     return {
       stepsType: newStepsTypes,
-      includeBlackAndWhite: newIncludeBlackAndWhite,
       steps: stepsStr,
-    }
-  }
-
-  getSteps() {
-    switch (this.state.stepsType) {
-      case ColorStepTypes.step10Step :
-        return get10StepsInfo();
-      case ColorStepTypes.step10StepColor :
-        return get10ColorStepsInfo();
-      case ColorStepTypes.stepLightestToDarkest :
-        return getLightestStepsInfo();
-      case ColorStepTypes.stepCustom :
-        return [];
     }
   }
 
@@ -118,68 +83,74 @@ export default class FirstRun extends React.Component<CoreProps> {
               }
             })
           } />*/}
-        <Input
+        {(
+          this.state.stepsType !== ColorStepTypes.colorGroup &&
+          this.state.stepsType !== ColorStepTypes.none
+        ) ? (
+          <Input
           label="Center Color (hex #ff0000)"
           value={this.state.baseColor}
           helpText="Color at the center of the steps that determines all others"
           onChange={(baseColor: string) => {
             this.setState({baseColor});
-          }} />{/*
-          onValidateBlur={
-            this.validator.register(() => {
-              const isValidColor = validColor(this.state.baseColor);
-              return {
-                success: isValidColor,
-                message: isValidColor ? '' : 'Must be a color'
-              }
-            })
-          } />*/}
+          }}
+           />
+        ) : ''}
+        {/*
+        onValidateBlur={
+          this.validator.register(() => {
+            const isValidColor = validColor(this.state.baseColor);
+            return {
+              success: isValidColor,
+              message: isValidColor ? '' : 'Must be a color'
+            }
+          })
+        } />*/}
         <Select
           label="Step Pattern"
           value={this.state.stepsType}
           dropdown={[
             {
               name: 'Choose a Step Pattern',
-              value: 'none'
+              value: ColorStepTypes.none,
             },
             {
-              name: '10 Step',
-              value: ColorStepTypes.step10Step
+              name: 'Stepped 1, 2,..., 9',
+              value: ColorStepTypes.step9OneDigit
             },
             {
-              name: '10 Step - Color (no black or white)',
-              value: ColorStepTypes.step10StepColor
+              name: 'Stepped 10, 20,..., 90',
+              value: ColorStepTypes.step9TwoDigit
+            },
+            {
+              name: 'Stepped 100, 200,..., 900',
+              value: ColorStepTypes.step9ThreeDigit
             },
             {
               name: 'Lightest to Darkest',
               value: ColorStepTypes.stepLightestToDarkest
             },
             {
-              name: 'Single Color',
-              value: ColorStepTypes.stepSingleColor
-            },
-            {
-              name: 'Custom',
-              value: ColorStepTypes.stepCustom
+              name: 'Color Group',
+              value: ColorStepTypes.colorGroup
             },
           ]}
           onChange={(stepsType: string) => {
             let stepsInfo : StepsInformation | undefined;
-            if (stepsType === ColorStepTypes.step10Step) {
-              stepsInfo = get10StepsInfo();
-            }else if (stepsType === ColorStepTypes.stepLightestToDarkest) {
+            if (stepsType === ColorStepTypes.stepLightestToDarkest) {
               stepsInfo = getLightestStepsInfo();
-            }else if (stepsType === ColorStepTypes.step10StepColor) {
-              stepsInfo = get10ColorStepsInfo();
-            }else if (stepsType === ColorStepTypes.stepSingleColor) {
-              stepsInfo = getSingleColorInfo();
-            }else if (stepsType === ColorStepTypes.stepCustom) {
-              stepsInfo = getCustomStepsInfo();
+            }else if (stepsType === ColorStepTypes.step9OneDigit) {
+              stepsInfo = getStep9OneDigitInfo();
+            }else if (stepsType === ColorStepTypes.step9TwoDigit) {
+              stepsInfo = getStep9TwoDigitInfo();
+            }else if (stepsType === ColorStepTypes.step9ThreeDigit) {
+              stepsInfo = getStep9ThreeDigitInfo();
+            }else if (stepsType === ColorStepTypes.colorGroup) {
+              stepsInfo = getColorGroupInfo();
             }
             this.setState({
               stepsType : stepsType,
-              steps: stepsInfo?.steps || undefined,
-              includeBlackAndWhite: stepsInfo?.includeBlackAndWhite || false
+              steps: stepsInfo?.steps || undefined
             });
           }}
           onValidate={
@@ -192,101 +163,24 @@ export default class FirstRun extends React.Component<CoreProps> {
             })
           }>
         </Select>
-        {this.state.stepsType === ColorStepTypes.stepCustom ? (<>
-          <Input
-            label="Custom Steps"
-            value={this.state.steps}
-            helpText="Comma deliminated. [base] is required, but only once. 
-            Base can also have an additional step entry [base:step]. Entering
-             [base:05] will create 'grey' and 'grey-05' with the base color.
-            "
-            onChange={(steps: string) => {
-              this.setState({
-                steps
-              })
-            }}
-            validator={this.validator}
-            onValidate={() => {
-              return {
-                success: this.state.steps ? false : false,
-                message: this.state.steps ? '' : 'Steps are required'
-              }
-            }} />
-            <Checkbox
-              label="include black and white ( usually grey steps )"
-              value={this.state.includeBlackAndWhite}
-              onChange={(includeBlackAndWhite: boolean) => {
-                this.setState({includeBlackAndWhite});
-              }} />
-          </>) : null}
-        
         <div style={{flex: "1"}}></div>
         <DTButton
           label="Create"
           color={DTButtonColor.primary}
           onClick={() => {
-            const validation = this.validator.validateAll();
-            if (validation.length > 0) {
-              return;
-            }
+            if (
+              !this.state.baseColor ||
+              !this.state.name ||
+              !this.props.tokenGroup
+            ) return;
 
-            const steps = this.state.steps.split(',');
-            const results = stepBaseColor(
+            createSteppedTokens(
+              this.state.steps,
               this.state.baseColor,
-              steps,
-              this.state.includeBlackAndWhite,
+              this.state.name,
+              this.props.tokenGroup,
+              this.props.updateTokenGroup,
             );
-            if (!this.props.tokenGroup) return;
-
-            const tg = this.props.tokenGroup;
-            const newTokenSet : DSysTokenset = {
-              $extensions: {
-                'dsys.level': DSysLevel.tokenset,
-                'dsys.type': DSysGroupType.ColorSet,
-                'dsys.name': this.state.name || '',
-                "dsys.nodeId": tg.nodeId,
-              },
-              $description:
-                `Color tokens with the named ${this.state.name} and steps ${this.state.steps}`,
-            };
-
-            results.steps?.map((stepResult, index) => {
-              if (stepResult.step === undefined) return;
-              newTokenSet[stepResult.step] = {
-                $extensions: {
-                  'dsys.level'    : DSysLevel.token,
-                  'dsys.name'     : stepResult.step,
-                  'dsys.index'    : index,
-                  'dsys.styleId'  : '',
-                },
-                $value: {
-                  hex: stepResult.hex,
-                  alpha: 1,
-                },
-                $type: DTTokenType.color
-              };
-
-              const name = this.state.name ? 
-                this.state.name.toLowerCase() : '';
-              const stepName = stepResult.step ?
-                `-${stepResult.step.toLowerCase()}` : ''
-              postMessagePromise(
-                MessageRequest.createStyle,
-                {
-                  style: {
-                    type: MessageRequestStyle.color,
-                    name: `${name}/${name}${stepName}`,
-                    value: stepResult,
-                  }
-                }
-              );
-            });
-
-            this.props.updateTokenGroup({
-              ...tg,
-              name: this.state.name,
-              tokensets: [newTokenSet]
-            });
           }}></DTButton>
       </div>
     );

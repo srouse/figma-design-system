@@ -1,14 +1,16 @@
 
 .color-step-row {
-  border-bottom: 1px solid var( --grey-lightest );
-  height: 52px;
+  height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
   background-color: var( --white );
-  
   position: absolute;
   top: 0; bottom: 0; right: 0; left: 0;
+}
+
+.drag-and-drop-house:not(:last-child) .color-step-row {
+  border-bottom: 1px solid var( --grey-lightest );
 }
 
 .color-step-row.moving-row {
