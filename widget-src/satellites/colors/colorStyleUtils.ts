@@ -69,18 +69,43 @@ export function colorTokenGroupToStyles(
 ) {
   if (!tokenGroup) return;
   tokenGroup.tokensets.map((tokenset: DSysTokenset) => {
-    Object.entries(tokenset).map((entry) => {
+    const tokensetArr = Object.entries(tokenset);
+    // sort by index so we can reorder relative to other items in list
+    tokensetArr.sort((
+      a:[string,any],
+      b:[string,any]
+    ) => {
+      const aVal = a[1];
+      const bVal = b[1];
+      if (
+        aVal.$extensions &&
+        bVal.$extensions
+      ) {
+        return aVal.$extensions['dsys.index'] - bVal.$extensions['dsys.index'];
+      }
+      return 0;// otherwise it doesn't matter..
+    });
+
+    let prevStyle : PaintStyle | null = null;
+    tokensetArr.map((entry) => {
       const name : string = entry[0];
       const value : any = entry[1];
       if (name.indexOf('$') === 0 || !value) return;
+
       const token: DSysToken = value as unknown as DSysColorToken;
+
+      // translate color
       let rgb = hexToRgb(token.$value.hex);
       if (!rgb || rgb.length !== 3) {
         rgb = [200,200,200];
       }
+
+      // find style
       let style = figma.getStyleById(
         token.$extensions['dsys.styleId']
-      );
+      ) as PaintStyle;
+
+      // manipulate style
       if (!style || style.type !== 'PAINT') {
         style = figma.createPaintStyle();
       }
@@ -100,6 +125,10 @@ export function colorTokenGroupToStyles(
         tokenGroup.name}${
         name ? `-${name}` : ''
       }`;
+
+      // move style relative to prev style (was sorted before getting here)
+      figma.moveLocalPaintStyleAfter(style, prevStyle);
+      prevStyle = style;
     })
   });
 }

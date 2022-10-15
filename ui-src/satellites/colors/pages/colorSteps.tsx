@@ -15,7 +15,7 @@ import "./colorSteps.css";
 import "./colorStepRow.css";
 import renderAda from "./renderAda";
 import 'color-picker-web-component';
-import { changeColorAction, changeNameAction } from "./actions";
+import { changeColorAction, changeNameAction, changeOrder } from "./actions";
 import DragAndDropList from "../../../utils/dragAndDropList";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
@@ -118,11 +118,18 @@ export default class ColorSteps extends React.Component<CoreProps> {
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <DragAndDropList
           rowHeight={52}
+          onChange={(rowIndex: number, dropIndex: number) => {
+            changeOrder(
+              rowIndex, dropIndex,
+              this.props.tokenGroup, this.props.updateTokenGroup
+            );
+          }}
           rowList={tokens}
           rowGenerator={(
             token, index,
             onMouseDownCapture,
-            onMouseUpCapture) => {
+            onMouseUpCapture,
+          ) => {
             const prop = token[0];
             const value = token[1] as DSysColorToken;
             const color = value.$value as DTColor;
@@ -149,8 +156,8 @@ export default class ColorSteps extends React.Component<CoreProps> {
                       );
                     }} />
                 </div>
-                <div className="edit-color-color">
-                  <div className="edit-color-color-chip"
+                <div className="color-step-row-color">
+                  <div className="color-step-row-color-chip"
                     style={{
                       backgroundColor: color.hex,
                       opacity: color.alpha,
@@ -175,9 +182,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
                     {validColor(color) ? '' : '!!'}
                   </div>
                 </div>
-                <div className="edit-color-hex">
+                <div className="color-step-row-hex">
                   <Input
-                    className="edit-color-hex-input"
+                    className="color-step-row-hex-input"
                     label="color" 
                     hideLabel hideBorder
                     value={`${color.hex}`}
@@ -195,9 +202,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
                       );
                     }} />
                 </div>
-                <div className="edit-color-alpha">
+                <div className="color-step-row-alpha">
                   <Input
-                    className="edit-color-alpha-input"
+                    className="color-step-row-alpha-input"
                     label="color alpha" 
                     hideLabel hideBorder
                     value={`${Math.round(color.alpha * 100)}%`}
@@ -212,14 +219,14 @@ export default class ColorSteps extends React.Component<CoreProps> {
                       );
                     }} />
                 </div>
-                <div className="edit-color-ada">
+                <div className="color-step-row-ada">
                   {renderAda(
                     color,
                     this.props.tokenGroup?.nodeId || tokenset.$extensions['dsys.name']
                   )}
                 </div>
-                <div className="edit-color-deleting">
-                  <div className="edit-color-deleting-icon"
+                <div className="color-step-row-deleting">
+                  <div className="color-step-row-deleting-icon"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.delete, colors.error) 
                     }}></div>

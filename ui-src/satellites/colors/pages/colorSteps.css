@@ -3,7 +3,7 @@
   position: absolute;
   bottom: 82px; top: 0; right: 0; left: 0;
   background-color: var( --white );
-  padding: 16px 20px 40px 20px;
+  padding: 16px 16px 40px 16px;
 
   display: flex;
   flex-direction: column;
@@ -48,6 +48,7 @@
       .edit-color-dragger {
         vertical-align: middle;
       }
+
         .edit-color-dragger-icon {
           width: 30px; height: 30px;
           display: flex; align-items: center; justify-content: center;
@@ -111,6 +112,10 @@
         transition: width 0.3s;
         position: relative;
         overflow: hidden;
+        align-self: stretch;
+        /*position: absolute;
+        top: 0; right: 0; bottom: 0;*/
+        
       }
 
         .edit-color-deleting-icon {
@@ -153,42 +158,3 @@
     }
 
 
-  .drop-td {
-    height: 1px;
-    position: relative;
-    transition: height 0.4s;
-  }
-  .drop-td.dragging-over {
-    height: 52px;
-    background-color: #eee;
-  }
-    .drop-td.dragging-over .drop {
-      position: absolute; top: -12px; right: 0; left: 0;
-      height: 64px;
-    }
-    .drop {
-      position: absolute; top: -12px; right: 0; left: 0;
-      height: 24px;
-    }
-  /*
-  .dragging-over, .dragging-over * {
-    
-  }
-  .dragging {
-    opacity: 0.5;
-    background-color: #fff;
-  }
-
-  .dragging-over + .drop {
-    height: 52px;
-  }
-  .dragging-over + .drop td {
-    background-color: #eee;
-  }
-
-  .drop {
-    height: 1px;
-  }
-  .drop td {
-    background-color: #fff;
-  }*/
