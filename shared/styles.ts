@@ -21,7 +21,7 @@ export const colors = {
   greyDark: '#373737',
   greyBgLight: '#F3F3F3',
 
-  errorLightest: '#FDBCBC',
+  errorLightest: '#FFE8E8',
   error: '#C90606',
 
   borderGrey: '#DCDCDC',

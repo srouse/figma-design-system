@@ -1,7 +1,16 @@
-import { DSysGroupType, DSysLevel, DSysToken, DSysTokenset, DTTokenType, MessageRequest, MessageRequestStyle, TokenGroup } from "../../../../shared";
+import {
+  DSysGroupType,
+  DSysLevel,
+  DSysToken,
+  DSysTokenset,
+  DTTokenType,
+  MessageRequest,
+  MessageRequestStyle,
+  TokenGroup
+} from "../../../../shared";
+import { Result } from "../../../../shared/types/types";
 import postMessagePromise from "../../../utils/postMessagePromise";
 import stepBaseColor from "./stepBaseColor";
-
 
 export default async function createSteppedTokens(
   stateSteps: string,
@@ -9,7 +18,7 @@ export default async function createSteppedTokens(
   tokenGroupName: string,
   tokenGroup: TokenGroup,
   updateTokenGroup: (tokenGroup: TokenGroup) => void
-) {
+) : Promise<Result> {
   /*const validation = this.validator.validateAll();
   if (validation.length > 0) {
     return;
@@ -20,7 +29,7 @@ export default async function createSteppedTokens(
     baseColor,
     steps
   );
-  if (!tokenGroup) return;
+  if (!tokenGroup) return {success: false, message: 'no token group'};
 
   const tg = tokenGroup;
   const newTokenSet : DSysTokenset = {
@@ -75,7 +84,8 @@ export default async function createSteppedTokens(
     })());
   });
 
-  await Promise.all(promiseArr);
+  const results = await Promise.all(promiseArr);
+  console.log(results);
 
   const finalTG = {
     ...tg,
@@ -84,4 +94,6 @@ export default async function createSteppedTokens(
   };
 
   updateTokenGroup(finalTG);
+
+  return {success: true};
 }

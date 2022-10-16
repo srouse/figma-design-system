@@ -3,176 +3,135 @@ import {
   DSysToken,
   DSysTokenset,
   MessageRequest,
+  MessageRequestStyle,
   TokenGroup
 } from "../../../../shared";
 import postMessagePromise from "../../../utils/postMessagePromise";
 
-export function changeColorAction(
+export async function changeColorAction(
   color: string,
   alpha: number,
   name: string,
   tokenGroup?: TokenGroup,
-  updateTokenGroup?: (val: TokenGroup) => void
+  refreshTokens?: () => void
 ) {
   // find the token in the tokengroup
-  if (!tokenGroup || !updateTokenGroup) return;
-  const tokenset = tokenGroup.tokensets[0];
+  if (!tokenGroup) return false;
   const token = findToken(name, tokenGroup);
-  if (!token) return;
+  if (!token) return false;
 
-  const newToken: DSysColorToken = {
+  const newColor = {
+    hex: color,
+    alpha: alpha,
+  };
+
+  if (
+    JSON.stringify(token.$value) === 
+    JSON.stringify(newColor)
+  ) return;
+
+  const newToken = {
     ...token,
-    $value: {
-      hex: color,
-      alpha: alpha,
+    $value: newColor
+  };
+
+  console.log('changeColorAction', newToken);
+  await postMessagePromise(
+    MessageRequest.updateStyle,
+    {
+      token: newToken,
     }
-  };
-  const newTokenSet : DSysTokenset = {
-    ...tokenset
-  };
-  newTokenSet[name] = newToken;
-  // now weave back together...
-  updateTokenGroup({
-    ...tokenGroup,
-    tokensets: [newTokenSet],
-  });
+  );
+  if (refreshTokens) await refreshTokens();
 }
 
-export function changeOrder(
+export async function changeOrder(
   movedRowIndex: number,
   newIndex: number,
-  tokenGroup?: TokenGroup,
-  updateTokenGroup?: (val: TokenGroup) => void
+  tokenGroup: TokenGroup | undefined,
+  refreshTokens: () => void
 ) {
-  if (!tokenGroup || !updateTokenGroup) return;
-  const tokenset = tokenGroup.tokensets[0];
+  if (!tokenGroup) return;
+  let prevToken = findTokenViaIndex(newIndex, tokenGroup);
+  if (newIndex < movedRowIndex) {
+    prevToken = findTokenViaIndex(newIndex-1, tokenGroup);
+  }
   const token = findTokenViaIndex(movedRowIndex, tokenGroup);
-  if (!token) return;
-
-  // typing will not allow an empty DSysTokenSet
-  const newTokenSet: {[key:string]: any} = {};
-  Object.entries(tokenset).map(entry => {
-    const name = entry[0];
-    const value = entry[1];
-    if (!value.$extensions) {
-      newTokenSet[name] = value;
-    }else{
-      const token = value as DSysToken;
-      const rowIndex = token.$extensions['dsys.index'];
-
-      // moving row up
-      if (
-        movedRowIndex > newIndex && // row is moving to lower index
-        newIndex <= rowIndex &&
-        movedRowIndex > rowIndex
-      ) {
-        newTokenSet[name] = {
-          ...token,
-          ['$extensions'] : {
-            ...token.$extensions,
-            ['dsys.index']: rowIndex+1
-          }
-        };
-
-      // moving row down
-      }else if (
-        movedRowIndex < newIndex && // row is moving to higher index
-        newIndex >= rowIndex &&
-        movedRowIndex < rowIndex
-      ) {
-        newTokenSet[name] = {
-          ...token,
-          ['$extensions'] : {
-            ...token.$extensions,
-            ['dsys.index']: rowIndex-1
-          }
-        };
-
-      }else if (rowIndex === movedRowIndex) {
-        newTokenSet[name] = {
-          ...token,
-          ['$extensions'] : {
-            ...token.$extensions,
-            ['dsys.index']: newIndex
-          }
-        };
-
-      }else{
-        newTokenSet[name] = {
-          ...token
-        };
-      }
+  if (!token) return;// doesn't matter if prevToken exists..
+  await postMessagePromise(
+    MessageRequest.moveStyle,
+    {
+      type: MessageRequestStyle.color,
+      styleId: token.$extensions['dsys.styleId'],
+      previousStyleId: prevToken ? prevToken.$extensions['dsys.styleId'] : null
     }
-  });
-
-  updateTokenGroup({
-    ...tokenGroup,
-    tokensets: [newTokenSet as DSysTokenset],
-  });
+  );
+  if (refreshTokens) await refreshTokens();
 }
 
 export async function deleteColorToken(
   deletedToken: DSysColorToken,
-  tokenGroup: TokenGroup,
-  updateTokenGroup: (val: TokenGroup) => void
+  refreshTokens: () => void
 ) {
   await postMessagePromise(
     MessageRequest.deleteStyle,
-    {
-      styleId: deletedToken.$extensions['dsys.styleId'] 
-    }
+    {styleId: deletedToken.$extensions['dsys.styleId']}
   );
-  const tokenset = tokenGroup.tokensets[0];
-  const newTokenSet: {[key:string]: any} = {};
-  Object.entries(tokenset).map(entry => {
-    const name = entry[0];
-    const value = entry[1];
-    if (
-      !value.$extensions || 
-      value.$extensions['dsys.styleId'] !== 
-      deletedToken.$extensions['dsys.styleId']
-    ) {
-      newTokenSet[name] = value;
-    }
-  });
-
-  // let the style refresh reindex things...
-  updateTokenGroup({
-    ...tokenGroup,
-    tokensets: [newTokenSet as DSysTokenset],
-  });
+  if (refreshTokens) await refreshTokens();
+  return true;
 }
 
-export function changeNameAction(
+export async function addColorToken(
+  tokenGroup: TokenGroup | undefined,
+  refreshTokens: () => void
+) {
+  if (!tokenGroup) return;
+  const result: any = await postMessagePromise(
+    MessageRequest.createStyle,
+    {
+      style: {
+        type: MessageRequestStyle.color,
+        name: `${tokenGroup.name}/new-color`,
+        value: {
+          r: 200, g: 200, b: 200,
+        },
+      }
+    }
+  );
+  if (result.success) {
+    if (refreshTokens) await refreshTokens();
+  }
+  return result;
+}
+
+export async function changeNameAction(
   newName: string,
   name: string,
-  tokenGroup?: TokenGroup,
-  updateTokenGroup?: (val: TokenGroup) => void
+  tokenGroup: TokenGroup | undefined,
+  refreshTokens: () => void
 ) {
   // find the token in the tokengroup
-  if (!tokenGroup || !updateTokenGroup) return;
-  const tokenset = tokenGroup.tokensets[0];
+  if (!tokenGroup) return false;
   const token = findToken(name, tokenGroup);
-  if (!token) return;
+  if (!token) return false;
 
-  const newToken: DSysColorToken = {
+  if (token.$extensions['dsys.name'] === newName) return;
+
+  const newToken = {
     ...token,
-    $extensions: {
+    '$extensions': {
       ...token.$extensions,
-      "dsys.name": newName,
+      ['dsys.name']: newName,
     }
   };
-  const newTokenSet : DSysTokenset = {
-    ...tokenset
-  };
-  newTokenSet[newName] = newToken;
-  delete newTokenSet[name];
-
-  // now weave back together...
-  updateTokenGroup({
-    ...tokenGroup,
-    tokensets: [newTokenSet],
-  });
+  await postMessagePromise(
+    MessageRequest.updateStyle,
+    {
+      token: newToken,
+    }
+  );
+  if (refreshTokens) await refreshTokens();
+  return true;
 }
 
 function findToken(
@@ -188,7 +147,6 @@ function findToken(
   if (!tokenEntry) return;
   const token = tokenEntry[1];// pulling from an entry
   if (!token) return;
-
   return token;
 }
 

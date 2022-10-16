@@ -144,8 +144,7 @@ export default function header(
               fill: isWindowUIOpen ? 
                 colors.hoverBgColorDark : colors.hoverBgColorLight
             }}
-            onClick={async () => {
-              // setColorsInitialized(false);
+            onClick={() => {
               if (refreshCallback) refreshCallback();
             }}>
             <SVG
@@ -163,11 +162,10 @@ export default function header(
                 fill: isWindowUIOpen ? 
                   colors.hoverBgColorDark : colors.hoverBgColorLight
               }}
-              onClick={async () => {
-                // nodeToImage();
+              onClick={() => {
                 setIsWindowUIOpen(true);
                 if (openEditorCallback) {
-                  await openEditorCallback();
+                  openEditorCallback();
                 }
                 return openEditor();
               }}>

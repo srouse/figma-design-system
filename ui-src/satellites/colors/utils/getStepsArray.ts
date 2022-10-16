@@ -16,7 +16,7 @@ export type StepsInformation = {
 
 export function getColorGroupInfo() : StepsInformation {
   return {
-    steps: '',
+    steps: 'white, [base], black',
     type: ColorStepTypes.colorGroup,
   }
 }

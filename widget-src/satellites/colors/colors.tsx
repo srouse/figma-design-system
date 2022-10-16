@@ -1,9 +1,7 @@
 import { 
-  mergeNames,
   colorContrastAda,
   cleanAndSortTokens,
   defaultTokenGroup,
-  DSysToken,
   colors,
   typography,
   validColor,
@@ -11,12 +9,12 @@ import {
   Icons,
   dtColorToCss,
   DTColor,
-  TokenGroup,
   DSysColorToken,
  } from '../../../shared/index';
-import { paintStyles } from '../../actions/getStyles';
 import header from '../../components/header';
-import { colorStylesToDSysTokenset } from './colorStyleUtils';
+import {
+  pullTokensFromColorStyles
+} from './colorStyleUtils';
 
 const { widget } = figma;
 const {
@@ -69,24 +67,6 @@ function renderAda(color: DTColor, id: string) {
       {results}
     </AutoLayout>
   );
-}
-
-async function pullTokensFromColorStyles(
-  tokenGroup: TokenGroup,
-  setTokenGroup: (val:TokenGroup) => void,
-  nodeId: string,
-) {
-  const styles = await paintStyles(tokenGroup.name);
-  const stylesTokenGroup = colorStylesToDSysTokenset(
-    styles,
-    tokenGroup.name,
-    nodeId
-  );
-  if (!stylesTokenGroup) return;
-  setTokenGroup({
-    ...tokenGroup,
-    tokensets: [stylesTokenGroup],
-  });
 }
 
 export default function colorsSatellite() {
@@ -230,9 +210,11 @@ export default function colorsSatellite() {
         spacing={24}
         overflow="visible">
         {header(
-          () => setColorsInitialized(false),
-          async () => {
-            return pullTokensFromColorStyles(
+          () => {
+            setColorsInitialized(false);
+          },
+          () => {
+            pullTokensFromColorStyles(
               tokenGroup, setTokenGroup, nodeId
             );
           }
@@ -262,21 +244,30 @@ export default function colorsSatellite() {
         horizontalAlignItems="center"
         verticalAlignItems="start"
         spacing={16}
-        padding={{
-          top: 10, bottom: 20,
-          left: 20, right: 20
-        }}
         overflow="visible">
         {header()}
-        <Text
-          fontFamily={typography.primaryFont}
-          fontWeight="light"
-          fontSize={18}
-          width="hug-contents"
-          horizontalAlignText="center"
-          fill={colors.textColorLightest}>
-          Tokens Not Found
-        </Text>
+        <AutoLayout 
+          height="hug-contents"
+          direction="vertical"
+          width="fill-parent"
+          horizontalAlignItems="center"
+          verticalAlignItems="center"
+          spacing={0}
+          padding={{
+            top: 20, bottom: 20,
+            left: 20, right: 20
+          }}
+          overflow="visible">
+          <Text
+            fontFamily={typography.primaryFont}
+            fontWeight="light"
+            fontSize={18}
+            width="hug-contents"
+            horizontalAlignText="center"
+            fill={colors.textColorLightest}>
+            Tokens Not Found
+          </Text>
+        </AutoLayout>
       </AutoLayout>
     )
   }

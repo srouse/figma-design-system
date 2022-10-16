@@ -17,6 +17,13 @@ export default class App extends React.Component<{}> {
   constructor(props: {} | Readonly<{}>) {
     super(props);
     this.state = {};
+    this.updateGlobalData = this.updateGlobalData.bind(this);
+    this.updateTokenGroup = this.updateTokenGroup.bind(this);
+    this.refreshTokens = this.refreshTokens.bind(this);
+
+    // inject css vars once
+    renderCssVariables();
+
     postMessagePromise(
       MessageRequest.stateUpdate
     ).then((result) => {
@@ -25,11 +32,6 @@ export default class App extends React.Component<{}> {
         ...(result as object),
       });
     });
-    this.updateGlobalData = this.updateGlobalData.bind(this);
-    this.updateTokenGroup = this.updateTokenGroup.bind(this);
-
-    // inject css vars once
-    renderCssVariables();
   }
 
   state: State;
@@ -64,6 +66,17 @@ export default class App extends React.Component<{}> {
     })
   }
 
+  refreshTokens() {
+    postMessagePromise(
+      MessageRequest.refreshTokensFromStyles
+    ).then((result) => {
+      this.setState({
+        ...this.state,
+        ...(result as object),
+      });
+    });
+  }
+
   render() {
     if (!this.state.tokenGroup) return '';
     return (
@@ -73,7 +86,8 @@ export default class App extends React.Component<{}> {
             tokenGroup={this.state.tokenGroup}
             globalData={this.state.globalData}
             updateGlobalData={this.updateGlobalData}
-            updateTokenGroup={this.updateTokenGroup} />
+            updateTokenGroup={this.updateTokenGroup}
+            refreshTokens={this.refreshTokens} />
         </div>
       </div>
     );

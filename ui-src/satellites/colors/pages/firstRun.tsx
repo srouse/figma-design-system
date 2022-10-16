@@ -1,12 +1,14 @@
 import React from "react";
 import {
   CoreProps,
+  MessageRequest,
   Validator,
 } from "../../../../shared";
 import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import InputHeader from "../../../components/InputHeader";
 import Select from "../../../components/Select";
+import postMessagePromise from "../../../utils/postMessagePromise";
 import createSteppedTokens from "../utils/createSteppedTokens";
 import {
   ColorStepTypes,
@@ -88,13 +90,13 @@ export default class FirstRun extends React.Component<CoreProps> {
           this.state.stepsType !== ColorStepTypes.none
         ) ? (
           <Input
-          label="Center Color (hex #ff0000)"
-          value={this.state.baseColor}
-          helpText="Color at the center of the steps that determines all others"
-          onChange={(baseColor: string) => {
-            this.setState({baseColor});
-          }}
-           />
+            label="Center Color (hex #ff0000)"
+            value={this.state.baseColor}
+            helpText="Color at the center of the steps that determines all others"
+            onChange={(baseColor: string) => {
+              this.setState({baseColor});
+            }}
+            />
         ) : ''}
         {/*
         onValidateBlur={
@@ -147,6 +149,7 @@ export default class FirstRun extends React.Component<CoreProps> {
               stepsInfo = getStep9ThreeDigitInfo();
             }else if (stepsType === ColorStepTypes.colorGroup) {
               stepsInfo = getColorGroupInfo();
+              this.setState({baseColor: '#eeeeee'});
             }
             this.setState({
               stepsType : stepsType,
@@ -172,15 +175,24 @@ export default class FirstRun extends React.Component<CoreProps> {
               !this.state.baseColor ||
               !this.state.name ||
               !this.props.tokenGroup
-            ) return;
+            ) {
+              postMessagePromise(
+                MessageRequest.notify,
+                {
+                  message: 'did not find basecolor, name or tokengroup',
+                  error: true,
+                }
+              )
+              return;
+            }
 
             createSteppedTokens(
               this.state.steps,
-              this.state.baseColor,
+              this.state.baseColor || '#eeeeee',
               this.state.name,
               this.props.tokenGroup,
               this.props.updateTokenGroup,
-            );
+            ).then(result => console.log('create color step results', result));
           }}></DTButton>
       </div>
     );

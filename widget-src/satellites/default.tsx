@@ -3,6 +3,7 @@ import button from "../components/button";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import { defaultTokenGroup, TokenGroup } from '../../shared/types/types';
 import header from '../components/header';
+import { openEditor } from '../actions/baseActions';
 
 const { widget } = figma;
 const {
@@ -16,6 +17,11 @@ export default function defaultSatellite() {
   const [tokenGroup, setTokenGroup] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
+  );
+
+  const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
+    'isWindowUIOpen',
+    false
   );
 
   return (
@@ -46,35 +52,45 @@ export default function defaultSatellite() {
         </Text>
         {button(
           'Color Set', 
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.ColorSet ),
+          () => clickTypeButton(
+            tokenGroup, setTokenGroup,
+            DSysGroupType.ColorSet, setIsWindowUIOpen
+          ),
         )}
         {button(
           'Typography Set',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.TypographySet ),
+          () => clickTypeButton(
+            tokenGroup, setTokenGroup,
+            DSysGroupType.TypographySet, setIsWindowUIOpen
+          ),
         )}
         {button(
           'Effects',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.EffectSet ),
+          () => clickTypeButton(
+            tokenGroup, setTokenGroup,
+            DSysGroupType.EffectSet, setIsWindowUIOpen
+          ),
         )}
         {button(
           'Icons',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.IconSet ),
+          () => clickTypeButton(
+            tokenGroup, setTokenGroup,
+            DSysGroupType.IconSet, setIsWindowUIOpen
+          ),
         )}
         {button(
           'Spacing',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.Spacing ),
+          () => clickTypeButton(
+            tokenGroup, setTokenGroup,
+            DSysGroupType.Spacing, setIsWindowUIOpen
+          ),
         )}
         {button(
           'Components',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.ComponentSet ),
-        )}
-        {button(
-          'Layouts',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.LayoutSet ),
-        )}
-        {button(
-          'Columns Spacing',
-          () => clickTypeButton( tokenGroup, setTokenGroup, DSysGroupType.ColumnLayoutSet ),
+          () => clickTypeButton(
+            tokenGroup, setTokenGroup,
+            DSysGroupType.ComponentSet, setIsWindowUIOpen
+          ),
         )}
       </AutoLayout>
     </AutoLayout>
@@ -85,10 +101,13 @@ export default function defaultSatellite() {
 function clickTypeButton(
   tokenGroup: TokenGroup,
   setTokenGroup: (newValue: TokenGroup | ((currValue: TokenGroup) => TokenGroup)) => void,
-  tokenGroupType: DSysGroupType
+  tokenGroupType: DSysGroupType,
+  setIsWindowUIOpen: (open: boolean) => void
 ) {
   setTokenGroup({
     ...tokenGroup,
     type: tokenGroupType
-  })
+  });
+  setIsWindowUIOpen(true);
+  return openEditor();
 }

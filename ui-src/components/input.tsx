@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FocusEvent, KeyboardEvent, KeyboardEventHandler, MouseEvent } from "react";
 import Validator, {
   getId,
   ValidationLocations,
@@ -12,6 +12,16 @@ interface InputProps {
   feedbackValue?: string | undefined,
   onFocus?: () => void,
   onChange?: (value: string) => void,
+  onEnter?: (value: string) => void,
+  onBlur?: (value: string) => void,
+  onArrowDown?: (value: string, evt: KeyboardEvent<HTMLInputElement>) => void,
+  onArrowUp?: (value: string, evt: KeyboardEvent<HTMLInputElement>) => void,
+  onArrowUpOrDown?: (
+    value: string,
+    direction: 'up' | 'down',
+    evt: KeyboardEvent<HTMLInputElement>
+  ) => void,
+  onEnterOrBlur?: (value: string) => void,
   background?: 'light' | 'dark',
   className?: string,
   password? : boolean,
@@ -32,6 +42,7 @@ export default class Input extends React.Component<InputProps> {
     this.uid = getId();
     this.state = {
       valid: true,
+      value: this.props.value,
     };
 
     this.props.validator?.registerComponent(
@@ -54,7 +65,6 @@ export default class Input extends React.Component<InputProps> {
         return results;
       }
     );
-    
   }
 
   componentWillUnmount() {
@@ -66,12 +76,26 @@ export default class Input extends React.Component<InputProps> {
     );
   }
 
+  componentDidUpdate(
+    prevProps: Readonly<InputProps>,
+    prevState: Readonly<{}>,
+    snapshot?: any
+  ): void {
+    if (prevProps.value !== this.props.value) {
+      this.setState({
+        value: this.props.value,
+      })
+    }
+  }
+
   uid: string;
   state : {
     valid: boolean,
+    value: string | undefined
   }
 
   render() {
+
     return (
       <div className={`
         ${this.props.className || ''}
@@ -101,12 +125,66 @@ export default class Input extends React.Component<InputProps> {
                   if (this.props.onFocus) this.props.onFocus();
                   this.setState({valid: true});
                 }}
-                onBlur={() => {
+                onBlur={(evt: FocusEvent<HTMLInputElement>) => {
                   this.props.validator?.validate(
                     this.uid, ValidationLocations.onValidateBlur
                   );
+                  const targetValue = (evt.target as HTMLInputElement).value;
+                  if (this.props.onBlur)
+                    this.props.onBlur(targetValue);
+                  if (this.props.onEnterOrBlur)
+                    this.props.onEnterOrBlur(targetValue);
+                }}
+                onKeyDown={(evt: KeyboardEvent<HTMLInputElement>) => {
+                  const targetValue = (evt.target as HTMLInputElement).value;
+                  if (evt.code === 'Enter') {
+                    if (this.props.onEnter) {
+                      evt.preventDefault();
+                      this.props.onEnter(targetValue);
+                    }
+                    if (this.props.onEnterOrBlur)
+                      this.props.onEnterOrBlur(targetValue);
+                  }
+                  if (evt.code === 'ArrowDown') {
+                    if (this.props.onArrowDown) {
+                      evt.preventDefault();
+                      this.props.onArrowDown(
+                        targetValue,
+                        evt
+                      );
+                    }
+                    if (this.props.onArrowUpOrDown) {
+                      evt.preventDefault();
+                      this.props.onArrowUpOrDown(
+                        targetValue,
+                        'down',
+                        evt
+                      );
+                    } 
+                  }
+                  if (evt.code === 'ArrowUp') {
+                    if (this.props.onArrowUp) {
+                      evt.preventDefault();
+                      this.props.onArrowUp(
+                        targetValue,
+                        evt
+                      );
+                    }
+                    if (this.props.onArrowUpOrDown) {
+                      evt.preventDefault();
+                      this.props.onArrowUpOrDown(
+                        targetValue,
+                        'up',
+                        evt
+                      );
+                    } 
+                  }
+                  return;
                 }}
                 onChange={(evt: any) => {
+                  this.setState({
+                    value: evt.target.value
+                  })
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);
 
@@ -116,7 +194,8 @@ export default class Input extends React.Component<InputProps> {
                     );
                   }, 0);
                 }}
-                value={this.props.value}>
+                value={this.state.value}
+                value-off={this.props.value}>
               </input>
             )
           }

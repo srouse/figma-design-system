@@ -26,7 +26,9 @@ export function dtColorToCss(color: DTColor) {
   }}`;
 }
 
-export function hexToRgb (hex: string) {
+export function hexToRgb (
+  hex: string
+) : number[] | null  {
   const result = hex.replace(
       /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
       (_m, r, g, b) => '#' + r + r + g + g + b + b

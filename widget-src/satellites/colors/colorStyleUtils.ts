@@ -11,6 +11,23 @@ import {
   hexToRgb,
   rgbFractionToHex
 } from '../../../shared/index';
+import { paintStyles } from '../../actions/getStyles';
+
+export function pullTokensFromColorStyles(
+  tokenGroup: TokenGroup,
+  setTokenGroup: (val:TokenGroup) => void,
+  nodeId: string,
+) {
+  const styles = paintStyles(tokenGroup.name);
+  const stylesTokenGroup = colorStylesToDSysTokenset(
+    styles, tokenGroup.name, nodeId
+  );
+  if (!stylesTokenGroup) return;
+  setTokenGroup({
+    ...tokenGroup,
+    tokensets: [stylesTokenGroup],
+  });
+}
 
 export function colorStylesToDSysTokenset(
   styles: FigmaPaintStyle[],

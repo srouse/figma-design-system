@@ -19,12 +19,21 @@ export enum MessageRequest {
   getFinalTokens = 'getFinalTokens',
   createStyle = 'createStyle',
   deleteStyle = 'deleteStyle',
+  updateStyle = 'updateStyle',
+  moveStyle = 'moveStyle',
+  notify = 'notify',
+  refreshTokensFromStyles = 'refreshTokensFromStyles',
 }
 
 export enum MessageRequestStyle {
   color = 'color',
   text = 'text',
   effect = 'effect',
+}
+
+export type Result = {
+  success: boolean,
+  message?: string,
 }
 
 // ---------- UI -----------------
@@ -40,6 +49,7 @@ export type CoreProps = {
   globalData?: GlobalData,
   updateGlobalData: (globalData: GlobalData) => void,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
+  refreshTokens: () => void,
   style?: {},
 }
 

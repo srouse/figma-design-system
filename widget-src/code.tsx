@@ -5,14 +5,19 @@ import {
   MessageName,
   MessageRequest,
   MessageRequestStyle,
+  TokenGroup,
 } from "../shared/types/types";
-import { colorTokenGroupToStyles } from "./satellites/colors/colorStyleUtils";
+import { colorStylesToDSysTokenset, colorTokenGroupToStyles, pullTokensFromColorStyles } from "./satellites/colors/colorStyleUtils";
 import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
 import createDesignTokens from "./actions/createDesignTokens";
-import getStyles, { getColorStyles, getEffectStyles, getTextStyles } from "./actions/getStyles";
+import getStyles, { getColorStyles, getEffectStyles, getTextStyles, paintStyles } from "./actions/getStyles";
 import designSystem from "./designTokens";
 import { findAllWidgets, findWidget } from "./utils";
 import bounceBack from "./utils/postMessagePromise";
+import { DSysColorToken, DSysGroupType, DSysToken, DSysTokenset, DTTokenType, hexToRgb, validColor } from "../shared/index";
+import { updateStyle } from "./actions/updateStyle";
+import refreshTokensFromStyles from "./actions/refreshTokensFromStyles";
+import createStyle from "./actions/createStyle";
 const { 
   widget,
 } = figma;
@@ -105,6 +110,21 @@ function Widget() {
               case MessageRequest.getEffectStyles:
                 getEffectStyles(message);
                 break;
+              case MessageRequest.notify:
+                console.log(message)
+                figma.notify(
+                  message.message,
+                  {
+                    error: message.error === true ? true : false,
+                  }
+                );
+                break;
+
+              case MessageRequest.refreshTokensFromStyles:
+                refreshTokensFromStyles(
+                  message, tokenGroup, setTokenGroup, nodeId,
+                );
+                break;
               case MessageRequest.getFinalTokens:
                 (async () => {
                   const tokens = await createDesignTokens();
@@ -113,40 +133,36 @@ function Widget() {
                   });
                 })();
                 break;
+              case MessageRequest.moveStyle:
+                if (message.type === MessageRequestStyle.color) {
+                  const targetStyle = figma.getStyleById(message.styleId) as PaintStyle;
+                  const previousStyle = figma.getStyleById(message.previousStyleId) as PaintStyle;
+                  if (!targetStyle) return;
+
+                  if (targetStyle === previousStyle) {
+                    // not doing anything is a right answer here
+                    return bounceBack(message, {success: true});
+                  }
+                  
+                  figma.moveLocalPaintStyleAfter(
+                    targetStyle, previousStyle || null
+                  );
+                  bounceBack(message, {success: true});
+                }
+                bounceBack(message, {success: false, message: 'no type found'});
+                break;
+              case MessageRequest.updateStyle:
+                return updateStyle(message, tokenGroup);
               case MessageRequest.deleteStyle:
                 if (message.styleId) {
                   const style = figma.getStyleById(message.styleId);
                   if (style) style.remove();
-                  bounceBack(message, {
-                    success: true,
-                  });
+                  bounceBack(message, {success: true});
                 }
-                break
+                bounceBack(message, {success: false});
+                break;
               case MessageRequest.createStyle:
-                if (message.style) {
-                  if (message.style.type === MessageRequestStyle.color) {
-                    const style = figma.createPaintStyle();
-                    style.paints = [
-                      {
-                        type: "SOLID",
-                        color: {
-                          r: message.style.value.r/255,
-                          g: message.style.value.g/255,
-                          b: message.style.value.b/255,
-                        }
-                      }
-                    ];
-                    style.name = message.style.name;
-                    bounceBack(message, {
-                      style
-                    });
-                  }else{
-                    bounceBack(message, {
-                      result: 'no style requested'
-                    });
-                  }
-                  
-                }
+                createStyle(message);
                 break;
             }
             break;

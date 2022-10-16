@@ -1,4 +1,8 @@
-import React, { DOMAttributes, MouseEvent } from "react";
+import React, {
+  DOMAttributes,
+  KeyboardEvent,
+  MouseEvent,
+} from "react";
 import {
   DSysColorToken,
   CoreProps,
@@ -8,15 +12,26 @@ import {
   getIcon,
   Icons,
   DTColor,
+  MessageRequest,
 } from "../../../../shared";
-import DTButton, { DTButtonColor, DTButtonDesign } from "../../../components/DTButton";
+import DTButton, {
+  DTButtonColor,
+  DTButtonDesign
+} from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import "./colorSteps.css";
 import "./colorStepRow.css";
 import renderAda from "./renderAda";
 import 'color-picker-web-component';
-import { changeColorAction, changeNameAction, changeOrder, deleteColorToken } from "./actions";
+import {
+  addColorToken,
+  changeColorAction,
+  changeNameAction,
+  changeOrder,
+  deleteColorToken
+} from "./actions";
 import DragAndDropList from "../../../utils/dragAndDropList";
+import postMessagePromise from "../../../utils/postMessagePromise";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -45,30 +60,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
       isDeleting: false,
       pickerLeft: '0px',
       pickerTop: '0px',
-      pickerColor: '#eeeeee'
+      pickerColor: '#eeeeee',
+      pickerAlpha: '100',
     }
-  }
-
-  componentDidMount(): void {
-    this.picker?.addEventListener("change", this.handlePickerChange);
-  }
-
-  componentWillUnmount() {
-    this.picker?.removeEventListener("change", this.handlePickerChange);
-  }
-
-  handlePickerChange = (event: any) => {
-    if (!this.picker || !this.state.focusedToken) return;
-    const hex = `#${this.picker.hex}`;
-    this.changeColor(
-      hex,
-      1,
-      this.state.focusedToken.$extensions['dsys.name']
-    );
-    this.setState({
-      pickerColor: hex,
-    })
-    this.fixMessedUpPicker();
   }
 
   changeColor = (
@@ -78,21 +72,28 @@ export default class ColorSteps extends React.Component<CoreProps> {
   ) => {
     changeColorAction(
       color, alpha, name, 
-      this.props.tokenGroup, this.props.updateTokenGroup
+      this.props.tokenGroup,
+      this.props.refreshTokens
     );
   }
 
   fixMessedUpPicker() {
-    // there is a timing issue within the component...
+    // there is a timing issue within the component..
+    console.log('fixPicker');
+    const picker = (this.picker as any);
+    if (!picker) return;
+    // picker.removeEventListener("change", this.handlePickerChange);
     setTimeout(() => {
-      const picker = (this.picker as any);
       picker.value = this.state.pickerColor;
+      picker.alpha = this.state.pickerAlpha;
       picker.shadowRoot.querySelector('#gridInput')
         .setAttribute(
           'style',
           `background: ${picker._gridBackground}`
         );
-      },10);
+      // picker.addEventListener("change", this.handlePickerChange);
+    },
+    10);
   }
 
   picker?: any;
@@ -103,6 +104,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
     pickerTop: string,
     pickerLeft: string,
     pickerColor: string,
+    pickerAlpha: string,
   }
 
   render() {
@@ -117,11 +119,14 @@ export default class ColorSteps extends React.Component<CoreProps> {
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <DragAndDropList
           rowHeight={48}
-          onChange={(rowIndex: number, dropIndex: number) => {
+          onChange={(
+            rowIndex: number,
+            dropIndex: number
+          ) => {
             changeOrder(
               rowIndex, dropIndex,
               this.props.tokenGroup,
-              this.props.updateTokenGroup
+              this.props.refreshTokens,
             );
           }}
           rowList={tokens}
@@ -149,10 +154,11 @@ export default class ColorSteps extends React.Component<CoreProps> {
                     hideLabel hideBorder
                     label="property"
                     value={prop}
-                    onChange={(newName: string) => {
+                    onEnterOrBlur={(newName: string) => {
                       changeNameAction(
                         newName, prop,
-                        this.props.tokenGroup, this.props.updateTokenGroup
+                        this.props.tokenGroup,
+                        this.props.refreshTokens
                       );
                     }} />
                 </div>
@@ -170,6 +176,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
                       this.setState({
                         focusedToken: value,
                         pickerColor: color.hex,
+                        pickerAlpha: color.alpha,
                         pickerTop: `${
                           Math.min(
                             viewSize.height - pickerSize.height,
@@ -194,7 +201,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
                         focusedToken: undefined,
                       });
                     }}
-                    onChange={(value: string) => {
+                    onEnterOrBlur={(value: string) => {
                       this.changeColor(
                         value,
                         color.alpha,
@@ -209,7 +216,28 @@ export default class ColorSteps extends React.Component<CoreProps> {
                     hideLabel hideBorder
                     value={`${Math.round(color.alpha * 100)}%`}
                     textAlign="right"
-                    onChange={(value: string) => {
+                    onArrowUpOrDown={(
+                      value: string,
+                      direction: 'up' | 'down',
+                      evt: KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      const alphaFractionStr = value.replace('%', '');
+                      let increment = evt.shiftKey ? 10 : 1;
+                      if (direction === 'down') {
+                        increment = increment * -1;
+                      }
+                      const alphaFraction = Math.max(
+                        0, Math.min(
+                          1, (parseInt(alphaFractionStr) + increment)/100
+                        )
+                      );
+                      this.changeColor(
+                        color.hex,
+                        alphaFraction,
+                        prop
+                      );
+                    }}
+                    onEnterOrBlur={(value: string) => {
                       const alphaFractionStr = value.replace('%', '');
                       const alphaFraction = parseInt(alphaFractionStr)/100;
                       this.changeColor(
@@ -231,8 +259,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
                       if (!this.props.tokenGroup) return;
                       deleteColorToken(
                         value,
-                        this.props.tokenGroup,
-                        this.props.updateTokenGroup
+                        this.props.refreshTokens
                       );
                     }
                   }}>
@@ -262,29 +289,49 @@ export default class ColorSteps extends React.Component<CoreProps> {
           className="edit-color-picker-btn"
           design={DTButtonDesign.border}
           color={DTButtonColor.grey}
-          label="Close" 
-          onClick={() => { 
+          label="Apply" 
+          onClick={() => {
+            if (!this.picker || !this.state.focusedToken) return;
+            const hex = `#${this.picker.hex}`;
+            this.changeColor(
+              hex,
+              this.picker.alpha,
+              this.state.focusedToken.$extensions['dsys.name']
+            );
             this.setState({
               focusedToken: undefined
-            })
+            });
           }} />
       </div>
       <div className="edit-color-navigation">
         <DTButton
-          label="Delete"
+          label={this.state.isDeleting ? 'Cancel Delete' : 'Delete'}
           design={DTButtonDesign.border}
           color={DTButtonColor.grey}
-          icon={Icons.delete}
+          icon={this.state.isDeleting ? Icons.deleteCancel : Icons.delete}
           onClick={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
-            })
+            });
           }} />
         <DTButton
           label="Add Color"
           design={DTButtonDesign.solid}
           color={DTButtonColor.grey}
-          onClick={() => {}}
+          onClick={() => {
+            addColorToken(
+              this.props.tokenGroup,
+              this.props.refreshTokens,
+            ).then(result => {
+              if (result.success === false) {
+                console.log(result)
+                postMessagePromise(
+                  MessageRequest.notify,
+                  {message: result.message, error: true}
+                );
+              }
+            });
+          }}
           icon={Icons.add} />
       </div>
     </>);
