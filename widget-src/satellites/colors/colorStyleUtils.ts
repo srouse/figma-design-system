@@ -36,7 +36,7 @@ export function colorStylesToDSysTokenset(
 ) : DSysTokenset | false {
   if (!name) return false;
 
-  const folderName = toKebobCase(name);
+  const folderName = name;
   const folderStyles = styles.filter(style => {
     return style.name.indexOf(`${folderName}/`) === 0;
   })
@@ -48,7 +48,7 @@ export function colorStylesToDSysTokenset(
       'dsys.name': name,
       "dsys.nodeId": nodeId,
     },
-    $description: 'primary color set',
+    $description: `${name} color tokens`,
   };
 
   folderStyles.map((style, index) => {

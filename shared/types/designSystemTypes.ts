@@ -1,4 +1,5 @@
 import {
+  DTBlurToken,
   DTBorderToken,
   DTColorToken,
   DTCubicBezierToken,
@@ -152,7 +153,8 @@ export type DSysTypographyTokenset = DSysTokensetBase<
 
 export type DSysEffectTokenset = DSysTokensetBase<
   DSysGroupType.EffectSet,
-  DSysShadowToken
+  DSysShadowToken |
+  DSysBlurToken
 >;
 
 export type DSysIconTokenset = DSysTokensetBase<// todo
@@ -220,6 +222,7 @@ export type DSysToken =
   DSysDurationToken |
   DSysCubicBezierToken |
   DSysShadowToken |
+  DSysBlurToken |
   DSysTransitionToken |
   DSysGradientToken |
   DSysPercentToken |
@@ -299,9 +302,18 @@ export interface DSysCubicBezierToken extends DTCubicBezierToken {
 }
 export interface DSysShadowToken extends DTShadowToken {
   $extensions : {
-    'dsys.level' : DSysLevel.token,
-    'dsys.name'  : string,
-    'dsys.index' : number,
+    'dsys.level'    : DSysLevel.token,
+    'dsys.name'     : string,
+    'dsys.index'    : number,
+    'dsys.styleId'  : string,
+  },
+}
+export interface DSysBlurToken extends DTBlurToken {
+  $extensions : {
+    'dsys.level'    : DSysLevel.token,
+    'dsys.name'     : string,
+    'dsys.index'    : number,
+    'dsys.styleId'  : string,
   },
 }
 export interface DSysTransitionToken extends DTTransitionToken {

@@ -1,4 +1,4 @@
-import { FigmaPaintStyle } from "../../shared/types/types";
+import { FigmaEffectStyle, FigmaPaintStyle } from "../../shared/types/types";
 import bounceBack from "../utils/postMessagePromise";
 
 const { 
@@ -35,6 +35,23 @@ export function paintStyles(folder?: string): FigmaPaintStyle[] {
       name: style.name,
       type: style.type,
       paints: style.paints as any
+    });
+  });
+  return finalStyles;
+}
+
+export function effectStyles(folder?: string): FigmaEffectStyle[] {
+  const styles = getLocalEffectStyles();
+  const finalStyles: FigmaEffectStyle[] = [];
+  styles.map(style => {
+    if (folder && style.name.indexOf(`${folder}/`) !== 0) {
+      return;
+    }
+    finalStyles.push({
+      id: style.id,
+      name: style.name,
+      type: style.type,
+      effects: style.effects as any,
     });
   });
   return finalStyles;

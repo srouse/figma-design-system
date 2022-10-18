@@ -1,6 +1,6 @@
 import React from "react";
 import "./typographyUI.css";
-import { CoreProps } from "../../shared/types/types";
+import { CoreProps } from "../../../shared/types/types";
 
 export default class TypographyUI extends React.Component<CoreProps> {
 

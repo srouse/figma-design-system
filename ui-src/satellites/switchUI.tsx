@@ -10,7 +10,7 @@ import IconsUI from "./iconsUI";
 import LayoutUI from "./layoutUI";
 import SpacingUI from "./spacingUI";
 import "./switchUI.css";
-import TypographyUI from "./typographyUI";
+import TypographyUI from "./typography/typographyUI";
 import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import DTTabs from "../components/DTTabs";
 import Deployment from "../deployment/deployment";

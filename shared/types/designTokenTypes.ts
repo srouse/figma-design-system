@@ -28,6 +28,7 @@ export enum DTTokenType {
   duration = 'duration',
   cubicBezier = 'cubicBezier',
   shadow = 'shadow',
+  blur = 'blur',
   transition = 'transition',
   gradient = 'gradient',
   percent = 'percent',
@@ -54,13 +55,24 @@ export interface DTColorToken extends DTTokenBase {
 export interface DTShadowToken extends DTTokenBase {
   '$value': 
     {
-      'color': string,
-      'offsetX': string,
-      'offsetY': string,
-      'blur'?: string,
-      'spread'?: string,
+      'color'   : string,
+      'alpha'   : number,
+      'offsetX' : number,
+      'offsetY' : number,
+      'radius'  : number,
+      'blur'    : number,
+      'spread'  : number,
     },
   '$type' : DTTokenType.shadow
+}
+
+// blur
+export interface DTBlurToken extends DTTokenBase {
+  '$value': 
+    {
+      'radius'    : number,
+    },
+  '$type' : DTTokenType.blur
 }
 
 // Border

@@ -146,6 +146,20 @@ export type FigmaPaintStyle = {
   }[]
 }
 
+export type FigmaEffectStyle = {
+  id: string,
+  name: string,
+  type: 'EFFECT',
+  effects: readonly {
+    blendMode: 'NORMAL',
+    color: {r:number, g:number, b:number, a:number},
+    offset: {x:number, y:number},
+    radius: number,
+    spread: number,
+    type: 'DROP_SHADOW' | 'LAYER_BLUR',
+  }[]
+}
+
 // =========START V1======================
 // ----------- WIDGET --------------
 export interface DesignTokensModel {
