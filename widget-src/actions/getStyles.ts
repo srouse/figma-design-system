@@ -1,4 +1,4 @@
-import { FigmaEffectStyle, FigmaPaintStyle } from "../../shared/types/types";
+import { FigmaEffectStyle, FigmaPaintStyle, FigmaTextStyle } from "../../shared/types/types";
 import bounceBack from "../utils/postMessagePromise";
 
 const { 
@@ -52,6 +52,35 @@ export function effectStyles(folder?: string): FigmaEffectStyle[] {
       name: style.name,
       type: style.type,
       effects: style.effects as any,
+    });
+  });
+  return finalStyles;
+}
+
+export function textStyles(folder?: string): FigmaTextStyle[] {
+  const styles = getLocalTextStyles();
+  const finalStyles: FigmaTextStyle[] = [];
+  styles.map(style => {
+    if (folder && style.name.indexOf(`${folder}/`) !== 0) {
+      return;
+    }
+    /*
+    Missing: (can find via REST API however...)
+    opentypeFlags
+    */
+    finalStyles.push({
+      id: style.id,
+      name: style.name,
+      type: style.type,
+      fontName: style.fontName,
+      fontSize: style.fontSize,
+      letterSpacing: style.letterSpacing,
+      lineHeight: style.lineHeight,
+      listSpacing: (style as any).listSpacing,
+      paragraphIndent: style.paragraphIndent,
+      paragraphSpacing: style.paragraphSpacing,
+      textCase: style.textCase,
+      textDecoration: style.textDecoration,
     });
   });
   return finalStyles;

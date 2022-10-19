@@ -127,10 +127,17 @@ export interface DTDimensionToken extends DTTokenBase {
 export interface DTTypographyToken extends DTTokenBase {
   '$value': {
     'fontFamily': string,
+    'fontWeight': string,// cludged w/ fontStyle into style in Figma
+    'fontStyle': string,
     'fontSize': string,
-    'fontWeight': DTFontWeightTokenValues,
-    'letterSpacing'?: string,
-    'lineHeight'?: string,
+
+    'letterSpacing': string,
+    'lineHeight': string,
+    'listSpacing': number,
+    'paragraphIndent': number,
+    'paragraphSpacing': number,
+    'textCase': 'ORIGINAL' | 'UPPER' | 'LOWER' | 'TITLE',
+    'textDecoration': 'NONE' | 'UNDERLINE' | 'STRIKETHROUGH',
   },
   '$type' : DTTokenType.typography
 }

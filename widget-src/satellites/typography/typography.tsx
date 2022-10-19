@@ -1,26 +1,62 @@
+import { defaultTokenGroup } from "../../../shared/index";
 import { colors, typography } from "../../../shared/styles";
 import header from "../../components/header";
+import { pullTokensFromTextStyles } from "./typographyUtils";
 
 const { widget } = figma;
 const {
   AutoLayout,
   Text,
+  useWidgetId,
+  useSyncedState,
+  useEffect,
 } = widget;
 
 export default function typographySatellite() {
+  const nodeId = useWidgetId();
+
+  const [tokenGroup, setTokenGroup] = useSyncedState(
+    'tokenGroup',
+    defaultTokenGroup
+  );
+
+  const [typographyInitialized, setTypographyInitialized] = useSyncedState(
+    'typographyInitialized',
+    false
+  );
+
+  useEffect(() => {
+    if (!typographyInitialized) {
+      setTypographyInitialized(true);
+      pullTokensFromTextStyles(
+        tokenGroup, setTokenGroup, nodeId
+      );
+    }
+  });
+
   return (
     <AutoLayout 
-      name="base-page"
-      height="hug-contents"
-      width="fill-parent"
-      direction="vertical"
-      horizontalAlignItems="center"
-      verticalAlignItems="start"
-      spacing={14}
-      padding={{top: 0,left: 0,bottom: 0,right: 0}}
-      cornerRadius={10}>
-      {header()}
-      <AutoLayout 
+        name="base-page"
+        height="hug-contents"
+        width="fill-parent"
+        direction="vertical"
+        horizontalAlignItems="start"
+        verticalAlignItems="start"
+        spacing={24}
+        overflow="visible">
+        {header(
+          () => {
+            setTypographyInitialized(false);
+          },
+          () => {
+            pullTokensFromTextStyles(
+              tokenGroup,
+              setTokenGroup,
+              nodeId
+            );
+          }
+        )}
+        <AutoLayout 
           height="hug-contents"
           direction="vertical"
           width="fill-parent"
@@ -28,7 +64,7 @@ export default function typographySatellite() {
           verticalAlignItems="center"
           spacing={0}
           padding={{
-            top: 20, bottom: 20,
+            top: 0, bottom: 10,
             left: 20, right: 20
           }}
           overflow="visible">
@@ -42,6 +78,6 @@ export default function typographySatellite() {
             Typography Tokens Not Found
           </Text>
         </AutoLayout>
-    </AutoLayout>
+      </AutoLayout>
   );
 }

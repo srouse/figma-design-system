@@ -160,6 +160,32 @@ export type FigmaEffectStyle = {
   }[]
 }
 
+export type FigmaTextStyle = {
+  id: string,
+  name: string,
+  type: 'TEXT',
+  fontName: {
+    readonly family: string
+    readonly style: string
+  },
+  fontSize: number,
+  letterSpacing: {
+    readonly value: number,
+    readonly unit: 'PIXELS' | 'PERCENT',
+  },
+  lineHeight: {
+    readonly value: number,
+    readonly unit: 'PIXELS' | 'PERCENT',
+  } | {
+    readonly unit: 'AUTO',
+  },
+  listSpacing: number,
+  paragraphIndent: number,
+  paragraphSpacing: number,
+  textCase: 'ORIGINAL' | 'UPPER' | 'LOWER' | 'TITLE',
+  textDecoration: 'NONE' | 'UNDERLINE' | 'STRIKETHROUGH',
+}
+
 // =========START V1======================
 // ----------- WIDGET --------------
 export interface DesignTokensModel {

@@ -48,8 +48,6 @@ export function effectStylesToDSysTokenset(
 
     if (!name) name = '';
     const effect = style.effects[0];// only the first one...
-    console.log(effect);
-    console.log(style);
     if (effect.type === 'DROP_SHADOW') {
       tokenset[name] = {
         $extensions: {
