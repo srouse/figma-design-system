@@ -19,7 +19,7 @@ import {
   getColorGroupInfo,
   getStep9ThreeDigitInfo,
 } from "../utils/getStepsArray";
-import "./firstRun.css";
+import "./colorFirstRun.css";
 
 export default class FirstRun extends React.Component<CoreProps> {
 

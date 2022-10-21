@@ -3,29 +3,33 @@
 .dttabs {
   height: var( --dttabs-height );
   width: 100%;
-  background-color: var( --grey-lightest );
+  background-color: var( --white );
   display: flex;
   flex-direction: row;
   user-select: none;
+  border-bottom: 1px solid var( --border-grey );
+  padding: 0 20px;
 }
 
   .dttabs .tab {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    color: var( --text-color );
+    font-size: 12px;
+    font-weight: 500;
+    color: var( --text-color-lightest );
     border-radius: 6px 6px 0 0;
+    margin-right: 24px
   }
 
   .dttabs .tab:hover {
     cursor: pointer;
-    background-color: var( --grey-lightest );
+    /* background-color: var( --grey-lightest ); */
   }
 
     .dttabs .tab.selected {
-      background-color: var( --white );
+      /* background-color: var( --white ); */
+      color: var( --text-color );
     }
 
     /* .dttabs .tab.selected:hover {

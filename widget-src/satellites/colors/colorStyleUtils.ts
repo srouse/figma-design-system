@@ -5,7 +5,6 @@ import {
   DSysToken,
   DSysColorToken,
   DTTokenType,
-  toKebobCase,
   FigmaPaintStyle,
   TokenGroup,
   hexToRgb,
@@ -20,7 +19,9 @@ export function pullTokensFromColorStyles(
 ) {
   const styles = paintStyles(tokenGroup.name);
   const stylesTokenGroup = colorStylesToDSysTokenset(
-    styles, tokenGroup.name, nodeId
+    styles,
+    tokenGroup.name,
+    nodeId
   );
   if (!stylesTokenGroup) return;
   setTokenGroup({

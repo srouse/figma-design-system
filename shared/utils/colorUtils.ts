@@ -40,6 +40,36 @@ export function hexToRgb (
   return null;
 }
 
+export enum RGBType {
+  base255 = 'base255',
+  base1 = 'base1',
+}
+export function hexToRgbObj (
+  hex: string, base: RGBType = RGBType.base255,
+) : {r:number, g:number, b:number}  {
+  const rgbArr = hexToRgb(hex);
+  if (!rgbArr || rgbArr.length < 3) {
+    return {
+      r: 0,
+      g: 0,
+      b: 0
+    };
+  }
+  if (base === RGBType.base255) {
+    return {
+      r: rgbArr[0],
+      g: rgbArr[1],
+      b: rgbArr[2]
+    };
+  }else{
+    return {
+      r: rgbArr[0]/255,
+      g: rgbArr[1]/255,
+      b: rgbArr[2]/255
+    };
+  }
+}
+
 export function decToHex(c: number) {
   var hex = Math.round(c).toString(16);
   return hex.length == 1 ? "0" + hex : hex;

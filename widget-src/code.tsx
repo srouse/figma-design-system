@@ -5,19 +5,18 @@ import {
   MessageName,
   MessageRequest,
   MessageRequestStyle,
-  TokenGroup,
 } from "../shared/types/types";
-import { colorStylesToDSysTokenset, colorTokenGroupToStyles, pullTokensFromColorStyles } from "./satellites/colors/colorStyleUtils";
 import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
 import createDesignTokens from "./actions/createDesignTokens";
 import getStyles, { getColorStyles, getEffectStyles, getTextStyles, paintStyles } from "./actions/getStyles";
 import designSystem from "./designTokens";
 import { findAllWidgets, findWidget } from "./utils";
 import bounceBack from "./utils/postMessagePromise";
-import { DSysColorToken, DSysGroupType, DSysToken, DSysTokenset, DTTokenType, hexToRgb, validColor } from "../shared/index";
 import { updateStyle } from "./actions/updateStyle";
 import refreshTokensFromStyles from "./actions/refreshTokensFromStyles";
 import createStyle from "./actions/createStyle";
+import changeStylesFolder from "./actions/changeStylesFolder";
+import updateTokenGroup from "./actions/updateTokenGroup";
 const { 
   widget,
 } = figma;
@@ -79,9 +78,6 @@ function Widget() {
             ) {
               doUpdate = true;
             }
-            // PUSH TO STYLES...
-            colorTokenGroupToStyles(message.tokenGroup);
-
             // update local token group
             setTokenGroup({
               ...message.tokenGroup,
@@ -91,12 +87,14 @@ function Widget() {
           case MessageName.promiseBounce :
             switch (message.request) {
               case MessageRequest.stateUpdate:
-                const thisWidget = findWidget(nodeId);
-                bounceBack(message, {
-                  nodeId,
-                  globalData: thisWidget.widgetSyncedState.globalData,
-                  tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
-                });
+                {
+                  const thisWidget = findWidget(nodeId);
+                  bounceBack(message, {
+                    nodeId,
+                    globalData: thisWidget.widgetSyncedState.globalData,
+                    tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
+                  });
+                }
                 break;
               case MessageRequest.getStyles:
                 getStyles(message);
@@ -111,15 +109,11 @@ function Widget() {
                 getEffectStyles(message);
                 break;
               case MessageRequest.notify:
-                console.log(message)
                 figma.notify(
                   message.message,
-                  {
-                    error: message.error === true ? true : false,
-                  }
+                  {error: message.error === true ? true : false}
                 );
                 break;
-
               case MessageRequest.refreshTokensFromStyles:
                 refreshTokensFromStyles(
                   message, tokenGroup, setTokenGroup, nodeId,
@@ -163,6 +157,22 @@ function Widget() {
                 break;
               case MessageRequest.createStyle:
                 createStyle(message);
+                break;
+              case MessageRequest.changeStylesFolder:
+                changeStylesFolder(
+                  message.folderName,
+                  message.newFolderName,
+                  message.type
+                );
+                bounceBack(message, {success: true});
+                break;
+              case MessageRequest.updateTokenGroup:
+                updateTokenGroup(
+                  nodeId,
+                  message.tokenGroup,
+                  setTokenGroup
+                )
+                bounceBack(message, {success: true});
                 break;
             }
             break;

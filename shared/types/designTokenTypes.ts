@@ -127,17 +127,17 @@ export interface DTDimensionToken extends DTTokenBase {
 export interface DTTypographyToken extends DTTokenBase {
   '$value': {
     'fontFamily': string,
-    'fontWeight': string,// cludged w/ fontStyle into style in Figma
+    'fontName' : string,
+    'fontWeight': DTFontWeightTokenValues,
     'fontStyle': string,
-    'fontSize': string,
-
+    'fontSize': number,
     'letterSpacing': string,
     'lineHeight': string,
     'listSpacing': number,
     'paragraphIndent': number,
     'paragraphSpacing': number,
-    'textCase': 'ORIGINAL' | 'UPPER' | 'LOWER' | 'TITLE',
-    'textDecoration': 'NONE' | 'UNDERLINE' | 'STRIKETHROUGH',
+    'textCase': 'original' | 'upper' | 'lower' | 'title',
+    'textDecoration': 'none' | 'underline' | 'strikethrough',
   },
   '$type' : DTTokenType.typography
 }
@@ -150,11 +150,8 @@ export interface DTFontFamilyToken extends DTTokenBase {
 
 // Font Weight
 export type DTFontWeightTokenValues = 
-  100	| 200 | 300 | 400 | 500 | 600 | 700 | 800 | 950 |
-  'thin' | 'hairline' | 'extra-light' | 'ultra-light' |
-  'light' | 'normal' | 'regular' | 'book' | 'medium' |
-  'semi-bold' | 'demi-bold' | 'bold' | 'extra-bold' |
-  'ultra-bold' | 'black' | 'heavy' | 'extra-black' | 'ultra-black'
+  100	| 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
+
 export interface DTFontWeightToken extends DTTokenBase {
   '$value': DTFontWeightTokenValues,
   '$type' : DTTokenType.fontWeight

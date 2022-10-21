@@ -50,26 +50,27 @@ export default class App extends React.Component<{}> {
     })
   }
 
-  updateTokenGroup(
+  async updateTokenGroup(
     tokenGroup: TokenGroup,
   ) {
-    parent?.postMessage?.({
-      pluginMessage: {
-        name: MessageName.tokenGroupUpdate,
-        tokenGroup
-      }},
-    "*");
-
+    await postMessagePromise(
+      MessageRequest.updateTokenGroup,
+      {tokenGroup: {
+        ...tokenGroup
+      }}
+    );
     this.setState({
       ...this.state,
       tokenGroup
-    })
+    });
+    this.refreshTokens();
   }
 
   refreshTokens() {
     postMessagePromise(
       MessageRequest.refreshTokensFromStyles
     ).then((result) => {
+      console.log('REFRESH', result);
       this.setState({
         ...this.state,
         ...(result as object),

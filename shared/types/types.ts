@@ -23,6 +23,8 @@ export enum MessageRequest {
   moveStyle = 'moveStyle',
   notify = 'notify',
   refreshTokensFromStyles = 'refreshTokensFromStyles',
+  changeStylesFolder = 'changeStylesFolder',
+  updateTokenGroup = 'updateTokenGroup',
 }
 
 export enum MessageRequestStyle {
@@ -169,22 +171,26 @@ export type FigmaTextStyle = {
     readonly style: string
   },
   fontSize: number,
-  letterSpacing: {
-    readonly value: number,
-    readonly unit: 'PIXELS' | 'PERCENT',
-  },
-  lineHeight: {
-    readonly value: number,
-    readonly unit: 'PIXELS' | 'PERCENT',
-  } | {
-    readonly unit: 'AUTO',
-  },
+  letterSpacing: FigmaLetterSpacing,
+  lineHeight: FigmaLineHeight,
   listSpacing: number,
   paragraphIndent: number,
   paragraphSpacing: number,
   textCase: 'ORIGINAL' | 'UPPER' | 'LOWER' | 'TITLE',
   textDecoration: 'NONE' | 'UNDERLINE' | 'STRIKETHROUGH',
 }
+
+export type FigmaLetterSpacing = {
+  readonly value: number,
+  readonly unit: 'PIXELS' | 'PERCENT',
+};
+
+export type FigmaLineHeight = {
+  readonly value: number,
+  readonly unit: 'PIXELS' | 'PERCENT' | 'AUTO',
+} | {
+  readonly unit: 'AUTO',
+};
 
 // =========START V1======================
 // ----------- WIDGET --------------

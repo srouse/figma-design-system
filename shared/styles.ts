@@ -3,7 +3,7 @@ export const colors = {
   textColor: '#373737',
   textColorHover: '#6F6F6F',
   textColorLighter: '#6F6F6F',// something lighter than default
-  textColorLightest: '#939393',
+  textColorLightest: '#A5A5A5',
   textColorWhite: '#ffffff',
   textColorError: '#E42222',
 
@@ -41,11 +41,13 @@ export const colors = {
   pagePadding: '30px 30px',
 
   buttonMinHeight: '42px',
-  dttabsHeight: '50px'
+  dttabsHeight: '44px'
 }
 
 export const typography = {
   primaryFont: `Inter`,
   primaryUIFont: `Inter, system-ui, sans-serif`,
   monotype: 'Roboto Mono',// 'Courier Prime'
+
+
 }

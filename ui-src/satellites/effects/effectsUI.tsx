@@ -1,6 +1,6 @@
 import React from "react";
 import "./effectsUI.css";
-import { CoreProps } from "../../shared/types/types";
+import { CoreProps } from "../../../shared/types/types";
 
 export default class EffectsUI extends React.Component<CoreProps> {
 

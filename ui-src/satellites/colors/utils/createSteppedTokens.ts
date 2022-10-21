@@ -1,9 +1,4 @@
 import {
-  DSysGroupType,
-  DSysLevel,
-  DSysToken,
-  DSysTokenset,
-  DTTokenType,
   MessageRequest,
   MessageRequestStyle,
   TokenGroup
@@ -31,69 +26,33 @@ export default async function createSteppedTokens(
   );
   if (!tokenGroup) return {success: false, message: 'no token group'};
 
-  const tg = tokenGroup;
-  const newTokenSet : DSysTokenset = {
-    $extensions: {
-      'dsys.level': DSysLevel.tokenset,
-      'dsys.type': DSysGroupType.ColorSet,
-      'dsys.name': tokenGroupName || '',
-      "dsys.nodeId": tg.nodeId,
-    },
-    $description:
-      `Color tokens with the named ${tokenGroupName} and steps ${stateSteps}`,
-  };
-
+  // Stepped Colors into Styles
   const promiseArr: any[] = [];
-  const finalTokenGroupName = tokenGroupName ? 
-    tokenGroupName.toLowerCase() : '';
-
   steppedColors.steps?.map((stepResult, index) => {
     if (stepResult.step === undefined) return;
-
-    const stepName = `${finalTokenGroupName}${stepResult.step ? 
-      `-${stepResult.step.toLowerCase()}` : ''}`;
-
-    const newToken : DSysToken = {
-      $extensions: {
-        'dsys.level'    : DSysLevel.token,
-        'dsys.name'     : stepName,
-        'dsys.index'    : index,
-        'dsys.styleId'  : '',
-      },
-      $value: {
-        hex: stepResult.hex,
-        alpha: 1,
-      },
-      $type: DTTokenType.color
-    };
-    newTokenSet[stepName] = newToken;
+    const stepName = `${tokenGroupName}${
+      stepResult.step ? `-${stepResult.step.toLowerCase()}` : ''}`;
 
     promiseArr.push((async () => {
-      const result: any = await postMessagePromise(
+      return await postMessagePromise(
         MessageRequest.createStyle,
         {
           style: {
             type: MessageRequestStyle.color,
-            name: `${finalTokenGroupName}/${stepName}`,
+            name: `${tokenGroupName}/${stepName}`,
             value: stepResult,
           }
         }
       );
-      newToken.$extensions['dsys.styleId'] = result.style.id;
-      return newToken;
     })());
   });
-
-  const results = await Promise.all(promiseArr);
-  console.log(results);
+  await Promise.all(promiseArr);
 
   const finalTG = {
-    ...tg,
-    name: finalTokenGroupName,
-    tokensets: [newTokenSet]
+    ...tokenGroup,
+    name: tokenGroupName,// just the name so we can build from styles
   };
 
   updateTokenGroup(finalTG);
-
   return {success: true};
 }

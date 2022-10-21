@@ -3,8 +3,8 @@ import "./colorsUI.css";
 import {
   CoreProps,
 } from "../../../shared/types/types";
-import FirstRun from "./pages/firstRun";
-import ColorSteps from "./pages/colorSteps";
+import FirstRun from "./pages/colorFirstRun";
+import ColorSteps from "./pages/colorList";
 
 export default class ColorsUI extends React.Component<CoreProps> {
 

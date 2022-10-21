@@ -5,7 +5,7 @@ import ColorsUI from "./colors/colorsUI";
 import ColumnLayoutUI from "./columnLayoutUI";
 import ComponentsUI from "./componentsUI";
 import { CoreProps } from "../../shared/types/types";
-import EffectsUI from "./effectsUI";
+import EffectsUI from "./effects/effectsUI";
 import IconsUI from "./iconsUI";
 import LayoutUI from "./layoutUI";
 import SpacingUI from "./spacingUI";
@@ -15,6 +15,9 @@ import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import DTTabs from "../components/DTTabs";
 import Deployment from "../deployment/deployment";
 import Settings from "../settings/settings";
+import ColorsSettings from "./colors/colorsSettings";
+import TypographySettings from "./typography/typographySettings";
+import EffectsSettings from "./effects/effectsSettings";
 
 export default class SwitchUI extends React.Component<CoreProps> {
 
@@ -48,18 +51,51 @@ export default class SwitchUI extends React.Component<CoreProps> {
             display: this.state.page === 'deployment' ? 'block' : 'none',
           }}
           {...this.props} />
-        <Settings
-            style={{
-              flex: 1,
-              display: this.state.page === 'settings' ? 'block' : 'none',
-            }}
-            {...this.props} />
+        {this.renderSettings()}
       </div>
     );
   }
 
   renderSettings() {
-    
+    let localSettings = undefined;
+    switch (this.props.tokenGroup?.type) {
+      case DSysGroupType.Base :
+        localSettings = undefined;
+        break;
+      case DSysGroupType.ColorSet :
+        localSettings = <ColorsSettings {...this.props} />;
+        break;
+      case DSysGroupType.TypographySet :
+        localSettings = <TypographySettings {...this.props} />;
+        break;
+      case DSysGroupType.EffectSet :
+        localSettings = <EffectsSettings {...this.props} />;
+        break;
+      case DSysGroupType.IconSet :
+        localSettings = undefined;
+        break;
+      case DSysGroupType.ComponentSet :
+        localSettings = undefined;
+        break;
+      case DSysGroupType.Spacing :
+        localSettings = undefined;
+        break;
+      case DSysGroupType.LayoutSet :
+        localSettings = undefined;
+        break;
+      case DSysGroupType.ColumnLayoutSet :
+        localSettings = undefined;
+        break;
+    }
+    return (
+      <Settings
+      style={{
+        flex: 1,
+        display: this.state.page === 'settings' ? 'block' : 'none',
+      }}
+      localSettings={localSettings}
+      {...this.props} />
+    );
   }
 
   renderTokenContent() {

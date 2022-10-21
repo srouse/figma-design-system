@@ -67,7 +67,10 @@ export function effectStylesToDSysTokenset(
         },
         $type: DTTokenType.shadow
       };
-    }else if (effect.type === 'LAYER_BLUR') {
+    }else if (
+      effect.type === 'LAYER_BLUR' ||
+      effect.type === 'BACKGROUND_BLUR'
+    ) {
       tokenset[name] = {
         $extensions: {
           'dsys.level'    : DSysLevel.token,

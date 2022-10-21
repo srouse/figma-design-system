@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import tokenGroupTypeToName from "../../shared/tokenGroupTypeToName";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import { CoreProps } from "../../shared/types/types";
@@ -7,7 +7,8 @@ import InputHeader from "../components/InputHeader";
 import "./settings.css";
 
 interface SettingsProps extends CoreProps {
-  style?: object
+  style?: object,
+  localSettings?: ReactElement<any, any>
 }
 
 export default class Settings extends React.Component<SettingsProps> {
@@ -21,26 +22,17 @@ export default class Settings extends React.Component<SettingsProps> {
       <div
         className="settings scroll-bar"
         style={this.props.style || {}}>
+        <InputHeader
+          label="Token Group" />
         {this.props.tokenGroup?.type === DSysGroupType.Base
-          ? (null) : (<>
-            <InputHeader
-              label="Token Group" />
-            <Input
-              label="Name" 
-              value={this.props.tokenGroup?.name}
-              onChange={(value: string) => {
-                if (this.props.tokenGroup) {
-                  this.props.updateTokenGroup({
-                    ...this.props.tokenGroup,
-                    name: value,
-                  });
-                }
-              }} />
-              <Input
-                label="Token Type" 
-                readOnly
-                value={tokenGroupTypeToName(this.props.tokenGroup)} />
-          </>)}
+          ? (null) : 
+          this.props.localSettings ? this.props.localSettings : null}
+        <Input
+          label="Token Type" 
+          readOnly
+          value={
+            tokenGroupTypeToName(this.props.tokenGroup)
+          } />
         <InputHeader
           label="Global" />
         <Input

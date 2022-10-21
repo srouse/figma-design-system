@@ -1,5 +1,4 @@
 import {
-  DSysColorToken,
   DSysToken,
   DSysTokenset,
 } from "../types/designSystemTypes";
@@ -18,8 +17,8 @@ export default function cleanAndSortTokens(
   });
 
   tokens.sort((a, b) => {
-    const aToken = a[1] as unknown as DSysColorToken;
-    const bToken = b[1] as unknown as DSysColorToken;
+    const aToken = a[1] as unknown as DSysToken;
+    const bToken = b[1] as unknown as DSysToken;
     const aIndex = aToken.$extensions["dsys.index"];
     const bIndex = bToken.$extensions["dsys.index"];
     if (

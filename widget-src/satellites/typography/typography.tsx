@@ -1,5 +1,13 @@
-import { defaultTokenGroup } from "../../../shared/index";
-import { colors, typography } from "../../../shared/styles";
+import {
+  defaultTokenGroup,
+  cleanAndSortTokens,
+  TokenGroup,
+  DSysTypographyToken
+} from "../../../shared/index";
+import {
+  colors,
+  typography
+} from "../../../shared/styles";
 import header from "../../components/header";
 import { pullTokensFromTextStyles } from "./typographyUtils";
 
@@ -10,6 +18,7 @@ const {
   useWidgetId,
   useSyncedState,
   useEffect,
+  Rectangle,
 } = widget;
 
 export default function typographySatellite() {
@@ -33,6 +42,8 @@ export default function typographySatellite() {
       );
     }
   });
+
+  const typographyList = getTypographyList(tokenGroup);
 
   return (
     <AutoLayout 
@@ -68,16 +79,121 @@ export default function typographySatellite() {
             left: 20, right: 20
           }}
           overflow="visible">
-          <Text
-            fontFamily={typography.primaryFont}
-            fontWeight="light"
-            fontSize={18}
-            width="hug-contents"
-            horizontalAlignText="center"
-            fill={colors.textColorLightest}>
-            Typography Tokens Not Found
-          </Text>
+          {typographyList ? typographyList : (
+            <Text
+              fontFamily={typography.primaryFont}
+              fontWeight="light"
+              fontSize={18}
+              width="hug-contents"
+              horizontalAlignText="center"
+              fill={colors.textColorLightest}>
+              Typography Tokens Not Found
+            </Text>
+          )}
         </AutoLayout>
       </AutoLayout>
+  );
+}
+
+function getExampleType(token: DSysTypographyToken) {
+  // need to protect entries from failures...
+  return (
+    <Text
+      fontFamily={token.$value.fontFamily}
+      fontWeight={token.$value.fontWeight as any}
+      
+      fontSize={Math.min( token.$value.fontSize, 32 )}
+      textCase={token.$value.textCase as any}
+      textDecoration={token.$value.textDecoration as any}
+      italic={token.$value.fontStyle === 'italic'}
+      fill={colors.textColor}
+      width="fill-parent"
+      height="hug-contents">
+      Ag
+    </Text>
+  );
+}
+
+function getTypographyList(
+  tokenGroup: TokenGroup
+) {
+  const tokenset = tokenGroup.tokensets[0];
+  const tokens = cleanAndSortTokens(tokenset);
+  console.log('tokens', tokens);
+  if (!tokens) return false;
+  return tokens.map(
+    (tokenInfo, index) => {
+      const token = tokenInfo[1] as DSysTypographyToken;
+      return (
+        <AutoLayout
+          height="hug-contents"
+          direction="vertical"
+          width="fill-parent"
+          overflow="visible"
+          verticalAlignItems="center"
+          padding={{
+            top: 0,left: 20,
+            bottom: 0,right: 20
+          }}
+          key={`row_${
+            token.$extensions['dsys.styleId']
+          }`}>
+          <AutoLayout
+            height={50}
+            verticalAlignItems="center"
+            spacing={4}
+            width="fill-parent"
+            overflow="visible">
+            <AutoLayout
+              height={50} width={50}
+              horizontalAlignItems="start"
+              verticalAlignItems="center"
+              overflow="visible">
+              {getExampleType(token)}
+            </AutoLayout>
+            <Text
+              fontFamily={typography.primaryFont}
+              fontWeight="normal"
+              fontSize={14}
+              fill={colors.textColor}
+              width="fill-parent"
+              height="hug-contents">
+              {token.$extensions["dsys.name"]}
+            </Text>
+            <AutoLayout
+              direction="vertical"
+              width="hug-contents"
+              horizontalAlignItems="end">
+              <Text
+                fontFamily={typography.primaryFont}
+                fontWeight="normal"
+                fontSize={11}
+                horizontalAlignText="right"
+                fill={colors.textColorLightest}
+                width="hug-contents"
+                height="hug-contents">
+                {token.$value.fontName}
+              </Text>
+              <Text
+                fontFamily={typography.primaryFont}
+                fontWeight="normal"
+                fontSize={11}
+                horizontalAlignText="right"
+                fill={colors.textColorLightest}
+                width="hug-contents"
+                height="hug-contents">
+                {token.$value.fontSize} / {token.$value.lineHeight}
+              </Text>
+            </AutoLayout>
+          </AutoLayout>
+          {index < tokens.length-1 ? (
+            <Rectangle
+              height={1}
+              width="fill-parent"
+              fill={colors.borderGrey} />
+          ) : null}
+        </AutoLayout>
+      );
+    }
   );
 }

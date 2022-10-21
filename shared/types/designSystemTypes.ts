@@ -145,9 +145,9 @@ export type DSysColorTokenset = DSysTokensetBase<
 
 export type DSysTypographyTokenset = DSysTokensetBase<
   DSysGroupType.TypographySet,
-  DSysTypographyToken |
   DSysFontFamilyToken |
   DSysFontWeightToken |
+  DSysTypographyToken |
   DSysFontStyleToken
 >;
 
@@ -256,6 +256,7 @@ export interface DSysFontFamilyToken extends DTFontFamilyToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+    'dsys.styleId'  : string,
   },
 }
 export interface DSysFontWeightToken extends DTFontWeightToken {
@@ -263,6 +264,7 @@ export interface DSysFontWeightToken extends DTFontWeightToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+    'dsys.styleId'  : string,
   },
 }
 export interface DSysFontStyleToken extends DTFontStyleToken {
@@ -270,6 +272,7 @@ export interface DSysFontStyleToken extends DTFontStyleToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+    'dsys.styleId'  : string,
   },
 }
 export interface DSysStrokeStyleToken extends DTStrokeStyleToken {
