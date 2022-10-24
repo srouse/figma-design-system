@@ -5,6 +5,8 @@ import toKebobCase from './toKebobCase';
 import tokenGroupTypeToName from './tokenGroupTypeToName';
 import tokensetTypeToName from './tokensetTypeToName';
 import getIcon, {Icons} from './icons';
+import findTokenViaIndex from './utils/findTokenViaIndex';
+import findToken from './utils/findToken';
 import Validator, {
   ValidatorSuccess,
   Validation,
@@ -209,6 +211,8 @@ export {
   DTTokenType,
   MessageRequest,
   MessageRequestStyle,
+  findTokenViaIndex,
+  findToken,
 
   colors,
   typography,

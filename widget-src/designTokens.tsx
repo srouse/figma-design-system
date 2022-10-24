@@ -71,7 +71,7 @@ export default function designSystem() {
     }
   });
 
-  let width = 440;
+  let width = 480;
 
   return (
     <AutoLayout 

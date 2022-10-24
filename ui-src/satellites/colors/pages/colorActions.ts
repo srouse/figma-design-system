@@ -1,14 +1,14 @@
 import {
   DSysColorToken,
   DSysToken,
-  DSysTokenset,
+  findTokenViaIndex,
   MessageRequest,
   MessageRequestStyle,
   TokenGroup
 } from "../../../../shared";
 import postMessagePromise from "../../../utils/postMessagePromise";
 
-export async function changeColorAction(
+export async function changeColor(
   color: string,
   alpha: number,
   name: string,
@@ -35,7 +35,6 @@ export async function changeColorAction(
     $value: newColor
   };
 
-  console.log('changeColorAction', newToken);
   await postMessagePromise(
     MessageRequest.updateStyle,
     {
@@ -81,6 +80,8 @@ export async function deleteColorToken(
   return true;
 }
 
+let newStyleId = 0;
+
 export async function addColorToken(
   tokenGroup: TokenGroup | undefined,
   refreshTokens: () => void
@@ -91,7 +92,7 @@ export async function addColorToken(
     {
       style: {
         type: MessageRequestStyle.color,
-        name: `${tokenGroup.name}/new-color`,
+        name: `${tokenGroup.name}/new-color${newStyleId ? `-${newStyleId}` : ''}`,
         value: {
           r: 200, g: 200, b: 200,
         },
@@ -101,10 +102,11 @@ export async function addColorToken(
   if (result.success) {
     if (refreshTokens) await refreshTokens();
   }
+  newStyleId += 1;
   return result;
 }
 
-export async function changeNameAction(
+export async function changeName(
   newName: string,
   name: string,
   tokenGroup: TokenGroup | undefined,
@@ -137,7 +139,7 @@ export async function changeNameAction(
 function findToken(
   name: string,
   tokenGroup: TokenGroup,
-) : DSysColorToken | void {
+) : DSysToken | void {
   // find the token in the tokengroup
   const tokenset = tokenGroup.tokensets[0];
   if (!tokenset) return;
@@ -147,26 +149,5 @@ function findToken(
   if (!tokenEntry) return;
   const token = tokenEntry[1];// pulling from an entry
   if (!token) return;
-  return token;
-}
-
-function findTokenViaIndex(
-  index: number,
-  tokenGroup: TokenGroup,
-) : DSysColorToken | void {
-  // find the token in the tokengroup
-  const tokenset = tokenGroup.tokensets[0];
-  if (!tokenset) return;
-  const tokenEntry = Object.entries(tokenset).find(entry => {
-    const name = entry[0];
-    // thank you design token standard
-    const token = entry[1] as DSysToken;
-    if (!token || !token.$extensions) return false;
-    return token.$extensions['dsys.index'] === index;
-  });
-  if (!tokenEntry) return;
-  const token = tokenEntry[1];// pulling from an entry
-  if (!token) return;
-
   return token;
 }

@@ -17,6 +17,7 @@ import refreshTokensFromStyles from "./actions/refreshTokensFromStyles";
 import createStyle from "./actions/createStyle";
 import changeStylesFolder from "./actions/changeStylesFolder";
 import updateTokenGroup from "./actions/updateTokenGroup";
+import moveStyle from "./actions/moveStyle";
 const { 
   widget,
 } = figma;
@@ -128,23 +129,7 @@ function Widget() {
                 })();
                 break;
               case MessageRequest.moveStyle:
-                if (message.type === MessageRequestStyle.color) {
-                  const targetStyle = figma.getStyleById(message.styleId) as PaintStyle;
-                  const previousStyle = figma.getStyleById(message.previousStyleId) as PaintStyle;
-                  if (!targetStyle) return;
-
-                  if (targetStyle === previousStyle) {
-                    // not doing anything is a right answer here
-                    return bounceBack(message, {success: true});
-                  }
-                  
-                  figma.moveLocalPaintStyleAfter(
-                    targetStyle, previousStyle || null
-                  );
-                  bounceBack(message, {success: true});
-                }
-                bounceBack(message, {success: false, message: 'no type found'});
-                break;
+                return moveStyle(message);
               case MessageRequest.updateStyle:
                 return updateStyle(message, tokenGroup);
               case MessageRequest.deleteStyle:
@@ -156,8 +141,7 @@ function Widget() {
                 bounceBack(message, {success: false});
                 break;
               case MessageRequest.createStyle:
-                createStyle(message);
-                break;
+                return createStyle(message);
               case MessageRequest.changeStylesFolder:
                 changeStylesFolder(
                   message.folderName,

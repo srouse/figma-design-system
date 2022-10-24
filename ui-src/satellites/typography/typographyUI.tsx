@@ -1,6 +1,8 @@
 import React from "react";
 import "./typographyUI.css";
 import { CoreProps } from "../../../shared/types/types";
+import TypographyFirstRun from "./pages/typographyFirstRun";
+import TypographyList from "./pages/typographyList";
 
 export default class TypographyUI extends React.Component<CoreProps> {
 
@@ -10,7 +12,23 @@ export default class TypographyUI extends React.Component<CoreProps> {
 
   render() {
     return (
-      <div style={this.props.style}>{this.props.tokenGroup?.type}</div>
+      <div
+        className="colors"
+        style={this.props.style}>
+        {this.renderPage()}
+      </div>
     );
+  }
+
+  renderPage() {
+    if (!this.props.tokenGroup?.name) {
+      return (
+        <TypographyFirstRun {...this.props} />
+      );
+    }else{
+      return (
+        <TypographyList {...this.props} />
+      );
+    }
   }
 }

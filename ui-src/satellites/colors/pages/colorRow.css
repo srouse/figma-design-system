@@ -1,0 +1,43 @@
+
+
+  /* COLOR CHIP */
+  .color-row-color {
+    padding: 0 0 0 10px;
+    overflow: visible;
+  }
+
+    .color-row-color-chip {
+      width: 16px; height: 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var( --text-color-error );
+      display: flex; align-items: center; justify-content: center;
+      overflow: visible;
+    }
+    .color-step-row-color-chip:hover {
+      cursor: pointer;
+    }
+
+  /* HEX */
+  .color-row-hex {
+    vertical-align: middle;
+  }
+
+    .color-row-hex-input {
+      width: 90px;
+    }
+
+  /* ALPHA 
+  .color-row-alpha {
+
+  }*/
+
+    .color-row-alpha-input {
+      width: 60px;
+    }
+
+  /* ADA  */
+  .color-row-ada {
+    margin-right: 10px;
+  }

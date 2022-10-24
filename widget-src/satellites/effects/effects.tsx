@@ -231,7 +231,7 @@ function getEffectList(
                   shadowToken.$value.offsetX} / {
                   shadowToken.$value.offsetY} / {
                   shadowToken.$value.blur} / {
-                  shadowToken.$value.alpha}%
+                  shadowToken.$value.alpha.toFixed(2)}%
                 </Text>
               </AutoLayout>
             ) : null}

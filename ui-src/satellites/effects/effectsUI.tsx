@@ -1,6 +1,8 @@
 import React from "react";
 import "./effectsUI.css";
 import { CoreProps } from "../../../shared/types/types";
+import EffectsFirstRun from "./pages/effectsFirstRun";
+import EffectsList from "./pages/effectsList";
 
 export default class EffectsUI extends React.Component<CoreProps> {
 
@@ -10,7 +12,23 @@ export default class EffectsUI extends React.Component<CoreProps> {
 
   render() {
     return (
-      <div style={this.props.style}>{this.props.tokenGroup?.type}</div>
+      <div
+        className="colors"
+        style={this.props.style}>
+        {this.renderPage()}
+      </div>
     );
+  }
+
+  renderPage() {
+    if (!this.props.tokenGroup?.name) {
+      return (
+        <EffectsFirstRun {...this.props} />
+      );
+    }else{
+      return (
+        <EffectsList {...this.props} />
+      );
+    }
   }
 }

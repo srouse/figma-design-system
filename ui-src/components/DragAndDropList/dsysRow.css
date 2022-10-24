@@ -1,0 +1,92 @@
+
+.dsys-row {
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var( --white );
+  position: absolute;
+  top: 0; bottom: 0; right: 0px; left: 0;
+  padding: 0 0 0 20px;
+}
+
+/* Input resets */
+.dsys-row .inputComp {
+  margin: 0;
+}
+
+.drag-and-drop-house .dsys-row {
+  border-bottom: 1px solid var( --grey-lightest );
+}
+
+.dsys-row.moving-row {
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+
+  /* DRAGGER */
+  .dsys-row-dragger {
+    width: 16px;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    transition: width 0.3s;
+    overflow: hidden;
+  }
+  .dsys-row-dragger svg {
+    width: 11px;
+  }
+  .is-deleting .dsys-row-dragger{
+    width: 0px;
+  }
+  .dsys-row-dragger:hover {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+  }
+  .dsys-row-dragger:active {
+    cursor: grabbing;
+  }
+
+  /* NAME */
+  .dsys-row-name {
+    border-right: 1px solid var( --grey-lightest );
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex: 1;
+  }
+
+  /* DELETING */
+  .dsys-row-deleting {
+    width: 0;
+    transition: width 0.3s;
+    position: relative;
+    overflow: hidden;
+    align-self: stretch;
+  }
+
+    .dsys-row-deleting-icon {
+      width: 46px;
+      transition: width 0.3s;
+      overflow: hidden;
+      position: absolute; 
+      left: 2px; top: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.15);
+    }
+
+      .dsys-row-deleting-icon svg {
+        width: 14px;
+      }
+
+    .dsys-row-deleting-icon:hover {
+      cursor: pointer;
+    }
+
+    .is-deleting .dsys-row-deleting {
+      width: 46px;
+    }

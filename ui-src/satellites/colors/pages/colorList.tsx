@@ -20,18 +20,21 @@ import DTButton, {
 } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import "./colorList.css";
-import "./colorStepRow.css";
+import "./colorRow.css";
+import "../../../components/DragAndDropList/dsysList.css";
+import "../../../components/DragAndDropList/dsysRow.css";
 import renderAda from "./renderAda";
 import 'color-picker-web-component';
 import {
   addColorToken,
-  changeColorAction,
-  changeNameAction,
+  changeColor,
+  changeName,
   changeOrder,
   deleteColorToken
-} from "./actions";
-import DragAndDropList from "../../../utils/dragAndDropList";
+} from "./colorActions";
+import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
 import postMessagePromise from "../../../utils/postMessagePromise";
+import ListHeader from "../../../components/ListHeader/ListHeader";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -62,7 +65,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
       pickerTop: '0px',
       pickerColor: '#eeeeee',
       pickerAlpha: '100',
-    }
+    };
   }
 
   changeColor = (
@@ -70,7 +73,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
     alpha: number,
     name: string
   ) => {
-    changeColorAction(
+    changeColor(
       color, alpha, name, 
       this.props.tokenGroup,
       this.props.refreshTokens
@@ -115,38 +118,29 @@ export default class ColorSteps extends React.Component<CoreProps> {
      
     return (<>
       <div className={`
-        edit-color
+        dsys-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
-        <div className="edit-color-header">
-          Color Tokens
-          <div style={{flex: 1}}></div>
-          <div
-            className="edit-color-header-btn delete"
-            onClick={() => {
-              this.setState({
-                isDeleting: !this.state.isDeleting
-              });
-            }} dangerouslySetInnerHTML={{__html:getIcon(Icons.delete)}}>
-          </div>
-          <div
-            className="edit-color-header-btn plus"
-            onClick={() =>{
-              addColorToken(
-                this.props.tokenGroup,
-                this.props.refreshTokens,
-              ).then(result => {
-                if (result.success === false) {
-                  console.log(result)
-                  postMessagePromise(
-                    MessageRequest.notify,
-                    {message: result.message, error: true}
-                  );
-                }
-              });
-            }} dangerouslySetInnerHTML={{__html:getIcon(Icons.plus)}}>
-          </div>
-        </div>
-        <div className="edit-color-list scroll-bar">
+        <ListHeader 
+          title="Color Tokens"
+          onAdd={() =>{
+            addColorToken(
+              this.props.tokenGroup,
+              this.props.refreshTokens,
+            ).then(result => {
+              if (result.success === false) {
+                postMessagePromise(
+                  MessageRequest.notify,
+                  {message: result.message, error: true}
+                );
+              }
+            });
+          }}
+          onDelete={() => {
+            this.setState({
+              isDeleting: !this.state.isDeleting
+            });
+          }} />
+        <div className="dsys-list-body scroll-bar">
           <DragAndDropList
             rowHeight={48}
             onChange={(
@@ -170,30 +164,30 @@ export default class ColorSteps extends React.Component<CoreProps> {
               const color = value.$value as DTColor;
               return (
                 <div
-                  className="color-step-row"
+                  className="dsys-row"
                   key={`color-${value.$extensions['dsys.styleId'] || index}}`}>
-                  <div className="color-step-row-dragger"
+                  <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
                     }}
                     onMouseDown={onMouseDownCapture}
                     onMouseUp={onMouseUpCapture}>
                   </div>
-                  <div className="color-step-row-name">
+                  <div className="dsys-row-name">
                     <Input
                       hideLabel hideBorder
                       label="property"
                       value={prop}
                       onEnterOrBlur={(newName: string) => {
-                        changeNameAction(
+                        changeName(
                           newName, prop,
                           this.props.tokenGroup,
                           this.props.refreshTokens
                         );
                       }} />
                   </div>
-                  <div className="color-step-row-color">
-                    <div className="color-step-row-color-chip"
+                  <div className="color-row-color">
+                    <div className="color-row-color-chip"
                       style={{
                         backgroundColor: color.hex,
                         opacity: color.alpha,
@@ -219,9 +213,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
                       {validColor(color) ? '' : '!!'}
                     </div>
                   </div>
-                  <div className="color-step-row-hex">
+                  <div className="color-row-hex">
                     <Input
-                      className="color-step-row-hex-input"
+                      className="color-row-hex-input"
                       label="color" 
                       hideLabel hideBorder
                       value={`${color.hex}`}
@@ -239,9 +233,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
-                  <div className="color-step-row-alpha">
+                  <div className="color-row-alpha">
                     <Input
-                      className="color-step-row-alpha-input"
+                      className="color-row-alpha-input"
                       label="color alpha" 
                       hideLabel hideBorder
                       value={`${Math.round(color.alpha * 100)}%`}
@@ -277,13 +271,13 @@ export default class ColorSteps extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
-                  <div className="color-step-row-ada">
+                  <div className="color-row-ada">
                     {renderAda(
                       color,
                       this.props.tokenGroup?.nodeId || tokenset.$extensions['dsys.name']
                     )}
                   </div>
-                  <div className="color-step-row-deleting"
+                  <div className="dsys-row-deleting"
                     onClick={() => {
                       if (this.state.isDeleting) {
                         if (!this.props.tokenGroup) return;
@@ -291,11 +285,16 @@ export default class ColorSteps extends React.Component<CoreProps> {
                           value,
                           this.props.refreshTokens
                         );
+                        setInterval(() => {// need to wait a beat for refresh
+                          this.setState({
+                            isDeleting: false,
+                          });
+                        }, 300);
                       }
                     }}>
-                    <div className="color-step-row-deleting-icon"
+                    <div className="dsys-row-deleting-icon"
                       dangerouslySetInnerHTML={{ __html: 
-                        getIcon(Icons.delete, colors.error) 
+                        getIcon(Icons.delete) 
                       }}></div>
                   </div>
                 </div>

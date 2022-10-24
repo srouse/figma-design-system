@@ -31,6 +31,8 @@ export enum MessageRequestStyle {
   color = 'color',
   text = 'text',
   effect = 'effect',
+  shadow = 'shadow',
+  blur = 'blur',
 }
 
 export type Result = {

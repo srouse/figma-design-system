@@ -12,6 +12,8 @@ export function updateStyle(
       message: 'did NOT get a token or token group',
     });
   }
+
+  console.log('updateStyle', token.$type);
   if (token.$type === DTTokenType.color) {
     const colorStyle = figma.getStyleById(
       token.$extensions['dsys.styleId']
@@ -49,7 +51,73 @@ export function updateStyle(
         message: 'color not valid',
       });
     }
+  } else if (token.$type === DTTokenType.shadow) {
+    const effectStyle = figma.getStyleById(
+      token.$extensions['dsys.styleId']
+    ) as EffectStyle;
+    if (effectStyle && effectStyle.type === 'EFFECT') {
+      /*colorStyle.paints = [
+        {
+          type: "SOLID",
+          color: {
+            r: rgb[0]/255,
+            g: rgb[1]/255,
+            b: rgb[2]/255,
+          },
+          opacity: token.$value.alpha,
+        }
+      ];*/
+      effectStyle.name = `${
+        tokenGroup.name}/${
+        token.$extensions['dsys.name']
+      }`;
+
+      return bounceBack(message, {
+        success: true,
+      });
+    }
+  } else if (token.$type === DTTokenType.blur) {
+    const effectStyle = figma.getStyleById(
+      token.$extensions['dsys.styleId']
+    ) as EffectStyle;
+    if (effectStyle && effectStyle.type === 'EFFECT') {
+      /*colorStyle.paints = [
+        {
+          type: "SOLID",
+          color: {
+            r: rgb[0]/255,
+            g: rgb[1]/255,
+            b: rgb[2]/255,
+          },
+          opacity: token.$value.alpha,
+        }
+      ];*/
+      effectStyle.name = `${
+        tokenGroup.name}/${
+        token.$extensions['dsys.name']
+      }`;
+
+      return bounceBack(message, {
+        success: true,
+      });
+    }
+  } else if (token.$type === DTTokenType.typography) {
+    const effectStyle = figma.getStyleById(
+      token.$extensions['dsys.styleId']
+    ) as TextStyle;
+    if (effectStyle && effectStyle.type === 'TEXT') {
+
+      effectStyle.name = `${
+        tokenGroup.name}/${
+        token.$extensions['dsys.name']
+      }`;
+
+      return bounceBack(message, {
+        success: true,
+      });
+    }
   }
+
   return bounceBack(message, {
     success: false,
     message: 'style not found ( or supported )'

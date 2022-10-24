@@ -1,0 +1,36 @@
+
+/* HEADER */
+.list-header {
+  height: 40px;
+  background-color: var( --white );
+  border-bottom: 1px solid var( --border-grey );
+  display: flex;
+  padding: 0 20px;
+  font-size: 12px;
+  font-weight: 500;
+  flex-direction: row;
+  align-items: center;
+}
+
+  .list-header-btn {
+    width: 26px; height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .list-header-btn:hover {
+      cursor: pointer;
+    }
+
+    .list-header-btn.delete {
+      margin-right: 6px;
+    }
+
+    .list-header-btn.plus svg {
+      width: 15px;
+    }
+
+    .list-header-btn.delete svg {
+      width: 14px;
+    }
