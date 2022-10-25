@@ -13,7 +13,7 @@ export default class EffectsUI extends React.Component<CoreProps> {
   render() {
     return (
       <div
-        className="colors"
+        className="ui-list"
         style={this.props.style}>
         {this.renderPage()}
       </div>

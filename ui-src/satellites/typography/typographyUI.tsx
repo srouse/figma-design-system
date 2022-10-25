@@ -13,7 +13,7 @@ export default class TypographyUI extends React.Component<CoreProps> {
   render() {
     return (
       <div
-        className="colors"
+        className="ui-list"
         style={this.props.style}>
         {this.renderPage()}
       </div>

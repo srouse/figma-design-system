@@ -1,0 +1,17 @@
+
+
+
+
+.typography-detail-row {
+  display: flex;
+  flex-direction: row;
+
+}
+
+  .typography-detail-row > * {
+    flex: 1;
+  }
+
+  .typography-detail-row > *:not(:last-child) {
+    margin-right: 10px;
+  }

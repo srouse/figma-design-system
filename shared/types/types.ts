@@ -25,6 +25,7 @@ export enum MessageRequest {
   refreshTokensFromStyles = 'refreshTokensFromStyles',
   changeStylesFolder = 'changeStylesFolder',
   updateTokenGroup = 'updateTokenGroup',
+  getAvailableFonts = 'getAvailableFonts',
 }
 
 export enum MessageRequestStyle {

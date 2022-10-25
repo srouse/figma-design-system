@@ -19,6 +19,12 @@ import "../../../components/DragAndDropList/dsysRow.css";
 import './typographyRow.css';
 import postMessagePromise from "../../../utils/postMessagePromise";
 import loadGoogleFont from "../../../utils/loadGoogleFont";
+import DetailModal from "../../../components/DetailModal/DetailModal";
+import TypographyDetail from "./TypographyDetail/TypographyDetail";
+
+
+export type FontWithStyles = {family: string, styles: string[]};
+type FigmaFont = {fontName:{family: string, style: string}};
 
 export default class TypographyList extends React.Component<CoreProps> {
 
@@ -26,11 +32,37 @@ export default class TypographyList extends React.Component<CoreProps> {
     super(props);
     this.state = {
       isDeleting: false,
+      detailModealOpen: false,
+      fonts: [],
     }
+
+    postMessagePromise(
+      MessageRequest.getAvailableFonts
+    ).then((results : any) => {
+      const finalFonts: FontWithStyles[] = [];
+      const fontLookup: {[key:string]: FontWithStyles} = {};
+      (results.fonts as FigmaFont[]).map((font) => {
+        if (!fontLookup[font.fontName.family]) {
+          fontLookup[font.fontName.family] = {
+            family: font.fontName.family,
+            styles: [font.fontName.style]
+          };
+          finalFonts.push(fontLookup[font.fontName.family]);
+        }else{
+          fontLookup[font.fontName.family].styles.push(font.fontName.style);
+        }
+      });
+      this.setState({
+        fonts: finalFonts
+      })
+    });
   }
 
   state : {
     isDeleting: boolean,
+    detailModealOpen: boolean,
+    focusedToken?: DSysTypographyToken,
+    fonts: FontWithStyles[],
   }
 
   render() {
@@ -39,7 +71,7 @@ export default class TypographyList extends React.Component<CoreProps> {
     if (!tokenset) return (<div>No Steps Found</div>);
     const tokens = cleanAndSortTokens(tokenset);
 
-    return (
+    return (<>
       <div className={`
         dsys-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
@@ -123,6 +155,12 @@ export default class TypographyList extends React.Component<CoreProps> {
                         value.$value.textCase === 'title' ?
                         'capitalize' : 'none',
                       textDecoration  : value.$value.textDecoration
+                    }}
+                    onClick={() => {
+                      this.setState({
+                        detailModealOpen: true,
+                        focusedToken: value
+                      });
                     }}>
                     Ag
                   </div>
@@ -152,7 +190,20 @@ export default class TypographyList extends React.Component<CoreProps> {
           </DragAndDropList>
         </div>
       </div>
-    );
+      <DetailModal
+        title={this.state.focusedToken?.$extensions["dsys.name"]}
+        onClose={() => {
+          this.setState({
+            detailModealOpen: false
+          })
+        }}
+        open={this.state.detailModealOpen}
+        body={(
+          <TypographyDetail
+            token={this.state.focusedToken}
+            fonts={this.state.fonts} />
+        )} />
+    </>);
   }
 
 }

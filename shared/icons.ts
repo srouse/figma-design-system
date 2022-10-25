@@ -12,6 +12,7 @@ export enum Icons {
   refresh = 'refresh',
   target = 'target',
   unlink = 'unlink',
+  chevronLeft = 'chevronLeft',
   adaWhiteaa = 'adaWhiteaa',
   adaWhiteaaa = 'adaWhiteaaa',
   adaWhiteAA = 'adaWhiteAA',
@@ -77,7 +78,14 @@ export default function getIcon(
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512">
         <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
         <path fill="${color}" d="M255.9 32.11c79.47 0 151.8 41.76 192.1 109.4V48C448 39.16 455.2 32 464 32S480 39.16 480 48v128C480 184.8 472.8 192 464 192h-128C327.2 192 320 184.8 320 176S327.2 160 336 160h85.85C387.5 100.7 324.9 64 256 64C150.1 64 64 150.1 64 256s86.13 192 192 192c59.48 0 114.7-26.91 151.3-73.84c5.438-7 15.48-8.281 22.47-2.75c6.953 5.438 8.187 15.5 2.75 22.44c-42.8 54.75-107.3 86.05-176.7 86.05C132.4 479.9 32 379.5 32 256S132.4 32.11 255.9 32.11z"/>
-      </svg>`
+      </svg>`;
+    case Icons.chevronLeft:
+      return `
+      <svg xmlns="http://www.w3.org/2000/svg" height="18" viewBox="0 0 320 512">
+        <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path fill="${color}" d="M234.8 36.25c3.438 3.141 5.156 7.438 5.156 11.75c0 3.891-1.406 7.781-4.25 10.86L53.77 256l181.1 197.1c6 6.5 5.625 16.64-.9062 22.61c-6.5 6-16.59 5.594-22.59-.8906l-192-208c-5.688-6.156-5.688-15.56 0-21.72l192-208C218.2 30.66 228.3 30.25 234.8 36.25z"/>
+      </svg>
+      `;
     case Icons.target :
       return `<svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd" d="M9 18.5576C13.9706 18.5576 18 14.5282 18 9.55762C18 4.58705 13.9706 0.557617 9 0.557617C4.02944 0.557617 0 4.58705 0 9.55762C0 14.5282 4.02944 18.5576 9 18.5576ZM9 15.5576C12.3137 15.5576 15 12.8713 15 9.55762C15 6.24391 12.3137 3.55762 9 3.55762C5.68629 3.55762 3 6.24391 3 9.55762C3 12.8713 5.68629 15.5576 9 15.5576Z" fill="${color}"/>

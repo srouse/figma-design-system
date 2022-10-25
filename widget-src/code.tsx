@@ -53,7 +53,7 @@ function Widget() {
   useEffect(() => {
     // only the open widget should listen to events...
     if (isWindowUIOpen) {
-      figma.ui.onmessage = (message) => {
+      figma.ui.onmessage = async (message) => {
         console.log('RECIEVE MSG', nodeId, message);
         switch (message.name) {
           case MessageName.globalDataUpdate:
@@ -158,6 +158,9 @@ function Widget() {
                 )
                 bounceBack(message, {success: true});
                 break;
+              case MessageRequest.getAvailableFonts :
+                const fonts = await figma.listAvailableFontsAsync();
+                bounceBack(message, {fonts});
             }
             break;
         }
