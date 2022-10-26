@@ -1,6 +1,38 @@
 
-.typography-row-example {
-  width: 46px;
-  border: 1px solid pink;
-  text-align: center;
+
+.typography-iframe-box {
+  width: 46px; height: 100%;
+  position: relative;
 }
+
+  .typography-iframe-box:hover {
+    cursor: pointer;
+  }
+
+  .typography-iframe-box::after {
+    content: ' ';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+  }
+
+  .typography-iframe-example {
+    width: 46px; height: 100%;
+    border: none;
+  }
+
+  
+
+.typography-row-details {
+  width: 170px; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+
+  font-size: 11px;
+  color: var( --text-color-lightest );
+}
+
+  .typography-row-details:hover {
+    cursor: pointer;
+  }

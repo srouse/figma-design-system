@@ -44,6 +44,12 @@ export type DTColor = {
   alpha: number,
 };
 
+
+export type FigmaFontName = {
+  family: string,
+  style: string,
+};
+
 // Color
 export interface DTColorToken extends DTTokenBase {
   // '$value': string,
@@ -127,7 +133,7 @@ export interface DTDimensionToken extends DTTokenBase {
 export interface DTTypographyToken extends DTTokenBase {
   '$value': {
     'fontFamily': string,
-    'fontName' : string,
+    'figmaFontObj' : FigmaFontName,
     'fontWeight': DTFontWeightTokenValues,
     'fontStyle': string,
     'fontSize': number,

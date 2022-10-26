@@ -18,13 +18,13 @@ import "../../../components/DragAndDropList/dsysList.css";
 import "../../../components/DragAndDropList/dsysRow.css";
 import './typographyRow.css';
 import postMessagePromise from "../../../utils/postMessagePromise";
-import loadGoogleFont from "../../../utils/loadGoogleFont";
 import DetailModal from "../../../components/DetailModal/DetailModal";
 import TypographyDetail from "./TypographyDetail/TypographyDetail";
+import typeIframeContent from "./utils/TypeIframeContent";
 
 
 export type FontWithStyles = {family: string, styles: string[]};
-type FigmaFont = {fontName:{family: string, style: string}};
+export type FigmaFontLookup = {[key:string]:{family: string, style: string}};
 
 export default class TypographyList extends React.Component<CoreProps> {
 
@@ -34,6 +34,7 @@ export default class TypographyList extends React.Component<CoreProps> {
       isDeleting: false,
       detailModealOpen: false,
       fonts: [],
+      fontLookup: {}
     }
 
     postMessagePromise(
@@ -41,7 +42,7 @@ export default class TypographyList extends React.Component<CoreProps> {
     ).then((results : any) => {
       const finalFonts: FontWithStyles[] = [];
       const fontLookup: {[key:string]: FontWithStyles} = {};
-      (results.fonts as FigmaFont[]).map((font) => {
+      (results.fonts as FigmaFontLookup[]).map((font) => {
         if (!fontLookup[font.fontName.family]) {
           fontLookup[font.fontName.family] = {
             family: font.fontName.family,
@@ -53,7 +54,8 @@ export default class TypographyList extends React.Component<CoreProps> {
         }
       });
       this.setState({
-        fonts: finalFonts
+        fonts: finalFonts,
+        fontLookup
       })
     });
   }
@@ -63,6 +65,7 @@ export default class TypographyList extends React.Component<CoreProps> {
     detailModealOpen: boolean,
     focusedToken?: DSysTypographyToken,
     fonts: FontWithStyles[],
+    fontLookup: FigmaFontLookup,
   }
 
   render() {
@@ -116,8 +119,6 @@ export default class TypographyList extends React.Component<CoreProps> {
             ) => {
               const prop = token[0];
               const value = token[1] as DSysTypographyToken;
-              // const color = value.$value as DTShad;
-              loadGoogleFont(value.$value.fontFamily);
 
               return (
                 <div
@@ -143,26 +144,35 @@ export default class TypographyList extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
-                  <div className="typography-row-example"
-                    style={{
-                      fontFamily      : value.$value.fontFamily,
-                      fontWeight      : value.$value.fontWeight,
-                      fontSize        : Math.min( 36, value.$value.fontSize ),
-                      textTransform   : value.$value.textCase === 'upper' ? 
-                        'uppercase' : 
-                        value.$value.textCase === 'lower' ?
-                        'lowercase' : 
-                        value.$value.textCase === 'title' ?
-                        'capitalize' : 'none',
-                      textDecoration  : value.$value.textDecoration
-                    }}
+                  <div className="typography-iframe-box"
                     onClick={() => {
                       this.setState({
                         detailModealOpen: true,
-                        focusedToken: value
+                        focusedToken: value,
                       });
                     }}>
-                    Ag
+                    <iframe
+                      className="typography-iframe-example"
+                      srcDoc={typeIframeContent(
+                        value
+                      )}>
+                    </iframe>
+                  </div>
+                  
+                  <div className="typography-row-details"
+                    onClick={() => {
+                      this.setState({
+                        detailModealOpen: true,
+                        focusedToken: value,
+                      });
+                    }}>
+                    <div>
+                      {value.$value.figmaFontObj.family} {
+                      value.$value.figmaFontObj.style}
+                    </div>
+                    <div>
+                      {value.$value.fontSize}px / {value.$value.lineHeight}
+                    </div>
                   </div>
                   <div className="dsys-row-deleting"
                     onClick={() => {

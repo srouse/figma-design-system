@@ -4,6 +4,7 @@ import Input from "../../../../components/Input";
 import { FontWithStyles } from "../typographyList";
 import "./TypographyDetail.css";
 import Select from "../../../../components/Select";
+import typeIframeContent from "../utils/TypeIframeContent";
 
 interface TypographyDetailProps {
   token?: DSysTypographyToken,
@@ -36,11 +37,11 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
       <div className={`typography-detail`}>
         <Select
           label="Font Family"
-          value={this.props.token.$value.fontFamily}
+          value={this.props.token.$value.figmaFontObj.family}
           dropdown={fonts} />
         <Select
           label="Font Style"
-          value={this.props.token.$value.fontStyle}
+          value={this.props.token.$value.figmaFontObj.style}
           dropdown={fontStyles} />
         <div className="typography-detail-row">
           <Input
@@ -72,6 +73,14 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             value={`${this.props.token.$value.textDecoration}`}
             onChange={(evt) => console.log(evt)} />
         </div>
+        <iframe
+          className="typography-detail-example"
+          srcDoc={typeIframeContent(
+            this.props.token,
+            'Quick zephyrs blow, vexing daft Jim.',
+            60
+          )}>
+        </iframe>
       </div>
     );
   }

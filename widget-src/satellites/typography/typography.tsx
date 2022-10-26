@@ -101,7 +101,6 @@ function getExampleType(token: DSysTypographyToken) {
     <Text
       fontFamily={token.$value.fontFamily}
       fontWeight={token.$value.fontWeight as any}
-      
       fontSize={Math.min( token.$value.fontSize, 32 )}
       textCase={token.$value.textCase as any}
       textDecoration={token.$value.textDecoration as any}
@@ -172,7 +171,7 @@ function getTypographyList(
                 fill={colors.textColorLightest}
                 width="hug-contents"
                 height="hug-contents">
-                {token.$value.fontName}
+                {token.$value.figmaFontObj.family} {token.$value.figmaFontObj.style}
               </Text>
               <Text
                 fontFamily={typography.primaryFont}

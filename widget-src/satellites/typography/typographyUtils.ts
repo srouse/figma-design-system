@@ -57,8 +57,8 @@ export function textStylesToDSysTokenset(
       },
       $value: {
         fontFamily: style.fontName.family,
-        fontName: `${style.fontName.family} ${style.fontName.style}`,
         fontStyle: getFontStyle(style.fontName.style),
+        figmaFontObj: {...style.fontName},
         fontWeight: getFontWeight(style.fontName.style),
         fontSize: style.fontSize,
         letterSpacing: getLetterSpacing(
