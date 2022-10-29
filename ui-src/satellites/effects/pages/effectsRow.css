@@ -1,1 +1,32 @@
 
+
+.effect-row-box {
+  padding: 0 10px;
+  display: flex;
+  flex-direction: row;
+  align-self: stretch;
+  align-items: center;
+}
+
+.effect-row-box:hover {
+  cursor: pointer;
+}
+
+  .effect-row-example {
+    width: 26px; height: 26px;
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .effect-row-details {
+    width: 160px;
+    color: #aaa;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }

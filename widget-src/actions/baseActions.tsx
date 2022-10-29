@@ -13,7 +13,7 @@ export async function openEditor() {
       __html__,
       {
         width: 460,
-        height: 670,
+        height: 664,
         themeColors: true
       }
     );

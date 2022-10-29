@@ -10,7 +10,6 @@ export default class EffectsSettings extends React.Component<CoreProps> {
   }
 
   render() { 
-    console.log(this.props.tokenGroup?.name);
     return (<>
       <Input
         label="Name" 

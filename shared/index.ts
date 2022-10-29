@@ -20,6 +20,7 @@ import {
   hexToRgb,
   rgbToHex,
   rgbFractionToHex,
+  hexAlphaToCss,
 } from './utils/colorUtils';
 import cleanAndSortTokens from './utils/cleanAndSortTokens';
 import colorContrastAda, 
@@ -229,6 +230,7 @@ export {
   hexToRgb,
   rgbToHex,
   rgbFractionToHex,
+  hexAlphaToCss,
 
   cleanAndSortTokens,
   colorContrastAda,

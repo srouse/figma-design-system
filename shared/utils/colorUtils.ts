@@ -45,7 +45,8 @@ export enum RGBType {
   base1 = 'base1',
 }
 export function hexToRgbObj (
-  hex: string, base: RGBType = RGBType.base255,
+  hex: string,
+  base: RGBType = RGBType.base255,
 ) : {r:number, g:number, b:number}  {
   const rgbArr = hexToRgb(hex);
   if (!rgbArr || rgbArr.length < 3) {
@@ -84,4 +85,12 @@ export function rgbFractionToHex (color: {r: number, g: number, b: number}) {
     decToHex(color.r*255) + 
     decToHex(color.g*255) + 
     decToHex(color.b*255);
+}
+
+export function hexAlphaToCss(
+  hex: string,
+  alpha: number
+) {
+  const rgbObj = hexToRgbObj(hex);
+  return `rgba(${rgbObj.r}, ${rgbObj.g}, ${rgbObj.b}, ${alpha.toFixed(3)})`;
 }

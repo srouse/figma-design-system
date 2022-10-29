@@ -101,7 +101,6 @@ function getEffectList(
 ) {
   const tokenset = tokenGroup.tokensets[0];
   const tokens = cleanAndSortTokens(tokenset);
-  console.log('tokens', tokens);
   if (!tokens) return false;
   return tokens.map(
     (tokenInfo, index) => {
@@ -111,7 +110,7 @@ function getEffectList(
       const blurToken = (token.$type === DTTokenType.blur) ?
         token as DSysBlurToken : false;
 
-       if(shadowToken)
+       /*if(shadowToken)
         console.log({
           type: 'drop-shadow',
           color: {
@@ -127,7 +126,7 @@ function getEffectList(
           },
           blur: shadowToken.$value.blur,
           spread: shadowToken.$value.spread
-        });
+        });*/
 
       return (
         <AutoLayout

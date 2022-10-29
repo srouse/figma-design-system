@@ -32,7 +32,7 @@ export default class TypographyList extends React.Component<CoreProps> {
     super(props);
     this.state = {
       isDeleting: false,
-      detailModealOpen: false,
+      detailModalOpen: false,
       fonts: [],
       fontLookup: {}
     }
@@ -62,7 +62,7 @@ export default class TypographyList extends React.Component<CoreProps> {
 
   state : {
     isDeleting: boolean,
-    detailModealOpen: boolean,
+    detailModalOpen: boolean,
     focusedToken?: DSysTypographyToken,
     fonts: FontWithStyles[],
     fontLookup: FigmaFontLookup,
@@ -99,7 +99,7 @@ export default class TypographyList extends React.Component<CoreProps> {
             });
           }} />
         <div className="dsys-list-body scroll-bar">
-        <DragAndDropList
+          <DragAndDropList
             rowHeight={48}
             onChange={(
               rowIndex: number,
@@ -147,7 +147,7 @@ export default class TypographyList extends React.Component<CoreProps> {
                   <div className="typography-iframe-box"
                     onClick={() => {
                       this.setState({
-                        detailModealOpen: true,
+                        detailModalOpen: true,
                         focusedToken: value,
                       });
                     }}>
@@ -162,7 +162,7 @@ export default class TypographyList extends React.Component<CoreProps> {
                   <div className="typography-row-details"
                     onClick={() => {
                       this.setState({
-                        detailModealOpen: true,
+                        detailModalOpen: true,
                         focusedToken: value,
                       });
                     }}>
@@ -204,10 +204,10 @@ export default class TypographyList extends React.Component<CoreProps> {
         title={this.state.focusedToken?.$extensions["dsys.name"]}
         onClose={() => {
           this.setState({
-            detailModealOpen: false
+            detailModalOpen: false
           })
         }}
-        open={this.state.detailModealOpen}
+        open={this.state.detailModalOpen}
         body={(
           <TypographyDetail
             token={this.state.focusedToken}
