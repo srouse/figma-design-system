@@ -2,6 +2,9 @@ import { DSysGroupType, DSysLevel, DSysTokenset, DTTokenType, rgbFractionToHex, 
 import { FigmaEffectStyle } from "../../../shared/types/types";
 import { effectStyles } from "../../actions/getStyles";
 
+/**
+ * pullTokensFromEffectStyles
+ */
 export function pullTokensFromEffectStyles(
   tokenGroup: TokenGroup,
   setTokenGroup: (val:TokenGroup) => void,
@@ -12,13 +15,15 @@ export function pullTokensFromEffectStyles(
     styles, tokenGroup.name, nodeId
   );
   if (!stylesTokenGroup) return;
-  console.log('stylesTokenGroup',stylesTokenGroup);
   setTokenGroup({
     ...tokenGroup,
     tokensets: [stylesTokenGroup],
   });
 }
 
+/**
+ * effectStylesToDSysTokenset
+ */
 export function effectStylesToDSysTokenset(
   styles: FigmaEffectStyle[],
   name: string | undefined,

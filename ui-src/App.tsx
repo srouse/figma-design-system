@@ -11,6 +11,7 @@ import {
 import { renderCssVariables } from './utils/renderCssVariables';
 import SwitchUI from "./satellites/switchUI";
 import postMessagePromise from "./utils/postMessagePromise";
+import Modal from "./components/Modal/Modal";
 
 export default class App extends React.Component<{}> {
 
@@ -20,6 +21,8 @@ export default class App extends React.Component<{}> {
     this.updateGlobalData = this.updateGlobalData.bind(this);
     this.updateTokenGroup = this.updateTokenGroup.bind(this);
     this.refreshTokens = this.refreshTokens.bind(this);
+    this.createPrompt = this.createPrompt.bind(this);
+    this.closePrompt = this.closePrompt.bind(this);
 
     // inject css vars once
     renderCssVariables();
@@ -66,11 +69,27 @@ export default class App extends React.Component<{}> {
     this.refreshTokens();
   }
 
+  createPrompt(
+    title: string,
+    content: JSX.Element
+  ) {
+    this.setState({
+      promptTitle: title,
+      promptContent: content,
+    })
+  }
+
+  closePrompt() {
+    this.setState({
+      promptTitle: undefined,
+      promptContent: undefined,
+    })
+  }
+
   refreshTokens() {
     postMessagePromise(
       MessageRequest.refreshTokensFromStyles
     ).then((result) => {
-      console.log('REFRESH', result);
       this.setState({
         ...this.state,
         ...(result as object),
@@ -88,8 +107,15 @@ export default class App extends React.Component<{}> {
             globalData={this.state.globalData}
             updateGlobalData={this.updateGlobalData}
             updateTokenGroup={this.updateTokenGroup}
-            refreshTokens={this.refreshTokens} />
+            refreshTokens={this.refreshTokens}
+            createPrompt={this.createPrompt}
+            closePrompt={this.closePrompt} />
         </div>
+        <Modal
+          title="What Type of Effect?"
+          body={this.state.promptContent}
+          onClose={() => {}}
+          open={this.state.promptContent ? true : false}></Modal>
       </div>
     );
   }

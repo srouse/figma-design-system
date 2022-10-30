@@ -1,11 +1,15 @@
 import { MessageRequestStyle } from "../../shared/index";
 import bounceBack from "../utils/postMessagePromise";
+import getUniqueStyleName from "./getUniqueStyleName";
 const { 
   getLocalPaintStyles,
   getLocalEffectStyles,
   getLocalTextStyles,
 } = figma;
 
+/**
+ * createStyle
+ */
 export default function createStyle(
   message: any,
 ) {
@@ -13,19 +17,6 @@ export default function createStyle(
 
     // COLOR
     if (message.style.type === MessageRequestStyle.color) {
-      const name = message.style.name;
-      // check for dups...
-      const paintStyles = getLocalPaintStyles();
-      const prevStyle = paintStyles.find(paintStyle => {
-        return paintStyle.name === name;
-      });
-      if (prevStyle) {
-        return bounceBack(message, {
-          success: false,
-          message: 'Should avoid making styles with duplicate names.'
-        });
-      }
-
       const style = figma.createPaintStyle();
       style.paints = [
         {
@@ -37,28 +28,19 @@ export default function createStyle(
           }
         }
       ];
-      style.name = name;
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalPaintStyles(),
+      );
+
       return bounceBack(message, {
         success: true,
         style,
         message: 'succesfully created style',
       });
 
-    // EFFECT
-    } else if (message.style.type === MessageRequestStyle.effect) {
-      const name = message.style.name;
-      // check for dups...
-      const effectStyles = getLocalEffectStyles();
-      const prevStyle = effectStyles.find(effectStyle => {
-        return effectStyle.name === name;
-      });
-      if (prevStyle) {
-        return bounceBack(message, {
-          success: false,
-          message: 'Should avoid making styles with duplicate names.'
-        });
-      }
-
+    // EFFECT SHADOW
+    } else if (message.style.type === MessageRequestStyle.shadow) {
       const style = figma.createEffectStyle();
       style.effects = [
         {
@@ -71,7 +53,32 @@ export default function createStyle(
           blendMode : 'NORMAL',
         }
       ];
-      style.name = name;
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalEffectStyles(),
+      );
+
+      return bounceBack(message, {
+        success: true,
+        style,
+        message: 'succesfully created style',
+      });
+
+    // EFFECT BLUR
+    } else if (message.style.type === MessageRequestStyle.blur) {
+      const style = figma.createEffectStyle();
+      style.effects = [
+        {
+          type      : 'LAYER_BLUR',
+          radius    : message.style.value.radius,
+          visible   : true,
+        }
+      ];
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalEffectStyles(),
+      );
+
       return bounceBack(message, {
         success: true,
         style,
@@ -80,25 +87,15 @@ export default function createStyle(
 
     // TEXT
     } else if (message.style.type === MessageRequestStyle.text) {
-      const name = message.style.name;
-      // check for dups...
-      const textStyles = getLocalTextStyles();
-      const prevStyle = textStyles.find(textStyle => {
-        return textStyle.name === name;
-      });
-      if (prevStyle) {
-        return bounceBack(message, {
-          success: false,
-          message: 'Should avoid making styles with duplicate names.'
-        });
-      }
-
       // just enough to make one...
       const style = figma.createTextStyle();
       style.fontSize = message.style.value.fontSize;
       style.fontName = message.style.value.fontName;
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalTextStyles(),
+      );
 
-      style.name = name;
       return bounceBack(message, {
         success: true,
         style,
@@ -117,3 +114,4 @@ export default function createStyle(
     message: 'no style'
   });
 }
+

@@ -47,6 +47,8 @@ export interface State {
   tokenGroup?: TokenGroup,
   globalData?: GlobalData,
   dsysTokens?: DSys,
+  promptTitle?: string,
+  promptContent?: any,
 }
 
 export type CoreProps = {
@@ -55,6 +57,8 @@ export type CoreProps = {
   updateGlobalData: (globalData: GlobalData) => void,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
   refreshTokens: () => void,
+  createPrompt: (title: string, content: any) => void,
+  closePrompt: () => void,
   style?: {},
 }
 

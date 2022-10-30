@@ -8,6 +8,9 @@ import {
 } from "../../../../shared";
 import postMessagePromise from "../../../utils/postMessagePromise";
 
+/**
+ * changeColor
+ */
 export async function changeColor(
   color: string,
   alpha: number,
@@ -44,6 +47,9 @@ export async function changeColor(
   if (refreshTokens) await refreshTokens();
 }
 
+/**
+ * changeOrder
+ */
 export async function changeOrder(
   movedRowIndex: number,
   newIndex: number,
@@ -68,6 +74,9 @@ export async function changeOrder(
   if (refreshTokens) await refreshTokens();
 }
 
+/**
+ * deleteColorToken 
+ */
 export async function deleteColorToken(
   deletedToken: DSysColorToken,
   refreshTokens: () => void
@@ -106,6 +115,9 @@ export async function addColorToken(
   return result;
 }
 
+/**
+ * changeName
+ */
 export async function changeName(
   newName: string,
   name: string,
@@ -136,6 +148,9 @@ export async function changeName(
   return true;
 }
 
+/**
+ * findToken
+ */
 function findToken(
   name: string,
   tokenGroup: TokenGroup,

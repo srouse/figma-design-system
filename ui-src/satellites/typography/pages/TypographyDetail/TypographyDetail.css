@@ -1,11 +1,12 @@
 
 
-
+.typography-detail {
+  flex: 1;
+}
 
 .typography-detail-row {
   display: flex;
   flex-direction: row;
-
 }
 
   .typography-detail-row > * {
@@ -17,6 +18,7 @@
   }
 
   .typography-detail-example {
-    width: 100%; height: 100px;
+    width: 100%;
+    padding: 20px 0px;
     border: 1px solid var( --border-grey );
   }

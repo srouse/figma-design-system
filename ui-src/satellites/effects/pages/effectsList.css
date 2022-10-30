@@ -1,0 +1,25 @@
+
+
+
+.effects-new-prompt {
+  display: flex;
+  flex-direction: row;
+}
+
+.effects-new-prompt > *:not(:last-child) {
+  margin-right: 10px;
+}
+
+  .effects-new-button {
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid var( --border-grey );
+    padding: 10px 20px;
+    flex: 1;
+    align-content: center;
+    text-align: center;
+  }
+
+    .effects-new-button:hover {
+      cursor: pointer;
+    }

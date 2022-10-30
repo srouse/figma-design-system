@@ -111,7 +111,7 @@ function getEffectList(
         token as DSysBlurToken : false;
 
        /*if(shadowToken)
-        console.log({
+        console.log('shadowtoken', {
           type: 'drop-shadow',
           color: {
             ...hexToRgbObj(

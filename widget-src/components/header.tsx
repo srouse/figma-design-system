@@ -122,7 +122,8 @@ export default function header(
           width={2}
           height={33}
           fill={isWindowUIOpen ? 
-            colors.borderDark : colors.borderGrey}
+            colors.white : colors.borderGrey}
+          opacity={isWindowUIOpen ? 0.2 : 1}
           cornerRadius={0} />
         <Text 
           name="Title"

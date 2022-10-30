@@ -9,6 +9,9 @@
   background-color: white;
   overflow: visible;
   transition: left 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
 }
 
 .detail-modal::before {
@@ -53,6 +56,11 @@
 
   .detail-modal-body {
     padding: 20px;
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
   }
 
 

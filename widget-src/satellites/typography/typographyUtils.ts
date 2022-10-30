@@ -61,14 +61,12 @@ export function textStylesToDSysTokenset(
         figmaFontObj: {...style.fontName},
         fontWeight: getFontWeight(style.fontName.style),
         fontSize: style.fontSize,
-        letterSpacing: getLetterSpacing(
+        letterSpacing: style.letterSpacing.value, /* getLetterSpacing(
           style.letterSpacing,
           style.fontSize,
-        ),
-        lineHeight: getLineHeight(
-          style.lineHeight,
-          style.fontSize,
-        ),
+        ),*/
+        lineHeight: style.lineHeight.unit === 'AUTO' ? 
+          0 : style.lineHeight.value,
         listSpacing: style.listSpacing,
         paragraphIndent: style.paragraphIndent,
         paragraphSpacing: style.paragraphSpacing,

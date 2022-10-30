@@ -1,6 +1,6 @@
 import {
+  DSysBlurToken,
   DSysShadowToken,
-  DSysToken,
   findToken,
   findTokenViaIndex,
   MessageRequest,
@@ -9,9 +9,10 @@ import {
 } from "../../../../shared";
 import postMessagePromise from "../../../utils/postMessagePromise";
 
-let newStyleId = 0;
-
-export async function addEffectToken(
+/**
+ * addEffectToken
+ */
+export async function addShadowEffectToken(
   tokenGroup: TokenGroup | undefined,
   refreshTokens: () => void
 ) {
@@ -20,9 +21,9 @@ export async function addEffectToken(
     MessageRequest.createStyle,
     {
       style: {
-        type: MessageRequestStyle.effect,
-        name: `${tokenGroup.name}/new-effect${newStyleId ? `-${newStyleId}` : ''}`,
-        value: {// shadow is default...
+        type: MessageRequestStyle.shadow,
+        name: `${tokenGroup.name}/new-effect`,
+        value: {
           color   : { r: 0, g: 0, b: 0, a: 0.15 },
           offset  : { x:0, y:0 },
           radius  : 10,
@@ -35,10 +36,38 @@ export async function addEffectToken(
   if (result.success) {
     if (refreshTokens) await refreshTokens();
   }
-  newStyleId += 1;
   return result;
 }
 
+/**
+ * addBlurToken
+ */
+ export async function addBlurEffectToken(
+  tokenGroup: TokenGroup | undefined,
+  refreshTokens: () => void
+) {
+  if (!tokenGroup) return;
+  const result: any = await postMessagePromise(
+    MessageRequest.createStyle,
+    {
+      style: {
+        type: MessageRequestStyle.blur,
+        name: `${tokenGroup.name}/new-effect`,
+        value: {
+          radius  : 10,
+        },
+      }
+    }
+  );
+  if (result.success) {
+    if (refreshTokens) await refreshTokens();
+  }
+  return result;
+}
+
+/**
+ * deleteEffectToken
+ */
 export async function deleteEffectToken(
   deletedToken: DSysShadowToken,// works for blur as well...
   refreshTokens: () => void
@@ -51,6 +80,9 @@ export async function deleteEffectToken(
   return true;
 }
 
+/**
+ * changeOrder
+ */
 export async function changeOrder(
   movedRowIndex: number,
   newIndex: number,
@@ -63,7 +95,11 @@ export async function changeOrder(
     prevToken = findTokenViaIndex(newIndex-1, tokenGroup);
   }
   const token = findTokenViaIndex(movedRowIndex, tokenGroup);
-  if (!token) return;// doesn't matter if prevToken exists..
+
+  if (!token) {
+    return;// doesn't matter if prevToken exists..
+  }
+
   await postMessagePromise(
     MessageRequest.moveStyle,
     {
@@ -75,11 +111,14 @@ export async function changeOrder(
   if (refreshTokens) await refreshTokens();
 }
 
+/**
+ * changeName
+ */
 export async function changeName(
   newName: string,
   name: string,
   tokenGroup: TokenGroup | undefined,
-  refreshTokens: () => void
+  refreshTokens: () => void,
 ) {
   // find the token in the tokengroup
   if (!tokenGroup) return false;
@@ -104,4 +143,20 @@ export async function changeName(
   );
   if (refreshTokens) await refreshTokens();
   return true;
+}
+
+/**
+ * updateEffect
+ */
+export async function updateEffect(
+  token: DSysShadowToken | DSysBlurToken,
+  refreshTokens: () => void,
+) {
+  await postMessagePromise(
+    MessageRequest.updateStyle,
+    {
+      token,
+    }
+  );
+  if (refreshTokens) await refreshTokens();
 }

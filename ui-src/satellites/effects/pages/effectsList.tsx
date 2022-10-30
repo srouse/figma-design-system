@@ -7,20 +7,28 @@ import {
   DTTokenType,
   getIcon,
   Icons,
-  MessageRequest,
-  hexAlphaToCss
+  hexAlphaToCss,
+  MessageRequest
 } from "../../../../shared";
 import { DSysBlurToken } from "../../../../shared/types/designSystemTypes";
 import Input from "../../../components/Input";
 import ListHeader from "../../../components/ListHeader/ListHeader";
 import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
-import { addEffectToken, changeName, changeOrder, deleteEffectToken } from "./effectActions";
+import {
+  addBlurEffectToken,
+  addShadowEffectToken,
+  changeName,
+  changeOrder,
+  deleteEffectToken,
+  updateEffect
+} from "./effectActions";
 import "../../../components/DragAndDropList/dsysList.css";
 import "../../../components/DragAndDropList/dsysRow.css";
-import postMessagePromise from "../../../utils/postMessagePromise";
-import EffectsDetail from "./EffectsDetail/effectsDetail";
+import EffectsDetail from "./EffectsDetail/EffectsDetail";
 import DetailModal from "../../../components/DetailModal/DetailModal";
 import "./effectsRow.css";
+import "./effectsList.css";
+import postMessagePromise from "../../../utils/postMessagePromise";
 
 export default class EffectsList extends React.Component<CoreProps> {
 
@@ -29,7 +37,7 @@ export default class EffectsList extends React.Component<CoreProps> {
     this.state = {
       isDeleting: false,
       detailModalOpen: false,
-    }
+    };
   }
 
   state : {
@@ -51,17 +59,45 @@ export default class EffectsList extends React.Component<CoreProps> {
         <ListHeader 
           title="Effect Tokens"
           onAdd={() =>{
-            addEffectToken(
-              this.props.tokenGroup,
-              this.props.refreshTokens,
-            ).then(result => {
-              if (result.success === false) {
-                postMessagePromise(
-                  MessageRequest.notify,
-                  {message: result.message, error: true}
-                );
-              }
-            });
+            this.props.createPrompt(
+              'What Type of Effect?',
+              <div className="effects-new-prompt">
+                <div className="effects-new-button"
+                  onClick={() => {
+                    addShadowEffectToken(
+                      this.props.tokenGroup,
+                      this.props.refreshTokens,
+                    ).then(result => {
+                      if (result.success === false) {
+                        postMessagePromise(
+                          MessageRequest.notify,
+                          {message: result.message, error: true}
+                        );
+                      }
+                    });
+                    this.props.closePrompt();
+                  }}>
+                  Shadow Effect
+                </div>
+                <div className="effects-new-button"
+                  onClick={() => {
+                    addBlurEffectToken(
+                      this.props.tokenGroup,
+                      this.props.refreshTokens,
+                    ).then(result => {
+                      if (result.success === false) {
+                        postMessagePromise(
+                          MessageRequest.notify,
+                          {message: result.message, error: true}
+                        );
+                      }
+                    });
+                    this.props.closePrompt();
+                  }}>
+                  Blur Effect
+                </div>
+              </div>
+            );
           }}
           onDelete={() => {
             this.setState({
@@ -89,13 +125,13 @@ export default class EffectsList extends React.Component<CoreProps> {
             ) => {
               const prop = token[0];
               const value = token[1] as DSysShadowToken | DSysBlurToken;
-              console.log(value);
               const isShadow = value.$type === DTTokenType.shadow;
 
               return (
                 <div
                   className="dsys-row effect-row"
-                  key={`color-${value.$extensions['dsys.styleId'] || index}}`}>
+                  key={`effect-${value.$extensions['dsys.styleId']}`}
+                  data-key={`effect-${value.$extensions['dsys.styleId']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -159,7 +195,7 @@ export default class EffectsList extends React.Component<CoreProps> {
                         </div>
                         <div className="effect-row-details">
                           <div>
-                            Shadow Effect
+                            Blur Effect
                           </div>
                           <div>
                             {value.$value.radius}
@@ -203,7 +239,16 @@ export default class EffectsList extends React.Component<CoreProps> {
         open={this.state.detailModalOpen}
         body={(
           <EffectsDetail
-            token={this.state.focusedToken} />
+            token={this.state.focusedToken}
+            updateToken={(token : DSysShadowToken | DSysBlurToken) => {
+              updateEffect(
+                token,
+                this.props.refreshTokens
+              );
+              this.setState({
+                focusedToken: token,
+              });
+            }} />
         )} />
     </>);
   }

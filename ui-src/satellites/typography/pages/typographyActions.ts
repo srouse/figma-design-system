@@ -8,8 +8,9 @@ import {
 } from "../../../../shared";
 import postMessagePromise from "../../../utils/postMessagePromise";
 
-let newStyleId = 0;
-
+/**
+ * addTypographyToken
+ */
 export async function addTypographyToken(
   tokenGroup: TokenGroup | undefined,
   refreshTokens: () => void
@@ -20,7 +21,7 @@ export async function addTypographyToken(
     {
       style: {
         type: MessageRequestStyle.text,
-        name: `${tokenGroup.name}/new-text${newStyleId ? `-${newStyleId}` : ''}`,
+        name: `${tokenGroup.name}/new-text`,
         value: {
           fontSize    : 12,
           fontName    : {
@@ -34,10 +35,12 @@ export async function addTypographyToken(
   if (result.success) {
     if (refreshTokens) await refreshTokens();
   }
-  newStyleId += 1;
   return result;
 }
 
+/**
+ * deleteTypographyToken
+ */
 export async function deleteTypographyToken(
   deletedToken: DSysTypographyToken,
   refreshTokens: () => void
@@ -50,6 +53,9 @@ export async function deleteTypographyToken(
   return true;
 }
 
+/**
+ * changeOrder
+ */
 export async function changeOrder(
   movedRowIndex: number,
   newIndex: number,
@@ -74,6 +80,9 @@ export async function changeOrder(
   if (refreshTokens) await refreshTokens();
 }
 
+/**
+ * changeName
+ */
 export async function changeName(
   newName: string,
   name: string,
@@ -103,4 +112,19 @@ export async function changeName(
   );
   if (refreshTokens) await refreshTokens();
   return true;
+}
+
+/**
+ * updateTypographyToken
+ */
+ export async function updateTypographyToken(
+  token: DSysTypographyToken,
+  refreshTokens: () => void,
+) {
+  console.log("token", token);
+  await postMessagePromise(
+    MessageRequest.updateStyle,
+    {token}
+  );
+  if (refreshTokens) await refreshTokens();
 }

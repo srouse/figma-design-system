@@ -1,4 +1,4 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { DSysTypographyToken } from "../../../../../shared";
 import Input from "../../../../components/Input";
 import { FontWithStyles } from "../typographyList";
@@ -8,7 +8,8 @@ import typeIframeContent from "../utils/TypeIframeContent";
 
 interface TypographyDetailProps {
   token?: DSysTypographyToken,
-  fonts: FontWithStyles[]
+  fonts: FontWithStyles[],
+  updateToken: (token: DSysTypographyToken) => void
 }
 
 export default class TypographyDetail extends React.Component<TypographyDetailProps> {
@@ -31,33 +32,85 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
       }
       return {value:font.family, name: font.family};
     });
-    
 
+    const token = this.props.token as DSysTypographyToken;
     return (
       <div className={`typography-detail`}>
-        <Select
-          label="Font Family"
-          value={this.props.token.$value.figmaFontObj.family}
-          dropdown={fonts} />
-        <Select
-          label="Font Style"
-          value={this.props.token.$value.figmaFontObj.style}
-          dropdown={fontStyles} />
         <div className="typography-detail-row">
-          <Input
-            label="Font Size"
-            value={`${this.props.token.$value.fontSize}`}
-            onChange={(evt) => console.log(evt)} />
-          <Input
-            label="Font Weight"
-            value={`${this.props.token.$value.fontWeight}`}
-            onChange={(evt) => console.log(evt)} />
+          <Select
+            label="Font Family"
+            value={this.props.token.$value.figmaFontObj.family}
+            dropdown={fonts} />
+          <Select
+            label="Font Style"
+            value={this.props.token.$value.figmaFontObj.style}
+            dropdown={fontStyles} />
         </div>
         <div className="typography-detail-row">
           <Input
+            label="Font Size"
+            value={`${token.$value.fontSize}`}
+            onArrowUpOrDown={(
+              value: string,
+              direction: 'up' | 'down',
+              evt: KeyboardEvent<HTMLInputElement>
+            ) => {
+              let increment = evt.shiftKey ? 10 : 1;
+              if (direction === 'down') {
+                increment = increment * -1;
+              }
+              const finalValue = parseInt(value) + increment;
+              this.props.updateToken({
+                ...token,
+                $value: {
+                  ...token.$value,
+                  fontSize: finalValue,
+                }
+              }); 
+            }}
+            onEnterOrBlur={(value) => {
+              this.props.updateToken({
+                ...token,
+                $value: {
+                  ...token.$value,
+                  fontSize: parseInt(value),
+                }
+              });
+            }} />
+          {/*<Input
+            label="Font Weight"
+            value={`${this.props.token.$value.fontWeight}`}
+            onChange={(evt) => console.log(evt)} />*/}
+          <Input
             label="Letter Spacing"
-            value={`${this.props.token.$value.letterSpacing}`}
-            onChange={(evt) => console.log(evt)} />
+            value={`${this.props.token.$value.letterSpacing}px`}
+            onArrowUpOrDown={(
+              value: string,
+              direction: 'up' | 'down',
+              evt: KeyboardEvent<HTMLInputElement>
+            ) => {
+              let increment = evt.shiftKey ? 10 : 1;
+              if (direction === 'down') {
+                increment = increment * -1;
+              }
+              const finalValue = parseInt(value) + increment;
+              this.props.updateToken({
+                ...token,
+                $value: {
+                  ...token.$value,
+                  letterSpacing: finalValue,
+                }
+              }); 
+            }}
+            onEnterOrBlur={(value) => {
+              this.props.updateToken({
+                ...token,
+                $value: {
+                  ...token.$value,
+                  letterSpacing: parseInt(value),
+                }
+              });
+            }} />
           <Input
             label="Line Height"
             value={`${this.props.token.$value.lineHeight}`}
@@ -73,6 +126,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             value={`${this.props.token.$value.textDecoration}`}
             onChange={(evt) => console.log(evt)} />
         </div>
+        <div style={{flex: 1}}></div>
         <iframe
           className="typography-detail-example"
           srcDoc={typeIframeContent(

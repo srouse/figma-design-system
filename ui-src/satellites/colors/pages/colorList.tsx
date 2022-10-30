@@ -68,21 +68,8 @@ export default class ColorSteps extends React.Component<CoreProps> {
     };
   }
 
-  changeColor = (
-    color: string,
-    alpha: number,
-    name: string
-  ) => {
-    changeColor(
-      color, alpha, name, 
-      this.props.tokenGroup,
-      this.props.refreshTokens
-    );
-  }
-
   fixMessedUpPicker() {
     // there is a timing issue within the component..
-    console.log('fixPicker');
     const picker = (this.picker as any);
     if (!picker) return;
     // picker.removeEventListener("change", this.handlePickerChange);
@@ -165,7 +152,8 @@ export default class ColorSteps extends React.Component<CoreProps> {
               return (
                 <div
                   className="dsys-row"
-                  key={`color-${value.$extensions['dsys.styleId'] || index}}`}>
+                  key={`color-${value.$extensions['dsys.styleId']}`}
+                  data-key={`color-${value.$extensions['dsys.styleId']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -226,10 +214,12 @@ export default class ColorSteps extends React.Component<CoreProps> {
                         });
                       }}
                       onEnterOrBlur={(value: string) => {
-                        this.changeColor(
+                        changeColor(
                           value,
                           color.alpha,
-                          prop
+                          prop,
+                          this.props.tokenGroup,
+                          this.props.refreshTokens
                         );
                       }} />
                   </div>
@@ -255,19 +245,23 @@ export default class ColorSteps extends React.Component<CoreProps> {
                             1, (parseInt(alphaFractionStr) + increment)/100
                           )
                         );
-                        this.changeColor(
+                        changeColor(
                           color.hex,
                           alphaFraction,
-                          prop
+                          prop,
+                          this.props.tokenGroup,
+                          this.props.refreshTokens
                         );
                       }}
                       onEnterOrBlur={(value: string) => {
                         const alphaFractionStr = value.replace('%', '');
                         const alphaFraction = parseInt(alphaFractionStr)/100;
-                        this.changeColor(
+                        changeColor(
                           color.hex,
                           alphaFraction,
-                          prop
+                          prop,
+                          this.props.tokenGroup,
+                          this.props.refreshTokens
                         );
                       }} />
                   </div>
@@ -323,47 +317,19 @@ export default class ColorSteps extends React.Component<CoreProps> {
           onClick={() => {
             if (!this.picker || !this.state.focusedToken) return;
             const hex = `#${this.picker.hex}`;
-            this.changeColor(
+            changeColor(
               hex,
               this.picker.alpha,
-              this.state.focusedToken.$extensions['dsys.name']
+              this.state.focusedToken.$extensions['dsys.name'],
+              this.props.tokenGroup,
+              this.props.refreshTokens
             );
+
             this.setState({
               focusedToken: undefined
             });
           }} />
       </div>
-      {/*<div className="edit-color-navigation">
-        <DTButton
-          label={this.state.isDeleting ? 'Cancel Delete' : 'Delete'}
-          design={DTButtonDesign.border}
-          color={DTButtonColor.grey}
-          icon={this.state.isDeleting ? Icons.deleteCancel : Icons.delete}
-          onClick={() => {
-            this.setState({
-              isDeleting: !this.state.isDeleting
-            });
-          }} />
-        <DTButton
-          label="Add Color"
-          design={DTButtonDesign.solid}
-          color={DTButtonColor.grey}
-          onClick={() => {
-            addColorToken(
-              this.props.tokenGroup,
-              this.props.refreshTokens,
-            ).then(result => {
-              if (result.success === false) {
-                console.log(result)
-                postMessagePromise(
-                  MessageRequest.notify,
-                  {message: result.message, error: true}
-                );
-              }
-            });
-          }}
-          icon={Icons.add} />
-        </div>*/}
     </>);
   }
 

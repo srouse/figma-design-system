@@ -250,6 +250,8 @@ export default class DragAndDropList extends React.Component<DnDProps> {
     const html = this.props.rowList.map((row, index) => {
       return (
         <div
+          key={`dnd-row-${index}`}
+          data-key={`dnd-row-${index}`}
           data-row-index={index}
           className="drag-and-drop-house"
           style={{

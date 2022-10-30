@@ -1,5 +1,6 @@
 import { FigmaEffectStyle, FigmaPaintStyle, FigmaTextStyle } from "../../shared/types/types";
 import bounceBack from "../utils/postMessagePromise";
+import getUniqueStyleName from "./getUniqueStyleName";
 
 const { 
   getLocalPaintStyles,
@@ -25,6 +26,7 @@ export function getColorStyles(message: any) {
 
 export function paintStyles(folder?: string): FigmaPaintStyle[] {
   const styles = getLocalPaintStyles();
+  dedupNames(styles);
   const finalStyles: FigmaPaintStyle[] = [];
   styles.map(style => {
     if (folder && style.name.indexOf(`${folder}/`) !== 0) {
@@ -42,6 +44,7 @@ export function paintStyles(folder?: string): FigmaPaintStyle[] {
 
 export function effectStyles(folder?: string): FigmaEffectStyle[] {
   const styles = getLocalEffectStyles();
+  dedupNames(styles);
   const finalStyles: FigmaEffectStyle[] = [];
   styles.map(style => {
     if (folder && style.name.indexOf(`${folder}/`) !== 0) {
@@ -59,6 +62,7 @@ export function effectStyles(folder?: string): FigmaEffectStyle[] {
 
 export function textStyles(folder?: string): FigmaTextStyle[] {
   const styles = getLocalTextStyles();
+  dedupNames(styles);
   const finalStyles: FigmaTextStyle[] = [];
   styles.map(style => {
     if (folder && style.name.indexOf(`${folder}/`) !== 0) {
@@ -127,4 +131,16 @@ function _effectStyle() {
       effects: style.effects,
     }
   });
+}
+
+function dedupNames(styles: {name:string}[]) {
+  const nameLookup: {[key:string]:true} = {};
+  styles.map(style => {
+    if (!nameLookup[style.name]) {
+      nameLookup[style.name] = true;
+    }else{
+      style.name = getUniqueStyleName(style.name, styles);
+      nameLookup[style.name] = true;
+    }
+  })
 }

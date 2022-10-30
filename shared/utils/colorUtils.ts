@@ -2,6 +2,9 @@ import {
   DTColor,
 } from '../types/designTokenTypes';
 
+/**
+ * validColor
+ */
 export function validColor(
   color: DTColor | undefined
 ) : boolean {
@@ -10,6 +13,9 @@ export function validColor(
   return rgb ? rgb.length === 3 : false;
 }
 
+/**
+ * returnValidColor 
+ */
 export function returnValidColor(
   color: DTColor,
   altColor = {hex: '#eeeeee', alpha: 1 },
@@ -17,6 +23,9 @@ export function returnValidColor(
   return validColor(color) ? color : altColor;
 }
 
+/**
+ * dtColorToCss
+ */
 export function dtColorToCss(color: DTColor) {
   const validColor = returnValidColor(color);
   return `${validColor.hex}${
@@ -26,6 +35,9 @@ export function dtColorToCss(color: DTColor) {
   }}`;
 }
 
+/**
+ * hexToRgb 
+ */
 export function hexToRgb (
   hex: string
 ) : number[] | null  {
@@ -40,10 +52,17 @@ export function hexToRgb (
   return null;
 }
 
+/**
+ * RGBType
+ */
 export enum RGBType {
   base255 = 'base255',
   base1 = 'base1',
 }
+
+/**
+ * hexToRgbObj
+ */
 export function hexToRgbObj (
   hex: string,
   base: RGBType = RGBType.base255,
@@ -71,15 +90,41 @@ export function hexToRgbObj (
   }
 }
 
+/**
+ * hexAndAlphaToRGBAObj
+ */
+export function hexAndAlphaToRGBAObj(
+  hex: string,
+  alpha: number,
+  base: RGBType = RGBType.base255,
+) {
+  const rgbObj = hexToRgbObj(hex, base);
+  return {
+    r: rgbObj.r,
+    g: rgbObj.g,
+    b: rgbObj.b,
+    a: alpha,
+  }
+}
+
+/**
+ * decToHex
+ */
 export function decToHex(c: number) {
   var hex = Math.round(c).toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
 
+/**
+ * rgbToHex
+ */
 export function rgbToHex (r: number, g: number, b: number) {
   return "#" + decToHex(r) + decToHex(g) + decToHex(b);
 }
 
+/**
+ * rgbFractionToHex
+ */
 export function rgbFractionToHex (color: {r: number, g: number, b: number}) {
   return "#" + 
     decToHex(color.r*255) + 
@@ -87,6 +132,9 @@ export function rgbFractionToHex (color: {r: number, g: number, b: number}) {
     decToHex(color.b*255);
 }
 
+/**
+ * hexAlphaToCss
+ */
 export function hexAlphaToCss(
   hex: string,
   alpha: number

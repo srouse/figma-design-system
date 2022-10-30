@@ -13,7 +13,7 @@ import {
 import Input from "../../../components/Input";
 import ListHeader from "../../../components/ListHeader/ListHeader";
 import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
-import { addTypographyToken, changeName, changeOrder, deleteTypographyToken } from "./typographyActions";
+import { addTypographyToken, changeName, changeOrder, deleteTypographyToken, updateTypographyToken } from "./typographyActions";
 import "../../../components/DragAndDropList/dsysList.css";
 import "../../../components/DragAndDropList/dsysRow.css";
 import './typographyRow.css';
@@ -119,11 +119,11 @@ export default class TypographyList extends React.Component<CoreProps> {
             ) => {
               const prop = token[0];
               const value = token[1] as DSysTypographyToken;
-
               return (
                 <div
                   className="dsys-row"
-                  key={`color-${value.$extensions['dsys.styleId'] || index}}`}>
+                  key={`type-${value.$extensions['dsys.styleId']}`}
+                  data-key={`type-${value.$extensions['dsys.styleId']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -211,7 +211,16 @@ export default class TypographyList extends React.Component<CoreProps> {
         body={(
           <TypographyDetail
             token={this.state.focusedToken}
-            fonts={this.state.fonts} />
+            fonts={this.state.fonts}
+            updateToken={(token : DSysTypographyToken) => {
+              updateTypographyToken(
+                token,
+                this.props.refreshTokens
+              );
+              this.setState({
+                focusedToken: token,
+              });
+            }} />
         )} />
     </>);
   }
