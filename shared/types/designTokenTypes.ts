@@ -45,10 +45,7 @@ export type DTColor = {
 };
 
 
-export type FigmaFontName = {
-  family: string,
-  style: string,
-};
+
 
 // Color
 export interface DTColorToken extends DTTokenBase {
@@ -130,15 +127,30 @@ export interface DTDimensionToken extends DTTokenBase {
 }
 
 // Typography
+export type FontName = {
+  family: string,
+  style: string,
+};
+
+export type LineHeight = {
+  value: number,
+  unit: 'PIXELS' | 'PERCENT'
+} | { unit: 'AUTO' };
+
+export type LetterSpacing = {
+  value: number,
+  unit: 'PIXELS' | 'PERCENT',
+}
+
 export interface DTTypographyToken extends DTTokenBase {
   '$value': {
     'fontFamily': string,
-    'figmaFontObj' : FigmaFontName,
+    'figmaFontObj' : FontName,
     'fontWeight': DTFontWeightTokenValues,
     'fontStyle': string,
     'fontSize': number,
-    'letterSpacing': number,
-    'lineHeight': number,
+    'letterSpacing': LetterSpacing,
+    'lineHeight': LineHeight,
     'listSpacing': number,
     'paragraphIndent': number,
     'paragraphSpacing': number,
@@ -155,7 +167,7 @@ export interface DTFontFamilyToken extends DTTokenBase {
 }
 
 // Font Weight
-export type DTFontWeightTokenValues = 
+export type DTFontWeightTokenValues =
   100	| 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
 
 export interface DTFontWeightToken extends DTTokenBase {

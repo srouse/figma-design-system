@@ -127,14 +127,8 @@ export function updateStyle(
     if (style && style.type === 'TEXT') {
       // TODO...
       style.fontSize = token.$value.fontSize;
-      style.letterSpacing = {
-        unit: 'PIXELS',
-        value: token.$value.letterSpacing,
-      };
-      style.lineHeight = {
-        unit: 'PIXELS',
-        value: token.$value.lineHeight,
-      };
+      style.letterSpacing = token.$value.letterSpacing;
+      style.lineHeight = token.$value.lineHeight;
       style.name = getUniqueStyleName(
         `${tokenGroup.name}/${token.$extensions['dsys.name']}`,
         getLocalTextStyles(),

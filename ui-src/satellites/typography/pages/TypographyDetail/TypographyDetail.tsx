@@ -81,9 +81,11 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             label="Font Weight"
             value={`${this.props.token.$value.fontWeight}`}
             onChange={(evt) => console.log(evt)} />*/}
+        </div>
+        <div className="typography-detail-row">
           <Input
             label="Letter Spacing"
-            value={`${this.props.token.$value.letterSpacing}px`}
+            value={`${this.props.token.$value.letterSpacing.value}`}
             onArrowUpOrDown={(
               value: string,
               direction: 'up' | 'down',
@@ -98,7 +100,10 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
                 ...token,
                 $value: {
                   ...token.$value,
-                  letterSpacing: finalValue,
+                  letterSpacing: {
+                    ...token.$value.letterSpacing,
+                    value: finalValue,
+                  }
                 }
               }); 
             }}
@@ -107,13 +112,18 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
                 ...token,
                 $value: {
                   ...token.$value,
-                  letterSpacing: parseInt(value),
+                  letterSpacing: {
+                    ...token.$value.letterSpacing,
+                    value: parseInt(value),
+                  },
                 }
               });
             }} />
+        </div>
+        <div className="typography-detail-row">
           <Input
             label="Line Height"
-            value={`${this.props.token.$value.lineHeight}`}
+            value={`${this.props.token.$value.lineHeight.unit}`}
             onChange={(evt) => console.log(evt)} />
         </div>
         <div className="typography-detail-row">

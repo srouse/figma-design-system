@@ -181,7 +181,7 @@ function getTypographyList(
                 fill={colors.textColorLightest}
                 width="hug-contents"
                 height="hug-contents">
-                {token.$value.fontSize} / {token.$value.lineHeight}
+                {token.$value.fontSize} / {token.$value.lineHeight.unit}
               </Text>
             </AutoLayout>
           </AutoLayout>

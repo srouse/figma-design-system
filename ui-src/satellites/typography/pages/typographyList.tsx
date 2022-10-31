@@ -171,7 +171,7 @@ export default class TypographyList extends React.Component<CoreProps> {
                       value.$value.figmaFontObj.style}
                     </div>
                     <div>
-                      {value.$value.fontSize}px / {value.$value.lineHeight}
+                      {value.$value.fontSize}px / {value.$value.lineHeight.unit}
                     </div>
                   </div>
                   <div className="dsys-row-deleting"

@@ -46,8 +46,8 @@ export default function typeIframeContent(
           font-family     : '${token.$value.fontFamily}';
           font-style      : ${token.$value.fontStyle};
           font-weight     : ${token.$value.fontWeight};
-          letter-spacing  : ${token.$value.letterSpacing}px;
-          line-height     : ${token.$value.lineHeight}px;
+          letter-spacing  : $ {token.$value.letterSpacing}px;
+          line-height     : $ {token.$value.lineHeight}px;
           font-size       : ${Math.min( maxSize, token.$value.fontSize )}px;
           text-transform  : ${token.$value.textCase === 'upper' ? 
             'uppercase' : 
