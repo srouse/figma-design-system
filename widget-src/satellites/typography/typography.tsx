@@ -102,9 +102,9 @@ function getExampleType(token: DSysTypographyToken) {
       fontFamily={token.$value.fontFamily}
       fontWeight={token.$value.fontWeight as any}
       fontSize={Math.min( token.$value.fontSize, 32 )}
-      textCase={token.$value.textCase as any}
-      textDecoration={token.$value.textDecoration as any}
       italic={token.$value.fontStyle === 'italic'}
+      textCase={(token.$value.textCase as any).toLowerCase()}
+      textDecoration={(token.$value.textDecoration as any).toLowerCase()}
       fill={colors.textColor}
       width="fill-parent"
       height="hug-contents">
@@ -118,7 +118,6 @@ function getTypographyList(
 ) {
   const tokenset = tokenGroup.tokensets[0];
   const tokens = cleanAndSortTokens(tokenset);
-  console.log('tokens', tokens);
   if (!tokens) return false;
   return tokens.map(
     (tokenInfo, index) => {

@@ -15,7 +15,6 @@ export default function getUniqueStyleName(
     prevStyle = styles.find(style => {
       return style.name === finalName;
     });
-    console.log(finalName);
   }
   return finalName;
 }

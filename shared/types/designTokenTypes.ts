@@ -154,8 +154,8 @@ export interface DTTypographyToken extends DTTokenBase {
     'listSpacing': number,
     'paragraphIndent': number,
     'paragraphSpacing': number,
-    'textCase': 'original' | 'upper' | 'lower' | 'title',
-    'textDecoration': 'none' | 'underline' | 'strikethrough',
+    'textCase': 'ORGINAL' | 'UPPER' | 'LOWER' | 'TITLE',
+    'textDecoration': 'NONE' | 'UNDERLINE' | 'STRIKETHROUGH',
   },
   '$type' : DTTokenType.typography
 }

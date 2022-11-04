@@ -2,6 +2,8 @@
 
 .typography-detail {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .typography-detail-row {
@@ -19,6 +21,13 @@
 
   .typography-detail-example {
     width: 100%;
-    padding: 20px 0px;
     border: 1px solid var( --border-grey );
+  }
+
+  .typography-detail-font-size {
+    flex: 0.4
+  }
+  .typography-detail-line-height-unit,
+  .typography-detail-letter-spacing-unit {
+    flex: 0.5;
   }

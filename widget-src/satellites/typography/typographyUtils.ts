@@ -9,18 +9,16 @@ export function pullTokensFromTextStyles(
   nodeId: string,
 ) {
   const styles = textStyles(tokenGroup.name);
+  
   const stylesTokenGroup = textStylesToDSysTokenset(
     styles, tokenGroup.name, nodeId
   );
   if (!stylesTokenGroup) return;
-  console.log('stylesTokenGroup',stylesTokenGroup);
   setTokenGroup({
     ...tokenGroup,
     tokensets: [stylesTokenGroup],
   });
 }
-
-
 
 export function textStylesToDSysTokenset(
   styles: FigmaTextStyle[],
@@ -66,8 +64,8 @@ export function textStylesToDSysTokenset(
         listSpacing: style.listSpacing,
         paragraphIndent: style.paragraphIndent,
         paragraphSpacing: style.paragraphSpacing,
-        textCase: style.textCase.toLowerCase() as any,
-        textDecoration: style.textDecoration.toLowerCase() as any,
+        textCase: style.textCase as any,
+        textDecoration: style.textDecoration as any,
       },
       $type: DTTokenType.typography
     };
@@ -75,7 +73,6 @@ export function textStylesToDSysTokenset(
 
   return tokenset;
 }
-
 
 const fontWeights: {[key:string]: DTFontWeightTokenValues} = {
   'hairline': 100,

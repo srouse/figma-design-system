@@ -15,12 +15,13 @@ const {
   getLocalPaintStyles,
   getLocalEffectStyles,
   getLocalTextStyles,
+  loadFontAsync,
 } = figma;
 
 /**
  * updateStyle
  */
-export function updateStyle(
+export async function updateStyle(
   message: any,
   tokenGroup: TokenGroup,
 ) {
@@ -125,10 +126,13 @@ export function updateStyle(
       token.$extensions['dsys.styleId']
     ) as TextStyle;
     if (style && style.type === 'TEXT') {
-      // TODO...
+      await loadFontAsync(token.$value.figmaFontObj);
+      style.fontName = token.$value.figmaFontObj;
       style.fontSize = token.$value.fontSize;
       style.letterSpacing = token.$value.letterSpacing;
       style.lineHeight = token.$value.lineHeight;
+      style.textCase = token.$value.textCase as any;
+      style.textDecoration = token.$value.textDecoration as any;
       style.name = getUniqueStyleName(
         `${tokenGroup.name}/${token.$extensions['dsys.name']}`,
         getLocalTextStyles(),

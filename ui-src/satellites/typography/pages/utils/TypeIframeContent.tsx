@@ -4,6 +4,7 @@ export default function typeIframeContent(
   token: DTTypographyToken,
   exampleText: string = "Ag",
   maxSize: number = 34,
+  padding: number = 0,
 ) {
 
   const style = token.$value.figmaFontObj.style.toLowerCase();
@@ -25,16 +26,38 @@ export default function typeIframeContent(
       exampleText.toLowerCase()
   }`;
 
+  console.log("CHANGINE")
+
   return `
     <html>
       <head>
       <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=${
-          token.$value.fontFamily.replace(/ /g, '+')}:${
+          token.$value.figmaFontObj.family.replace(/ /g, '+')}:${
           finalStyles.join(',')
         }&display=swap&subset=latin&text=${loadedLetters}"
       />
+      <script>
+        fetch("https://fonts.googleapis.com/css?family=${
+          token.$value.figmaFontObj.family.replace(/ /g, '+')}:${
+          finalStyles.join(',')
+        }&display=swap&subset=latin&text=${loadedLetters}")
+          .then(response=>{
+              console.log(response.ok);
+              response.text();
+          })
+          .catch(err => {
+              if (err instanceof TypeError) {
+                  // Handle this normally
+              } else {
+                  // Execute other logic depending on the type of error you are receiving
+              }
+              document.querySelector("#error").innerHTML = "Font not on Google";
+              document.querySelector("#example").innerHTML = "";
+              document.body.classList.add('error');
+          });
+      </script>
       <style>
         html, body {
           width: 100vw; height: 100vh;
@@ -43,19 +66,19 @@ export default function typeIframeContent(
           text-align: center;
         }
         html {
-          font-family     : '${token.$value.fontFamily}';
+          font-family     : '${token.$value.figmaFontObj.family}';
           font-style      : ${token.$value.fontStyle};
           font-weight     : ${token.$value.fontWeight};
           letter-spacing  : $ {token.$value.letterSpacing}px;
           line-height     : $ {token.$value.lineHeight}px;
           font-size       : ${Math.min( maxSize, token.$value.fontSize )}px;
-          text-transform  : ${token.$value.textCase === 'upper' ? 
+          text-transform  : ${token.$value.textCase === 'UPPER' ? 
             'uppercase' : 
-            token.$value.textCase === 'lower' ?
+            token.$value.textCase === 'LOWER' ?
             'lowercase' : 
-            token.$value.textCase === 'title' ?
+            token.$value.textCase === 'TITLE' ?
             'capitalize' : 'none'};
-          text-decoration  : ${token.$value.textDecoration === 'strikethrough' ?
+          text-decoration  : ${token.$value.textDecoration === 'STRIKETHROUGH' ?
             'line-through' : token.$value.textDecoration};
           color: #222222;
         }
@@ -63,11 +86,21 @@ export default function typeIframeContent(
           display: flex;
           align-items: center;
           justify-content: center;
+          padding: ${padding}px;
+          box-sizing: border-box;
+        }
+        #error {
+          font-family: sans-serif;
+          font-size: 14px;
+        }
+        body.error {
+          background-color: #eee;
         }
       </style>
       </head>
       <body>
-        ${exampleText}
+        <div id="error"></div>
+        <div id="example">${exampleText}</div>
       </body>
     </html>`;
 }

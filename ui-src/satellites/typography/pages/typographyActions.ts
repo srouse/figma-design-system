@@ -121,7 +121,6 @@ export async function changeName(
   token: DSysTypographyToken,
   refreshTokens: () => void,
 ) {
-  console.log("token", token);
   await postMessagePromise(
     MessageRequest.updateStyle,
     {token}

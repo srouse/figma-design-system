@@ -4,7 +4,6 @@ import {
   defaultTokenGroupLookup,
   MessageName,
   MessageRequest,
-  MessageRequestStyle,
 } from "../shared/types/types";
 import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
 import createDesignTokens from "./actions/createDesignTokens";

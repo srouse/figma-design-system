@@ -29,6 +29,7 @@ interface InputProps {
   hideLabel? : boolean,
   hideBorder? : boolean,
   helpText? : string,
+  placeholder? : string,
   textAlign? : 'left' | 'right' | 'center',
   validator?: Validator,
   onValidate? : () => ValidatorSuccess,
@@ -119,6 +120,7 @@ export default class Input extends React.Component<InputProps> {
                 autoCapitalize="off"
                 autoCorrect="off" 
                 className="inputComp-input"
+                placeholder={this.props.placeholder}
                 type={this.props.password ? 'password' : 'text'}
                 style={{textAlign: this.props.textAlign || 'left'}}
                 onFocus={() => {
