@@ -34,6 +34,7 @@ const exampleDesignSystem: DSys = {
             'dsys.level': DSysLevel.token,
             'dsys.name': '01',
             'dsys.index' : 0,
+            'dsys.styleId' : 'sdfasdfasdfasdf',
           },
           $value: { // don't presume how alpha gets utilized...
             hex: '#444444',
@@ -61,11 +62,29 @@ const exampleDesignSystem: DSys = {
             'dsys.level': DSysLevel.token,
             'dsys.name': '10',
             'dsys.index' : 0,
+            'dsys.styleId' : 'sdfasdfasdfasdf',
           },
           $value: {
-            fontFamily: 'dd',
-            fontWeight: 'normal',
-            fontSize: '12px',
+            fontFamily: 'FontFam',
+            figmaFontObj: {
+              family: 'FontFam',
+              style: 'Normal',
+            },
+            fontWeight: 100,
+            fontStyle: 'italic',
+            fontSize: 12,
+            letterSpacing: {
+              value: 12,
+              unit: 'PIXELS',
+            },
+            lineHeight: {
+              unit:"AUTO"
+            },
+            listSpacing: 12,
+            paragraphIndent: 12,
+            paragraphSpacing: 12,
+            textCase: "LOWER",
+            textDecoration: "NONE"
           },
           $type: DTTokenType.typography
         }
@@ -106,6 +125,42 @@ const exampleDesignSystem: DSys = {
           },
           $type: DTTokenType.dimension
         }*/
+      }
+    },
+    spacing: {
+      $extensions: {
+        'dsys.level': DSysLevel.group,
+        'dsys.type': DSysGroupType.Spacing,
+        'dsys.nodeIds': ['S:2443'],
+      },
+      spacing: {
+        $extensions: {
+          'dsys.level': DSysLevel.tokenset,
+          'dsys.type': DSysGroupType.Spacing,
+          "dsys.name": 'spacing',
+          "dsys.nodeId": 'S:4444'
+        },
+        $description: 'a set of spacing tokens',
+        'spacing-l' : {
+          $extensions: {
+            'dsys.level': DSysLevel.token,
+            "dsys.name": 'lg',
+            "dsys.index": 1,
+            "dsys.uid": 'safasdf',
+          },
+          $type: DTTokenType.spacing,
+          $value: 20,
+        },
+        'spacing-xl' : {
+          $extensions: {
+            'dsys.level': DSysLevel.token,
+            "dsys.name": 'xl',
+            "dsys.index": 0,
+            "dsys.uid": 'asdfasfasdfasdf'
+          },
+          $type: DTTokenType.spacing,
+          $value: 30,
+        }
       }
     },
     components: {

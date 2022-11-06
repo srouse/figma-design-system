@@ -10,9 +10,9 @@ import findToken from './utils/findToken';
 import Validator, {
   ValidatorSuccess,
   Validation,
-  ValidationLocations,
-  getId,
+  ValidationLocation,
 } from './validator/Validator';
+import ValidationWorker from './validator/ValidationWorker';
 import {
   dtColorToCss,
   validColor,
@@ -65,6 +65,7 @@ import {
   DTGradientToken,
   DTDimensionToken,
   DTTypographyToken,
+  DTSpacingToken,
   DTFontFamilyToken,
   DTFontWeightTokenValues,
   DTFontStyleToken,
@@ -122,7 +123,7 @@ import {
 
 export type {
   ValidatorSuccess, 
-  Validation, ValidationLocations,
+  Validation, 
 
   AdaColorContrastResult,
 
@@ -157,6 +158,7 @@ export type {
   DTGradientToken,
   DTDimensionToken,
   DTTypographyToken,
+  DTSpacingToken,
   DTFontFamilyToken,
   DTFontWeightTokenValues,
   DTFontStyleToken,
@@ -209,6 +211,8 @@ export type {
 
 export {
   Validator,
+  ValidationWorker,
+  ValidationLocation,
   DSysLevel,
   DSysGroupType,
   DTTokenType,
@@ -225,7 +229,6 @@ export {
   tokenGroupTypeToName,
   tokensetTypeToName,
   getIcon, Icons,
-  getId,
   dtColorToCss,
   validColor,
   returnValidColor,

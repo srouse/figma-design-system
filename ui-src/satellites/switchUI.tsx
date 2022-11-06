@@ -8,7 +8,7 @@ import { CoreProps } from "../../shared/types/types";
 import EffectsUI from "./effects/effectsUI";
 import IconsUI from "./iconsUI";
 import LayoutUI from "./layoutUI";
-import SpacingUI from "./spacingUI";
+import SpacingUI from "./spacing/spacingUI";
 import "./switchUI.css";
 import TypographyUI from "./typography/typographyUI";
 import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
@@ -18,6 +18,7 @@ import Settings from "../settings/settings";
 import ColorsSettings from "./colors/colorsSettings";
 import TypographySettings from "./typography/typographySettings";
 import EffectsSettings from "./effects/effectsSettings";
+import SpacingSettings from "./spacing/pages/settings/spacingSettings";
 
 export default class SwitchUI extends React.Component<CoreProps> {
 
@@ -78,7 +79,7 @@ export default class SwitchUI extends React.Component<CoreProps> {
         localSettings = undefined;
         break;
       case DSysGroupType.Spacing :
-        localSettings = undefined;
+        localSettings = <SpacingSettings {...this.props} />;
         break;
       case DSysGroupType.LayoutSet :
         localSettings = undefined;

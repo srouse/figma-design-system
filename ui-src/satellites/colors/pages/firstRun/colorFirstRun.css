@@ -3,7 +3,7 @@
 .first-run {
   position: absolute;
   left: 0; right: 0;
-  bottom: 0; top: calc( -1 * var( --dttabs-height ) );
+  bottom: 0; top: 0;
   background-color: var( --white );
   padding: var( --page-padding );
   /* padding-top: 120px;*/

@@ -62,6 +62,14 @@
     margin-top: 2px;
   }
 
+  .inputComp-error-text {
+    position: absolute;
+    right: 10px; 
+    top: calc( 50% - 6px );
+    font-size: 12px;
+    color: var( --text-color-error);
+  }
+
 .inputComp.dark .inputComp-label {
   color: var( --text-color-white );
 }

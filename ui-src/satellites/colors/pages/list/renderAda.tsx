@@ -4,7 +4,7 @@ import {
   DTColor,
   getIcon,
   Icons,
-} from "../../../../shared";
+} from "../../../../../shared";
 
 export default function renderAda(color: DTColor, id: string) {
   const ada = colorContrastAda(color);

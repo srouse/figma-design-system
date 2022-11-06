@@ -109,25 +109,6 @@ function getEffectList(
         token as DSysShadowToken : false;
       const blurToken = (token.$type === DTTokenType.blur) ?
         token as DSysBlurToken : false;
-
-       /*if(shadowToken)
-        console.log('shadowtoken', {
-          type: 'drop-shadow',
-          color: {
-            ...hexToRgbObj(
-              shadowToken.$value.color,
-              RGBType.base1
-            ),
-            a: shadowToken.$value.alpha
-          },
-          offset: {
-            x: shadowToken.$value.offsetX,
-            y: shadowToken.$value.offsetY
-          },
-          blur: shadowToken.$value.blur,
-          spread: shadowToken.$value.spread
-        });*/
-
       return (
         <AutoLayout
           height="hug-contents"

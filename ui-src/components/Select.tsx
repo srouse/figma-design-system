@@ -1,5 +1,6 @@
-import React, { ChangeEvent } from "react";
-import { ValidatorRegistration } from "../../shared/validator/Validator";
+import React from "react";
+import { ValidationLocation, ValidationWorker, ValidatorSuccess } from "../../shared";
+
 import "./Select.css";
 
 interface SelectProps {
@@ -11,8 +12,8 @@ interface SelectProps {
   className?: string,
   readOnly? : boolean,
   centerIcon? : boolean,
-  onValidate? : ValidatorRegistration,
   dropdown: {value:string, name: string}[],
+  validation?: ValidationWorker,
 }
 
 export default class Select extends React.Component<SelectProps> {
@@ -22,27 +23,37 @@ export default class Select extends React.Component<SelectProps> {
     this.uid = `${Math.round(Math.random() * 1000000)}`;
     this.state = {
       valid: true,
+      errorMessage: undefined,
     };
-
-    /*this.props.onValidate?.validator.registerComponent(
-      this.uid,
-      () => {
-        if (!this.props.onValidate) return {success:true};
-        const results = this.props.onValidate.validation();
-        this.setState({valid: results.success});
-        return results;
-      }
-    );*/
+    this.addValidationSideEffects();
   }
 
   componentWillUnmount() {
-    // if (this.props.onValidate)
-      // this.props.onValidate.validator.unregister(this.uid);
+    if (this.props.validation) {
+      this.props.validation.unregister();
+    }
+  }
+
+  componentDidUpdate(): void {
+    this.addValidationSideEffects();
+  }
+
+  addValidationSideEffects() {
+    if (this.props.validation && !this.props.validation.sideEffects) {
+      this.props.validation.sideEffects = (validationResults : ValidatorSuccess) => {
+        this.setState({
+          valid: validationResults.success,
+          errorMessage: validationResults.success ? 
+            '' : validationResults.message
+        });
+      }
+    }
   }
 
   uid: string;
   state : {
     valid: boolean,
+    errorMessage: string | undefined,
   }
 
   render() {
@@ -63,13 +74,30 @@ export default class Select extends React.Component<SelectProps> {
               <select
                 className="selectComp-select" 
                 value={this.props.value}
+                onFocus={() => {
+                  this.setState({
+                    errorMessage: undefined,
+                    valid: true// just to reset during typing
+                  });
+                }}
+                onBlur={() => {
+                  if (this.props.validation) {
+                    this.props.validation.validateOnLocation(
+                      ValidationLocation.onValidateBlur
+                    );
+                  }
+                }}
                 onChange={(evt: any) => {
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);
-                  
-                  /* setTimeout(() => {
-                    this.props.onValidate?.validator.validate(this.uid)
-                  }, 0);*/
+
+                  setTimeout(() => {
+                    if (this.props.validation) {
+                      this.props.validation.validateOnLocation(
+                        ValidationLocation.onValidateChange
+                      );
+                    }
+                  }, 0);
                 }}>
                 {this.props.dropdown.map(dropdown => {
                   return (
@@ -92,9 +120,16 @@ export default class Select extends React.Component<SelectProps> {
               </svg>
             </>)
           }
-          <div className="selectComp-feedback-value">
-            {this.props.feedbackValue}
-          </div>
+          {this.props.feedbackValue ? (
+            <div className="selectComp-feedback-value">
+              {this.props.feedbackValue}
+            </div>
+          ) : null }
+          {this.state.errorMessage ? (
+            <div className="selectComp-error-text">
+              {this.state.errorMessage}
+            </div>
+          ) : null }
         </div>
       </div>
     );

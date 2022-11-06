@@ -30,9 +30,6 @@ export default class SatelliteHeaderUI extends React.Component<CoreProps> {
           <div className="name">
             {title}
           </div>
-          <div className="type">
-            {subtitle}
-          </div>
         </div>
      </div>
     );

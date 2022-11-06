@@ -1,76 +1,64 @@
+import ValidationWorker from './ValidationWorker';
 
 export type ValidatorSuccess = {
   success: boolean,
   message?: string,
 }
 
+export type ValidatorIgnored = 'ignored';
+
 export type Validation = () => ValidatorSuccess;
 
-export type ValidatorRegistration = {
-  validator: Validator,
-  validation: Validation
-};
-
-export enum ValidationLocations {
-  onValidate = 'onValidate',
+export enum ValidationLocation {
   onValidateChange = 'onValidateChange',
   onValidateBlur = 'onValidateBlur',
 }
 
-let validationId = 0;
-
-export function getId() {
-  return `${validationId++}`;
-}
-
 export default class Validator {
 
-  constructor() {
-    this.registrations = {};
-  }
-
-  registrations : {[key:string]:Validation};
+  validationWorkersLookup: {[key:string]:ValidationWorker} = {};
 
   register(
-    validation: Validation
-  ) : ValidatorRegistration {
-    return {
-      validator: this,
-      validation
-    };
-  }
+    identifier: string,
+    validate: Validation,
+    locations?: ValidationLocation[] | ValidationLocation
+  ) : ValidationWorker {
+    if (this.validationWorkersLookup[identifier]) 
+      return this.validationWorkersLookup[identifier];
 
-  registerComponent(
-    id:string,
-    location: ValidationLocations,
-    funk: Validation
-  ) {
-    this.registrations[`${id}-${location}`] = funk;
+    let finalLocations: ValidationLocation[] | undefined;
+    if (locations) {
+      finalLocations = Array.isArray(locations) ? locations : [locations];
+    } 
+    const newWorker : ValidationWorker = new ValidationWorker(
+      identifier,
+      this,
+      validate,
+      finalLocations
+    );
+    this.validationWorkersLookup[identifier] = newWorker;
+    return newWorker;
   }
 
   unregister(
-    id: string,
-    location: ValidationLocations,
+    worker: ValidationWorker,
   ) {
-    delete this.registrations[`${id}-${location}`];
+    delete this.validationWorkersLookup[worker.identifier];
   }
 
-  validate(
-    id: string,
-    location: ValidationLocations,
+  unregisterWithIdentifier(
+    identifier: string,
   ) {
-    if (id) {
-      if (this.registrations[`${id}-${location}`]) {
-        this.registrations[`${id}-${location}`]();
+    delete this.validationWorkersLookup[identifier];
+  }
+
+  validate(): ValidationWorker[] {
+    const errors = Object.values(this.validationWorkersLookup).filter(
+      (worker) => {
+        const result = worker.validate();
+        return result.success === false;
       }
-    }
-  }
-
-  validateAll() : ValidatorSuccess[] {
-    console.log('registrations', this.registrations)
-    const final = Object.values(this.registrations).map(funk => funk());
-    const errors = final.filter(result => result.success === false);
+    );
     return errors;
   }
-
 }

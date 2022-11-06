@@ -19,6 +19,7 @@ export type DTToken =
 export enum DTTokenType {
   color = 'color',
   dimension = 'dimension',
+  spacing = 'spacing',
   typography = 'typography',
   fontFamily = 'fontFamily',
   fontWeight = 'fontWeight',
@@ -124,6 +125,12 @@ export interface DTGradientToken extends DTTokenBase {
 export interface DTDimensionToken extends DTTokenBase {
   '$value': string,
   '$type' : DTTokenType.dimension
+}
+
+// Dimension
+export interface DTSpacingToken extends DTTokenBase {
+  '$value': number,
+  '$type' : DTTokenType.spacing
 }
 
 // Typography

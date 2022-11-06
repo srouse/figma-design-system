@@ -9,23 +9,24 @@
   padding: 14px 18px;
   color: var( --text-color-white );
   height: var( --satellite-header-height );
+  font-family: var( --primary-ui-font );
+  font-weight: 300;
 }
 
   .satellite-header .prefix {
     font-size: 16px;
-    font-weight: 600;
     text-transform: uppercase;
   }
 
   .satellite-header .groupSummary {
     flex: 1;
-    padding-left: 10px;
-    margin-left: 10px;
+    padding-left: 14px;
+    margin-left: 14px;
     border-left: 1px solid rgba(255,255,255, 0.25);
   }
 
     .satellite-header .groupSummary .name {
-      font-size: 14px;
+      font-size: 18px;
     }
 
     .satellite-header .groupSummary .type {

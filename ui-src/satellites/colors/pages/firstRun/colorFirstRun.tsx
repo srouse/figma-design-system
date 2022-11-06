@@ -3,13 +3,13 @@ import {
   CoreProps,
   MessageRequest,
   Validator,
-} from "../../../../shared";
-import DTButton, { DTButtonColor } from "../../../components/DTButton";
-import Input from "../../../components/Input";
-import InputHeader from "../../../components/InputHeader";
-import Select from "../../../components/Select";
-import postMessagePromise from "../../../utils/postMessagePromise";
-import createSteppedTokens from "../utils/createSteppedTokens";
+} from "../../../../../shared";
+import DTButton, { DTButtonColor } from "../../../../components/DTButton";
+import Input from "../../../../components/Input";
+import InputHeader from "../../../../components/InputHeader";
+import Select from "../../../../components/Select";
+import postMessagePromise from "../../../../utils/postMessagePromise";
+import createSteppedTokens from "../../utils/createSteppedTokens";
 import {
   ColorStepTypes,
   StepsInformation,
@@ -18,7 +18,7 @@ import {
   getLightestStepsInfo,
   getColorGroupInfo,
   getStep9ThreeDigitInfo,
-} from "../utils/getStepsArray";
+} from "../../utils/getStepsArray";
 import "./colorFirstRun.css";
 
 export default class FirstRun extends React.Component<CoreProps> {
@@ -155,8 +155,8 @@ export default class FirstRun extends React.Component<CoreProps> {
               stepsType : stepsType,
               steps: stepsInfo?.steps || undefined
             });
-          }}
-          onValidate={
+          }}>
+          {/* onValidate={
             this.validator.register(() => {
               const valid = this.state.stepsType !== 'none';
               return {
@@ -164,7 +164,7 @@ export default class FirstRun extends React.Component<CoreProps> {
                 message: valid ? '' : 'Step pattern is required'
               }
             })
-          }>
+          } */}
         </Select>
         <div style={{flex: "1"}}></div>
         <DTButton

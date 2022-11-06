@@ -8,7 +8,7 @@ import effectsSatellite from "./effects/effects";
 import iconsSatellite from "./icons";
 import typographySatellite from "./typography/typography";
 import defaultSatellite from "./default";
-import spacingSatellite from "./spacing";
+import spacingSatellite from "./spacing/spacing";
 import layoutSatellite from "./layout";
 import columnLayoutSatellite from "./columnLayout";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";

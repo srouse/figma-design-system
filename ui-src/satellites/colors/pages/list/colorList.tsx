@@ -13,16 +13,16 @@ import {
   Icons,
   DTColor,
   MessageRequest,
-} from "../../../../shared";
+} from "../../../../../shared";
 import DTButton, {
   DTButtonColor,
   DTButtonDesign
-} from "../../../components/DTButton";
-import Input from "../../../components/Input";
+} from "../../../../components/DTButton";
+import Input from "../../../../components/Input";
 import "./colorList.css";
 import "./colorRow.css";
-import "../../../components/DragAndDropList/dsysList.css";
-import "../../../components/DragAndDropList/dsysRow.css";
+import "../../../../components/DragAndDropList/dsysList.css";
+import "../../../../components/DragAndDropList/dsysRow.css";
 import renderAda from "./renderAda";
 import 'color-picker-web-component';
 import {
@@ -31,10 +31,10 @@ import {
   changeName,
   changeOrder,
   deleteColorToken
-} from "./colorActions";
-import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
-import postMessagePromise from "../../../utils/postMessagePromise";
-import ListHeader from "../../../components/ListHeader/ListHeader";
+} from "../../utils/colorActions";
+import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
+import postMessagePromise from "../../../../utils/postMessagePromise";
+import ListHeader from "../../../../components/ListHeader/ListHeader";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -107,7 +107,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
       <div className={`
         dsys-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
-        <ListHeader 
+        <ListHeader
           title="Color Tokens"
           onAdd={() =>{
             addColorToken(

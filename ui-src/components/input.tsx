@@ -1,7 +1,12 @@
-import React, { FocusEvent, KeyboardEvent, KeyboardEventHandler, MouseEvent } from "react";
-import Validator, {
-  getId,
-  ValidationLocations,
+import React, {
+  FocusEvent,
+  KeyboardEvent,
+} from "react";
+import {
+  ValidationWorker
+} from "../../shared/index";
+import {
+  ValidationLocation,
   ValidatorSuccess
 } from "../../shared/validator/Validator";
 import "./Input.css";
@@ -31,72 +36,57 @@ interface InputProps {
   helpText? : string,
   placeholder? : string,
   textAlign? : 'left' | 'right' | 'center',
-  validator?: Validator,
-  onValidate? : () => ValidatorSuccess,
-  onValidateBlur? : () => ValidatorSuccess,
+  validation?: ValidationWorker,
 }
 
 export default class Input extends React.Component<InputProps> {
 
   constructor(props: InputProps | Readonly<InputProps>) {
     super(props);
-    this.uid = getId();
     this.state = {
       valid: true,
       value: this.props.value,
+      errorMessage: undefined,
     };
-
-    this.props.validator?.registerComponent(
-      this.uid,
-      ValidationLocations.onValidate,
-      () => {
-        if (!this.props.onValidate) return {success:true};
-        const results = this.props.onValidate();
-        this.setState({valid: results.success});
-        return results;
-      }
-    );
-    this.props.validator?.registerComponent(
-      this.uid,
-      ValidationLocations.onValidateBlur,
-      () => {
-        if (!this.props.onValidateBlur) return {success:true};
-        const results = this.props.onValidateBlur();
-        this.setState({valid: results.success});
-        return results;
-      }
-    );
+    this.addValidationSideEffects();
   }
 
   componentWillUnmount() {
-    this.props.validator?.unregister(
-      this.uid, ValidationLocations.onValidate
-    );
-    this.props.validator?.unregister(
-      this.uid, ValidationLocations.onValidateBlur
-    );
+    if (this.props.validation) {
+      this.props.validation.unregister();
+    }
   }
 
   componentDidUpdate(
     prevProps: Readonly<InputProps>,
-    prevState: Readonly<{}>,
-    snapshot?: any
   ): void {
     if (prevProps.value !== this.props.value) {
       this.setState({
         value: this.props.value,
       })
     }
+    this.addValidationSideEffects();
   }
 
-  uid: string;
+  addValidationSideEffects() {
+    if (this.props.validation && !this.props.validation.sideEffects) {
+      this.props.validation.sideEffects = (validationResults : ValidatorSuccess) => {
+        this.setState({
+          valid: validationResults.success,
+          errorMessage: validationResults.success ? 
+            '' : validationResults.message
+        });
+      }
+    }
+  }
+
   state : {
     valid: boolean,
-    value: string | undefined
+    value: string | undefined,
+    errorMessage: string | undefined,
   }
 
   render() {
-
     return (
       <div className={`
         ${this.props.className || ''}
@@ -121,16 +111,20 @@ export default class Input extends React.Component<InputProps> {
                 autoCorrect="off" 
                 className="inputComp-input"
                 placeholder={this.props.placeholder}
-                type={this.props.password ? 'password' : 'text'}
+                type={
+                  this.props.password ? 'password' : 'text'
+                }
                 style={{textAlign: this.props.textAlign || 'left'}}
                 onFocus={() => {
                   if (this.props.onFocus) this.props.onFocus();
                   this.setState({valid: true});
                 }}
                 onBlur={(evt: FocusEvent<HTMLInputElement>) => {
-                  this.props.validator?.validate(
-                    this.uid, ValidationLocations.onValidateBlur
-                  );
+                  if (this.props.validation) {
+                    this.props.validation.validateOnLocation(
+                      ValidationLocation.onValidateBlur
+                    );
+                  }
                   const targetValue = (evt.target as HTMLInputElement).value;
                   if (this.props.onBlur)
                     this.props.onBlur(targetValue);
@@ -185,15 +179,19 @@ export default class Input extends React.Component<InputProps> {
                 }}
                 onChange={(evt: any) => {
                   this.setState({
-                    value: evt.target.value
-                  })
+                    value: evt.target.value,
+                    errorMessage: undefined,
+                    valid: true// just to reset during typing
+                  });
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);
 
                   setTimeout(() => {
-                    this.props.validator?.validate(
-                      this.uid, ValidationLocations.onValidate
-                    );
+                    if (this.props.validation) {
+                      this.props.validation.validateOnLocation(
+                        ValidationLocation.onValidateChange
+                      );
+                    }
                   }, 0);
                 }}
                 value={this.state.value}
@@ -206,9 +204,14 @@ export default class Input extends React.Component<InputProps> {
               {this.props.feedbackValue}
             </div>
           ) : null }
-          {this.props.helpText ? (
+          {(this.props.helpText && !this.state.errorMessage) ? (
             <div className="inputComp-help-text">
               {this.props.helpText}
+            </div>
+          ) : null }
+          {this.state.errorMessage ? (
+            <div className="inputComp-error-text">
+              {this.state.errorMessage}
             </div>
           ) : null }
         </div>

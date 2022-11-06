@@ -12,6 +12,7 @@ import {
   DTGradientToken,
   DTPercentToken,
   DTShadowToken,
+  DTSpacingToken,
   DTStrokeStyleToken,
   DTTransitionToken,
   DTTypographyToken
@@ -171,7 +172,7 @@ export type DSysComponentsTokenset = DSysTokensetBase<// todo
 
 export type DSysSpacingTokenset = DSysTokensetBase<
   DSysGroupType.Spacing,
-  DSysDimensionToken
+  DSysSpacingToken
 >;
 
 export type DSysLayoutTokenset = DSysTokensetBase<
@@ -241,6 +242,7 @@ export interface DSysDimensionToken extends DTDimensionToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+    'dsys.uid'  : string,
   },
 }
 export interface DSysTypographyToken extends DTTypographyToken {
@@ -345,6 +347,15 @@ export interface DSysFileToken extends DTFileToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+  },
+}
+
+export interface DSysSpacingToken extends DTSpacingToken {
+  $extensions : {
+    'dsys.level' : DSysLevel.token,
+    'dsys.name'  : string,
+    'dsys.index' : number,
+    'dsys.uid'  : string,
   },
 }
 
