@@ -1,9 +1,14 @@
 import React, { MouseEvent, MouseEventHandler } from "react";
 import "./dragAndDropList.css";
+import "./dsysList.css";
+import "./dsysRow.css";
 
 export type DnDProps = {
   rowHeight: number,
   rowList: any[],
+  // DONT PUT THIS BACK!!! 
+  // WE DO NOT WANT ROWS TO DYNAMICALLY UPDATE..INDEX IS RIGHT ANSWER
+  // rowKeyGenerator: (rowData: any) => string,
   rowGenerator: (
     rowData: any,
     index: number,
@@ -248,10 +253,12 @@ export default class DragAndDropList extends React.Component<DnDProps> {
 
   render() : JSX.Element {
     const html = this.props.rowList.map((row, index) => {
+      // const key = this.props.rowKeyGenerator(row);
+      const key = index;
       return (
         <div
-          key={`dnd-row-${index}`}
-          data-key={`dnd-row-${index}`}
+          key={`dnd-row-${key}`}
+          data-key={`dnd-row-${key}`}
           data-row-index={index}
           className="drag-and-drop-house"
           style={{

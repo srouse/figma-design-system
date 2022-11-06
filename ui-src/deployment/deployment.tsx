@@ -106,7 +106,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
         <Input
           label="Username" 
           value={this.props.globalData?.gitHubSettings?.username}
-          onChange={(value: string) => {
+          onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
                 ...this.props.globalData,
@@ -120,7 +120,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
         <Input
           label="Repository / NPM Package Name (ex: my-design-tokens)" 
           value={this.props.globalData?.gitHubSettings?.repositoryAndNPMPackageName}
-          onChange={(value: string) => {
+          onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
                 ...this.props.globalData,
@@ -133,9 +133,9 @@ export default class Deployment extends React.Component<DeploymentProps> {
           }} />
         <Input
           label="Access Token"
-          password
+          type="password"
           value={this.props.globalData?.gitHubSettings?.accessToken}
-          onChange={(value: string) => {
+          onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
                 ...this.props.globalData,

@@ -14,8 +14,6 @@ import Input from "../../../components/Input";
 import ListHeader from "../../../components/ListHeader/ListHeader";
 import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
 import { addTypographyToken, changeName, changeOrder, deleteTypographyToken, updateTypographyToken } from "./typographyActions";
-import "../../../components/DragAndDropList/dsysList.css";
-import "../../../components/DragAndDropList/dsysRow.css";
 import './typographyRow.css';
 import postMessagePromise from "../../../utils/postMessagePromise";
 import DetailModal from "../../../components/DetailModal/DetailModal";
@@ -113,17 +111,17 @@ export default class TypographyList extends React.Component<CoreProps> {
             }}
             rowList={tokens}
             rowGenerator={(
-              token, index,
+              tokenInfo, index,
               onMouseDownCapture,
               onMouseUpCapture,
             ) => {
-              const prop = token[0];
-              const value = token[1] as DSysTypographyToken;
+              const prop = tokenInfo[0];
+              const token = tokenInfo[1] as DSysTypographyToken;
               return (
                 <div
                   className="dsys-row"
-                  key={`type-${value.$extensions['dsys.styleId']}`}
-                  data-key={`type-${value.$extensions['dsys.styleId']}`}>
+                  key={`type-${token.$extensions['dsys.styleId']}`}
+                  data-key={`type-${token.$extensions['dsys.styleId']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -144,17 +142,62 @@ export default class TypographyList extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
+                  <div className="typography-row-size">
+                    <Input
+                      hideLabel hideBorder
+                      label="property"
+                      textAlign="right"
+                      type="number"
+                      selectAllOnFocus={true}
+                      value={`${token.$value.fontSize}`}
+                      onArrowUpOrDown={(
+                        value: string,
+                        increment: number,
+                      ) => {
+                        const newToken = {
+                          ...token,
+                          $value: {
+                            ...token.$value,
+                            fontSize: parseFloat(value) + increment,
+                          }
+                        }
+                        updateTypographyToken(
+                          newToken,
+                          this.props.refreshTokens
+                        );
+                        this.setState({
+                          focusedToken: newToken,
+                        }); 
+                      }}
+                      onEnterOrBlur={(newSize: string) => {
+                        const newToken = {
+                          ...token,
+                          $value: {
+                            ...token.$value,
+                            fontSize: parseFloat(newSize),
+                          }
+                        }
+                        updateTypographyToken(
+                          newToken,
+                          this.props.refreshTokens
+                        );
+                        this.setState({
+                          focusedToken: newToken,
+                        });
+                      }} />
+                  </div>
                   <div className="typography-iframe-box"
                     onClick={() => {
                       this.setState({
                         detailModalOpen: true,
-                        focusedToken: value,
+                        focusedToken: token,
                       });
                     }}>
                     <iframe
                       className="typography-iframe-example"
+                      tabIndex={-1}
                       srcDoc={typeIframeContent(
-                        value
+                        token
                       )}>
                     </iframe>
                   </div>
@@ -163,26 +206,27 @@ export default class TypographyList extends React.Component<CoreProps> {
                     onClick={() => {
                       this.setState({
                         detailModalOpen: true,
-                        focusedToken: value,
+                        focusedToken: token,
                       });
                     }}>
                     <div>
-                      {value.$value.figmaFontObj.family} {
-                      value.$value.figmaFontObj.style}
+                      {token.$value.figmaFontObj.family} {
+                      token.$value.figmaFontObj.style}
                     </div>
                     <div>
-                      {value.$value.fontSize}px / {value.$value.lineHeight.unit}
+                      {token.$value.fontSize}px / {token.$value.lineHeight.unit}
                     </div>
                   </div>
                   <div className="dsys-row-deleting"
+                    tabIndex={this.state.isDeleting ? 0 : -1}
                     onClick={() => {
                       if (this.state.isDeleting) {
                         if (!this.props.tokenGroup) return;
                         deleteTypographyToken(
-                          value as DSysTypographyToken,
+                          token as DSysTypographyToken,
                           this.props.refreshTokens
                         );
-                        setInterval(() => {// need to wait a beat for refresh
+                        setTimeout(() => {// need to wait a beat for refresh
                           this.setState({
                             isDeleting: false,
                           });
@@ -208,7 +252,7 @@ export default class TypographyList extends React.Component<CoreProps> {
           })
         }}
         open={this.state.detailModalOpen}
-        body={(
+        body={this.state.focusedToken ? (
           <TypographyDetail
             token={this.state.focusedToken}
             fonts={this.state.fonts}
@@ -221,7 +265,7 @@ export default class TypographyList extends React.Component<CoreProps> {
                 focusedToken: token,
               });
             }} />
-        )} />
+        ): (<div></div>)} />
     </>);
   }
 

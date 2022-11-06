@@ -27,6 +27,7 @@ import colorContrastAda,
 { 
   AdaColorContrastResult,
 } from './utils/adaCompliance';
+import isToken from './utils/isToken';
 import {
   MessageName,
   MessageRequest,
@@ -104,6 +105,7 @@ import {
   DSysToken,
   DSysColorToken,
   DSysDimensionToken,
+  DSysSpacingToken,
   DSysTypographyToken,
   DSysFontFamilyToken,
   DSysFontWeightToken,
@@ -193,6 +195,7 @@ export type {
   DSysToken,
   DSysColorToken,
   DSysDimensionToken,
+  DSysSpacingToken,
   DSysTypographyToken,
   DSysFontFamilyToken,
   DSysFontWeightToken,
@@ -237,6 +240,7 @@ export {
   rgbFractionToHex,
   hexAlphaToCss,
 
+  isToken,
   cleanAndSortTokens,
   colorContrastAda,
   

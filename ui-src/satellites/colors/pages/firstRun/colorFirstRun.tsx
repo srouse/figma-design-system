@@ -74,7 +74,7 @@ export default class FirstRun extends React.Component<CoreProps> {
         <Input
           label="Token Name"
           value={this.state.name}
-          onChange={(name: string) => {
+          onEnterOrBlur={(name: string) => {
             this.setState({name});
           }} />{/*
           onValidate={
@@ -93,7 +93,7 @@ export default class FirstRun extends React.Component<CoreProps> {
             label="Center Color (hex #ff0000)"
             value={this.state.baseColor}
             helpText="Color at the center of the steps that determines all others"
-            onChange={(baseColor: string) => {
+            onEnterOrBlur={(baseColor: string) => {
               this.setState({baseColor});
             }}
             />

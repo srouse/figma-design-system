@@ -16,7 +16,6 @@ export default function updateSpacingToken(
       return false;
     }
     const tmpToken = value as DSysSpacingToken;
-    console.log(tmpToken.$extensions["dsys.uid"], token.$extensions["dsys.uid"])
     return tmpToken.$extensions["dsys.uid"] === token.$extensions["dsys.uid"];
   });
   if (!origTokenEntry) return;

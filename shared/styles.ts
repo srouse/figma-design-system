@@ -9,6 +9,7 @@ export const colors = {
 
   white: '#ffffff',
 
+  primaryLightest: '#F6F2FC',
   primaryLighter: '#EFE3FF',
   primaryLight: '#C9A6FA',
   primary: '#A164F9',
@@ -48,6 +49,4 @@ export const typography = {
   primaryFont: `Inter`,
   primaryUIFont: `Inter, system-ui, sans-serif`,
   monotype: 'Roboto Mono',// 'Courier Prime'
-
-
 }

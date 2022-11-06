@@ -38,15 +38,12 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
             <Input
               label="Offset X"
               value={`${shadow.$value.offsetX}`}
+              type="number"
+              selectAllOnFocus={true}
               onArrowUpOrDown={(
                 value: string,
-                direction: 'up' | 'down',
-                evt: KeyboardEvent<HTMLInputElement>
+                increment: number,
               ) => {
-                let increment = evt.shiftKey ? 10 : 1;
-                if (direction === 'down') {
-                  increment = increment * -1;
-                }
                 const finalValue = parseInt(value) + increment;
                 this.props.updateToken({
                   ...shadow,
@@ -68,15 +65,12 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
             <Input
               label="Offset Y"
               value={`${shadow.$value.offsetY}`}
+              type="number"
+              selectAllOnFocus={true}
               onArrowUpOrDown={(
                 value: string,
-                direction: 'up' | 'down',
-                evt: KeyboardEvent<HTMLInputElement>
+                increment: number,
               ) => {
-                let increment = evt.shiftKey ? 10 : 1;
-                if (direction === 'down') {
-                  increment = increment * -1;
-                }
                 const finalValue = parseInt(value) + increment;
                 this.props.updateToken({
                   ...shadow,
@@ -98,15 +92,12 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
             <Input
               label="Blur"
               value={`${shadow.$value.blur}`}
+              type="number"
+              selectAllOnFocus={true}
               onArrowUpOrDown={(
                 value: string,
-                direction: 'up' | 'down',
-                evt: KeyboardEvent<HTMLInputElement>
+                increment: number,
               ) => {
-                let increment = evt.shiftKey ? 10 : 1;
-                if (direction === 'down') {
-                  increment = increment * -1;
-                }
                 const finalValue = Math.max(0, parseInt(value) + increment );
                 this.props.updateToken({
                   ...shadow,
@@ -128,15 +119,12 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
             <Input
               label="Spread"
               value={`${shadow.$value.spread}`}
+              type="number"
+              selectAllOnFocus={true}
               onArrowUpOrDown={(
                 value: string,
-                direction: 'up' | 'down',
-                evt: KeyboardEvent<HTMLInputElement>
+                increment: number,
               ) => {
-                let increment = evt.shiftKey ? 10 : 1;
-                if (direction === 'down') {
-                  increment = increment * -1;
-                }
                 const finalValue = Math.max(0, parseInt(value) + increment );
                 this.props.updateToken({
                   ...shadow,
@@ -173,16 +161,19 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
               className="effects-alpha-input"
               label="Opacity"
               value={`${shadow.$value.alpha.toFixed(2)}`}
+              type="number"
+              selectAllOnFocus={true}
+              increments={{
+                shifted: 0.1,
+                unshifted: 0.01,
+              }}
               onArrowUpOrDown={(
                 value: string,
-                direction: 'up' | 'down',
-                evt: KeyboardEvent<HTMLInputElement>
+                increment: number,
               ) => {
-                let increment = evt.shiftKey ? 0.1 : 0.01;
-                if (direction === 'down') {
-                  increment = increment * -1;
-                }
-                const finalValue = Math.max(0, parseFloat(value) + increment );
+                const finalValue = Math.min(
+                  1, Math.max(0, parseFloat(value) + increment )
+                );
                 this.props.updateToken({
                   ...shadow,
                   $value: {
@@ -228,15 +219,12 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
         <Input
           label="Radius"
           value={`${blur.$value.radius}`}
+          type="number"
+          selectAllOnFocus={true}
           onArrowUpOrDown={(
             value: string,
-            direction: 'up' | 'down',
-            evt: KeyboardEvent<HTMLInputElement>
+            increment: number,
           ) => {
-            let increment = evt.shiftKey ? 10 : 1;
-            if (direction === 'down') {
-              increment = increment * -1;
-            }
             const finalValue = Math.max(0, parseInt(value) + increment );
             this.props.updateToken({
               ...blur,
@@ -264,7 +252,7 @@ export default class EffectsDetail extends React.Component<EffectsDetailProps> {
             Quick zephyrs blow, vexing daft Jim.
           </div>
         </div>
-        </div>
+      </div>
     );
   }
 }

@@ -65,6 +65,7 @@
     position: relative;
     overflow: hidden;
     align-self: stretch;
+    pointer-events: none;
   }
 
     .dsys-row-deleting-icon {
@@ -89,4 +90,5 @@
 
     .is-deleting .dsys-row-deleting {
       width: 46px;
+      pointer-events: auto;
     }

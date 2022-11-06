@@ -1,13 +1,14 @@
 import React from "react";
-import { cleanAndSortTokens, colors, CoreProps, DSysDimensionToken, getIcon, Icons } from "../../../../../shared";
+import { cleanAndSortTokens, colors, CoreProps, DSysDimensionToken, getIcon, Icons, MessageRequest } from "../../../../../shared";
 import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
 import Input from "../../../../components/Input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
 import "./spacingList.css";
-import "../../../../components/DragAndDropList/dsysList.css";
-import "../../../../components/DragAndDropList/dsysRow.css";
 import updateSpacingToken from "../../utils/updateSpacingToken";
 import { DSysSpacingToken } from "../../../../../shared/types/designSystemTypes";
+import { addSpacingToken } from "../../utils/addSpacingToken";
+import { changeSpacingOrder } from "../../utils/changeSpacingOrder";
+import deleteSpacingToken from "../../utils/deleteSpacingToken";
 
 export default class SpacingList extends React.Component<CoreProps> {
 
@@ -35,17 +36,10 @@ export default class SpacingList extends React.Component<CoreProps> {
         <ListHeader
           title="Spacing Tokens"
           onAdd={() =>{
-            /*addColorToken(
+            addSpacingToken(
               this.props.tokenGroup,
-              this.props.refreshTokens,
-            ).then(result => {
-              if (result.success === false) {
-                postMessagePromise(
-                  MessageRequest.notify,
-                  {message: result.message, error: true}
-                );
-              }
-            });*/
+              this.props.updateTokenGroup,
+            );
           }}
           onDelete={() => {
             this.setState({
@@ -59,20 +53,20 @@ export default class SpacingList extends React.Component<CoreProps> {
               rowIndex: number,
               dropIndex: number
             ) => {
-              /* changeOrder(
+              changeSpacingOrder(
                 rowIndex, dropIndex,
                 this.props.tokenGroup,
-                this.props.refreshTokens,
-              );*/
+                this.props.updateTokenGroup,
+              );
             }}
             rowList={tokens}
             rowGenerator={(
-              token, index,
+              tokenInfo, index,
               onMouseDownCapture,
               onMouseUpCapture,
             ) => {
-              const prop = token[0];
-              const spacingToken = token[1] as DSysSpacingToken;
+              const prop = tokenInfo[0];
+              const spacingToken = tokenInfo[1] as DSysSpacingToken;
               return (
                 <div
                   className="dsys-row"
@@ -110,8 +104,23 @@ export default class SpacingList extends React.Component<CoreProps> {
                     <Input
                       label="size" 
                       hideLabel hideBorder
+                      type="number"
                       value={`${spacingToken.$value}`}
-                      textAlign="left"
+                      textAlign="right"
+                      selectAllOnFocus={true}
+                      onArrowUpOrDown={(
+                        value: string,
+                        increment: number
+                      ) => {
+                        updateSpacingToken(
+                          {
+                            ...spacingToken,
+                            $value: Math.max(0, parseFloat(value) + increment)
+                          },
+                          this.props.tokenGroup,
+                          this.props.updateTokenGroup,
+                        )
+                      }}
                       onEnterOrBlur={(value: string) => {
                         updateSpacingToken(
                           {
@@ -127,11 +136,12 @@ export default class SpacingList extends React.Component<CoreProps> {
                     onClick={() => {
                       if (this.state.isDeleting) {
                         if (!this.props.tokenGroup) return;
-                        /* deleteColorToken(
-                          value,
-                          this.props.refreshTokens
-                        );*/
-                        setInterval(() => {// need to wait a beat for refresh
+                        deleteSpacingToken(
+                          spacingToken,
+                          this.props.tokenGroup,
+                          this.props.updateTokenGroup,
+                        );
+                        setTimeout(() => {// need to wait a beat for refresh
                           this.setState({
                             isDeleting: false,
                           });

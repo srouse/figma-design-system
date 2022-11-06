@@ -9,11 +9,11 @@ import {
   Icons,
   hexAlphaToCss,
   MessageRequest
-} from "../../../../shared";
-import { DSysBlurToken } from "../../../../shared/types/designSystemTypes";
-import Input from "../../../components/Input";
-import ListHeader from "../../../components/ListHeader/ListHeader";
-import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
+} from "../../../../../shared";
+import { DSysBlurToken } from "../../../../../shared/types/designSystemTypes";
+import Input from "../../../../components/Input";
+import ListHeader from "../../../../components/ListHeader/ListHeader";
+import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
 import {
   addBlurEffectToken,
   addShadowEffectToken,
@@ -21,14 +21,12 @@ import {
   changeOrder,
   deleteEffectToken,
   updateEffect
-} from "./effectActions";
-import "../../../components/DragAndDropList/dsysList.css";
-import "../../../components/DragAndDropList/dsysRow.css";
-import EffectsDetail from "./EffectsDetail/EffectsDetail";
-import DetailModal from "../../../components/DetailModal/DetailModal";
+} from "../effectActions";
+import EffectsDetail from "../EffectsDetail/EffectsDetail";
+import DetailModal from "../../../../components/DetailModal/DetailModal";
 import "./effectsRow.css";
 import "./effectsList.css";
-import postMessagePromise from "../../../utils/postMessagePromise";
+import postMessagePromise from "../../../../utils/postMessagePromise";
 
 export default class EffectsList extends React.Component<CoreProps> {
 

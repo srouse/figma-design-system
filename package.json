@@ -43,6 +43,7 @@
     "prettier": "^2.3.2",
     "typescript": "^4.4.2",
     "vite": "^2.5.2",
-    "vite-plugin-singlefile": "^0.5.1"
+    "vite-plugin-singlefile": "^0.5.1",
+    "colr": "^1.2.2"
   }
 }

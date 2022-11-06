@@ -38,7 +38,7 @@ export default class Settings extends React.Component<SettingsProps> {
         <Input
           label="Prefix" 
           value={this.props.globalData?.prefix}
-          onChange={(value: string) => {
+          onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
                 ...this.props.globalData,
@@ -49,7 +49,7 @@ export default class Settings extends React.Component<SettingsProps> {
         <Input
           label="Full Name" 
           value={this.props.globalData?.fullName}
-          onChange={(value: string) => {
+          onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
                 ...this.props.globalData,

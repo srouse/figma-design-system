@@ -51,7 +51,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
       <div className={`typography-detail`}>
         <div className="typography-detail-row">
           <Select
-            label="Font Family"
+            label="Family"
             className="typography-detail-font-family"
             value={this.props.token.$value.figmaFontObj.family}
             dropdown={fonts}
@@ -61,7 +61,6 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
                 return style.name === 'Regular' || style.name === 'Normal'
               });
               const finalStyle = regular ? regular.value : styles[0].value;
-
               this.props.updateToken({
                 ...token,
                 $value: {
@@ -74,7 +73,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               });
             }} />
           <Select
-            label="Font Style"
+            label="Style"
             className="typography-detail-font-style"
             value={this.props.token.$value.figmaFontObj.style}
             dropdown={fontStyles}
@@ -91,18 +90,15 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               });
             }} />
           <Input
-            label="Font Size"
+            label="Size"
             className="typography-detail-font-size"
             value={`${token.$value.fontSize}`}
+            type="number"
+            selectAllOnFocus={true}
             onArrowUpOrDown={(
               value: string,
-              direction: 'up' | 'down',
-              evt: KeyboardEvent<HTMLInputElement>
+              increment: number,
             ) => {
-              let increment = evt.shiftKey ? 10 : 1;
-              if (direction === 'down') {
-                increment = increment * -1;
-              }
               const finalValue = parseInt(value) + increment;
               this.props.updateToken({
                 ...token,
@@ -126,15 +122,12 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
           <Input
             label="Letter Spacing"
             value={`${this.props.token.$value.letterSpacing.value}`}
+            type="number"
+            selectAllOnFocus={true}
             onArrowUpOrDown={(
               value: string,
-              direction: 'up' | 'down',
-              evt: KeyboardEvent<HTMLInputElement>
+              increment: number,
             ) => {
-              let increment = evt.shiftKey ? 10 : 1;
-              if (direction === 'down') {
-                increment = increment * -1;
-              }
               const finalValue = parseInt(value) + increment;
               this.props.updateToken({
                 ...token,
@@ -188,16 +181,10 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             placeholder={`${
               (this.props.token.$value.lineHeight as any).value ? 
                 '' : 'Auto'}`}
-            onChange={(evt) => console.log(evt)}
             onArrowUpOrDown={(
               value: string,
-              direction: 'up' | 'down',
-              evt: KeyboardEvent<HTMLInputElement>
+              increment: number,
             ) => {
-              let increment = evt.shiftKey ? 10 : 1;
-              if (direction === 'down') {
-                increment = increment * -1;
-              }
               let finalValue = 0;
               if (token.$value.lineHeight.unit === 'AUTO') {
                 finalValue = (token.$value.fontSize*1.33) + increment;

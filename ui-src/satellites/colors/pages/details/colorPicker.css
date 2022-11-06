@@ -1,0 +1,45 @@
+
+
+.color-picker {
+  width: 100%;
+  height: 200px;
+  border: 1px solid var( --border-grey );
+  border-bottom: none;
+  position: relative;
+}
+
+  .color-picker-brightness {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      180deg, 
+      rgba(0, 0, 0, 0) 0%, 
+      #000000 100%
+    );
+  }
+
+  .color-picker-thumb {
+    position: absolute;
+    width: 20px; height: 20px;
+    border: 1px solid var( --border-grey );
+    background-color: var( --white );
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+    .color-picker-thumb:hover {
+      cursor: pointer;
+    }
+
+    .color-picker-thumb-inner {
+      position: absolute; inset: 3px;
+      border-radius: 20px;
+    }
+
+.color-picker-hue-selector {
+  height: 20px;
+  width: 100%;
+  border: 1px solid var( --border-grey );
+  border-top: none;
+  position: relative;
+}

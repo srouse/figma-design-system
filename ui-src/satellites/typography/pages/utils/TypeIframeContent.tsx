@@ -26,8 +26,6 @@ export default function typeIframeContent(
       exampleText.toLowerCase()
   }`;
 
-  console.log("CHANGINE")
-
   return `
     <html>
       <head>
@@ -44,7 +42,7 @@ export default function typeIframeContent(
           finalStyles.join(',')
         }&display=swap&subset=latin&text=${loadedLetters}")
           .then(response=>{
-              console.log(response.ok);
+              // console.log('found font:', response.ok);
               response.text();
           })
           .catch(err => {

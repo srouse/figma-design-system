@@ -37,14 +37,16 @@ export default class SwitchUI extends React.Component<CoreProps> {
         <SatelliteHeaderUI
           {...this.props}
            />
-        <DTTabs 
-          tabs={[
-            {name: 'Tokens', value: 'tokens'},
-            {name: 'Deploy', value: 'deployment'},
-            {name: 'Settings', value: 'settings'},
-          ]}
-          value={this.state.page}
-          onValueChange={(value: string) => this.setState({page:value})} />
+        {this.props.tokenGroup?.name ? (
+          <DTTabs 
+            tabs={[
+              {name: 'Tokens', value: 'tokens'},
+              {name: 'Deploy', value: 'deployment'},
+              {name: 'Settings', value: 'settings'},
+            ]}
+            value={this.state.page}
+            onValueChange={(value: string) => this.setState({page:value})} />
+        ) : '' }
         {this.renderTokenContent()}
         <Deployment
           style={{

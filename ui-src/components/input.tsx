@@ -19,17 +19,26 @@ interface InputProps {
   onChange?: (value: string) => void,
   onEnter?: (value: string) => void,
   onBlur?: (value: string) => void,
-  onArrowDown?: (value: string, evt: KeyboardEvent<HTMLInputElement>) => void,
-  onArrowUp?: (value: string, evt: KeyboardEvent<HTMLInputElement>) => void,
+  increments?: {unshifted:number,shifted:number},
+  onArrowDown?: (
+    value: string,
+    increment: number,
+    evt: KeyboardEvent<HTMLInputElement>
+  ) => void,
+  onArrowUp?: (
+    value: string,
+    increment: number,
+    evt: KeyboardEvent<HTMLInputElement>
+  ) => void,
   onArrowUpOrDown?: (
     value: string,
-    direction: 'up' | 'down',
-    evt: KeyboardEvent<HTMLInputElement>
+    increment: number,
+    evt?: KeyboardEvent<HTMLInputElement>
   ) => void,
   onEnterOrBlur?: (value: string) => void,
   background?: 'light' | 'dark',
   className?: string,
-  password? : boolean,
+  type? : 'text' | 'number' | 'password',
   readOnly? : boolean,
   hideLabel? : boolean,
   hideBorder? : boolean,
@@ -37,6 +46,7 @@ interface InputProps {
   placeholder? : string,
   textAlign? : 'left' | 'right' | 'center',
   validation?: ValidationWorker,
+  selectAllOnFocus?: boolean,
 }
 
 export default class Input extends React.Component<InputProps> {
@@ -111,13 +121,21 @@ export default class Input extends React.Component<InputProps> {
                 autoCorrect="off" 
                 className="inputComp-input"
                 placeholder={this.props.placeholder}
-                type={
-                  this.props.password ? 'password' : 'text'
-                }
+                value={this.state.value}
+                type={this.props.type || 'text'}
                 style={{textAlign: this.props.textAlign || 'left'}}
-                onFocus={() => {
+                onFocus={(evt: FocusEvent) => {
                   if (this.props.onFocus) this.props.onFocus();
                   this.setState({valid: true});
+                  if (this.props.selectAllOnFocus === true) {
+                    const input = (evt.target as HTMLInputElement);
+                    const prevType = input.type;
+                    input.type = 'text';// number doesn't do this...
+                    input.setSelectionRange(
+                      0, input.value.length
+                    );
+                    input.type = prevType;
+                  }
                 }}
                 onBlur={(evt: FocusEvent<HTMLInputElement>) => {
                   if (this.props.validation) {
@@ -141,11 +159,23 @@ export default class Input extends React.Component<InputProps> {
                     if (this.props.onEnterOrBlur)
                       this.props.onEnterOrBlur(targetValue);
                   }
+
+                  let increments = this.props.increments;
+                  if (!increments) {
+                    increments = {
+                      shifted: 10,
+                      unshifted: 1,
+                    }
+                  }
+
                   if (evt.code === 'ArrowDown') {
                     if (this.props.onArrowDown) {
                       evt.preventDefault();
                       this.props.onArrowDown(
                         targetValue,
+                        evt.shiftKey ? 
+                          -increments.shifted : 
+                          -increments.unshifted,
                         evt
                       );
                     }
@@ -153,7 +183,9 @@ export default class Input extends React.Component<InputProps> {
                       evt.preventDefault();
                       this.props.onArrowUpOrDown(
                         targetValue,
-                        'down',
+                        evt.shiftKey ? 
+                          -increments.shifted : 
+                          -increments.unshifted,
                         evt
                       );
                     } 
@@ -163,6 +195,9 @@ export default class Input extends React.Component<InputProps> {
                       evt.preventDefault();
                       this.props.onArrowUp(
                         targetValue,
+                        evt.shiftKey ? 
+                          increments.shifted : 
+                          increments.unshifted,
                         evt
                       );
                     }
@@ -170,7 +205,9 @@ export default class Input extends React.Component<InputProps> {
                       evt.preventDefault();
                       this.props.onArrowUpOrDown(
                         targetValue,
-                        'up',
+                        evt.shiftKey ? 
+                          increments.shifted : 
+                          increments.unshifted,
                         evt
                       );
                     } 
@@ -193,9 +230,7 @@ export default class Input extends React.Component<InputProps> {
                       );
                     }
                   }, 0);
-                }}
-                value={this.state.value}
-                value-off={this.props.value}>
+                }}>
               </input>
             )
           }

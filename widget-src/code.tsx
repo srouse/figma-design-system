@@ -111,7 +111,14 @@ function Widget() {
               case MessageRequest.notify:
                 figma.notify(
                   message.message,
-                  {error: message.error === true ? true : false}
+                  {
+                    error: message.error === true ? true : false,
+                    timeout: message.timeout ? message.timeout : 2000,
+                    button: message.button ? {
+                      text: 'ok',
+                      action: () => {}
+                    } : undefined
+                  }
                 );
                 break;
               case MessageRequest.refreshTokensFromStyles:

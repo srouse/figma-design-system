@@ -1,7 +1,5 @@
 import React, {
   DOMAttributes,
-  KeyboardEvent,
-  MouseEvent,
 } from "react";
 import {
   DSysColorToken,
@@ -14,17 +12,11 @@ import {
   DTColor,
   MessageRequest,
 } from "../../../../../shared";
-import DTButton, {
-  DTButtonColor,
-  DTButtonDesign
-} from "../../../../components/DTButton";
+
 import Input from "../../../../components/Input";
 import "./colorList.css";
 import "./colorRow.css";
-import "../../../../components/DragAndDropList/dsysList.css";
-import "../../../../components/DragAndDropList/dsysRow.css";
 import renderAda from "./renderAda";
-import 'color-picker-web-component';
 import {
   addColorToken,
   changeColor,
@@ -35,6 +27,8 @@ import {
 import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
+import DetailModal from "../../../../components/DetailModal/DetailModal";
+import ColorDetail from "../details/colorDetail";
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -65,6 +59,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
       pickerTop: '0px',
       pickerColor: '#eeeeee',
       pickerAlpha: '100',
+      detailModalOpen: false,
     };
   }
 
@@ -95,6 +90,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
     pickerLeft: string,
     pickerColor: string,
     pickerAlpha: string,
+    detailModalOpen: boolean,
   }
 
   render() {
@@ -142,18 +138,18 @@ export default class ColorSteps extends React.Component<CoreProps> {
             }}
             rowList={tokens}
             rowGenerator={(
-              token, index,
+              tokenInfo, index,
               onMouseDownCapture,
               onMouseUpCapture,
             ) => {
-              const prop = token[0];
-              const value = token[1] as DSysColorToken;
-              const color = value.$value as DTColor;
+              const prop = tokenInfo[0];
+              const colorToken = tokenInfo[1] as DSysColorToken;
+              const colorValue = colorToken.$value as DTColor;
               return (
                 <div
                   className="dsys-row"
-                  key={`color-${value.$extensions['dsys.styleId']}`}
-                  data-key={`color-${value.$extensions['dsys.styleId']}`}>
+                  key={`color-${colorToken.$extensions['dsys.styleId']}`}
+                  data-key={`color-${colorToken.$extensions['dsys.styleId']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -174,112 +170,100 @@ export default class ColorSteps extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
-                  <div className="color-row-color">
+                  <div
+                    className="color-row-summary"
+                    onClick={() => {
+                      this.setState({
+                        focusedToken: colorToken,
+                        detailModalOpen: true
+                      });
+                    }}>
                     <div className="color-row-color-chip"
                       style={{
-                        backgroundColor: color.hex,
-                        opacity: color.alpha,
-                      }}
-                      onClick={(evt: MouseEvent) => {
-                        const pickerSize = {width: 240, height: 294};
-                        const viewSize = {width: 460, height: 560};
-                        const absTop = 110;
-                        const chipOffset = getOffset( evt.target as HTMLElement );
-                        this.setState({
-                          focusedToken: value,
-                          pickerColor: color.hex,
-                          pickerAlpha: color.alpha,
-                          pickerTop: `${
-                            Math.min(
-                              viewSize.height - pickerSize.height,
-                              chipOffset.top - absTop - 15
-                            )
-                          }px`
-                        });
-                        this.fixMessedUpPicker();
+                        backgroundColor: colorValue.hex,
+                        opacity: colorValue.alpha,
                       }}>
-                      {validColor(color) ? '' : '!!'}
+                      {validColor(colorValue) ? '' : '!!'}
                     </div>
-                  </div>
-                  <div className="color-row-hex">
-                    <Input
-                      className="color-row-hex-input"
-                      label="color" 
-                      hideLabel hideBorder
-                      value={`${color.hex}`}
-                      textAlign="left"
-                      onFocus={() => {
-                        this.setState({
-                          focusedToken: undefined,
-                        });
-                      }}
-                      onEnterOrBlur={(value: string) => {
-                        changeColor(
-                          value,
-                          color.alpha,
-                          prop,
-                          this.props.tokenGroup,
-                          this.props.refreshTokens
-                        );
-                      }} />
-                  </div>
-                  <div className="color-row-alpha">
-                    <Input
-                      className="color-row-alpha-input"
-                      label="color alpha" 
-                      hideLabel hideBorder
-                      value={`${Math.round(color.alpha * 100)}%`}
-                      textAlign="right"
-                      onArrowUpOrDown={(
-                        value: string,
-                        direction: 'up' | 'down',
-                        evt: KeyboardEvent<HTMLInputElement>
-                      ) => {
-                        const alphaFractionStr = value.replace('%', '');
-                        let increment = evt.shiftKey ? 10 : 1;
-                        if (direction === 'down') {
-                          increment = increment * -1;
-                        }
-                        const alphaFraction = Math.max(
-                          0, Math.min(
-                            1, (parseInt(alphaFractionStr) + increment)/100
-                          )
-                        );
-                        changeColor(
-                          color.hex,
-                          alphaFraction,
-                          prop,
-                          this.props.tokenGroup,
-                          this.props.refreshTokens
-                        );
-                      }}
-                      onEnterOrBlur={(value: string) => {
-                        const alphaFractionStr = value.replace('%', '');
-                        const alphaFraction = parseInt(alphaFractionStr)/100;
-                        changeColor(
-                          color.hex,
-                          alphaFraction,
-                          prop,
-                          this.props.tokenGroup,
-                          this.props.refreshTokens
-                        );
-                      }} />
-                  </div>
-                  <div className="color-row-ada">
-                    {renderAda(
-                      color,
-                      this.props.tokenGroup?.nodeId || tokenset.$extensions['dsys.name']
-                    )}
+                    <div className="color-row-summary-text">
+                      {colorValue.hex} / {Math.round(colorValue.alpha * 100)}%
+                    </div>
+                    {/*<div className="color-row-hex">
+                      <Input
+                        className="color-row-hex-input"
+                        label="color" 
+                        hideLabel hideBorder
+                        value={`${color.hex}`}
+                        textAlign="left"
+                        onFocus={() => {
+                          this.setState({
+                            focusedToken: undefined,
+                          });
+                        }}
+                        onEnterOrBlur={(value: string) => {
+                          changeColor(
+                            value,
+                            color.alpha,
+                            prop,
+                            this.props.tokenGroup,
+                            this.props.refreshTokens
+                          );
+                        }} />
+                    </div>
+                    <div className="color-row-alpha">
+                      <Input
+                        className="color-row-alpha-input"
+                        label="color alpha" 
+                        hideLabel hideBorder
+                        value={`${Math.round(color.alpha * 100)}%`}
+                        textAlign="right"
+                        increments={{shifted:10, unshifted: 1}}
+                        onArrowUpOrDown={(
+                          value: string,
+                          increment: number
+                        ) => {
+                          const alphaFractionStr = value.replace('%', '');
+                          const alphaFraction = Math.max(
+                            0, Math.min(
+                              1, (parseInt(alphaFractionStr) + increment)/100
+                            )
+                          );
+                          changeColor(
+                            color.hex,
+                            alphaFraction,
+                            prop,
+                            this.props.tokenGroup,
+                            this.props.refreshTokens
+                          );
+                        }}
+                        onEnterOrBlur={(value: string) => {
+                          const alphaFractionStr = value.replace('%', '');
+                          const alphaFraction = parseInt(alphaFractionStr)/100;
+                          changeColor(
+                            color.hex,
+                            alphaFraction,
+                            prop,
+                            this.props.tokenGroup,
+                            this.props.refreshTokens
+                          );
+                        }} />
+                    </div>*/}
+                    <div className="color-row-ada">
+                      {renderAda(
+                        colorValue,
+                        this.props.tokenGroup?.nodeId || tokenset.$extensions['dsys.name']
+                      )}
+                    </div>
                   </div>
                   <div className="dsys-row-deleting"
                     onClick={() => {
                       if (this.state.isDeleting) {
                         if (!this.props.tokenGroup) return;
                         deleteColorToken(
-                          value,
+                          colorToken,
                           this.props.refreshTokens
                         );
-                        setInterval(() => {// need to wait a beat for refresh
+                        setTimeout(() => {// need to wait a beat for refresh
                           this.setState({
                             isDeleting: false,
                           });
@@ -297,7 +281,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
           </DragAndDropList>
         </div>
       </div>
-      <div
+      {/*<div
         className="edit-color-picker"
         style={{
           left: this.state.pickerLeft,
@@ -324,12 +308,35 @@ export default class ColorSteps extends React.Component<CoreProps> {
               this.props.tokenGroup,
               this.props.refreshTokens
             );
-
             this.setState({
               focusedToken: undefined
             });
           }} />
-      </div>
+        </div>*/}
+      <DetailModal
+        title={this.state.focusedToken?.$extensions["dsys.name"]}
+        onClose={() => {
+          this.setState({
+            detailModalOpen: false
+          });
+        }}
+        open={this.state.detailModalOpen}
+        body={(
+          <ColorDetail
+            token={this.state.focusedToken}
+            updateToken={(token : DSysColorToken) => {
+              changeColor(
+                token.$value.hex,
+                token.$value.alpha,
+                token.$extensions['dsys.name'],
+                this.props.tokenGroup,
+                this.props.refreshTokens
+              );
+              this.setState({
+                focusedToken: token,
+              });
+            }} />
+        )} />
     </>);
   }
 

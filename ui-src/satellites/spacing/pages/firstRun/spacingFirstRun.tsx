@@ -8,7 +8,12 @@ import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
 import Select from "../../../../components/Select";
 import createNewSteppedSpacingTokens from "../../utils/createNewSteppedSpacingTokens";
-import { spacingSteps, SpacingStepTypes } from "../../utils/spacingStepping";
+import {
+  spacingStepBaseOptions,
+  SpacingStepMetrics,
+  spacingSteps,
+  SpacingStepTypes
+} from "../../utils/spacingStepping";
 import "./spacingFirstRun.css";
 
 export default class SpacingFirstRun extends React.Component<CoreProps> {
@@ -20,6 +25,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
       baseName: 'spacing',
       baseSpaceSize: undefined,
       spaceStepsType: SpacingStepTypes.none,
+      spaceStepsBaseMetrics: undefined
     }
     this.validator = new Validator();
   }
@@ -31,6 +37,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
     baseName: string | undefined,
     baseSpaceSize?: number,
     spaceStepsType: SpacingStepTypes,
+    spaceStepsBaseMetrics: SpacingStepMetrics | undefined,
   }
 
   render() {
@@ -41,7 +48,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
         <Input
           label="Group Name"
           value={this.state.name}
-          onChange={(name: string) => {
+          onEnterOrBlur={(name: string) => {
             this.setState({name});
           }} 
           validation={
@@ -58,7 +65,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
         <Input
           label="Token Prefix (each token will begin with this)"
           value={this.state.baseName}
-          onChange={(baseName: string) => {
+          onEnterOrBlur={(baseName: string) => {
             this.setState({baseName});
           }} 
           validation={
@@ -75,7 +82,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
         <Input
           label="Base Spacing Size"
           value={`${this.state.baseSpaceSize ? this.state.baseSpaceSize : ''}`}
-          onChange={(baseSpaceSize: string) => {
+          onEnterOrBlur={(baseSpaceSize: string) => {
             this.setState({baseSpaceSize: parseFloat(baseSpaceSize)});
           }} 
           validation={
@@ -94,8 +101,12 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
           value={this.state.spaceStepsType}
           dropdown={spacingSteps}
           onChange={(spaceStepsType: string) => {
+            const newSpaceStepsBaseMetrics = spacingStepBaseOptions[spaceStepsType];
             this.setState({
               spaceStepsType,
+              spaceStepsBaseMetrics: {
+                ...newSpaceStepsBaseMetrics
+              },
             });
           }}
           validation={
@@ -110,6 +121,32 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
             )
           }>
         </Select>
+        {this.state.spaceStepsBaseMetrics ? (
+          <Select
+              label="Base Spacing Step"
+              value={this.state.spaceStepsBaseMetrics.default}
+              dropdown={this.state.spaceStepsBaseMetrics.options}
+              onChange={(value: string) => {
+                this.setState({
+                  spaceStepsBaseMetrics: {
+                    ...this.state.spaceStepsBaseMetrics,
+                    default: value
+                  },
+                });
+              }}
+              validation={
+                this.validator.register(
+                  'stepPattern',
+                  () => {
+                    return {
+                      success: this.state.spaceStepsBaseMetrics?.default ?
+                        true : false,
+                      message: 'A spacing base step type is required'
+                    }
+                  }
+                )
+              }>
+            </Select>) : null }
         <div style={{flex: "1"}}></div>
         <DTButton
           label="Create"
@@ -119,9 +156,9 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
               createNewSteppedSpacingTokens(
                 this.state.baseName,
                 this.state.baseSpaceSize,
-                this.state.spaceStepsType,
+                this.state.spaceStepsBaseMetrics,
                 this.props.tokenGroup,
-                this.props.updateTokenGroup
+                this.props.updateTokenGroup,
               )
             }
           }}></DTButton>

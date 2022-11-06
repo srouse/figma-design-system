@@ -32,5 +32,11 @@
 }
 
   .typography-row-details:hover {
+    background-color: var( --primary-lightest );
     cursor: pointer;
+  }
+
+  .typography-row-size {
+    width: 50px;
+    border-right: 1px solid var( --grey-lightest );
   }
