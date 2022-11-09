@@ -13,10 +13,20 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
     this.onMouseDownCapture = this.onMouseDownCapture.bind(this);
     this.onMouseMoveCapture = this.onMouseMoveCapture.bind(this);
     this.onMouseUpCapture = this.onMouseUpCapture.bind(this);
+    this.state = this._processColor();
+  }
+
+  componentDidUpdate(prevProps: ColorHueThumbProps) {
+    if (prevProps.color !== this.props.color) {
+      this.setState(this._processColor());
+    }
+  }
+
+  _processColor() {
     this.initColorObj = new Colr().fromHex(this.props.color);
     const colorValueHsv = this.initColorObj.toHsvObject();
     this.thumbWidth = 20;
-    this.state = {
+    return {
       thumbX: (colorValueHsv.h / 360) * 100,
       color: this.initColorObj.toHex(),
     };
@@ -71,7 +81,6 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
     const metrics = this._getMetrics(evt);
     if (!metrics) return;
     this.setState(metrics);
-    console.log(metrics.color)
     this.props.onColorChange(metrics.color);
     this.isDragging = false;
     document.removeEventListener('mousemove', this.onMouseMoveCapture);

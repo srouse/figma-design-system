@@ -41,14 +41,6 @@ declare global {
   }
 }
 
-function getOffset(el: HTMLElement) {
-  const rect = el.getBoundingClientRect();
-  return {
-    left: rect.left + window.scrollX,
-    top: rect.top + window.scrollY
-  };
-}
-
 export default class ColorSteps extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
@@ -61,6 +53,26 @@ export default class ColorSteps extends React.Component<CoreProps> {
       pickerAlpha: '100',
       detailModalOpen: false,
     };
+  }
+
+  componentDidUpdate(prevProps: CoreProps) {
+    if (prevProps.tokenGroup !== this.props.tokenGroup) {
+      const tokenset = prevProps.tokenGroup?.tokensets[0];
+      if (tokenset && this.state.focusedToken) {
+        const newFocusedToken = Object.values(tokenset).find(
+          (token:DSysColorToken) => {
+            if (!token.$extensions) return false;
+            return token.$extensions["dsys.styleId"] === 
+             this.state.focusedToken!.$extensions["dsys.styleId"];
+          }
+        );
+        if (newFocusedToken) {
+          this.setState({
+            focusedToken: newFocusedToken,
+          })
+        }
+      }
+    }
   }
 
   fixMessedUpPicker() {

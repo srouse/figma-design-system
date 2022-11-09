@@ -15,10 +15,20 @@ export default class ColorThumb extends React.Component<ColorThumbProps> {
     this.onMouseDownCapture = this.onMouseDownCapture.bind(this);
     this.onMouseMoveCapture = this.onMouseMoveCapture.bind(this);
     this.onMouseUpCapture = this.onMouseUpCapture.bind(this);
+    this.thumbWidth = this.props.size === 'large' ? 20 : 10;
+    this.state = this._processColor();
+  }
+
+  componentDidUpdate(prevProps: ColorThumbProps) {
+    if (prevProps.color !== this.props.color) {
+      this.setState(this._processColor());
+    }
+  }
+
+  _processColor() {
     this.initColorObj = new Colr().fromHex(this.props.color);
     const colorValueHsv = this.initColorObj.toHsvObject();
-    this.thumbWidth = this.props.size === 'large' ? 20 : 10;
-    this.state = {
+    return {
       thumbX: colorValueHsv.s,
       thumbY: 100-colorValueHsv.v,
       color: this.initColorObj.toHex(),

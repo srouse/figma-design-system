@@ -9,6 +9,7 @@
   background-color: var( --white );
   border-radius: 20px;
   overflow: hidden;
+  z-index: 100;
 }
 
   /* .color-picker-thumb:hover {
@@ -28,6 +29,7 @@
   background-color: #bbb;
   border-radius: 20px;
   overflow: hidden;
+  z-index: 90;
 }
 
   /* .color-picker-small-thumb:hover {

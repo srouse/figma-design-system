@@ -12,6 +12,7 @@ import Colr from 'colr';
 import ColorThumb from "./colorThumb/colorThumb";
 import { changeColor } from "../../utils/colorActions";
 import ColorHueThumb from "./colorHueThumb/colorHueThumb";
+import Input from "../../../../components/Input";
 
 interface ColorDetailProps {
   token?: DSysColorToken,
@@ -37,27 +38,25 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
     const tokens = cleanAndSortTokens(tokenset);
     return tokens.map(tokenInfo => {
       const token = tokenInfo[1] as DSysColorToken;
-      if (
-        token.$extensions["dsys.styleId"] !== 
-        this.props.token!.$extensions["dsys.styleId"]
-      ) {
-        return (
-          <ColorThumb
-            key={`thumb-${token.$extensions["dsys.styleId"]}`}
-            color={token.$value.hex}
-            size="small"
-            onColorChange={(color: string) => {
-              changeColor(
-                color,
-                token.$value.alpha,
-                token.$extensions["dsys.name"],
-                this.props.tokenGroup,
-                this.props.refreshTokens
-              );
-            }}>
-          </ColorThumb>
-        );
-      }
+      const isFocusedToken = token.$extensions["dsys.styleId"] === 
+        this.props.token!.$extensions["dsys.styleId"];
+      return (
+        <ColorThumb
+          key={`thumb-${token.$extensions["dsys.styleId"]}`}
+          color={token.$value.hex}
+          size={isFocusedToken ? 'large' : 'small'}
+          onColorChange={(color: string) => {
+            changeColor(
+              color,
+              token.$value.alpha,
+              token.$extensions["dsys.name"],
+              this.props.tokenGroup,
+              this.props.refreshTokens
+            );
+          }}>
+        </ColorThumb>
+      );
+      
     })
   }
 
@@ -71,7 +70,6 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
     const colorValueHsv = colorValue.toHsvObject();
     const hueColor = new Colr().fromHsvObject({h:colorValueHsv.h,s:100,v:100});
 
-    console.log('new', hueColor.toHex())
     const hueGrad: string[] = [];
     [...Array(360)].map((_:any, index:number) => {
       hueGrad.push(` ${new Colr().fromHsvObject({
@@ -89,7 +87,7 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
           )`}}>
           <div className="color-picker-brightness"></div>
           {this.renderOtherColors()}
-          <ColorThumb
+          {/*<ColorThumb
             color={color.$value.hex}
             size="large"
             onColorChange={(color: string) => {
@@ -101,7 +99,7 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
                 this.props.refreshTokens
               );
             }}>
-          </ColorThumb>
+          </ColorThumb>*/}
         </div>
         <div
           className="color-picker-hue-selector"
@@ -142,9 +140,21 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
               });
             }}></ColorHueThumb>
         </div>
-        <h2>Color</h2>
-        <div>
-          {color.$value.hex}
+        <div className="color-detail-row">
+          <Input
+            label=""
+            value={color.$value.hex}
+            selectAllOnFocus={true}
+            onEnterOrBlur={(value: string) => {
+              
+            }} />
+          <Input
+            label=""
+            value={`${color.$value.alpha * 100}`}
+            selectAllOnFocus={true}
+            onEnterOrBlur={(value: string) => {
+              
+            }} />
         </div>
       </div>
     );

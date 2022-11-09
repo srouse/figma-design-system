@@ -2,7 +2,7 @@
 
 .color-picker {
   width: 100%;
-  height: 200px;
+  height: 360px;
   border: 1px solid var( --border-grey );
   border-bottom: none;
   position: relative;
@@ -23,6 +23,8 @@
   width: 100%;
   border: 1px solid var( --border-grey );
   border-top: none;
+  margin-top: 4px;
+  margin-bottom: 4px;
   position: relative;
 }
 

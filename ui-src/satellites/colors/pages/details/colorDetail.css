@@ -1,5 +1,17 @@
 
-
 .color-detail {
-
+  padding: 30px;
 }
+
+.color-detail-row {
+  display: flex;
+  flex-direction: row;
+}
+
+  .color-detail-row > * {
+    flex: 1;
+  }
+
+  .color-detail-row > *:not(:last-child) {
+    margin-right: 10px;
+  }
