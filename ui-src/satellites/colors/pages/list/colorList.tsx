@@ -317,13 +317,17 @@ export default class ColorSteps extends React.Component<CoreProps> {
         title={this.state.focusedToken?.$extensions["dsys.name"]}
         onClose={() => {
           this.setState({
-            detailModalOpen: false
+            detailModalOpen: false,
+            focusedToken: undefined,
           });
         }}
         open={this.state.detailModalOpen}
-        body={(
+        body={
+          this.state.focusedToken ? (
           <ColorDetail
+            tokenGroup={this.props.tokenGroup}
             token={this.state.focusedToken}
+            refreshTokens={this.props.refreshTokens}
             updateToken={(token : DSysColorToken) => {
               changeColor(
                 token.$value.hex,
@@ -336,7 +340,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
                 focusedToken: token,
               });
             }} />
-        )} />
+        ) : <div></div>} />
     </>);
   }
 

@@ -1,0 +1,40 @@
+
+
+
+/* THUMB */
+.color-picker-thumb {
+  position: absolute;
+  width: 20px; height: 20px;
+  border: 1px solid var( --border-grey );
+  background-color: var( --white );
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+  /* .color-picker-thumb:hover {
+    cursor: pointer; 
+  }*/
+
+  .color-picker-thumb-inner {
+    position: absolute; inset: 3px;
+    border-radius: 20px;
+  }
+
+/* SMALL THUMB */
+.color-picker-small-thumb {
+  position: absolute;
+  width: 10px; height: 10px;
+  border: 1px solid var( --border-grey );
+  background-color: #bbb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+  /* .color-picker-small-thumb:hover {
+    cursor: pointer;
+  }*/
+
+  .color-picker-small-thumb-inner {
+    position: absolute; inset: 1px;
+    border-radius: 20px;
+  }
