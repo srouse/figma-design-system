@@ -27,13 +27,13 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
     const colorValueHsv = this.initColorObj.toHsvObject();
     this.thumbWidth = 20;
     return {
-      thumbX: (colorValueHsv.h / 360) * 100,
+      thumbY: (colorValueHsv.h / 360) * 100,
       color: this.initColorObj.toHex(),
     };
   }
 
   state : {
-    thumbX: number;
+    thumbY: number;
     color: string;
   }
 
@@ -41,7 +41,7 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
   draggingThumb?: HTMLElement;
   draggingThumbHouse?: HTMLDivElement;
   isDragging: boolean = false;
-  initX: number = 0;
+  initY: number = 0;
   thumbWidth: number = 0;
   initColorObj: any;
 
@@ -49,7 +49,7 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
     if (!this.thumbRoot) return;
     this.isDragging = true;
     this.draggingThumbHouse = this.thumbRoot?.parentElement as HTMLDivElement;
-    this.initX = evt.clientX;
+    this.initY = evt.clientY;
     document.addEventListener('mousemove', this.onMouseMoveCapture);
     document.addEventListener('mouseup', this.onMouseUpCapture);
   }
@@ -57,16 +57,16 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
   _getMetrics(evt: any) {
     if (!this.isDragging || !this.draggingThumbHouse) return;
     const thumbHouseRect = this.draggingThumbHouse.getBoundingClientRect();
-    const relativeX = evt.clientX - thumbHouseRect.left;
+    const relativeY = evt.clientY - thumbHouseRect.top;
     const colorValueHsv = this.initColorObj.toHsvObject();
     const hue = Math.min(360, Math.max(0, 
-      (relativeX / thumbHouseRect.width) * 360
+      (relativeY / thumbHouseRect.height) * 360
     ));
     const newColor = new Colr().fromHsvObject({
       h:hue , s:colorValueHsv.s, v:colorValueHsv.v
     });
     return {
-      thumbX: (hue / 360) * 100,
+      thumbY: (hue / 360) * 100,
       color: newColor.toHex(),
     };
   }
@@ -93,8 +93,8 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
       ref={(thumbRoot: HTMLDivElement) => this.thumbRoot = thumbRoot}
         className="color-picker-hue-thumb"
         style={{
-          left: `calc( ${this.state.thumbX}% - ${this.thumbWidth/2}px )`,
-          top:  0,
+          top: `calc( ${this.state.thumbY}% - ${this.thumbWidth/2}px )`,
+          left:  0,
         }}
         onMouseDown={this.onMouseDownCapture}
         onMouseMove={this.onMouseMoveCapture}

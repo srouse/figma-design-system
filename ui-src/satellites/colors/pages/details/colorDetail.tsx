@@ -27,7 +27,7 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
     super(props);
   }
 
-  renderOtherColors() {
+  renderThumbs() {
     if (
       !this.props.token ||
       !this.props.tokenGroup ||
@@ -79,66 +79,48 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
 
     return (
       <div className="color-detail">
-        <div className="color-picker"
-          style={{background: `linear-gradient(
-            270deg, 
-            ${hueColor.toHex()} 0%, 
-            rgba(255, 0, 0, 0) 100%
-          )`}}>
-          <div className="color-picker-brightness"></div>
-          {this.renderOtherColors()}
-          {/*<ColorThumb
-            color={color.$value.hex}
-            size="large"
-            onColorChange={(color: string) => {
-              changeColor(
-                color,
-                this.props.token!.$value.alpha,
-                this.props.token!.$extensions["dsys.name"],
-                this.props.tokenGroup,
-                this.props.refreshTokens
-              );
+        <div className="color-picker">
+          <div className="color-picker-square"
+            style={{background: `linear-gradient(
+              270deg, 
+              ${hueColor.toHex()} 0%, 
+              rgba(255, 0, 0, 0) 100%
+            )`}}>
+            <div className="color-picker-brightness"></div>
+            {this.renderThumbs()}
+          </div>
+          <div
+            className="color-picker-hue-selector"
+            tabIndex={0}
+            style={{
+              background: `linear-gradient(180deg, ${hueGrad.join(',')})`
             }}>
-          </ColorThumb>*/}
-        </div>
-        <div
-          className="color-picker-hue-selector"
-          tabIndex={0}
-          style={{
-            background: `linear-gradient(90deg, ${hueGrad.join(',')})`
-          }}>
-          <ColorHueThumb
-            color={hueColor.toHex()}
-            onColorChange={(color: string) => {
-              /* changeColor(
-                color,
-                this.props.token!.$value.alpha,
-                this.props.token!.$extensions["dsys.name"],
-                this.props.tokenGroup,
-                this.props.refreshTokens
-              );*/
-              const tokenset = this.props.tokenGroup?.tokensets[0];
-              const tokens = cleanAndSortTokens(tokenset);
-              return tokens.map(tokenInfo => {
-                const token = tokenInfo[1] as DSysColorToken;
-                const tokenColor = new Colr().fromHex(token.$value.hex);
-                const tokenColorHsv = tokenColor.toHsvObject();
-                const newColor = new Colr().fromHex(color);
-                const newColorHsv = newColor.toHsvObject();
-                const newTokenColor = new Colr().fromHsvObject({
-                  h:newColorHsv.h,
-                  s:tokenColorHsv.s,
-                  v:tokenColorHsv.v,
+            <ColorHueThumb
+              color={hueColor.toHex()}
+              onColorChange={(color: string) => {
+                const tokenset = this.props.tokenGroup?.tokensets[0];
+                const tokens = cleanAndSortTokens(tokenset);
+                return tokens.map(tokenInfo => {
+                  const token = tokenInfo[1] as DSysColorToken;
+                  const tokenColor = new Colr().fromHex(token.$value.hex);
+                  const tokenColorHsv = tokenColor.toHsvObject();
+                  const newColor = new Colr().fromHex(color);
+                  const newColorHsv = newColor.toHsvObject();
+                  const newTokenColor = new Colr().fromHsvObject({
+                    h:newColorHsv.h,
+                    s:tokenColorHsv.s,
+                    v:tokenColorHsv.v,
+                  });
+                  changeColor(
+                    newTokenColor.toHex(),
+                    token!.$value.alpha,
+                    token!.$extensions["dsys.name"],
+                    this.props.tokenGroup,
+                    this.props.refreshTokens
+                  );
                 });
-                changeColor(
-                  newTokenColor.toHex(),
-                  token!.$value.alpha,
-                  token!.$extensions["dsys.name"],
-                  this.props.tokenGroup,
-                  this.props.refreshTokens
-                );
-              });
-            }}></ColorHueThumb>
+              }}></ColorHueThumb>
+          </div>
         </div>
         <div className="color-detail-row">
           <Input
