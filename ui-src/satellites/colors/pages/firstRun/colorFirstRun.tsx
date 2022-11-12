@@ -1,14 +1,12 @@
 import React from "react";
 import {
   CoreProps,
-  MessageRequest,
   Validator,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
 import Select from "../../../../components/Select";
-import postMessagePromise from "../../../../utils/postMessagePromise";
 import {
   ColorStepMetrics,
   ColorStepTypes,
@@ -48,7 +46,7 @@ export default class FirstRun extends React.Component<CoreProps> {
         <InputHeader
           label="Create Color Tokens" />
         <Input
-          label="Group Name"
+          label="Name"
           value={this.state.name}
           onEnterOrBlur={(name: string) => {
             this.setState({name});

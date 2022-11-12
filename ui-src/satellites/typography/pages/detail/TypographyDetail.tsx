@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from "react";
+import React from "react";
 import { DSysTypographyToken } from "../../../../../shared";
 import Input from "../../../../components/Input";
 import { FontWithStyles } from "../typographyList";
@@ -16,18 +16,57 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
 
   constructor(props: TypographyDetailProps | Readonly<TypographyDetailProps>) {
     super(props);
+    this.state = {
+      fontFamilies: this._getFontSelectorValues(),
+      fontStyles: this._updateStyles(
+        this.props.token?.$value.figmaFontObj.family
+      ),
+    }
   }
 
-  getStyles(fontFamily:string) {
+  componentDidUpdate(prevProps: Readonly<TypographyDetailProps>): void {
+    if (prevProps.fonts !== this.props.fonts) {
+      this.setState({
+        fontFamilies: this._getFontSelectorValues(),
+        fontStyles: this._updateStyles(
+          this.props.token?.$value.figmaFontObj.family
+        ),
+      });
+    }    
+  }
+
+  _getFontSelectorValues() {
+    const fonts = this.props.fonts.map(font => {
+      return {value:font.family, name: font.family};
+    });
+    fonts.unshift({name:'Choose a Family',value: ''});
+    return fonts;
+  }
+
+  _updateStyles(
+    fontFamily:string | undefined,
+    updateState: boolean = false
+  ) {
+    if (!fontFamily) return [];
     let fontStyles: {value:string, name:string}[] = [];
-    this.props.fonts.map(font => {
+    this.props.fonts.find(font => {
       if (fontFamily === font.family) {
         fontStyles = font.styles.map(style => {
           return {value:style, name: style};
         });
+        return true;
       }
+      return false;
     });
+    if (updateState) {
+      this.setState({fontStyles});
+    }
     return fontStyles;
+  }
+
+  state: {
+    fontFamilies: {name:string, value:string}[];
+    fontStyles: {name:string, value:string}[]; 
   }
 
   render() {
@@ -35,16 +74,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
       return (<div>no token</div>);
     }
 
-    let fontStyles: {value:string, name:string}[] = [];
-    const fontFamily = this.props.token?.$value.figmaFontObj.family;
-    const fonts = this.props.fonts.map(font => {
-      if (fontFamily === font.family) {
-        fontStyles = font.styles.map(style => {
-          return {value:style, name: style};
-        });
-      }
-      return {value:font.family, name: font.family};
-    });
+    console.log(this.state);
 
     const token = this.props.token as DSysTypographyToken;
     return (
@@ -54,9 +84,9 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             label="Family"
             className="typography-detail-font-family"
             value={this.props.token.$value.figmaFontObj.family}
-            dropdown={fonts}
+            dropdown={this.state.fontFamilies}
             onChange={(value) => {
-              const styles = this.getStyles(value);
+              const styles = this._updateStyles(value, true);
               let regular = styles.find(style => {
                 return style.name === 'Regular' || style.name === 'Normal'
               });
@@ -76,7 +106,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             label="Style"
             className="typography-detail-font-style"
             value={this.props.token.$value.figmaFontObj.style}
-            dropdown={fontStyles}
+            dropdown={this.state.fontStyles}
             onChange={(value) => {
               this.props.updateToken({
                 ...token,
@@ -196,8 +226,9 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
                 $value: {
                   ...token.$value,
                   lineHeight: {
-                    unit: 'PIXELS',
-                    value: finalValue,
+                    unit: token.$value.lineHeight.unit === 'AUTO' ? 
+                      'PIXELS' : token.$value.lineHeight.unit,
+                    value: Math.max(0, finalValue),
                   }
                 }
               }); 
@@ -215,7 +246,6 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
                 });
                 return;
               }
-
               let lineHeightUnit = token.$value.lineHeight.unit;
               if (token.$value.lineHeight.unit === 'AUTO') {
                 lineHeightUnit = 'PIXELS';

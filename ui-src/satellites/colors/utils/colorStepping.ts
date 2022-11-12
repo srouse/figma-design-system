@@ -136,19 +136,8 @@ function multiplier(
   const baseHslColorObj = baseColorObj.toHsvObject();
   const topIndex = options.length-1;
   const offsetIndex = index - centerIndex;
-  console.log({
-    baseColor,
-    centerIndex,
-    index,
-    offsetIndex,
-    topIndex,
-    option,
-    options
-  });
   // goal
   // sat: 20, val:100 -> base -> sat:100, val: 36
-
-  console.log('hslColor', baseHslColorObj.s, baseHslColorObj.v, offsetIndex);
   // we don't want white or black, so limit the max/min
   if (offsetIndex > 0) {
     // return baseColor * (1 + offsetIndex*.5);
@@ -161,7 +150,6 @@ function multiplier(
     const saturation = baseHslColorObj.s + (saturationSegmentSize * incrementPercent);
     const value = baseHslColorObj.v - (valueSegmentSize * incrementPercent);
     const finalColor = new Colr().fromHsv(baseHslColorObj.h, saturation, value);
-    console.log(incrementPercent, saturation, value, finalColor.toHex());
     return finalColor.toRgbObject();
   }else if (offsetIndex < 0) {
     const incrementSize = centerIndex;
@@ -173,7 +161,6 @@ function multiplier(
     const saturation = baseHslColorObj.s - (saturationSegmentSize * incrementPercent);
     const value = baseHslColorObj.v + (valueSegmentSize * incrementPercent);
     const finalColor = new Colr().fromHsv(baseHslColorObj.h, saturation, value);
-    console.log(incrementPercent, saturation, value, finalColor.toHex());
     return finalColor.toRgbObject();
   }
   // there could be two values...

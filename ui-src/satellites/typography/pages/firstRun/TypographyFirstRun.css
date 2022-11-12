@@ -1,0 +1,23 @@
+
+
+.typography-first-run-row {
+  display: flex;
+  flex-direction: row;
+}
+
+  .typography-first-run-row > * {
+    flex: 1;
+  }
+
+  .typography-first-run-row > *:not(:last-child) {
+    margin-right: 10px;
+  }
+
+.typography-first-run-base-size {
+  width: 90px;
+  flex: none;
+}
+
+.typography-first-run-create-btn {
+  margin-top: 10px;
+}

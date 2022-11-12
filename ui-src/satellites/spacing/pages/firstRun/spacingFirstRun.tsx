@@ -49,7 +49,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
         <InputHeader
           label="Create Spacing Tokens" />
         <Input
-          label="Group Name"
+          label="Name"
           value={this.state.name}
           onEnterOrBlur={(name: string) => {
             this.setState({name});

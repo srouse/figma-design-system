@@ -1,7 +1,7 @@
 import React from "react";
 import "./effectsUI.css";
 import { CoreProps } from "../../../shared/types/types";
-import EffectsFirstRun from "./pages/effectsFirstRun";
+import EffectsFirstRun from "./pages/firstRun/effectsFirstRun";
 import EffectsList from "./pages/list/effectsList";
 
 export default class EffectsUI extends React.Component<CoreProps> {

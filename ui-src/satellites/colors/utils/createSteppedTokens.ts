@@ -39,7 +39,6 @@ export default async function createSteppedTokens(
     }
     return false;
   });
-  console.log('centerIndex', centerIndex);
 
   // create steps
   colorStepsBaseMetrics.options.map((option, index) => {
@@ -71,7 +70,7 @@ export default async function createSteppedTokens(
 
   // Stepped Colors into Styles
   const promiseArr: any[] = [];
-  steps.map((stepResult, index) => {
+  steps.map((stepResult) => {
     if (stepResult.color === undefined) return;
     const stepName = `${name}${
       stepResult.name ? `-${stepResult.name.toLowerCase()}` : ''}`;

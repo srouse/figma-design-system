@@ -17,25 +17,28 @@ import { addTypographyToken, changeName, changeOrder, deleteTypographyToken, upd
 import './typographyRow.css';
 import postMessagePromise from "../../../utils/postMessagePromise";
 import DetailModal from "../../../components/DetailModal/DetailModal";
-import TypographyDetail from "./TypographyDetail/TypographyDetail";
+import TypographyDetail from "./detail/TypographyDetail";
 import typeIframeContent from "./utils/TypeIframeContent";
-
 
 export type FontWithStyles = {family: string, styles: string[]};
 export type FigmaFontLookup = {[key:string]:{family: string, style: string}};
 
-export default class TypographyList extends React.Component<CoreProps> {
+interface TypographyProps extends CoreProps {
+  fonts: FontWithStyles[]
+}
 
-  constructor(props: CoreProps | Readonly<CoreProps>) {
+export default class TypographyList extends React.Component<TypographyProps> {
+
+  constructor(props: TypographyProps | Readonly<TypographyProps>) {
     super(props);
     this.state = {
       isDeleting: false,
       detailModalOpen: false,
-      fonts: [],
-      fontLookup: {}
+      // fonts: [],
+      // fontLookup: {}
     }
 
-    postMessagePromise(
+    /*postMessagePromise(
       MessageRequest.getAvailableFonts
     ).then((results : any) => {
       const finalFonts: FontWithStyles[] = [];
@@ -55,15 +58,15 @@ export default class TypographyList extends React.Component<CoreProps> {
         fonts: finalFonts,
         fontLookup
       })
-    });
+    });*/
   }
 
   state : {
     isDeleting: boolean,
     detailModalOpen: boolean,
     focusedToken?: DSysTypographyToken,
-    fonts: FontWithStyles[],
-    fontLookup: FigmaFontLookup,
+    // fonts: FontWithStyles[],
+    // fontLookup: FigmaFontLookup,
   }
 
   render() {
@@ -255,7 +258,7 @@ export default class TypographyList extends React.Component<CoreProps> {
         body={this.state.focusedToken ? (
           <TypographyDetail
             token={this.state.focusedToken}
-            fonts={this.state.fonts}
+            fonts={this.props.fonts}
             updateToken={(token : DSysTypographyToken) => {
               updateTypographyToken(
                 token,

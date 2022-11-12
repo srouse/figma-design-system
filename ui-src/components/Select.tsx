@@ -34,12 +34,22 @@ export default class Select extends React.Component<SelectProps> {
     }
   }
 
-  componentDidUpdate(): void {
+  componentDidUpdate(prevProps: Readonly<SelectProps>): void {
     this.addValidationSideEffects();
+    if (prevProps.value !== this.props.value) {
+      // just reset validation if value changes from outside
+      this.setState({
+        valid: true,
+        errorMessage: undefined
+      });
+    }
   }
 
   addValidationSideEffects() {
-    if (this.props.validation && !this.props.validation.sideEffects) {
+    if (
+      this.props.validation && 
+      !this.props.validation.sideEffects
+    ) {
       this.props.validation.sideEffects = (validationResults : ValidatorSuccess) => {
         this.setState({
           valid: validationResults.success,

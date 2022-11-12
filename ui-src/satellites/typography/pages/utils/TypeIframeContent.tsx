@@ -44,6 +44,7 @@ export default function typeIframeContent(
           .then(response=>{
               // console.log('found font:', response.ok);
               response.text();
+              document.body.classList.add('show');
           })
           .catch(err => {
               if (err instanceof TypeError) {
@@ -64,11 +65,15 @@ export default function typeIframeContent(
           text-align: center;
         }
         html {
-          font-family     : '${token.$value.figmaFontObj.family}';
+          font-family     : ${token.$value.figmaFontObj.family};
           font-style      : ${token.$value.fontStyle};
           font-weight     : ${token.$value.fontWeight};
-          letter-spacing  : $ {token.$value.letterSpacing}px;
-          line-height     : $ {token.$value.lineHeight}px;
+          letter-spacing  : ${token.$value.letterSpacing.value}px;
+          line-height     : ${token.$value.lineHeight.unit === 'AUTO' ? 
+              token.$value.lineHeight.unit :
+              `${token.$value.lineHeight.unit === 'PIXELS' ? 
+                  `${token.$value.lineHeight.value || 0}px` : 
+                  `${token.$value.lineHeight.value || 0}%`}`};
           font-size       : ${Math.min( maxSize, token.$value.fontSize )}px;
           text-transform  : ${token.$value.textCase === 'UPPER' ? 
             'uppercase' : 
@@ -91,8 +96,17 @@ export default function typeIframeContent(
           font-family: sans-serif;
           font-size: 14px;
         }
-        body.error {
-          background-color: #eee;
+        #example {
+          display: none;
+        }
+        body.show #example{
+          display: block;
+        }
+        body {
+          background-color: #efefef;
+        }
+        body.show {
+          background-color: #ffffff;
         }
       </style>
       </head>
