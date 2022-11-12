@@ -4,6 +4,7 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 }
 
 .color-picker-square {
@@ -25,8 +26,8 @@
 
 
 .color-picker-hue-selector {
-  align-self: stretch;
-  width: 20px;
+  height: 361px;
+  width: 22px;
   border: 1px solid var( --border-grey );
   border-top: none;
   margin-left: 4px;

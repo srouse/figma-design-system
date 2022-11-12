@@ -65,14 +65,14 @@ export default class ColorThumb extends React.Component<ColorThumbProps> {
     const thumbHouseRect = this.draggingThumbHouse.getBoundingClientRect();
     const relativeX = evt.clientX - thumbHouseRect.left;
     const relativeY = evt.clientY - thumbHouseRect.top;
-    const saturation = Math.max(
+    const saturation = Math.round(Math.max(
       0, Math.min(
         1, relativeX / thumbHouseRect.width)
-    ) * 100;
-    const value = 100 - (Math.max(
+    ) * 100);
+    const value = Math.round(100 - (Math.max(
       0, Math.min(
         1, relativeY / thumbHouseRect.height)
-    ) * 100);
+    ) * 100));
     const colorValueHsv = this.initColorObj.toHsvObject();
     const newColor = new Colr().fromHsvObject({
       h:colorValueHsv.h, s:saturation, v:value
@@ -81,6 +81,8 @@ export default class ColorThumb extends React.Component<ColorThumbProps> {
       thumbX: saturation,
       thumbY: 100 - value,
       color: newColor.toHex(),
+      saturation,
+      value,
     };
   }
 
@@ -94,7 +96,9 @@ export default class ColorThumb extends React.Component<ColorThumbProps> {
     const metrics = this._getMetrics(evt);
     if (!metrics) return;
     this.setState(metrics);
-    this.props.onColorChange(metrics.color);
+    this.props.onColorChange(
+      metrics.color,
+    );
     this.isDragging = false;
     document.removeEventListener('mousemove', this.onMouseMoveCapture);
     document.removeEventListener('mouseup', this.onMouseUpCapture);

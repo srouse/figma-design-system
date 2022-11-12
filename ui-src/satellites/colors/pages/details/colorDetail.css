@@ -14,3 +14,15 @@
   .color-detail-row > *:not(:last-child) {
     margin-right: 10px;
   }
+
+  .color-detail-alpha,
+  .color-detail-hue,
+  .color-detail-saturation,
+  .color-detail-value {
+    width: 60px;
+    flex: none;
+  }
+
+  .lockHueCheckbox {
+    margin: 0 !important;
+  }

@@ -5,6 +5,7 @@ import "./colorHueThumb.css";
 export type ColorHueThumbProps = {
   color: string,
   onColorChange: (color: string) => void,
+  onMove: (color: string) => void,
 }
 export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
 
@@ -75,6 +76,7 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
     const metrics = this._getMetrics(evt);
     if (!metrics) return;
     this.setState(metrics);
+    this.props.onMove(metrics.color);
   }
 
   onMouseUpCapture(evt: any) {

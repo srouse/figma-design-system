@@ -11,6 +11,7 @@ import {
   Icons,
   DTColor,
   MessageRequest,
+  findTokenViaStyleId,
 } from "../../../../../shared";
 
 import Input from "../../../../components/Input";
@@ -57,14 +58,10 @@ export default class ColorSteps extends React.Component<CoreProps> {
 
   componentDidUpdate(prevProps: CoreProps) {
     if (prevProps.tokenGroup !== this.props.tokenGroup) {
-      const tokenset = prevProps.tokenGroup?.tokensets[0];
-      if (tokenset && this.state.focusedToken) {
-        const newFocusedToken = Object.values(tokenset).find(
-          (token:DSysColorToken) => {
-            if (!token.$extensions) return false;
-            return token.$extensions["dsys.styleId"] === 
-             this.state.focusedToken!.$extensions["dsys.styleId"];
-          }
+      if (this.props.tokenGroup && this.state.focusedToken) {
+        const newFocusedToken = findTokenViaStyleId(
+          this.state.focusedToken.$extensions["dsys.styleId"],
+          this.props.tokenGroup
         );
         if (newFocusedToken) {
           this.setState({
@@ -79,7 +76,6 @@ export default class ColorSteps extends React.Component<CoreProps> {
     // there is a timing issue within the component..
     const picker = (this.picker as any);
     if (!picker) return;
-    // picker.removeEventListener("change", this.handlePickerChange);
     setTimeout(() => {
       picker.value = this.state.pickerColor;
       picker.alpha = this.state.pickerAlpha;
@@ -88,7 +84,6 @@ export default class ColorSteps extends React.Component<CoreProps> {
           'style',
           `background: ${picker._gridBackground}`
         );
-      // picker.addEventListener("change", this.handlePickerChange);
     },
     10);
   }
@@ -200,66 +195,6 @@ export default class ColorSteps extends React.Component<CoreProps> {
                     <div className="color-row-summary-text">
                       {colorValue.hex} / {Math.round(colorValue.alpha * 100)}%
                     </div>
-                    {/*<div className="color-row-hex">
-                      <Input
-                        className="color-row-hex-input"
-                        label="color" 
-                        hideLabel hideBorder
-                        value={`${color.hex}`}
-                        textAlign="left"
-                        onFocus={() => {
-                          this.setState({
-                            focusedToken: undefined,
-                          });
-                        }}
-                        onEnterOrBlur={(value: string) => {
-                          changeColor(
-                            value,
-                            color.alpha,
-                            prop,
-                            this.props.tokenGroup,
-                            this.props.refreshTokens
-                          );
-                        }} />
-                    </div>
-                    <div className="color-row-alpha">
-                      <Input
-                        className="color-row-alpha-input"
-                        label="color alpha" 
-                        hideLabel hideBorder
-                        value={`${Math.round(color.alpha * 100)}%`}
-                        textAlign="right"
-                        increments={{shifted:10, unshifted: 1}}
-                        onArrowUpOrDown={(
-                          value: string,
-                          increment: number
-                        ) => {
-                          const alphaFractionStr = value.replace('%', '');
-                          const alphaFraction = Math.max(
-                            0, Math.min(
-                              1, (parseInt(alphaFractionStr) + increment)/100
-                            )
-                          );
-                          changeColor(
-                            color.hex,
-                            alphaFraction,
-                            prop,
-                            this.props.tokenGroup,
-                            this.props.refreshTokens
-                          );
-                        }}
-                        onEnterOrBlur={(value: string) => {
-                          const alphaFractionStr = value.replace('%', '');
-                          const alphaFraction = parseInt(alphaFractionStr)/100;
-                          changeColor(
-                            color.hex,
-                            alphaFraction,
-                            prop,
-                            this.props.tokenGroup,
-                            this.props.refreshTokens
-                          );
-                        }} />
-                    </div>*/}
                     <div className="color-row-ada">
                       {renderAda(
                         colorValue,
@@ -293,38 +228,6 @@ export default class ColorSteps extends React.Component<CoreProps> {
           </DragAndDropList>
         </div>
       </div>
-      {/*<div
-        className="edit-color-picker"
-        style={{
-          left: this.state.pickerLeft,
-          top: this.state.pickerTop,
-          display: this.state.focusedToken ? 'flex' : 'none',
-        }}>
-        <color-picker
-          ref={(picker: any) => this.picker = picker}
-          formats="hex"
-          selectedformat="hex"
-        ></color-picker>
-        <DTButton
-          className="edit-color-picker-btn"
-          design={DTButtonDesign.border}
-          color={DTButtonColor.grey}
-          label="Apply" 
-          onClick={() => {
-            if (!this.picker || !this.state.focusedToken) return;
-            const hex = `#${this.picker.hex}`;
-            changeColor(
-              hex,
-              this.picker.alpha,
-              this.state.focusedToken.$extensions['dsys.name'],
-              this.props.tokenGroup,
-              this.props.refreshTokens
-            );
-            this.setState({
-              focusedToken: undefined
-            });
-          }} />
-        </div>*/}
       <DetailModal
         title={this.state.focusedToken?.$extensions["dsys.name"]}
         onClose={() => {

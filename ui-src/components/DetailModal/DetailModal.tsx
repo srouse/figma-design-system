@@ -24,7 +24,11 @@ export default class DetailModal extends React.Component<DetailModalProps> {
             onClick={this.props.onClose}
             dangerouslySetInnerHTML={{__html:getIcon(Icons.chevronLeft)}}>
           </div>
-          {this.props.title}
+          <div
+            className="detail-modal-title"
+            onClick={this.props.onClose}>
+            {this.props.title}
+          </div>
         </div>
         <div className="detail-modal-body">
           {this.props.body}

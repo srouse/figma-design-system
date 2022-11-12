@@ -6,7 +6,7 @@ import tokenGroupTypeToName from './tokenGroupTypeToName';
 import tokensetTypeToName from './tokensetTypeToName';
 import getIcon, {Icons} from './icons';
 import findTokenViaIndex from './utils/findTokenViaIndex';
-import findToken from './utils/findToken';
+import findToken, {findTokenViaStyleId} from './utils/findToken';
 import Validator, {
   ValidatorSuccess,
   Validation,
@@ -223,6 +223,7 @@ export {
   MessageRequestStyle,
   findTokenViaIndex,
   findToken,
+  findTokenViaStyleId,
 
   colors,
   typography,

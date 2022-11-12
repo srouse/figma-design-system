@@ -54,6 +54,10 @@
         cursor: pointer;
       }
 
+      .detail-modal-title:hover {
+        cursor: pointer;
+      }
+
   .detail-modal-body {
     padding: 20px;
     flex: 1;
