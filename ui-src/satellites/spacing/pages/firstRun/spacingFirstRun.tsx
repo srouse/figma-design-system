@@ -1,6 +1,9 @@
 import React from "react";
 import {
   CoreProps,
+  DSysGroupType,
+  DSysLevel,
+  DSysSpacingTokenset,
   Validator,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
@@ -62,40 +65,45 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
               }
             )
           } />
-        <Input
-          label="Token Prefix (each token will begin with this)"
-          value={this.state.baseName}
-          onEnterOrBlur={(baseName: string) => {
-            this.setState({baseName});
-          }} 
-          validation={
-            this.validator.register(
-              'name',
-              () => {
-                return {
-                  success:  this.state.baseName ? true : false,
-                  message: 'Need a base name to create tokens.'
+        {(
+          this.state.spaceStepsType !== SpacingStepTypes.spacingGroup &&
+          this.state.spaceStepsType !== SpacingStepTypes.none
+        ) ? (<>
+          <Input
+            label="Token Prefix (each token will begin with this)"
+            value={this.state.baseName}
+            onEnterOrBlur={(baseName: string) => {
+              this.setState({baseName});
+            }} 
+            validation={
+              this.validator.register(
+                'name',
+                () => {
+                  return {
+                    success:  this.state.baseName ? true : false,
+                    message: 'Need a base name to create tokens.'
+                  }
                 }
-              }
-            )
-          } />
-        <Input
-          label="Base Spacing Size"
-          value={`${this.state.baseSpaceSize ? this.state.baseSpaceSize : ''}`}
-          onEnterOrBlur={(baseSpaceSize: string) => {
-            this.setState({baseSpaceSize: parseFloat(baseSpaceSize)});
-          }} 
-          validation={
-            this.validator.register(
-              'baseSpaceSize',
-              () => {
-                return {
-                  success: this.state.baseSpaceSize ? true : false,
-                  message: 'Base sizing space (number) is required'
+              )
+            } />
+          <Input
+            label="Base Spacing Size"
+            value={`${this.state.baseSpaceSize ? this.state.baseSpaceSize : ''}`}
+            onEnterOrBlur={(baseSpaceSize: string) => {
+              this.setState({baseSpaceSize: parseFloat(baseSpaceSize)});
+            }} 
+            validation={
+              this.validator.register(
+                'baseSpaceSize',
+                () => {
+                  return {
+                    success: this.state.baseSpaceSize ? true : false,
+                    message: 'Base sizing space (number) is required'
+                  }
                 }
-              }
-            )
-          } />
+              )
+            } />
+        </>) : ''}
         <Select
           label="Step Pattern"
           value={this.state.spaceStepsType}
@@ -104,9 +112,8 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
             const newSpaceStepsBaseMetrics = spacingStepBaseOptions[spaceStepsType];
             this.setState({
               spaceStepsType,
-              spaceStepsBaseMetrics: {
-                ...newSpaceStepsBaseMetrics
-              },
+              spaceStepsBaseMetrics: newSpaceStepsBaseMetrics ?
+                {...newSpaceStepsBaseMetrics} : undefined,
             });
           }}
           validation={
@@ -121,7 +128,10 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
             )
           }>
         </Select>
-        {this.state.spaceStepsBaseMetrics ? (
+        {(
+          this.state.spaceStepsBaseMetrics &&
+          this.state.spaceStepsType === SpacingStepTypes.tshirtSizes
+        ) ? (
           <Select
               label="Base Spacing Step"
               value={this.state.spaceStepsBaseMetrics.default}
@@ -152,6 +162,29 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
           label="Create"
           color={DTButtonColor.primary}
           onClick={() => {
+            if (!this.state.name || !this.props.tokenGroup) return;
+
+            if (this.state.spaceStepsType === SpacingStepTypes.spacingGroup) {
+              // build an empty tokenset and tokengroup and let list build groups
+              const tokenset: DSysSpacingTokenset = {
+                $extensions: {
+                  'dsys.level': DSysLevel.tokenset,
+                  'dsys.type': DSysGroupType.Spacing,
+                  "dsys.name": this.state.name,
+                  "dsys.nodeId": '?'
+                },
+                $description: 'a set of spacing tokens',
+              }
+              const finalTokenGroup = {
+                ...this.props.tokenGroup,
+                name: this.state.name,
+                tokensets: [tokenset]
+              };
+              this.props.updateTokenGroup(finalTokenGroup);
+              this.props.refreshTokens();
+              return;
+            }
+
             if (this.validator.validate().length === 0 ) {
               createNewSteppedSpacingTokens(
                 this.state.baseName,

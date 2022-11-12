@@ -3,44 +3,86 @@ import {
   MessageRequestStyle,
   TokenGroup
 } from "../../../../shared";
-import { Result } from "../../../../shared/types/types";
 import postMessagePromise from "../../../utils/postMessagePromise";
-import stepBaseColor from "./stepBaseColor";
+import { ColorStepMetrics } from "./colorStepping";
 
 export default async function createSteppedTokens(
-  stateSteps: string,
+  name: string,
   baseColor: string,
-  tokenGroupName: string,
+  colorStepsBaseMetrics: ColorStepMetrics | undefined,
   tokenGroup: TokenGroup,
-  updateTokenGroup: (tokenGroup: TokenGroup) => void
-) : Promise<Result> {
-  /*const validation = this.validator.validateAll();
-  if (validation.length > 0) {
-    return;
-  }*/
+  refreshTokens: () => void,
+  updateTokenGroup: (tokenGroup: TokenGroup) => void,
+) {
+  if (!name || !baseColor || !colorStepsBaseMetrics || !tokenGroup) return;
 
-  const steps = stateSteps.split(',');
-  const steppedColors = stepBaseColor(
-    baseColor,
-    steps
-  );
-  if (!tokenGroup) return {success: false, message: 'no token group'};
+  // build steps into this variable
+  const steps: {name:string,color:string}[] = [];
+
+  // find the center index
+  let centerIndex = 3;
+  colorStepsBaseMetrics.options.find((option, index) => {
+    if (Array.isArray(option.value)) {
+      if (
+        (option.value as string[]).indexOf(
+          colorStepsBaseMetrics.default
+        ) !== -1
+      ) {
+        centerIndex = index;
+        return true;
+      }
+    }else{
+      if (option.value === colorStepsBaseMetrics.default) {
+        centerIndex = index;
+        return true;
+      }
+    }
+    return false;
+  });
+  console.log('centerIndex', centerIndex);
+
+  // create steps
+  colorStepsBaseMetrics.options.map((option, index) => {
+    if (Array.isArray(option.value)) {
+      option.value.map(val => {
+        steps.push({
+          name: val,
+          color: colorStepsBaseMetrics.multiplier(
+            baseColor, centerIndex, index, 
+            {
+              ...option,
+              value: val,// flatten values for multiplier
+            },
+            colorStepsBaseMetrics.options
+          ),
+        });
+      })
+    }else{
+      steps.push({
+        name: option.value,
+        color: colorStepsBaseMetrics.multiplier(
+          baseColor, centerIndex, index, 
+          option,
+          colorStepsBaseMetrics.options
+        ),
+      });
+    }
+  });
 
   // Stepped Colors into Styles
   const promiseArr: any[] = [];
-  steppedColors.steps?.map((stepResult, index) => {
-    if (stepResult.step === undefined) return;
-    const stepName = `${tokenGroupName}${
-      stepResult.step ? `-${stepResult.step.toLowerCase()}` : ''}`;
-
+  steps.map((stepResult, index) => {
+    if (stepResult.color === undefined) return;
+    const stepName = `${name}${
+      stepResult.name ? `-${stepResult.name.toLowerCase()}` : ''}`;
     promiseArr.push((async () => {
       return await postMessagePromise(
         MessageRequest.createStyle,
         {
           style: {
             type: MessageRequestStyle.color,
-            name: `${tokenGroupName}/${stepName}`,
-            value: stepResult,
+            name: `${name}/${stepName}`,
+            value: stepResult.color,
           }
         }
       );
@@ -50,9 +92,8 @@ export default async function createSteppedTokens(
 
   const finalTG = {
     ...tokenGroup,
-    name: tokenGroupName,// just the name so we can build from styles
+    name,// just the name so we can build from styles
   };
-
   updateTokenGroup(finalTG);
-  return {success: true};
+  refreshTokens();
 }

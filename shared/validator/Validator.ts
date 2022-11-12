@@ -23,8 +23,10 @@ export default class Validator {
     validate: Validation,
     locations?: ValidationLocation[] | ValidationLocation
   ) : ValidationWorker {
-    if (this.validationWorkersLookup[identifier]) 
+    if (this.validationWorkersLookup[identifier]) {
+      // console.error(`duplicate identifiers where registered: ${identifier}`);
       return this.validationWorkersLookup[identifier];
+    }
 
     let finalLocations: ValidationLocation[] | undefined;
     if (locations) {

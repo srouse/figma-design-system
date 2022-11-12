@@ -1,6 +1,6 @@
 import { DSysGroupType, DSysLevel, DSysSpacingTokenset, DTTokenType, TokenGroup } from "../../../../shared";
 import uid from "../../../utils/uid";
-import { SpacingStepMetrics, SpacingStepTypes } from "./spacingStepping";
+import { SpacingStepMetrics } from "./spacingStepping";
 
 export default function createNewSteppedSpacingTokens(
   name: string | undefined,
@@ -9,7 +9,7 @@ export default function createNewSteppedSpacingTokens(
   tokenGroup: TokenGroup | undefined,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
 ) {
-  if (!name || !tokenGroup || !baseSize || !spaceStepsBaseMetrics) return;
+  if (!name || !baseSize || !spaceStepsBaseMetrics || !tokenGroup) return;
 
   const tokenset: DSysSpacingTokenset = {
     $extensions: {
@@ -27,7 +27,10 @@ export default function createNewSteppedSpacingTokens(
     tokensets: [tokenset]
   };
 
-  let steps: {name:string,size:number}[] = [];
+  // build steps into this variable
+  const steps: {name:string,size:number}[] = [];
+
+  // find the center index
   let centerIndex = 3;
   spaceStepsBaseMetrics.options.find((option, index) => {
     if (option.value === spaceStepsBaseMetrics.default) {
@@ -36,6 +39,8 @@ export default function createNewSteppedSpacingTokens(
     }
     return false;
   });
+
+  // create steps
   spaceStepsBaseMetrics.options.map((option, index) => {
     steps.push({
       name: option.value,
@@ -48,6 +53,7 @@ export default function createNewSteppedSpacingTokens(
   });
   steps.unshift(spaceStepsBaseMetrics.zeroOption);
 
+  // take steps and build tokens...
   steps.map((step, index) => {
     const finalName = `${name}${step.name ? `-${step.name}` : ''}`;
     tokenset[finalName] = {

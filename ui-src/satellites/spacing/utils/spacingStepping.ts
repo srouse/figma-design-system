@@ -36,7 +36,7 @@ export const spacingSteps = [
     value: SpacingStepTypes.smallestToLargest
   },
   {
-    name: 'xxxl, xxl, xl, l, m, s, xs, xxs, xxxs',
+    name: 'xxxl, xxl, xl, lg, md, sm, xs, xxs, xxxs',
     value: SpacingStepTypes.tshirtSizes
   },
   {

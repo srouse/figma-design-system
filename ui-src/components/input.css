@@ -16,6 +16,12 @@
     margin: 0;
   }
 
+  .inputComp input::placeholder {
+    font-style: italic;
+    color: var( --text-color-lighter );
+  }
+
+
   .inputComp.hide-border .inputComp-input {
     border: none;
   }

@@ -138,16 +138,19 @@ export default class Input extends React.Component<InputProps> {
                   }
                 }}
                 onBlur={(evt: FocusEvent<HTMLInputElement>) => {
-                  if (this.props.validation) {
-                    this.props.validation.validateOnLocation(
-                      ValidationLocation.onValidateBlur
-                    );
-                  }
                   const targetValue = (evt.target as HTMLInputElement).value;
                   if (this.props.onBlur)
                     this.props.onBlur(targetValue);
                   if (this.props.onEnterOrBlur)
                     this.props.onEnterOrBlur(targetValue);
+                  // need to wait a cycle
+                  setTimeout(() => {
+                    if (this.props.validation) {
+                      this.props.validation.validateOnLocation(
+                        ValidationLocation.onValidateBlur
+                      );
+                    }
+                  }, 0);
                 }}
                 onKeyDown={(evt: KeyboardEvent<HTMLInputElement>) => {
                   const targetValue = (evt.target as HTMLInputElement).value;
@@ -223,6 +226,7 @@ export default class Input extends React.Component<InputProps> {
                   if (this.props.onChange)
                     this.props.onChange(evt.target.value);
 
+                  // need to wait a cycle
                   setTimeout(() => {
                     if (this.props.validation) {
                       this.props.validation.validateOnLocation(
