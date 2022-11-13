@@ -50,11 +50,7 @@ export const ColorSteps = [
     value: ColorStepTypes.step9ThreeDigit,
   },
   {
-    name: '100, 200, 300, 400, [base:500], 600, 700, 800, 900',
-    value: ColorStepTypes.step9ThreeDigit,
-  },
-  {
-    name: 'Color Group',
+    name: 'Custom Group',
     value: ColorStepTypes.colorGroup,
   },
 ];
@@ -140,7 +136,6 @@ function multiplier(
   // sat: 20, val:100 -> base -> sat:100, val: 36
   // we don't want white or black, so limit the max/min
   if (offsetIndex > 0) {
-    // return baseColor * (1 + offsetIndex*.5);
     const incrementSize = topIndex - centerIndex;
     const incrementPercent = offsetIndex/incrementSize;
     // find sat/val segments

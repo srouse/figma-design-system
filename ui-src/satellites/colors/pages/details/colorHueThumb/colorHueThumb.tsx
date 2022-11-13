@@ -4,8 +4,8 @@ import "./colorHueThumb.css";
 
 export type ColorHueThumbProps = {
   color: string,
-  onColorChange: (color: string) => void,
-  onMove: (color: string) => void,
+  onColorChange?: (color: string) => void,
+  onMove?: (color: string) => void,
 }
 export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
 
@@ -76,14 +76,14 @@ export default class ColorHueThumb extends React.Component<ColorHueThumbProps> {
     const metrics = this._getMetrics(evt);
     if (!metrics) return;
     this.setState(metrics);
-    this.props.onMove(metrics.color);
+    if (this.props.onMove) this.props.onMove(metrics.color);
   }
 
   onMouseUpCapture(evt: any) {
     const metrics = this._getMetrics(evt);
     if (!metrics) return;
     this.setState(metrics);
-    this.props.onColorChange(metrics.color);
+    if (this.props.onColorChange) this.props.onColorChange(metrics.color);
     this.isDragging = false;
     document.removeEventListener('mousemove', this.onMouseMoveCapture);
     document.removeEventListener('mouseup', this.onMouseUpCapture);

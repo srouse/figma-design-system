@@ -13,12 +13,20 @@ import {
 import Input from "../../../components/Input";
 import ListHeader from "../../../components/ListHeader/ListHeader";
 import DragAndDropList from "../../../components/DragAndDropList/dragAndDropList";
-import { addTypographyToken, changeName, changeOrder, deleteTypographyToken, updateTypographyToken } from "./typographyActions";
-import './typographyRow.css';
+import {
+  addTypographyToken,
+  changeName,
+  changeOrder,
+  deleteTypographyToken,
+  updateTypographyToken
+} from "./typographyActions";
 import postMessagePromise from "../../../utils/postMessagePromise";
 import DetailModal from "../../../components/DetailModal/DetailModal";
 import TypographyDetail from "./detail/TypographyDetail";
 import typeIframeContent from "./utils/TypeIframeContent";
+import DTButton, { DTButtonColor } from "../../../components/DTButton";
+import './typographyList.css';
+import './typographyRow.css';
 
 export type FontWithStyles = {family: string, styles: string[]};
 export type FigmaFontLookup = {[key:string]:{family: string, style: string}};
@@ -34,45 +42,25 @@ export default class TypographyList extends React.Component<TypographyProps> {
     this.state = {
       isDeleting: false,
       detailModalOpen: false,
-      // fonts: [],
-      // fontLookup: {}
     }
-
-    /*postMessagePromise(
-      MessageRequest.getAvailableFonts
-    ).then((results : any) => {
-      const finalFonts: FontWithStyles[] = [];
-      const fontLookup: {[key:string]: FontWithStyles} = {};
-      (results.fonts as FigmaFontLookup[]).map((font) => {
-        if (!fontLookup[font.fontName.family]) {
-          fontLookup[font.fontName.family] = {
-            family: font.fontName.family,
-            styles: [font.fontName.style]
-          };
-          finalFonts.push(fontLookup[font.fontName.family]);
-        }else{
-          fontLookup[font.fontName.family].styles.push(font.fontName.style);
-        }
-      });
-      this.setState({
-        fonts: finalFonts,
-        fontLookup
-      })
-    });*/
   }
 
   state : {
     isDeleting: boolean,
     detailModalOpen: boolean,
     focusedToken?: DSysTypographyToken,
-    // fonts: FontWithStyles[],
-    // fontLookup: FigmaFontLookup,
   }
 
   render() {
-    if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
+    if (
+      !this.props.tokenGroup ||
+      !this.props.tokenGroup.tokensets[0]
+    ) return (
+      <div className="typography-list-no-tokenset">
+        <div className="typography-list-no-tokenset-text">no tokenset</div>
+      </div>
+    );
     const tokenset = this.props.tokenGroup.tokensets[0];
-    if (!tokenset) return (<div>No Steps Found</div>);
     const tokens = cleanAndSortTokens(tokenset);
 
     return (<>

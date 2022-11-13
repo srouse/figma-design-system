@@ -28,7 +28,6 @@ export function findTokenViaStyleId(
   // find the token in the tokengroup
   const tokenset = tokenGroup.tokensets[0];
   if (!tokenset) return;
-  console.log(tokenset);
   const tokenEntry = Object.entries(tokenset).find(entry => {
     const token = entry[1] as DSysColorToken;
     if (!isToken(token)) return false;

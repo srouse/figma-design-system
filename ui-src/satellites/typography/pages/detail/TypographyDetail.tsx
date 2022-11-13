@@ -74,8 +74,6 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
       return (<div>no token</div>);
     }
 
-    console.log(this.state);
-
     const token = this.props.token as DSysTypographyToken;
     return (
       <div className={`typography-detail`}>

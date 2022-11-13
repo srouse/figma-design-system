@@ -9,7 +9,6 @@ export function pullTokensFromTextStyles(
   nodeId: string,
 ) {
   const styles = textStyles(tokenGroup.name);
-  
   const stylesTokenGroup = textStylesToDSysTokenset(
     styles, tokenGroup.name, nodeId
   );
@@ -70,7 +69,6 @@ export function textStylesToDSysTokenset(
       $type: DTTokenType.typography
     };
   });
-
   return tokenset;
 }
 

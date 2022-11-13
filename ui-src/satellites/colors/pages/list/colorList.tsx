@@ -101,9 +101,16 @@ export default class ColorSteps extends React.Component<CoreProps> {
   }
 
   render() {
-    if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
+    if (
+      !this.props.tokenGroup ||
+      !this.props.tokenGroup.tokensets[0]
+    ) return (
+      <div className="color-list-no-tokenset">
+        <div className="color-list-no-tokenset-text">no tokenset</div>
+      </div>
+    );
+
     const tokenset = this.props.tokenGroup.tokensets[0];
-    if (!tokenset) return (<div>No Steps Found</div>);
     const tokens = cleanAndSortTokens(tokenset);
      
     return (<>

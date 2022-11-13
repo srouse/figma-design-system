@@ -11,7 +11,6 @@ export default async function createSteppedTokens(
   baseColor: string,
   colorStepsBaseMetrics: ColorStepMetrics | undefined,
   tokenGroup: TokenGroup,
-  refreshTokens: () => void,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
 ) {
   if (!name || !baseColor || !colorStepsBaseMetrics || !tokenGroup) return;
@@ -89,10 +88,9 @@ export default async function createSteppedTokens(
   });
   await Promise.all(promiseArr);
 
-  const finalTG = {
+  const finalTokenGroup = {
     ...tokenGroup,
     name,// just the name so we can build from styles
   };
-  updateTokenGroup(finalTG);
-  refreshTokens();
+  updateTokenGroup(finalTokenGroup);
 }

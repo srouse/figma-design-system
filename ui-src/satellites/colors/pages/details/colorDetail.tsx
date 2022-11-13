@@ -64,7 +64,6 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
       const colorValue = new Colr().fromHex(color.$value.hex);
       const colorValueHsv = colorValue.toHsvObject();
       const hueColor = new Colr().fromHsvObject({h:colorValueHsv.h,s:100,v:100});
-
       this.setState({
         hue:colorValueHsv.h,
         saturation: colorValueHsv.s,

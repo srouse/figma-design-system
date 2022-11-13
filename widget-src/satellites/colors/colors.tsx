@@ -265,7 +265,7 @@ export default function colorsSatellite() {
             width="hug-contents"
             horizontalAlignText="center"
             fill={colors.textColorLightest}>
-            Tokens Not Found
+            Color Tokens Not Found
           </Text>
         </AutoLayout>
       </AutoLayout>

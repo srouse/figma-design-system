@@ -53,7 +53,7 @@ function Widget() {
     // only the open widget should listen to events...
     if (isWindowUIOpen) {
       figma.ui.onmessage = async (message) => {
-        console.log('RECIEVE MSG', nodeId, message);
+        console.log('RECIEVE MSG', message);
         switch (message.name) {
           case MessageName.globalDataUpdate:
             setGlobalData(message.globalData);

@@ -9,6 +9,7 @@ import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
 import Select from "../../../../components/Select";
 import { FontWithStyles } from "../typographyList";
+import createSteppedTypographyTokens from "../utils/createSteppedTypographyTokens";
 import typeIframeContent from "../utils/TypeIframeContent";
 import {
   TypographyStepBaseOptions,
@@ -116,7 +117,6 @@ export default class FirstRun extends React.Component<TypographyProps> {
           value={this.state.typographyStepsType}
           dropdown={TypographySteps}
           onChange={(typographyStepsType: string) => {
-            console.log(typographyStepsType);
             const newTypographyStepsBaseMetrics = 
               TypographyStepBaseOptions[typographyStepsType];
             this.setState({
@@ -158,7 +158,6 @@ export default class FirstRun extends React.Component<TypographyProps> {
                 this.validator.register(
                   'family',
                   () => {
-                    console.log()
                     return {
                       success: this.state.baseFontFamily ? true : false,
                       message: 'Font Family is required'
@@ -253,38 +252,36 @@ export default class FirstRun extends React.Component<TypographyProps> {
           className="typography-first-run-create-btn"
           color={DTButtonColor.primary}
           onClick={() => {
-            this.validator.validate()
-            if (
-              this.validator.validate().length > 0 || 
-              !this.props.tokenGroup) return;
+            if (!this.props.tokenGroup) return;
+            if (this.validator.validate().length === 0) {
+              if (
+                this.state.typographyStepsType === 
+                TypographyStepTypes.typographyGroup
+              ) {
+                const finalTokenGroup = {
+                  ...this.props.tokenGroup,
+                  // just the name so we can build from style
+                  name: this.state.name,
+                };
+                this.props.updateTokenGroup(finalTokenGroup);
+                this.props.refreshTokens();
+                return;
+              }
 
-            this.validator.validate();
-
-            console.log('this.state', this.state);
-
-            /*if (this.state.colorStepsType === ColorStepTypes.colorGroup) {
-              const finalTokenGroup = {
-                ...this.props.tokenGroup,
-                name: this.state.name,// just the name so we can build from styles
-              };
-              this.props.updateTokenGroup(finalTokenGroup);
-              this.props.refreshTokens();
-              return;
+              (async () => {
+                await createSteppedTypographyTokens(
+                  // we are past validator, so we know they are good
+                  this.state.name,
+                  this.state.baseFontFamily,
+                  this.state.baseFontStyle,
+                  this.state.baseSize,
+                  this.state.typographyStepsBaseMetrics,
+                  this.props.tokenGroup!,
+                  this.props.updateTokenGroup,
+                );
+                this.props.refreshTokens();
+              })()
             }
-
-            if (
-              this.validator.validate().length === 0 &&
-              this.state.baseColor
-            ) {
-              createSteppedTokens(
-                this.state.name,
-                this.state.baseColor,
-                this.state.colorStepsBaseMetrics,
-                this.props.tokenGroup,
-                this.props.refreshTokens,
-                this.props.updateTokenGroup,
-              );
-            }*/
           }}></DTButton>
       </div>
     );

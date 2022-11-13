@@ -5,26 +5,25 @@ import { pullTokensFromTextStyles } from "../satellites/typography/typographyUti
 import { findWidget } from "../utils";
 import bounceBack from "../utils/postMessagePromise";
 
-export default async function refreshTokensFromStyles(
+export default function refreshTokensFromStyles(
   message: any,
   tokenGroup: TokenGroup,
   setTokenGroup: (tokenGroup: TokenGroup) => void,
   nodeId: string,
 ) {
   if (tokenGroup.type === DSysGroupType.ColorSet) {
-    await pullTokensFromColorStyles(
+    pullTokensFromColorStyles(
       tokenGroup, setTokenGroup, nodeId
     );
   }else if (tokenGroup.type === DSysGroupType.TypographySet) {
-    await pullTokensFromTextStyles(
+    pullTokensFromTextStyles(
       tokenGroup, setTokenGroup, nodeId
     );
   }else if (tokenGroup.type === DSysGroupType.EffectSet) {
-    await pullTokensFromEffectStyles(
+    pullTokensFromEffectStyles(
       tokenGroup, setTokenGroup, nodeId
     );
   }
-
   const thisWidget = findWidget(nodeId);
   bounceBack(message, {
     nodeId,

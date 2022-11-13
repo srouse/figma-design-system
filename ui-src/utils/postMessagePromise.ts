@@ -14,9 +14,11 @@ export default async function postMessagePromise(
     console.error('Can not send "name" to messagePromise');
     return;
   }
+
   return new Promise((resolve) => {
     const promiseId = `promise_${promiseBounceId++}`;
     messagePromiseCallbacks[promiseId] = (msg) => resolve(msg);
+    // con sole.log('postMessagePromise',promiseId, Object.keys(messagePromiseCallbacks))
     setTimeout(() => {
       parent.postMessage({pluginMessage: {
         name: MessageName.promiseBounce,
@@ -28,10 +30,13 @@ export default async function postMessagePromise(
   });
 }
 
-window.onmessage = (evt: any) => {
+onmessage = (evt: any) => {
   const msg = evt.data.pluginMessage;
   if (messagePromiseCallbacks[msg.promiseId]) {
+    // con sole.log('RECIEVE MSG BOUNCE BACK (SUCCESS)', msg);
     messagePromiseCallbacks[msg.promiseId](msg);
     delete messagePromiseCallbacks[msg.promiseId];
+  }else{
+    // con sole.log('RECIEVE MSG BOUNCE BACK (FAIL)', msg);
   }
 }

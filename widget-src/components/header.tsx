@@ -46,7 +46,8 @@ export default function header(
     false
   );
 
-  let title = tokenGroup?.name || 'No Name Found';
+  let title = tokenGroup?.name || 'No Name';
+  const hasName = tokenGroup?.name ? true : false;
   // let subtitle = '';
   switch( tokenGroup?.type ) {
     case DSysGroupType.Base:
@@ -129,11 +130,12 @@ export default function header(
           name="Title"
           fontFamily={typography.primaryFont}
           fontWeight="normal"
-          fontSize={18}
+          fontSize={hasName ? 18 : 16}
           width="fill-parent"
           height="hug-contents"
           fill={isWindowUIOpen ? 
-            colors.white : colors.textColor}>
+            colors.white : 
+            hasName ? colors.textColor : colors.greyLighter}>
           {title}
         </Text>
         <AutoLayout

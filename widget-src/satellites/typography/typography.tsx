@@ -43,10 +43,10 @@ export default function typographySatellite() {
     }
   });
 
-  const typographyList = getTypographyList(tokenGroup);
-
-  return (
-    <AutoLayout 
+  if (tokenGroup.name) {
+    const typographyList = getTypographyList(tokenGroup);
+    return (
+      <AutoLayout 
         name="base-page"
         height="hug-contents"
         width="fill-parent"
@@ -79,7 +79,8 @@ export default function typographySatellite() {
             left: 20, right: 20
           }}
           overflow="visible">
-          {typographyList ? typographyList : (
+          {typographyList ? 
+            typographyList :
             <Text
               fontFamily={typography.primaryFont}
               fontWeight="light"
@@ -87,12 +88,49 @@ export default function typographySatellite() {
               width="hug-contents"
               horizontalAlignText="center"
               fill={colors.textColorLightest}>
-              Typography Tokens Not Found
+              Found no Typography Tokens in Folder '{tokenGroup.name}'
             </Text>
-          )}
+          }
         </AutoLayout>
       </AutoLayout>
-  );
+    );
+  }else{
+    return (
+      <AutoLayout 
+        name="base-page"
+        height="hug-contents"
+        width="fill-parent"
+        direction="vertical"
+        horizontalAlignItems="start"
+        verticalAlignItems="start"
+        spacing={24}
+        overflow="visible">
+        {header()}
+        <AutoLayout 
+          height="hug-contents"
+          direction="vertical"
+          width="fill-parent"
+          horizontalAlignItems="center"
+          verticalAlignItems="center"
+          spacing={0}
+          padding={{
+            top: 20, bottom: 20,
+            left: 20, right: 20
+          }}
+          overflow="visible">
+          <Text
+            fontFamily={typography.primaryFont}
+            fontWeight="light"
+            fontSize={18}
+            width="hug-contents"
+            horizontalAlignText="center"
+            fill={colors.textColorLightest}>
+            Typography Tokens Not Found
+          </Text>
+        </AutoLayout>
+      </AutoLayout>
+    );
+  }
 }
 
 function getExampleType(token: DSysTypographyToken) {
@@ -118,7 +156,7 @@ function getTypographyList(
 ) {
   const tokenset = tokenGroup.tokensets[0];
   const tokens = cleanAndSortTokens(tokenset);
-  if (!tokens) return false;
+  if (!tokens || tokens.length == 0) return false;
   return tokens.map(
     (tokenInfo, index) => {
       const token = tokenInfo[1] as DSysTypographyToken;

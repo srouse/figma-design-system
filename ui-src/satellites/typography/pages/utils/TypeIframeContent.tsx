@@ -42,7 +42,7 @@ export default function typeIframeContent(
           finalStyles.join(',')
         }&display=swap&subset=latin&text=${loadedLetters}")
           .then(response=>{
-              // console.log('found font:', response.ok);
+              // cons ole.log('found font:', response.ok);
               response.text();
               document.body.classList.add('show');
           })

@@ -5,12 +5,13 @@ const {
   getLocalPaintStyles,
   getLocalEffectStyles,
   getLocalTextStyles,
+  loadFontAsync,
 } = figma;
 
 /**
  * createStyle
  */
-export default function createStyle(
+export default async function createStyle(
   message: any,
 ) {
   if (message.style) {
@@ -18,6 +19,10 @@ export default function createStyle(
     // COLOR
     if (message.style.type === MessageRequestStyle.color) {
       const style = figma.createPaintStyle();
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalPaintStyles(),
+      );
       style.paints = [
         {
           type: "SOLID",
@@ -28,11 +33,6 @@ export default function createStyle(
           }
         }
       ];
-      style.name = getUniqueStyleName(
-        message.style.name,
-        getLocalPaintStyles(),
-      );
-
       return bounceBack(message, {
         success: true,
         style,
@@ -42,6 +42,10 @@ export default function createStyle(
     // EFFECT SHADOW
     } else if (message.style.type === MessageRequestStyle.shadow) {
       const style = figma.createEffectStyle();
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalEffectStyles(),
+      );
       style.effects = [
         {
           type      : 'DROP_SHADOW',
@@ -53,10 +57,6 @@ export default function createStyle(
           blendMode : 'NORMAL',
         }
       ];
-      style.name = getUniqueStyleName(
-        message.style.name,
-        getLocalEffectStyles(),
-      );
 
       return bounceBack(message, {
         success: true,
@@ -67,6 +67,10 @@ export default function createStyle(
     // EFFECT BLUR
     } else if (message.style.type === MessageRequestStyle.blur) {
       const style = figma.createEffectStyle();
+      style.name = getUniqueStyleName(
+        message.style.name,
+        getLocalEffectStyles(),
+      );
       style.effects = [
         {
           type      : 'LAYER_BLUR',
@@ -74,11 +78,6 @@ export default function createStyle(
           visible   : true,
         }
       ];
-      style.name = getUniqueStyleName(
-        message.style.name,
-        getLocalEffectStyles(),
-      );
-
       return bounceBack(message, {
         success: true,
         style,
@@ -89,19 +88,19 @@ export default function createStyle(
     } else if (message.style.type === MessageRequestStyle.text) {
       // just enough to make one...
       const style = figma.createTextStyle();
-      style.fontSize = message.style.value.fontSize;
-      style.fontName = message.style.value.fontName;
       style.name = getUniqueStyleName(
         message.style.name,
         getLocalTextStyles(),
       );
-
+      await loadFontAsync(message.style.value.fontName);
+      style.fontName = message.style.value.fontName;
+      style.fontSize = message.style.value.fontSize;
+      console.log(`done creating ${message.style.name}`);
       return bounceBack(message, {
         success: true,
         style,
         message: 'succesfully created style',
       });
-
     }else{
       return bounceBack(message, {
         success: false,

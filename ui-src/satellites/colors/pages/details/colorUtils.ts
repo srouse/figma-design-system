@@ -19,7 +19,6 @@ export function hexToHsv(
   hex: string
 ): ColorHsv  {
   const rgb = hexToRgb(hex);
-  console.log('hexToHsv rgb', rgb);
   return rgbToHsv(rgb.r, rgb.g, rgb.b);
 }
 
