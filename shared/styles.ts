@@ -50,3 +50,12 @@ export const typography = {
   primaryUIFont: `Inter, system-ui, sans-serif`,
   monotype: 'Roboto Mono',// 'Courier Prime'
 }
+
+export const sizing = {
+  headerHeight: 70,
+  defaultWidgetWidth: 480,
+  // icons
+  iconDisplaySize: 80,
+  iconSpacing: 10,
+  iconCompsetPadding: 10,
+}

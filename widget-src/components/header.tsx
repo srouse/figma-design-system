@@ -6,7 +6,7 @@ import {
   openEditor,
 } from "../actions/baseActions";
 import { findBaseWidget, findNodeParentPage } from "../utils";
-import { colors, typography } from "../../shared/styles";
+import { colors, sizing, typography } from "../../shared/styles";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import getIcon, { Icons } from "../../shared/icons";
 
@@ -16,30 +16,30 @@ const {
   Text,
   SVG,
   useSyncedState,
-  useWidgetId,
   Rectangle,
 } = widget;
  
 export default function header(
   refreshCallback?: () => void,
-  openEditorCallback?:  () => void
+  openEditorCallback?:  () => void,
+  addCallback?: () => void,
 ) {
-  const nodeId = useWidgetId();
+  // const nodeId = useWidgetId();
 
-  const [tokenGroup, setTokenGroup] = useSyncedState(
+  const [tokenGroup, ] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
   );
 
-  const [globalData, setGlobalData] = useSyncedState(
+  const [globalData, ] = useSyncedState(
     'globalData',
     defaultGlobalData
   );
 
-  const [touch, setTouch] = useSyncedState(
+  /* const [touch, setTouch] = useSyncedState(
     'touch',
     0
-  );
+  );*/
 
   const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
     'isWindowUIOpen',
@@ -79,7 +79,7 @@ export default function header(
       <AutoLayout 
         name="Header Titles"
         width="fill-parent"
-        height="hug-contents"
+        height={sizing.headerHeight}
         direction="horizontal"
         horizontalAlignItems="start"
         verticalAlignItems="center"
@@ -140,6 +140,25 @@ export default function header(
         </Text>
         <AutoLayout
           spacing={2}>
+          {addCallback ? (
+            <AutoLayout
+              padding={6}
+              cornerRadius={4}
+              hoverStyle={{
+                fill: isWindowUIOpen ? 
+                  colors.hoverBgColorDark : colors.hoverBgColorLight
+              }}
+              onClick={() => {
+                addCallback();
+              }}>
+              <SVG
+                src={getIcon(
+                  Icons.add,
+                  isWindowUIOpen ? colors.white : colors.textColor
+                )}
+              />
+            </AutoLayout>
+          ) : null}
           <AutoLayout
             padding={6}
             cornerRadius={4}

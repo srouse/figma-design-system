@@ -5,7 +5,7 @@ import base from "../base/base";
 import colorsSatellite from "./colors/colors";
 import componentsSatellite from "./components";
 import effectsSatellite from "./effects/effects";
-import iconsSatellite from "./icons";
+import iconsSatellite from "./icons/icons";
 import typographySatellite from "./typography/typography";
 import defaultSatellite from "./default";
 import spacingSatellite from "./spacing/spacing";

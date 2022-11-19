@@ -26,6 +26,8 @@ export enum MessageRequest {
   changeStylesFolder = 'changeStylesFolder',
   updateTokenGroup = 'updateTokenGroup',
   getAvailableFonts = 'getAvailableFonts',
+  getFontAwesomeAPIKey = 'getFontAwesomeAPIKey',
+  setFontAwesomeAPIKey = 'setFontAwesomeAPIKey',
 }
 
 export enum MessageRequestStyle {
@@ -49,6 +51,7 @@ export interface State {
   dsysTokens?: DSys,
   promptTitle?: string,
   promptContent?: any,
+  fontAwesomeApiKey?: string,
 }
 
 export type CoreProps = {
@@ -56,9 +59,11 @@ export type CoreProps = {
   globalData?: GlobalData,
   updateGlobalData: (globalData: GlobalData) => void,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
+  updateFontAwesomeApiKey: (fontAwesomeApiKey: string) => void,
   refreshTokens: () => void,
   createPrompt: (title: string, content: any) => void,
   closePrompt: () => void,
+  fontAwesomeApiKey?: string,
   style?: {},
 }
 

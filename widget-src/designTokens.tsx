@@ -1,3 +1,4 @@
+import { sizing } from "../shared/styles";
 import {
   defaultGlobalData,
   defaultTokenGroup,
@@ -71,7 +72,7 @@ export default function designSystem() {
     }
   });
 
-  let width = 480;
+  let width = sizing.defaultWidgetWidth;
 
   return (
     <AutoLayout 

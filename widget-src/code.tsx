@@ -34,20 +34,25 @@ function Widget() {
     defaultTokenGroup
   );
 
-  const [globalData, setGlobalData] = useSyncedState(
+  const [, setGlobalData] = useSyncedState(
     'globalData',
     defaultGlobalData
   );
 
-  const [isWindowUIOpen, setIsWindowUIOpen] = useSyncedState(
+  const [isWindowUIOpen,] = useSyncedState(
     'isWindowUIOpen',
     false
   );
 
-  const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
+  const [fontAwesomeApiKey, setFontAwesomeApiKey] = useSyncedState(
+    'fontAwesomeApiKey',
+    ''
+  );
+
+  /* const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
     'tokenGroupLookup',
     defaultTokenGroupLookup
-  );
+  );*/
 
   useEffect(() => {
     // only the open widget should listen to events...
@@ -93,6 +98,8 @@ function Widget() {
                     nodeId,
                     globalData: thisWidget.widgetSyncedState.globalData,
                     tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
+                    fontAwesomeApiKey:
+                      thisWidget.widgetSyncedState.fontAwesomeApiKey
                   });
                 }
                 break;
@@ -107,6 +114,17 @@ function Widget() {
                 break;
               case MessageRequest.getEffectStyles:
                 getEffectStyles(message);
+                break;
+              case MessageRequest.getFontAwesomeAPIKey:
+                bounceBack(message, {
+                  fontAwesomeApiKey 
+                });
+                break;
+              case MessageRequest.setFontAwesomeAPIKey:
+                setFontAwesomeApiKey(message.fontAwesomeApiKey);
+                bounceBack(message, {
+                  fontAwesomeApiKey: message.fontAwesomeApiKey
+                });
                 break;
               case MessageRequest.notify:
                 figma.notify(

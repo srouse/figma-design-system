@@ -6,7 +6,7 @@ import ColumnLayoutUI from "./columnLayoutUI";
 import ComponentsUI from "./componentsUI";
 import { CoreProps } from "../../shared/types/types";
 import EffectsUI from "./effects/effectsUI";
-import IconsUI from "./iconsUI";
+import IconsUI from "./icons/iconsUI";
 import LayoutUI from "./layoutUI";
 import SpacingUI from "./spacing/spacingUI";
 import "./switchUI.css";
@@ -15,10 +15,11 @@ import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
 import DTTabs from "../components/DTTabs";
 import Deployment from "../deployment/deployment";
 import Settings from "../settings/settings";
-import ColorsSettings from "./colors/colorsSettings";
+import ColorsSettings from "./colors/pages/settings/colorsSettings";
 import TypographySettings from "./typography/typographySettings";
 import EffectsSettings from "./effects/effectsSettings";
 import SpacingSettings from "./spacing/pages/settings/spacingSettings";
+import IconsSettings from "./icons/pages/settings/iconsSettings";
 
 export default class SwitchUI extends React.Component<CoreProps> {
 
@@ -75,7 +76,7 @@ export default class SwitchUI extends React.Component<CoreProps> {
         localSettings = <EffectsSettings {...this.props} />;
         break;
       case DSysGroupType.IconSet :
-        localSettings = undefined;
+        localSettings = <IconsSettings {...this.props} />;
         break;
       case DSysGroupType.ComponentSet :
         localSettings = undefined;
