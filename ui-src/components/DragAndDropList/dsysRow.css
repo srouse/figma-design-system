@@ -15,7 +15,7 @@
   margin: 0;
 }
 
-.drag-and-drop-house .dsys-row {
+.dsys-row {
   border-bottom: 1px solid var( --grey-lightest );
 }
 

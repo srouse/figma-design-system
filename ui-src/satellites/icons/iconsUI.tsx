@@ -25,7 +25,7 @@ export default class IconsUI extends React.Component<CoreProps> {
   render() {
     return (
       <div
-        className="icons-list"
+        className="ui-list"
         style={this.props.style}>
         {this.renderPage()}
       </div>

@@ -7,7 +7,7 @@ export function findComponentSet(
   thisWidget: WidgetNode,
 ) {
   const groupParent = findParentGroup(thisWidget);
-  if (!groupParent) return false;
+  if (!groupParent) return undefined;
 
   const compSets = groupParent.findAllWithCriteria({
     types: ['COMPONENT_SET']
@@ -16,7 +16,7 @@ export function findComponentSet(
   if (
     compSets.length !== 1
   ) {
-    return false;
+    return undefined;
   }
   return compSets[0];
 }
@@ -27,7 +27,7 @@ export function createComponentSet(
   const groupParent = findParentGroup(thisWidget);
   const compSet = findComponentSet(thisWidget);
   // don't do anything if there is a compSet
-  if (compSet || !groupParent) return false;
+  if (compSet || !groupParent) return undefined;
 
   // create an example...
   const component = figma.createComponent();

@@ -14,6 +14,7 @@ import {
   DTShadowToken,
   DTSpacingToken,
   DTStrokeStyleToken,
+  DTSvgToken,
   DTTransitionToken,
   DTTypographyToken
 } from "./designTokenTypes";
@@ -81,7 +82,7 @@ export type DSysEffectGroup = DSysGroup<
   DSysEffectTokenset
 >;
 
-export type DSysIconGroup = DSysGroup<// todo
+export type DSysIconGroup = DSysGroup<
   DSysGroupType.IconSet,
   DSysIconTokenset 
 >;
@@ -158,9 +159,9 @@ export type DSysEffectTokenset = DSysTokensetBase<
   DSysBlurToken
 >;
 
-export type DSysIconTokenset = DSysTokensetBase<// todo
+export type DSysIconTokenset = DSysTokensetBase<
   DSysGroupType.IconSet,
-  DSysFileToken 
+  DSysSvgToken 
 >;
 
 export type DSysComponentsTokenset = DSysTokensetBase<// todo
@@ -347,6 +348,14 @@ export interface DSysFileToken extends DTFileToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+  },
+}
+
+export interface DSysSvgToken extends DTSvgToken {
+  $extensions : {
+    'dsys.level' : DSysLevel.token,
+    'dsys.name'  : string,
+    'dsys.componentSetId' : string,
   },
 }
 

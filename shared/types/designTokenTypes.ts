@@ -34,6 +34,7 @@ export enum DTTokenType {
   gradient = 'gradient',
   percent = 'percent',
   file = 'file',
+  svg = 'svg',
 }
 
 type DTTokenBase = {
@@ -213,5 +214,15 @@ export interface DTFileToken extends DTTokenBase {
     mime: string,
   },
   '$type' : DTTokenType.file
+}
+
+// Svg
+export interface DTSvgToken extends DTTokenBase {
+  '$value': {
+    svg: string,
+    style: 'regular' | string,
+    sizes: number[],
+  },
+  '$type' : DTTokenType.svg
 }
 

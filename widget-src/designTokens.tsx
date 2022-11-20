@@ -34,11 +34,6 @@ export default function designSystem() {
     defaultGlobalData
   );
 
-  const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
-    'tokenGroupLookup',
-    defaultTokenGroupLookup
-  );
-
   const [initialized, setInitialized] = useSyncedState(
     'initialized',
     false
@@ -47,6 +42,11 @@ export default function designSystem() {
   const [tokenGroup, setTokenGroup] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
+  );
+
+  const [widgetWidth, ] = useSyncedState(
+    'widgetWidth',
+    sizing.defaultWidgetWidth
   );
 
   useEffect(() => {
@@ -72,12 +72,10 @@ export default function designSystem() {
     }
   });
 
-  let width = sizing.defaultWidgetWidth;
-
   return (
     <AutoLayout 
       name="design-system"
-      width={width}
+      width={widgetWidth}
       height="hug-contents"
       direction="vertical"
       horizontalAlignItems="center"

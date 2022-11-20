@@ -31,7 +31,6 @@ export default class App extends React.Component<{}> {
     postMessagePromise(
       MessageRequest.stateUpdate
     ).then((result) => {
-      console.log('result', result);
       this.setState({
         ...this.state,
         ...(result as object),

@@ -1,4 +1,5 @@
 import { TokenGroup } from "../../../../shared/index";
+import { sizing } from "../../../../shared/styles";
 import { findWidget } from "../../../utils";
 import { createComponentSet } from "./componentSet";
 import { normalizeFills } from "./fills";
@@ -9,7 +10,8 @@ import { resizeComponentSet, setIconPadding } from "./sizing";
 export default function refreshLayout(
   nodeId: string,
   tokenGroup: TokenGroup,
-  setCompSetHeight: (compSetMetrics: number) => void
+  setCompSetHeight: (compSetMetrics: number) => void,
+  setWidgetWidth: (compSetMetrics: number) => void
 ) {
   const thisWidget = findWidget(nodeId);
 
@@ -24,8 +26,10 @@ export default function refreshLayout(
 
   // size accordingly
   const compSetMetrics = resizeComponentSet(thisWidget);
-  if (compSetMetrics)
+  if (compSetMetrics) {
     setCompSetHeight(compSetMetrics.height);
+    setWidgetWidth(compSetMetrics.width + (sizing.iconSpacing*2));
+  }
 
   // testing
   // setIconPadding(thisWidget, 10);

@@ -8,7 +8,7 @@ export function findParentGroup(
     !thisWidget.parent ||
     !(thisWidget.parent.type === "GROUP")
   ) {
-    return false;
+    return undefined;
   }
   return thisWidget.parent;
 }

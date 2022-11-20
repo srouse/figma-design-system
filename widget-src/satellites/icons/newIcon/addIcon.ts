@@ -10,13 +10,15 @@ export default function addIcon(
     figma.currentPage.selection.length
   )
   if (figma.currentPage.selection.length === 0) {
-    figma.notify('Select the icon (a vector) you would like to add');
+    figma.notify('Select a vector you would like to add');
     return;
   }
   if (figma.currentPage.selection.length > 1) {
     figma.notify('Select just one icon (a vector)');
     return;
   }
+
+  
   const newIcon = figma.currentPage.selection[0];
   console.log(newIcon.type);
   if (

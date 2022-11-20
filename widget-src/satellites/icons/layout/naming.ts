@@ -18,32 +18,21 @@ export function normalizeIconComponentNames(
   const nameLookup: {[key:string]: true} = {};
   const icons: {name:string, icon:ComponentNode}[] = [];
   compSet.children.map((child, index) => {
-    const childNameArr = child.name.split(',');
-    const props: {[key:string]: string} = {};
-    childNameArr.map(chunk => {
-      const chunkArr = chunk.split('=');
-      if (chunkArr.length === 2) {
-        const name = chunkArr[0] as string;
-        const value = chunkArr[1] as string;
-        props[name] = value;
-      }
-    });
+    const props = nameToProps(child.name);
     let theName = props.name || `icon-${index}`;
     // there is a quirk in Figma with appending a stupid " 1" on the end of 
     // things. Lets take care of that
+    // chance of this biting me in the ass....5%
     if (
       theName.lastIndexOf(' 1') === theName.length-2 ||
       theName.lastIndexOf(' 2') === theName.length-2
     ) {
       theName = theName.substring(0, theName.length-2);
     }
-    theName = theName.replace(/[^a-zA-Z0-9]/g, '-');
-
-    // avoid dups...
-    if (nameLookup[theName]) {
-      theName = `${theName}-dup`;
-    }
-    nameLookup[theName] = true;
+    theName = theName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
+    theName = theName.replace(/-{2,}/g, '-');
+    theName = addToLookupWithUniqueName(nameLookup, theName);
+    
     icons.push({
       name: theName,
       icon: child as ComponentNode,
@@ -58,4 +47,31 @@ export function normalizeIconComponentNames(
   icons.map((icon, index) => {
     compSet.insertChild(index, icon.icon);
   });
+}
+
+export function addToLookupWithUniqueName(
+  lookup: {[key:string]: true},
+  name: string,
+) {
+  let newName = name;
+  while (lookup[newName] === true) {
+    newName = `${name}-${Math.round(Math.random()*10000)}`;
+  }
+  lookup[newName] = true;
+  return newName;
+}
+
+
+export function nameToProps(name: string) {
+  const childNameArr = name.split(',');
+  const props: {[key:string]: string} = {};
+  childNameArr.map(chunk => {
+    const chunkArr = chunk.split('=');
+    if (chunkArr.length === 2) {
+      const name = chunkArr[0] as string;
+      const value = chunkArr[1] as string;
+      props[name] = value;
+    }
+  });
+  return props;
 }

@@ -4,6 +4,9 @@ import header from "../../components/header";
 import refreshLayout from "./layout/refreshLayout";
 import { sizing } from "../../../shared/styles";
 import addIcon from "./newIcon/addIcon";
+import {
+  pullTokensFromIconComponentSet
+} from "./iconComponentUtils";
 
 const { widget } = figma;
 const {
@@ -11,13 +14,15 @@ const {
   useSyncedState,
   Text,
   useWidgetId,
+  useEffect,
+  waitForTask,
 } = widget;
 
 export default function iconsSatellite() {
 
   const nodeId = useWidgetId();
 
-  const [tokenGroup, ] = useSyncedState(
+  const [tokenGroup, setTokenGroup ] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
   );
@@ -27,7 +32,26 @@ export default function iconsSatellite() {
     sizing.iconDisplaySize
   );
 
-  // TODO: get this to init correctly...need the default token, maybe on naming
+  const [, setWidgetWidth] = useSyncedState(
+    'widgetWidth',
+    sizing.defaultWidgetWidth
+  );
+
+  const [iconsInitialized, setIconsInitialized] = useSyncedState(
+    'iconsInitialized',
+    false
+  );
+
+  useEffect(() => {
+    if (!iconsInitialized) {
+      setIconsInitialized(true);
+      waitForTask(
+        pullTokensFromIconComponentSet(
+          tokenGroup, setTokenGroup, nodeId
+        )
+      );
+    }
+  });
 
   if (tokenGroup.name) {
     return (
@@ -44,11 +68,20 @@ export default function iconsSatellite() {
         verticalAlignItems="start"
         overflow="visible">
         {header(
-          () => {
+          async () => {
+            const start = new Date();
             refreshLayout(
               nodeId,
               tokenGroup,
-              setCompSetHeight
+              setCompSetHeight,
+              setWidgetWidth
+            );
+            await pullTokensFromIconComponentSet(
+              tokenGroup, setTokenGroup, nodeId
+            );
+            const end = new Date();
+            console.log(
+              end.getTime() - start.getTime(),
             );
           },
           undefined,
@@ -57,7 +90,8 @@ export default function iconsSatellite() {
             refreshLayout(
               nodeId,
               tokenGroup,
-              setCompSetHeight
+              setCompSetHeight,
+              setWidgetWidth
             );
           }
         )}

@@ -13,3 +13,36 @@
     border-radius: 10px;
     padding: 10px;
   }
+
+
+  .ui-list .icons-list-row {
+    position: relative;
+  }
+
+    .icons-list-row-icon {
+      width: 30px;
+      margin-right: 10px;
+    }
+
+      .icons-list-row-icon svg {
+        width: 30px; height: 30px;
+      }
+
+    .icons-list-row-name {
+      flex: 1;
+      font-size: 12px;
+      color: var( --text-color );
+    }
+
+    .icons-list-line {
+      width: 1px;
+      align-self: stretch;
+      background-color: var( --grey-lightest );
+      margin-right: 10px;
+    }
+
+    .icons-list-row-style {
+      width: 100px;
+      font-size: 12px;
+      color: var( --text-color );
+    }
