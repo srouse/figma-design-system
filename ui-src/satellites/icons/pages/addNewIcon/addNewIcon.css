@@ -1,0 +1,57 @@
+
+
+.add-new-icon {
+  position: absolute;
+  inset: 0px;
+  top: calc( ( var( --satellite-header-height ) + var( --dttabs-height ) ) * -1 );
+  background-color: rgba(0,0,0,.2);
+}
+
+  .add-new-icon-body {
+    position: absolute;
+    inset: 10px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .add-new-icon-body.choose-type {
+    display: flex;
+    flex-direction: column;
+    inset: auto;
+    width: 70%;
+    top: 100px;
+    left: 15%;
+    padding: 30px;
+  }
+
+  .add-new-icon-body.choose-type > *:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .add-new-icon-body.choose-type .header {
+    font-size: 24px;
+    color: var( --text-color );
+    font-weight: 200;
+    margin-bottom: 20px;
+  }
+
+  .add-new-icon-body .other-option {
+    font-size: 12px;
+    color: var( --text-color );
+    font-weight: 200;
+  }
+
+  .add-new-icon-body .close {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .add-new-icon-body .close:hover {
+      cursor: pointer;
+    }

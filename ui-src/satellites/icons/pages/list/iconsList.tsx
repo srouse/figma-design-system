@@ -3,10 +3,10 @@ import {
   CoreProps, getIcon, Icons,
 } from "../../../../../shared";
 import { DSysSvgToken } from "../../../../../shared/types/designSystemTypes";
-import { cleanAndSortTokensAlphabetical } from "../../../../../shared/utils/cleanAndSortTokens";
-import DTButton, { DTButtonColor } from "../../../../components/DTButton";
-import Input from "../../../../components/Input";
+import { cleanAndSortTokensAlphabetical } 
+  from "../../../../../shared/utils/cleanAndSortTokens";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
+import AddNewIcon from "../addNewIcon/addNewIcon";
 import "./iconsList.css";
 
 export default class IconsList extends React.Component<CoreProps> {
@@ -15,7 +15,7 @@ export default class IconsList extends React.Component<CoreProps> {
     super(props);
     this.state = {
       isDeleting: false,
-      fontAwesomeModalOpen: false,
+      newIconModalOpen: false,
       searchTerm: '',
       svgExample: '',
     }
@@ -25,7 +25,7 @@ export default class IconsList extends React.Component<CoreProps> {
 
   state: {
     isDeleting: boolean,
-    fontAwesomeModalOpen: boolean,
+    newIconModalOpen: boolean,
     searchTerm: string,
     svgExample: string,
   }
@@ -57,14 +57,14 @@ export default class IconsList extends React.Component<CoreProps> {
           color={DTButtonColor.primary}
           onClick={() => {
             this.setState({
-              fontAwesomeModalOpen: true,
+              newIconModalOpen: true,
             });
           }}></DTButton> */}
         <ListHeader
           title="Icon Tokens"
           onAdd={() =>{
             this.setState({
-              fontAwesomeModalOpen: true,
+              newIconModalOpen: true,
             });
           }}
           onDelete={() => {
@@ -115,48 +115,10 @@ export default class IconsList extends React.Component<CoreProps> {
             );
           })}
         </div>
-        {this.state.fontAwesomeModalOpen ? (
-          <div className="font-awesome-modal">
-            <div className="font-awesome-modal-body">
-              <div onClick={() => {
-                this.setState({
-                  fontAwesomeModalOpen: false,
-                  searchTerm:'',// reset
-                });
-              }}>close</div>
-              <Input
-                label="" 
-                value={this.state.searchTerm}
-                placeholder="search"
-                onEnterOrBlur={async (searchTerm: string) => {
-                  this.setState({searchTerm});
-                }} />
-              <input type="file"
-                id="uploadSvg" name="uploadSvg"
-                onChange={(evt) => {
-                  const fileList = evt.target.files;
-                  console.log(fileList);
-                  if (fileList && fileList.length > 0) {
-                    const file = fileList[0];
-                    if (file.type && !file.type.startsWith('image/')) {
-                      console.log('File is not an image.', file.type, file);
-                      return;
-                    }
-                    const reader = new FileReader();
-                    reader.addEventListener('load', (event: ProgressEvent) => {
-                      const result = (event.target as FileReader).result;
-                      this.setState({
-                        svgExample: result,
-                      })
-                    });
-                    reader.readAsText(file);
-                  }
-                }}
-                accept="image/svg,.svg,image/svg+xml"></input>
-              <div dangerouslySetInnerHTML={{__html:this.state.svgExample}}></div>
-              upload svg, import local vector, or import from font awesome
-            </div>
-          </div>
+        {this.state.newIconModalOpen ? (
+          <AddNewIcon 
+            {...this.props}
+            onClose={() => this.setState({newIconModalOpen:false})} />
         ) : null}
       </div>
     );

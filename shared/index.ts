@@ -131,7 +131,6 @@ export type {
 
   FigmaPaintStyle,
 
-  MessageName,
   State,
   CoreProps,
   GlobalData,
@@ -224,6 +223,7 @@ export {
   findTokenViaIndex,
   findToken,
   findTokenViaStyleId,
+  MessageName,
 
   colors,
   typography,

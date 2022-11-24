@@ -28,6 +28,7 @@ export enum MessageRequest {
   getAvailableFonts = 'getAvailableFonts',
   getFontAwesomeAPIKey = 'getFontAwesomeAPIKey',
   setFontAwesomeAPIKey = 'setFontAwesomeAPIKey',
+  createIconFromSVG = 'createIconFromSVG',
 }
 
 export enum MessageRequestStyle {

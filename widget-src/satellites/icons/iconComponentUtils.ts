@@ -79,9 +79,8 @@ export async function compSetToDSysTokenset(
   return tokenset;
 }
 
-
 export async function getSvg(
-  comp: ComponentNode,
+  comp: ComponentNode | VectorNode | SceneNode,
   errorLog: string[],
 ) {
   if (!comp) return;
@@ -93,7 +92,6 @@ export async function getSvg(
   const str = Utf8ArrayToStr(bytes);
   return str;
 }
-
 
 function Utf8ArrayToStr(array: Uint8Array | undefined | void) {
   if (!array) return;

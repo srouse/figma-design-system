@@ -1,7 +1,6 @@
 import { 
   defaultGlobalData,
   defaultTokenGroup,
-  defaultTokenGroupLookup,
   MessageName,
   MessageRequest,
 } from "../shared/types/types";
@@ -17,6 +16,7 @@ import createStyle from "./actions/createStyle";
 import changeStylesFolder from "./actions/changeStylesFolder";
 import updateTokenGroup from "./actions/updateTokenGroup";
 import moveStyle from "./actions/moveStyle";
+
 const { 
   widget,
 } = figma;

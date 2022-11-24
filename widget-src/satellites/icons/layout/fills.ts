@@ -19,14 +19,20 @@ export function normalizeFills(
 }
 
 export function processFill(
-  node: VectorNode
+  node: any
 ) {
-  const fills = JSON.parse(JSON.stringify(node.fills));
-  fills[0].color = {
-    r: 53/255,
-    g: 55/255,
-    b: 57/255,
+  if (node.type === 'VECTOR') {
+    const fills = JSON.parse(JSON.stringify(node.fills));
+    fills[0].color = {
+      r: 53/255,
+      g: 55/255,
+      b: 57/255,
+    }
+    fills[0].visible = true;
+    node.fills = fills;
+  }else if (node.children) {
+    node.children.map((child: any) => {
+      processFill(child);
+    })
   }
-  fills[0].visible = true;
-  node.fills = fills;
 }

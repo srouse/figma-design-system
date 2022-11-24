@@ -3,5 +3,5 @@
 .ui-list {
   flex: 1;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }

@@ -1,8 +1,10 @@
 import { findWidget } from "../../../utils";
+import { getSvg } from "../iconComponentUtils";
 import { findComponentSet } from "../layout/componentSet";
 import { processFill } from "../layout/fills";
+import addSvgAsIcon from "./addSvgAsIcon";
 
-export default function addIcon(
+export default async function addIcon(
   nodeId: string,
 ) {
   const thisWidget = findWidget(nodeId);
@@ -18,54 +20,35 @@ export default function addIcon(
     return;
   }
 
-  
   const newIcon = figma.currentPage.selection[0];
-  console.log(newIcon.type);
+
   if (
     newIcon.type === 'VECTOR' ||
     newIcon.type === 'RECTANGLE' ||
-    newIcon.type === 'ELLIPSE'
+    newIcon.type === 'ELLIPSE' ||
+    newIcon.type === 'COMPONENT' ||
+    newIcon.type === 'FRAME' ||
+    newIcon.type === 'GROUP' ||
+    newIcon.type === 'INSTANCE' ||
+    newIcon.type === 'POLYGON' ||
+    newIcon.type === 'STAR'
+    // newIcon.type === 'WIDGET'
   ) {
-    const component = createComponent(newIcon as VectorNode);
-    component.appendChild(newIcon);
-    processFill(newIcon as VectorNode);
-    const compSet = findComponentSet(thisWidget);
-    if (compSet) compSet.appendChild(component);
-  }
-
-  if (newIcon.type === 'FRAME') {
-    const component = createComponent(newIcon);
-    if (newIcon.children.length !== 1 ) {
-      figma.notify('Select a vector or a frame with a single vector child');
-      return;
+    const errorLog: string[] = [];
+    const svg = await getSvg(newIcon, errorLog);
+    if (svg) {
+      await addSvgAsIcon(
+        svg,
+        newIcon.name,
+        nodeId,
+      );
     }
-    const child = newIcon.children[0];
-    component.appendChild(child);
-    processFill(child as VectorNode);
-    newIcon.remove();// not needed anymore
-    const compSet = findComponentSet(thisWidget);
-    if (compSet) compSet.appendChild(component);
+    return true;
   }
-
-  if (newIcon.type === 'GROUP') {
-    const component = createComponent(newIcon);
-    if (newIcon.children.length !== 1 ) {
-      figma.notify('Select a vector or a group with a single vector child');
-      return;
-    }
-    const child = newIcon.children[0];
-    const initX = newIcon.x;
-    const initY = newIcon.y;
-    component.appendChild(child);
-    child.x = child.x - initX;
-    child.y = child.y - initY;
-    processFill(child as VectorNode);
-    const compSet = findComponentSet(thisWidget);
-    if (compSet) compSet.appendChild(component);
-  }
+  figma.notify('Select a node that can be transformed into an svg');
 }
 
-function createComponent(newIcon: VectorNode | FrameNode | GroupNode) {
+export function createComponent(newIcon: VectorNode | FrameNode | GroupNode) {
   const component = figma.createComponent();
   component.name = `name=${newIcon.name}, style=regular`;
   component.resizeWithoutConstraints(

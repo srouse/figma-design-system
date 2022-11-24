@@ -1,4 +1,5 @@
 import { TokenGroup } from "../../../../shared/index";
+import cleanName from "./cleanName";
 import { findComponentSet } from "./componentSet";
 import { findParentGroup } from "./grouping";
 
@@ -29,8 +30,7 @@ export function normalizeIconComponentNames(
     ) {
       theName = theName.substring(0, theName.length-2);
     }
-    theName = theName.toLowerCase().replace(/[^a-zA-Z0-9]/g, '-');
-    theName = theName.replace(/-{2,}/g, '-');
+    theName = cleanName(theName);
     theName = addToLookupWithUniqueName(nameLookup, theName);
     
     icons.push({

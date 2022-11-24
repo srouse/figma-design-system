@@ -12,18 +12,23 @@ export function resizeComponentSet(
   
   // tokens are derived from component, so feed off of what's there...
   const totalIcons = compSet.children.length;
-  const iconsPerRow = Math.round(Math.sqrt(totalIcons));
+  const iconsPerRow = Math.max(5, Math.round(Math.sqrt(totalIcons)));
   // Component Set Width
-  // const compWidth = sizing.defaultWidgetWidth - (sizing.iconCompsetPadding*2);
-  const compWidth = 
+  const compWidth = Math.max(
+    sizing.defaultWidgetWidth,
     ( iconsPerRow * (sizing.iconDisplaySize + (sizing.iconSpacing))) + 
-    sizing.iconSpacing;
+    sizing.iconSpacing
+  );
+
   // Component Set Height
   const totalRows = Math.ceil( totalIcons / iconsPerRow );
+
   const compHeight = totalRows * (
     sizing.iconDisplaySize + 
     (sizing.iconSpacing)
   ) + sizing.iconSpacing;
+
+
   compSet.resize(
     compWidth,
     compHeight,

@@ -1,4 +1,8 @@
-import { defaultTokenGroup } from "../../../shared/index";
+import {
+  defaultTokenGroup,
+  MessageRequest,
+} from "../../../shared/index";
+import { MessageName } from "../../../shared/index";
 import { colors, typography } from "../../../shared/styles";
 import header from "../../components/header";
 import refreshLayout from "./layout/refreshLayout";
@@ -7,6 +11,8 @@ import addIcon from "./newIcon/addIcon";
 import {
   pullTokensFromIconComponentSet
 } from "./iconComponentUtils";
+import bounceBack from "../../utils/postMessagePromise";
+import addSvgAsIcon from "./newIcon/addSvgAsIcon";
 
 const { widget } = figma;
 const {
@@ -43,6 +49,14 @@ export default function iconsSatellite() {
   );
 
   useEffect(() => {
+    const logSelection = () => {
+      console.log('figma.currentPage.selection', figma.currentPage.selection);
+    }
+    figma.on('selectionchange', logSelection)
+    return () => figma.off('selectionchange', logSelection)
+  })
+
+  useEffect(() => {
     if (!iconsInitialized) {
       setIconsInitialized(true);
       waitForTask(
@@ -51,6 +65,33 @@ export default function iconsSatellite() {
         )
       );
     }
+  });
+
+  useEffect(() => {
+    const onMessageHandler = (message: any) => {
+      switch (message.name) {
+        case MessageName.promiseBounce :
+            switch (message.request) {
+              case MessageRequest.createIconFromSVG :
+                (async () => {
+                  const result = await addSvgAsIcon(
+                    message.svg,
+                    message.fileName,
+                    nodeId,
+                  );
+                  refreshLayout(
+                    nodeId,
+                    tokenGroup,
+                    setCompSetHeight,
+                    setWidgetWidth
+                  );
+                  bounceBack(message, result);
+                })();
+            }
+      }
+    };
+    figma.ui.on('message', onMessageHandler);
+    return () => figma.ui.off('message', onMessageHandler);
   });
 
   if (tokenGroup.name) {
@@ -85,8 +126,8 @@ export default function iconsSatellite() {
             );
           },
           undefined,
-          () => {
-            addIcon(nodeId);
+          async () => {
+            await addIcon(nodeId);
             refreshLayout(
               nodeId,
               tokenGroup,
