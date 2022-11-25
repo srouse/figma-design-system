@@ -1,0 +1,141 @@
+
+
+.font-awesome-icon {
+  position: absolute;
+  inset: 0px;
+  top: calc( ( var( --satellite-header-height ) + var( --dttabs-height ) ) * -1 );
+  background-color: rgba(0,0,0,.2);
+}
+
+  .font-awesome-icon-body {
+    position: absolute;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    top: 20px;
+    left: 20px; right: 20px;
+    padding: 30px 20px;
+  }
+
+  .font-awesome-icon-body > *:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .font-awesome-icon-body .header {
+    font-size: 24px;
+    color: var( --text-color );
+    font-weight: 200;
+    margin-bottom: 20px;
+  }
+
+  .font-awesome-icon-body .other-option {
+    font-size: 12px;
+    color: var( --text-color );
+    font-weight: 200;
+  }
+
+  .font-awesome-icon-body .close {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .font-awesome-icon-body .close:hover {
+      cursor: pointer;
+    }
+
+    .font-awesome-icon .icon-preview {
+      width: 340px; height: 340px;
+      border: 1px solid var( --border-grey );
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      color: var( --text-color-lightest );
+    }
+
+      .font-awesome-icon .icon-preview svg {
+        max-width: 330px; max-height: 330px;
+        margin: 5px;
+      }
+
+
+    .font-awesome-icon .navigation {
+      display: flex;
+      flex-direction: row;
+    }
+
+      .font-awesome-icon .navigation > * {
+        flex: 1;
+      }
+      .font-awesome-icon .navigation > *:not(:last-child) {
+        margin-right: 10px;
+      }
+
+      .font-awesome-icon .search-fields {
+        display: flex;
+        flex-direction: row;
+      }
+        .font-awesome-icon .search-fields > * {
+          flex: 1;
+        }
+        .font-awesome-icon .search-fields > *:not(:last-child) {
+          margin-right: 10px;
+        }
+
+  /* restults */
+  .font-awesome-icon .fontawesome-results {
+    overflow-y: auto;
+    height: 430px;
+  }
+
+    .font-awesome-icon .fontawesome-result {
+      float: left;
+      padding: 10px 4px;
+      margin: 4px;
+      width: 80px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+      .font-awesome-icon .fontawesome-result:hover {
+        cursor: pointer;
+        background-color: var( --primary-lightest );
+      }
+
+      .font-awesome-icon .fontawesome-result-icon {
+        height: 40px;
+        margin-bottom: 6px;
+      }
+
+        .font-awesome-icon .fontawesome-result-icon svg {
+          width: 40px; height: 40px;
+        }
+
+      .font-awesome-icon .fontawesome-result .name {
+        font-size: 9px;
+        color: var( --text-color );
+        text-overflow: ellipsis;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        align-self: stretch;
+      }
+
+      .font-awesome-icon .fontawesome-result .style {
+        font-size: 8px;
+        color: var( --text-color );
+        font-weight: bold;
+        text-overflow: ellipsis;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        align-self: stretch;
+      }
