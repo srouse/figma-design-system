@@ -46,14 +46,15 @@ export default class FontAwesomeIcon extends React.Component<FontAwesomeIconProp
             onClick={() => this.props.onClose()}
             dangerouslySetInnerHTML={{__html:getIcon(Icons.close)}}>
           </div>
-          <div className="header">Add Font Awesome Icon</div>
+          <div className="header">Font Awesome Icon</div>
           <div className="search-fields">
             <Input
               label="" 
               value={this.state.searchTerm}
               placeholder="search"
               onEnterOrBlur={async (searchTerm: string) => {
-                console.log('searchTerm',)
+                if (searchTerm === '') return;
+
                 this.setState({
                   searchTerm,
                 });
@@ -125,11 +126,14 @@ export default class FontAwesomeIcon extends React.Component<FontAwesomeIconProp
                 });
               }} />
           </div>
-          {this.state.searching ? 
-            (<div>searching</div>) : 
-            (<div>
-              {this.state.faResults.length} results for {this.state.searchTerm}
-            </div>)}
+          <div className="summary">
+            {this.state.searching ? 
+              'searching' : 
+              this.state.faResults.length > 0 ? 
+                `${this.state.faResults.length} results for ${this.state.searchTerm}` :
+                ''
+            }
+          </div>
           <div className="fontawesome-results scroll-bar">
             {this.state.faResults.map((result) => {
               if (

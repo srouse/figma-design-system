@@ -26,7 +26,7 @@
     font-size: 24px;
     color: var( --text-color );
     font-weight: 200;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .font-awesome-icon-body .other-option {
@@ -77,28 +77,38 @@
         margin-right: 10px;
       }
 
-      .font-awesome-icon .search-fields {
-        display: flex;
-        flex-direction: row;
-      }
-        .font-awesome-icon .search-fields > * {
-          flex: 1;
-        }
-        .font-awesome-icon .search-fields > *:not(:last-child) {
-          margin-right: 10px;
-        }
+  /* search fields */
+  .font-awesome-icon .search-fields {
+    display: flex;
+    flex-direction: row;
+  }
+    .font-awesome-icon .search-fields > * {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .font-awesome-icon .search-fields > *:not(:last-child) {
+      margin-right: 10px;
+    }
+
+  /* SUMMARY */
+  .font-awesome-icon .summary {
+    font-size: 11px;
+    color: var( --text-color-lighter );
+    text-align: center;
+  }
+
 
   /* restults */
   .font-awesome-icon .fontawesome-results {
     overflow-y: auto;
-    height: 430px;
+    height: 450px;
   }
 
     .font-awesome-icon .fontawesome-result {
       float: left;
       padding: 10px 4px;
       margin: 4px;
-      width: 80px;
+      width: 82px;
       border-radius: 6px;
       display: flex;
       align-items: center;
