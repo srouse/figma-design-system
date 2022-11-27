@@ -19,7 +19,7 @@ const {
 } = widget;
 
 export default function satelliteSwitch() {
-  const [tokenGroup, setTokenGroup] = useSyncedState(
+  const [tokenGroup, ] = useSyncedState(
     'tokenGroup',
     defaultTokenGroup
   );

@@ -75,7 +75,8 @@ export async function compSetToDSysTokenset(
     tokenset[props.name] = tokenInfo;
   });
   await Promise.all(promiseAllArr);
-  console.log('totes failed', errorLog.length);
+  if (errorLog.length > 0)
+    console.error('errors in processing icons', errorLog);
   return tokenset;
 }
 

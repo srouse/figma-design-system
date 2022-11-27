@@ -95,7 +95,6 @@ export default async function createStyle(
       await loadFontAsync(message.style.value.fontName);
       style.fontName = message.style.value.fontName;
       style.fontSize = message.style.value.fontSize;
-      console.log(`done creating ${message.style.name}`);
       return bounceBack(message, {
         success: true,
         style,

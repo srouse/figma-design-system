@@ -21,12 +21,14 @@ export default class UploadIcon extends React.Component<UploadIconProps> {
     this.state = {
       svgExample: 'Icon Preview',
       svgName: undefined,
+      style: 'regular',
     }
   }
 
   state: {
     svgExample: string,
     svgName?: string,
+    style? : string,
   }
 
   render() {
@@ -52,6 +54,12 @@ export default class UploadIcon extends React.Component<UploadIconProps> {
                   svgName: newName,
                 })
               }} />
+            <Input
+              label="Style"
+              value={this.state.style}
+              onEnterOrBlur={(style: string) => {
+                this.setState({style})
+              }} />
             <div className="navigation">
               <DTButton
                 label="Cancel"
@@ -66,8 +74,11 @@ export default class UploadIcon extends React.Component<UploadIconProps> {
                 postMessagePromise(
                   MessageRequest.createIconFromSVG,
                   {
-                    svg: this.state.svgExample,
-                    fileName: this.state.svgName
+                    icon: {
+                      svg: this.state.svgExample,
+                      name: this.state.svgName,
+                      style: this.state.style
+                    }
                   },
                 );
                 this.props.onClose();
@@ -80,11 +91,10 @@ export default class UploadIcon extends React.Component<UploadIconProps> {
                   type="file"
                   onChange={(evt) => {
                     const fileList = evt.target.files;
-                    console.log(fileList);
                     if (fileList && fileList.length > 0) {
                       const file = fileList[0];
                       if (file.type && !file.type.startsWith('image/')) {
-                        console.log('File is not an image.', file.type, file);
+                        console.error('File is not an image.', file.type, file);
                         return;
                       }
                       const reader = new FileReader();

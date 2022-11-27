@@ -19,8 +19,6 @@ export default class IconsList extends React.Component<CoreProps> {
       searchTerm: '',
       svgExample: '',
     }
-
-    // document.addEventListener('change', this.onChangeHandler);
   }
 
   state: {
@@ -28,10 +26,6 @@ export default class IconsList extends React.Component<CoreProps> {
     newIconModalOpen: boolean,
     searchTerm: string,
     svgExample: string,
-  }
-
-  onChangeHandler(evt: Event) {
-    console.log(evt);
   }
 
   render() {
@@ -46,20 +40,11 @@ export default class IconsList extends React.Component<CoreProps> {
 
     const tokenset = this.props.tokenGroup.tokensets[0];
     const tokens = cleanAndSortTokensAlphabetical(tokenset);
-    console.log('tokenset', tokenset);
 
     return (
       <div className={`
         dsys-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
-        {/* <DTButton
-          label="Add Icon"
-          color={DTButtonColor.primary}
-          onClick={() => {
-            this.setState({
-              newIconModalOpen: true,
-            });
-          }}></DTButton> */}
         <ListHeader
           title="Icon Tokens"
           onAdd={() =>{

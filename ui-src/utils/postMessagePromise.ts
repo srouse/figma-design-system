@@ -32,7 +32,7 @@ export default async function postMessagePromise(
 
 onmessage = (evt: any) => {
   const msg = evt.data.pluginMessage;
-  if (messagePromiseCallbacks[msg.promiseId]) {
+  if (msg && messagePromiseCallbacks[msg.promiseId]) {
     // con sole.log('RECIEVE MSG BOUNCE BACK (SUCCESS)', msg);
     messagePromiseCallbacks[msg.promiseId](msg);
     delete messagePromiseCallbacks[msg.promiseId];

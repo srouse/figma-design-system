@@ -26,9 +26,15 @@ export enum MessageRequest {
   changeStylesFolder = 'changeStylesFolder',
   updateTokenGroup = 'updateTokenGroup',
   getAvailableFonts = 'getAvailableFonts',
-  getFontAwesomeAPIKey = 'getFontAwesomeAPIKey',
-  setFontAwesomeAPIKey = 'setFontAwesomeAPIKey',
+
+  // icons
   createIconFromSVG = 'createIconFromSVG',
+  createIconFromSelection = 'createIconFromSelection',
+  changeIconCompName = 'changeIconCompName',
+  setFontAwesomeAPIKey = 'setFontAwesomeAPIKey',
+  setFontAwesomeStyle = 'setFontAwesomeStyle',
+  setFontAwesomeKit = 'setFontAwesomeKit',
+  refreshIconTokens = 'refreshIconTokens',
 }
 
 export enum MessageRequestStyle {
@@ -53,6 +59,7 @@ export interface State {
   promptTitle?: string,
   promptContent?: any,
   fontAwesomeApiKey?: string,
+  fontAwesomeKit?: string,
 }
 
 export type CoreProps = {
@@ -60,12 +67,14 @@ export type CoreProps = {
   globalData?: GlobalData,
   updateGlobalData: (globalData: GlobalData) => void,
   updateTokenGroup: (tokenGroup: TokenGroup) => void,
-  updateFontAwesomeApiKey: (fontAwesomeApiKey: string) => void,
   refreshTokens: () => void,
   createPrompt: (title: string, content: any) => void,
   closePrompt: () => void,
-  fontAwesomeApiKey?: string,
   style?: {},
+  fontAwesomeApiKey?: string,
+  updateFontAwesomeApiKey: (fontAwesomeApiKey: string) => Promise<string>,
+  fontAwesomeKit?: string,
+  updateFontAwesomeKit: (fontAwesomeKit: string) => Promise<string>,
 }
 
 export interface GlobalData {

@@ -44,16 +44,6 @@ function Widget() {
     false
   );
 
-  const [fontAwesomeApiKey, setFontAwesomeApiKey] = useSyncedState(
-    'fontAwesomeApiKey',
-    ''
-  );
-
-  /* const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
-    'tokenGroupLookup',
-    defaultTokenGroupLookup
-  );*/
-
   useEffect(() => {
     // only the open widget should listen to events...
     if (isWindowUIOpen) {
@@ -99,7 +89,9 @@ function Widget() {
                     globalData: thisWidget.widgetSyncedState.globalData,
                     tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
                     fontAwesomeApiKey:
-                      thisWidget.widgetSyncedState.fontAwesomeApiKey
+                      thisWidget.widgetSyncedState.fontAwesomeApiKey,
+                    fontAwesomeKit:
+                      thisWidget.widgetSyncedState.fontAwesomeKit,
                   });
                 }
                 break;
@@ -114,17 +106,6 @@ function Widget() {
                 break;
               case MessageRequest.getEffectStyles:
                 getEffectStyles(message);
-                break;
-              case MessageRequest.getFontAwesomeAPIKey:
-                bounceBack(message, {
-                  fontAwesomeApiKey 
-                });
-                break;
-              case MessageRequest.setFontAwesomeAPIKey:
-                setFontAwesomeApiKey(message.fontAwesomeApiKey);
-                bounceBack(message, {
-                  fontAwesomeApiKey: message.fontAwesomeApiKey
-                });
                 break;
               case MessageRequest.notify:
                 figma.notify(

@@ -93,12 +93,12 @@ export default class SwitchUI extends React.Component<CoreProps> {
     }
     return (
       <Settings
-      style={{
-        flex: 1,
-        display: this.state.page === 'settings' ? 'block' : 'none',
-      }}
-      localSettings={localSettings}
-      {...this.props} />
+        style={{
+          flex: 1,
+          display: this.state.page === 'settings' ? 'block' : 'none',
+        }}
+        localSettings={localSettings}
+        {...this.props} />
     );
   }
 

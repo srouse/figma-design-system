@@ -1,0 +1,45 @@
+
+.font-awesome-kit-button {
+  padding: 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var( --text-color-white );
+  border: 1px solid var( --primary );
+  color: var( --primary );
+  border-radius: 6px;
+}
+
+.font-awesome-kit-button:hover {
+  border-color: var( --primary-light );
+  cursor: pointer;
+}
+
+  .font-awesome-kit-button-fa-icon {
+    width: 30px; height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .font-awesome-kit-button-fa-icon svg > * {
+      fill: var( --primary );
+    }
+
+    .font-awesome-kit-button-info {
+      flex: 1;
+      margin-left: 10px;
+    }
+      .font-awesome-kit-button-info > *:first-child {
+        font-size: 10px;
+      }
+      .font-awesome-kit-button-info > *:nth-child(2) {
+        font-size: 14px;
+        color: var( --primary-dark );
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .font-awesome-kit-button-info > *:last-child {
+        font-size: 10px;
+      }

@@ -1,7 +1,12 @@
 import React from "react";
-import { CoreProps, DSysGroupType, MessageRequest } from "../../../../../shared";
+import {
+  CoreProps,
+  MessageRequest
+} from "../../../../../shared";
 import Input from "../../../../components/Input";
+import Select from "../../../../components/Select";
 import postMessagePromise from "../../../../utils/postMessagePromise";
+import FontAwesomeKitButton from "../addNewIcon/fontAwesome/kits/fontAwesomeKitButton";
 
 export default class IconsSettings extends React.Component<CoreProps> {
 
@@ -17,11 +22,9 @@ export default class IconsSettings extends React.Component<CoreProps> {
         onEnterOrBlur={async (value: string) => {
           if (!this.props.tokenGroup) return;
           await postMessagePromise(
-            MessageRequest.changeStylesFolder,
+            MessageRequest.changeIconCompName,
             {
-              folderName: this.props.tokenGroup?.name,
-              newFolderName: value,
-              type: DSysGroupType.ColorSet
+              newName: value,
             }
           );
           this.props.updateTokenGroup({
@@ -29,13 +32,12 @@ export default class IconsSettings extends React.Component<CoreProps> {
             name: value,
           });
         }} />
-      <Input
-        label="Font Awesome API Key (optional)" 
-        value={this.props.fontAwesomeApiKey}
-        type="password"
-        onEnterOrBlur={async (value: string) => {
-          this.props.updateFontAwesomeApiKey(value);
-        }} />
+      <FontAwesomeKitButton
+        style={{marginBottom: 20}}
+        fontAwesomeKit={this.props.fontAwesomeKit}
+        fontAwesomeApiKey={this.props.fontAwesomeApiKey}
+        updateFontAwesomeKit={this.props.updateFontAwesomeKit}
+        updateFontAwesomeApiKey={this.props.updateFontAwesomeApiKey} />
     </>);
   }
 }

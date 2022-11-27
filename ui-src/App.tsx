@@ -24,6 +24,7 @@ export default class App extends React.Component<{}> {
     this.createPrompt = this.createPrompt.bind(this);
     this.closePrompt = this.closePrompt.bind(this);
     this.updateFontAwesomeApiKey = this.updateFontAwesomeApiKey.bind(this);
+    this.updateFontAwesomeKit = this.updateFontAwesomeKit.bind(this);
 
     // inject css vars once
     renderCssVariables();
@@ -51,7 +52,7 @@ export default class App extends React.Component<{}> {
     this.setState({
       ...this.state,
       globalData
-    })
+    });
   }
 
   async updateTokenGroup(
@@ -68,6 +69,7 @@ export default class App extends React.Component<{}> {
       tokenGroup
     });
     this.refreshTokens();
+    return tokenGroup;
   }
 
   async updateFontAwesomeApiKey(
@@ -82,6 +84,22 @@ export default class App extends React.Component<{}> {
     this.setState({
       fontAwesomeApiKey
     });
+    return fontAwesomeApiKey;
+  }
+
+  async updateFontAwesomeKit(
+    fontAwesomeKit: string
+  ) {
+    await postMessagePromise(
+      MessageRequest.setFontAwesomeKit,
+      {
+        fontAwesomeKit,
+      }
+    );
+    this.setState({
+      fontAwesomeKit
+    });
+    return fontAwesomeKit;
   }
 
   createPrompt(
@@ -114,7 +132,6 @@ export default class App extends React.Component<{}> {
 
   render() {
     if (!this.state.tokenGroup) return '';
-    console.log('this.state.fontAwesomeApiKey', this.state.fontAwesomeApiKey);
     return (
       <div className="App">
         <div id="editor">
@@ -125,6 +142,8 @@ export default class App extends React.Component<{}> {
             updateTokenGroup={this.updateTokenGroup}
             fontAwesomeApiKey={this.state.fontAwesomeApiKey}
             updateFontAwesomeApiKey={this.updateFontAwesomeApiKey}
+            fontAwesomeKit={this.state.fontAwesomeKit}
+            updateFontAwesomeKit={this.updateFontAwesomeKit}
             refreshTokens={this.refreshTokens}
             createPrompt={this.createPrompt}
             closePrompt={this.closePrompt} />

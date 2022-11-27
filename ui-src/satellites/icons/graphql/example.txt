@@ -1,8 +1,0 @@
-curl -H "Content-Type: application/json" \-d '{ "query": "query { release (version: \"6.x\") { version } }" }' \https://api.fontawesome.com
-
-
-
-curl -H "Content-Type: application/json" \-H "Authorization: Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJGb250YXdlc29tZSIsImV4cCI6MTY2ODYxMzUyNiwiaWF0IjoxNjY4NjA5OTI2LCJpc3MiOiJGb250YXdlc29tZSIsImp0aSI6IjU0Y2ExMTM5LWJhNjMtNDc3MC1hNmQ3LTQzMTk4ODU2ODIxMiIsIm5iZiI6MTY2ODYwOTkyNSwic3ViIjoiVG9rZW46MTk3MTA2MiIsInR5cCI6ImFjY2VzcyJ9.Z_kJa9EcI9L9dGySSaatF1cacELKrfB7GrHFG3CZVsX_eJdTh1CDGf0KxPS51Ud8TP6X9G71oOAlglA3ruXq-w" \-d '{ "query": "query{ search (version: \"6.x\", query: \"coff\", first: 5) { id } }" }' \https://api.fontawesome.com
-
-
-curl -H "Authorization: Bearer 74273A24-64D8-48D0-8ED2-C8BB3ED82A8E" \-X POST \https://api.fontawesome.com/token

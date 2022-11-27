@@ -2,6 +2,12 @@ import toKebabCase from "../../shared/toKebobCase";
 import { colors, typography } from "../../shared/styles";
 
 export function renderCssVariables() {
+  document.head.insertAdjacentHTML("beforeend", `<style>${
+    cssVariables()
+  }</style>`)
+}
+
+export function cssVariables() {
   const colorCssVars = Object.entries(colors).map(entry => {
     return `--${toKebabCase(entry[0])}: ${entry[1]};`;
   });
@@ -15,5 +21,6 @@ export function renderCssVariables() {
   ${colorCssVars.join('\n')}
   ${typographyCssVars.join('\n')}
 }`;
-  document.head.insertAdjacentHTML("beforeend", `<style>${css}</style>`)
+
+  return css;
 }

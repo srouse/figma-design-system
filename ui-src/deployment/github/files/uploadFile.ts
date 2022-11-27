@@ -60,7 +60,7 @@ async function getSHA(
       path,
     }
   ).catch((err:any) => {
-    console.log('error getting sha', err);
+    console.error('error getting sha', err);
   });
 
   const sha = result?.data?.sha;

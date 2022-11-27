@@ -17,7 +17,7 @@ export async function openEditor() {
         themeColors: true
       }
     );
-  }).catch(err => console.log('openEditor error', err));
+  }).catch(err => console.error('openEditor error', err));
 }
 
 export function triggerBaseRefresh() {

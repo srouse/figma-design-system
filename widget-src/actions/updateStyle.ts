@@ -40,7 +40,6 @@ export async function updateStyle(
     if (style && style.type === 'PAINT') {
       if (validColor(token.$value)) {
         const rgb = hexToRgb(token.$value.hex);
-        console.log(token.$value.hex, rgb);
         if (rgb) {
           style.paints = [
             {

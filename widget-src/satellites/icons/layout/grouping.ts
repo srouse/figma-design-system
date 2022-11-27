@@ -38,7 +38,6 @@ export function ejectOtherNodes(
       child !== thisWidget &&
       child !== iconCompSet
     ) {
-      console.log("ejecting", child);
       // eject
       if (groupParent) {
         groupParent.appendChild(child);

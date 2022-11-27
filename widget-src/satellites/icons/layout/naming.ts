@@ -1,5 +1,5 @@
 import { TokenGroup } from "../../../../shared/index";
-import cleanName from "./cleanName";
+import cleanName from "../../../../shared/utils/cleanName";
 import { findComponentSet } from "./componentSet";
 import { findParentGroup } from "./grouping";
 
@@ -61,15 +61,14 @@ export function addToLookupWithUniqueName(
   return newName;
 }
 
-
 export function nameToProps(name: string) {
   const childNameArr = name.split(',');
   const props: {[key:string]: string} = {};
   childNameArr.map(chunk => {
     const chunkArr = chunk.split('=');
     if (chunkArr.length === 2) {
-      const name = chunkArr[0] as string;
-      const value = chunkArr[1] as string;
+      const name = `${chunkArr[0]}`.trim();
+      const value = `${chunkArr[1]}`.trim();
       props[name] = value;
     }
   });

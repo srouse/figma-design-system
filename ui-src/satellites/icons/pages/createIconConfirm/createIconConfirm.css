@@ -1,0 +1,80 @@
+.create-icon-confirm {
+  position: fixed;
+  inset: 0px;
+  background-color: rgba(0,0,0,.2);
+}
+
+  .create-icon-confirm-body {
+    position: absolute;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    inset: 10px;
+    padding: 30px;
+  }
+
+  .create-icon-confirm-body > *:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  .create-icon-confirm-body .header {
+    font-size: 24px;
+    color: var( --text-color );
+    font-weight: 200;
+    margin-bottom: 20px;
+  }
+
+  .create-icon-confirm-body .other-option {
+    font-size: 12px;
+    color: var( --text-color );
+    font-weight: 200;
+  }
+
+  .create-icon-confirm-body .close {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+    .create-icon-confirm-body .close:hover {
+      cursor: pointer;
+    }
+
+    .create-icon-confirm .icon-preview {
+      width: 340px; height: 340px;
+      border: 1px solid var( --border-grey );
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      color: var( --text-color-lightest );
+    }
+
+      .create-icon-confirm .icon-preview svg {
+        /* max-width: 330px; max-height: 330px;*/
+        width: 330px; height: 330px;
+        margin: 5px;
+      }
+
+        .create-icon-confirm .icon-preview svg,
+        .create-icon-confirm .icon-preview svg > * {
+          fill: #353539;
+        }
+
+
+    .create-icon-confirm .navigation {
+      display: flex;
+      flex-direction: row;
+    }
+
+      .create-icon-confirm .navigation > * {
+        flex: 1;
+      }
+      .create-icon-confirm .navigation > *:not(:last-child) {
+        margin-right: 10px;
+      }

@@ -55,3 +55,29 @@
     .add-new-icon-body .close:hover {
       cursor: pointer;
     }
+
+
+    /* UPLOAD BUTTON */
+  .add-new-icon input[type="file"] {
+    display: none;
+  }
+
+  .add-new-icon .upload-svg{
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: auto;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    border-radius: 6px;
+    position: relative;
+    min-height: var( --button-min-height );
+    border: none;
+    background-color: var( --text-color-white );
+    border: 1px solid var( --primary );
+    color: var( --primary );
+    font-size: 14px;
+  }
