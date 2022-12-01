@@ -6,6 +6,10 @@
   flex-direction: row;
 }
 
+.effects-list {
+  overflow-x: hidden;
+}
+
 .effects-new-prompt > *:not(:last-child) {
   margin-right: 10px;
 }

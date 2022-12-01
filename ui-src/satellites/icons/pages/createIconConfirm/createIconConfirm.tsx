@@ -72,12 +72,12 @@ export default class CreateIconConfirm extends React.Component<CreateIconConfirm
             onEnterOrBlur={(name: string) => {
               this.setState({icon:{...this.state.icon,name}});
             }} />
-          <Input
+          {/* <Input
             label="Style"
             value={this.state.icon.style}
             onEnterOrBlur={(style: string) => {
               this.setState({icon:{...this.state.icon,style}});
-            }} />
+            }} /> */}
           <div className="navigation">
             <DTButton
               label="Cancel"

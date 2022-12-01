@@ -55,7 +55,8 @@ export const sizing = {
   headerHeight: 70,
   defaultWidgetWidth: 480,
   // icons
-  iconDisplaySize: 80,
-  iconSpacing: 10,
+  iconDisplaySize: 90,
+  iconHorizontalSpacing: 21.5,
+  iconVerticalSpacing: 47,
   iconCompsetPadding: 10,
 }

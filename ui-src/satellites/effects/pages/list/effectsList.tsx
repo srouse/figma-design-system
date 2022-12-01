@@ -53,6 +53,7 @@ export default class EffectsList extends React.Component<CoreProps> {
     return (<>
       <div className={`
         dsys-list
+        effects-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <ListHeader 
           title="Effect Tokens"

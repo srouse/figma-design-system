@@ -35,6 +35,7 @@ export enum MessageRequest {
   setFontAwesomeStyle = 'setFontAwesomeStyle',
   setFontAwesomeKit = 'setFontAwesomeKit',
   refreshIconTokens = 'refreshIconTokens',
+  deleteIcon = 'deleteIcon',
 }
 
 export enum MessageRequestStyle {

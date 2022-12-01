@@ -3,8 +3,14 @@
 
 
 
-  .ui-list .icons-list-row {
+  .icons-list .icons-list-row {
     position: relative;
+    user-select: none;
+    overflow-x: hidden;
+  }
+
+  .icons-list .icons-list-row:hover {
+    cursor: pointer;
   }
 
     .icons-list-row-icon {

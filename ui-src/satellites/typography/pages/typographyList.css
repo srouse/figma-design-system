@@ -1,6 +1,10 @@
 
 
 
+.typography-list {
+  overflow-x: hidden;
+}
+
 .typography-list-no-tokenset {
   padding: 20px;
   display: flex;

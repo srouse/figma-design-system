@@ -113,10 +113,10 @@ function Widget() {
                   {
                     error: message.error === true ? true : false,
                     timeout: message.timeout ? message.timeout : 2000,
-                    button: message.button ? {
+                    /* button: message.button ? {
                       text: 'ok',
                       action: () => {}
-                    } : undefined
+                    } : undefined */
                   }
                 );
                 break;

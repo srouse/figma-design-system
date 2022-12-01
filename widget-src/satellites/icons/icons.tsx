@@ -7,15 +7,15 @@ import { colors, typography } from "../../../shared/styles";
 import header from "../../components/header";
 import refreshLayout from "./layout/refreshLayout";
 import { sizing } from "../../../shared/styles";
-import addIcon, { getSelectionSvg } from "./newIcon/addIcon";
+import { getSelectionSvg } from "./newIcon/addIcon";
 import {
-  getSvg,
   pullTokensFromIconComponentSet
 } from "./iconComponentUtils";
 import bounceBack from "../../utils/postMessagePromise";
 import addSvgAsIcon from "./newIcon/addSvgAsIcon";
 import { findComponentSet } from "./layout/componentSet";
 import { findWidget } from "../../utils";
+import { LabelMetric } from "./layout/computeLabelMetrics";
 
 const { widget } = figma;
 const {
@@ -25,40 +25,38 @@ const {
   useWidgetId,
   useEffect,
   waitForTask,
+  Frame,
 } = widget;
 
 export default function iconsSatellite() {
-
   const nodeId = useWidgetId();
 
   const [tokenGroup, setTokenGroup ] = useSyncedState(
-    'tokenGroup',
-    defaultTokenGroup
+    'tokenGroup', defaultTokenGroup
   );
 
   const [compSetHeight, setCompSetHeight] = useSyncedState(
-    'compSetHeight',
-    sizing.iconDisplaySize
+    'compSetHeight', sizing.iconDisplaySize
   );
 
   const [, setWidgetWidth] = useSyncedState(
-    'widgetWidth',
-    sizing.defaultWidgetWidth
+    'widgetWidth', sizing.defaultWidgetWidth
   );
 
   const [iconsInitialized, setIconsInitialized] = useSyncedState(
-    'iconsInitialized',
-    false
+    'iconsInitialized', false
   );
 
   const [, setFontAwesomeApiKey] = useSyncedState(
-    'fontAwesomeApiKey',
-    ''
+    'fontAwesomeApiKey', ''
   );
 
   const [, setFontAwesomeKit] = useSyncedState(
-    'fontAwesomeKit',
-    ''
+    'fontAwesomeKit', ''
+  );
+
+  const [labelMetrics, setLabelMetrics] = useSyncedState(
+    'labelMetrics', []
   );
 
   const rebuildTokens = async () => {
@@ -67,7 +65,8 @@ export default function iconsSatellite() {
       nodeId,
       tokenGroup,
       setCompSetHeight,
-      setWidgetWidth
+      setWidgetWidth,
+      setLabelMetrics,
     );
     await pullTokensFromIconComponentSet(
       tokenGroup, setTokenGroup, nodeId
@@ -120,7 +119,8 @@ export default function iconsSatellite() {
                     nodeId,
                     tokenGroup,
                     setCompSetHeight,
-                    setWidgetWidth
+                    setWidgetWidth,
+                    setLabelMetrics,
                   );
                   bounceBack(message, result);
                 })();
@@ -166,6 +166,21 @@ export default function iconsSatellite() {
                   fontAwesomeKit: message.fontAwesomeKit
                 });
                 break;
+
+              // delete token
+              case MessageRequest.deleteIcon: {
+                console.log('message', message);
+                const thisWidget = findWidget(nodeId);
+                const compSet = findComponentSet(thisWidget);
+                compSet?.children.map(child => {
+                  if (child.id === message.componentSetId) {
+                    child.remove();
+                  }
+                });
+                await rebuildTokens();
+                bounceBack(message, {});
+                break;
+              }
             }
       }
     };
@@ -180,7 +195,7 @@ export default function iconsSatellite() {
         width="fill-parent"
         height={
           sizing.headerHeight + 
-          (sizing.iconSpacing*2) +
+          (sizing.iconCompsetPadding*2) +
           compSetHeight - 15 // some slop from somewhere?
         }
         direction="vertical"
@@ -190,14 +205,28 @@ export default function iconsSatellite() {
         {header(
           rebuildTokens,
         )}
-        <AutoLayout 
-            height="hug-contents"
-            direction="vertical"
-            width="fill-parent"
-            horizontalAlignItems="center"
-            verticalAlignItems="center"
-            overflow="visible">
-          </AutoLayout>
+        <Frame
+          width="fill-parent"
+          height="fill-parent">
+          {labelMetrics.map((labelMetric: LabelMetric) => {
+            return (
+              <AutoLayout
+                key={`${labelMetric.name}`}
+                width="hug-contents"
+                x={labelMetric.x}
+                y={labelMetric.y}>
+                <Text
+                  fontFamily={typography.primaryFont}
+                  fontSize={10}
+                  width={sizing.iconDisplaySize}
+                  horizontalAlignText="center"
+                  fill={colors.textColor}>
+                  {labelMetric.name}
+                </Text>
+              </AutoLayout>
+            );
+          })}
+        </Frame>
       </AutoLayout>
     );
   }else{
@@ -207,7 +236,7 @@ export default function iconsSatellite() {
         width="fill-parent"
         height={
           sizing.headerHeight + 
-          (sizing.iconSpacing*2) + 
+          (sizing.iconCompsetPadding*2) + 
           sizing.iconDisplaySize
         }
         direction="vertical"
@@ -217,27 +246,27 @@ export default function iconsSatellite() {
         overflow="visible">
         {header()}
         <AutoLayout 
-            height="hug-contents"
-            direction="vertical"
-            width="fill-parent"
-            horizontalAlignItems="center"
-            verticalAlignItems="center"
-            spacing={0}
-            padding={{
-              top: 20, bottom: 20,
-              left: 20, right: 20
-            }}
-            overflow="visible">
-            <Text
-              fontFamily={typography.primaryFont}
-              fontWeight="light"
-              fontSize={18}
-              width="hug-contents"
-              horizontalAlignText="center"
-              fill={colors.textColorLightest}>
-              Icon Tokens Not Found
-            </Text>
-          </AutoLayout>
+          height="hug-contents"
+          direction="vertical"
+          width="fill-parent"
+          horizontalAlignItems="center"
+          verticalAlignItems="center"
+          spacing={0}
+          padding={{
+            top: 20, bottom: 20,
+            left: 20, right: 20
+          }}
+          overflow="visible">
+          <Text
+            fontFamily={typography.primaryFont}
+            fontWeight="light"
+            fontSize={18}
+            width="hug-contents"
+            horizontalAlignText="center"
+            fill={colors.textColorLightest}>
+            Icon Tokens Not Found
+          </Text>
+        </AutoLayout>
       </AutoLayout>
     );
   }

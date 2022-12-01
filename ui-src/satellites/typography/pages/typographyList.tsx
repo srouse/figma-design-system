@@ -66,6 +66,7 @@ export default class TypographyList extends React.Component<TypographyProps> {
     return (<>
       <div className={`
         dsys-list
+        typography-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <ListHeader 
           title="Typography Tokens"

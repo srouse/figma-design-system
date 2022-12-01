@@ -12,12 +12,19 @@ export function resizeComponentSet(
   
   // tokens are derived from component, so feed off of what's there...
   const totalIcons = compSet.children.length;
-  const iconsPerRow = Math.max(5, Math.round(Math.sqrt(totalIcons)));
+
+  const minIconsCols = 5;
+  const maxIconsRows = 6;
+  const iconsPerRow = Math.max(
+    minIconsCols,
+    Math.ceil( totalIcons / maxIconsRows )
+  );
+
   // Component Set Width
   const compWidth = Math.max(
     sizing.defaultWidgetWidth,
-    ( iconsPerRow * (sizing.iconDisplaySize + (sizing.iconSpacing))) + 
-    sizing.iconSpacing
+    ( iconsPerRow * (sizing.iconDisplaySize + (sizing.iconHorizontalSpacing))) + 
+    sizing.iconCompsetPadding
   );
 
   // Component Set Height
@@ -25,9 +32,8 @@ export function resizeComponentSet(
 
   const compHeight = totalRows * (
     sizing.iconDisplaySize + 
-    (sizing.iconSpacing)
-  ) + sizing.iconSpacing;
-
+    (sizing.iconVerticalSpacing)
+  ) + sizing.iconCompsetPadding;
 
   compSet.resize(
     compWidth,
@@ -41,13 +47,13 @@ export function resizeComponentSet(
     formatVectorsIntoComponent(childComp);
 
     const col = index % iconsPerRow;
-    childComp.x = sizing.iconSpacing + (
-      (sizing.iconDisplaySize + sizing.iconSpacing) * col
+    childComp.x = sizing.iconCompsetPadding + (
+      (sizing.iconDisplaySize + sizing.iconHorizontalSpacing) * col
     );
 
     const row = Math.floor( index / iconsPerRow );
-    childComp.y = sizing.iconSpacing + (
-      (sizing.iconDisplaySize + sizing.iconSpacing) * row
+    childComp.y = sizing.iconCompsetPadding + (
+      (sizing.iconDisplaySize + sizing.iconVerticalSpacing) * row
     );
   });
 
