@@ -57,11 +57,12 @@ export async function compSetToDSysTokenset(
       $extensions: {
         'dsys.level'            : DSysLevel.token,
         'dsys.name'             : props.name,
-        'dsys.componentSetId'   : comp.id,
+        'dsys.componentId'      : comp.id,
+        'dsys.sizes'            : [],
       },
       $value: {
         svg: '',
-        style: props.style || 'regular',
+        // style: props.style || 'regular',
         sizes: [12, 24, 32],
       },
       $type: DTTokenType.svg

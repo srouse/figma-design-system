@@ -11,11 +11,13 @@ import { getSelectionSvg } from "./newIcon/addIcon";
 import {
   pullTokensFromIconComponentSet
 } from "./iconComponentUtils";
-import bounceBack from "../../utils/postMessagePromise";
+import bounceBack, { postPluginMessage } from "../../utils/postMessagePromise";
 import addSvgAsIcon from "./newIcon/addSvgAsIcon";
 import { findComponentSet } from "./layout/componentSet";
 import { findWidget } from "../../utils";
 import { LabelMetric } from "./layout/computeLabelMetrics";
+import changeIconCompName from "./utils/changeIconCompName";
+import { getFullPluginState } from "../../code";
 
 const { widget } = figma;
 const {
@@ -24,7 +26,6 @@ const {
   Text,
   useWidgetId,
   useEffect,
-  waitForTask,
   Frame,
 } = widget;
 
@@ -43,9 +44,9 @@ export default function iconsSatellite() {
     'widgetWidth', sizing.defaultWidgetWidth
   );
 
-  const [iconsInitialized, setIconsInitialized] = useSyncedState(
-    'iconsInitialized', false
-  );
+  // const [iconsInitialized, setIconsInitialized] = useSyncedState(
+  //   'iconsInitialized', false
+  // );
 
   const [, setFontAwesomeApiKey] = useSyncedState(
     'fontAwesomeApiKey', ''
@@ -59,6 +60,20 @@ export default function iconsSatellite() {
     'labelMetrics', []
   );
 
+  const [, setIconSizes] = useSyncedState(
+    'iconSizes', [12, 24, 32, 40, 48, 56, 62]
+  );
+
+  const refreshPluginState = () => {
+    postPluginMessage({
+      name: 'refreshState',
+      state: getFullPluginState(
+        nodeId,
+        findWidget(nodeId)
+      ),
+    });
+  }
+
   const rebuildTokens = async () => {
     const start = new Date();
     refreshLayout(
@@ -71,9 +86,10 @@ export default function iconsSatellite() {
     await pullTokensFromIconComponentSet(
       tokenGroup, setTokenGroup, nodeId
     );
+    refreshPluginState();
     const end = new Date();
     figma.notify(
-      `Rebuild icon tokens ${end.getTime() - start.getTime()}`,
+      `rebuilt icon tokens (${end.getTime() - start.getTime()}ms)`,
     );
   };
 
@@ -84,17 +100,6 @@ export default function iconsSatellite() {
     figma.on('selectionchange', logSelection)
     return () => figma.off('selectionchange', logSelection)
   })*/
-
-  useEffect(() => {
-    if (!iconsInitialized) {
-      setIconsInitialized(true);
-      waitForTask(
-        pullTokensFromIconComponentSet(
-          tokenGroup, setTokenGroup, nodeId
-        )
-      );
-    }
-  });
 
   useEffect(() => {
     const onMessageHandler = async (message: any) => {
@@ -122,19 +127,17 @@ export default function iconsSatellite() {
                     setWidgetWidth,
                     setLabelMetrics,
                   );
+                  rebuildTokens();
                   bounceBack(message, result);
                 })();
                 break;
               case MessageRequest.changeIconCompName :
-                const thisWidget = findWidget(nodeId);
-                const compSet = findComponentSet(thisWidget);
-                if (compSet) compSet.name = message.newName;
+                changeIconCompName(nodeId, message.newName);
                 bounceBack(message, {success: true});
                 break;
 
               // refresh tokens
               case MessageRequest.createIconFromSelection:
-
                 const svg = await getSelectionSvg();
                 if (svg) {
                   bounceBack(message, {svg, success: true});
@@ -159,22 +162,40 @@ export default function iconsSatellite() {
                 });
                 break;
 
+              // Icon Sizes
+              case MessageRequest.setIconSizes:
+                setIconSizes(message.iconSizes);
+                bounceBack(message, {
+                  setIconSizes: message.iconSizes
+                });
+                break;
+
               // refresh tokens
               case MessageRequest.refreshIconTokens:
                 await rebuildTokens();
-                bounceBack(message, {
-                  fontAwesomeKit: message.fontAwesomeKit
-                });
                 break;
 
               // delete token
               case MessageRequest.deleteIcon: {
-                console.log('message', message);
                 const thisWidget = findWidget(nodeId);
                 const compSet = findComponentSet(thisWidget);
                 compSet?.children.map(child => {
-                  if (child.id === message.componentSetId) {
+                  if (child.id === message.componentId) {
                     child.remove();
+                  }
+                });
+                await rebuildTokens();
+                bounceBack(message, {});
+                break;
+              }
+
+              // Change token name
+              case MessageRequest.changeIconTokenName: {
+                const thisWidget = findWidget(nodeId);
+                const compSet = findComponentSet(thisWidget);
+                compSet?.children.map(child => {
+                  if (child.id === message.componentId) {
+                    child.name = `name=${message.newName}`;
                   }
                 });
                 await rebuildTokens();
@@ -193,11 +214,7 @@ export default function iconsSatellite() {
       <AutoLayout 
         name="base-page"
         width="fill-parent"
-        height={
-          sizing.headerHeight + 
-          (sizing.iconCompsetPadding*2) +
-          compSetHeight - 15 // some slop from somewhere?
-        }
+        height="hug-contents"
         direction="vertical"
         horizontalAlignItems="center"
         verticalAlignItems="start"
@@ -207,18 +224,29 @@ export default function iconsSatellite() {
         )}
         <Frame
           width="fill-parent"
-          height="fill-parent">
+          height={
+            (sizing.iconCompsetPadding*2) +
+            compSetHeight
+          }
+          fill="#eee">
           {labelMetrics.map((labelMetric: LabelMetric) => {
             return (
               <AutoLayout
                 key={`${labelMetric.name}`}
                 width="hug-contents"
-                x={labelMetric.x}
-                y={labelMetric.y}>
+                x={labelMetric.x - 12}
+                y={labelMetric.y - 8}
+                padding={{
+                  top: labelMetric.iconHeight + 10,
+                  left: 2, right: 2, bottom: 2,
+                }}
+                cornerRadius={6}
+                fill="#fff">
                 <Text
                   fontFamily={typography.primaryFont}
-                  fontSize={10}
-                  width={sizing.iconDisplaySize}
+                  fontSize={9}
+                  width={sizing.iconDisplaySize + 20}
+                  height={32}
                   horizontalAlignText="center"
                   fill={colors.textColor}>
                   {labelMetric.name}

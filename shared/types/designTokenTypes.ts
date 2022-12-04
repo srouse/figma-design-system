@@ -46,9 +46,6 @@ export type DTColor = {
   alpha: number,
 };
 
-
-
-
 // Color
 export interface DTColorToken extends DTTokenBase {
   // '$value': string,
@@ -220,7 +217,7 @@ export interface DTFileToken extends DTTokenBase {
 export interface DTSvgToken extends DTTokenBase {
   '$value': {
     svg: string,
-    style: 'regular' | string,
+    // style: 'regular' | string,
     sizes: number[],
   },
   '$type' : DTTokenType.svg

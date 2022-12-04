@@ -31,7 +31,7 @@ export function createComponentSet(
 
   // create an example...
   const component = figma.createComponent();
-  component.name = 'name=default, style=regular';
+  component.name = 'name=default';// , style=regular';
   const defaultSVGNode = figma.createNodeFromSvg(defaultSvg);
   component.resizeWithoutConstraints(
     defaultSVGNode.width,

@@ -36,6 +36,8 @@ export enum MessageRequest {
   setFontAwesomeKit = 'setFontAwesomeKit',
   refreshIconTokens = 'refreshIconTokens',
   deleteIcon = 'deleteIcon',
+  changeIconTokenName = 'changeIconTokenName',
+  setIconSizes = 'setIconSizes',
 }
 
 export enum MessageRequestStyle {
@@ -61,6 +63,7 @@ export interface State {
   promptContent?: any,
   fontAwesomeApiKey?: string,
   fontAwesomeKit?: string,
+  iconSizes?: number[],
 }
 
 export type CoreProps = {
@@ -76,6 +79,8 @@ export type CoreProps = {
   updateFontAwesomeApiKey: (fontAwesomeApiKey: string) => Promise<string>,
   fontAwesomeKit?: string,
   updateFontAwesomeKit: (fontAwesomeKit: string) => Promise<string>,
+  iconSizes?: number[],
+  updateIconSizes: (iconSizes: number[]) => Promise<number[]>,
 }
 
 export interface GlobalData {

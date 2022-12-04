@@ -102,11 +102,13 @@ export default class FontAwesomeIcon
       this.props.updateFontAwesomeKit
     );
     const results = await searchFontAwesome( searchTerm, kit );
-    this.setState({
-      faResults: results,
-      searching: false,
-      kit
-    });
+    if (this.state.searchTerm === searchTerm) {
+      this.setState({
+        faResults: results,
+        searching: false,
+        kit
+      });
+    }
   }
 
   render() {
@@ -131,7 +133,7 @@ export default class FontAwesomeIcon
                 label="" 
                 value={this.state.searchTerm}
                 placeholder="search"
-                onEnterOrBlur={async (searchTerm: string) => {
+                onChange={async (searchTerm: string) => {
                   if (this.state.searchTerm !== searchTerm)
                     this.search( searchTerm );
                 }} />

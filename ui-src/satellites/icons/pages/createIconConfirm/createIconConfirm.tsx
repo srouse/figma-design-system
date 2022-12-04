@@ -96,9 +96,6 @@ export default class CreateIconConfirm extends React.Component<CreateIconConfirm
                   },
                 },
               );
-              await postMessagePromise(
-                MessageRequest.refreshIconTokens
-              );
               this.props.onClose();
             }} />
           </div>

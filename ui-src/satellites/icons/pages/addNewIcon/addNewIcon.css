@@ -1,9 +1,8 @@
 
 
 .add-new-icon {
-  position: absolute;
+  position: fixed;
   inset: 0px;
-  top: calc( ( var( --satellite-header-height ) + var( --dttabs-height ) ) * -1 );
   background-color: rgba(0,0,0,.2);
 }
 
@@ -13,6 +12,7 @@
     background-color: white;
     border-radius: 10px;
     padding: 10px;
+    box-shadow: var( --modal-shadow );
   }
 
   .add-new-icon-body.choose-type {

@@ -51,7 +51,7 @@
       border: 1px solid var( --figma-color-border );
       appearance: none;
       font-family: var( --primary-ui-font );
-      color: var( --text-color );
+      color: var( --text-color ); 
       font-weight: 300;
     }
 

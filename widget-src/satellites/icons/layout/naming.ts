@@ -38,8 +38,8 @@ export function normalizeIconComponentNames(
       icon: child as ComponentNode,
     })
     const nameStr = `name=${theName}`;
-    const styleStr = `style=${props.style || `regular`}`;
-    child.name = `${nameStr}, ${styleStr}`;
+    // const styleStr = `style=${props.style || `regular`}`;
+    child.name = `${nameStr}`;//, ${styleStr}`;
   });
 
   // sort by name...

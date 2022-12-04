@@ -1,11 +1,14 @@
 import React from "react";
 import {
   CoreProps,
+  MessageRequest,
   Validator,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
+import postMessagePromise from "../../../../utils/postMessagePromise";
+import FontAwesomeKitButton from "../addNewIcon/fontAwesome/kits/fontAwesomeKitButton";
 
 export default class IconsFirstRun extends React.Component<CoreProps> {
 
@@ -47,17 +50,17 @@ export default class IconsFirstRun extends React.Component<CoreProps> {
               }
             )
           } />
-        <Input
-          label="Font Awesome API Key (optional)"
-          value={this.state.fontAwesomeApiKey}
-          onEnterOrBlur={(fontAwesomeApiKey: string) => {
-            this.setState({fontAwesomeApiKey});
-          }} />
+        <FontAwesomeKitButton
+          style={{marginBottom: 20}}
+          fontAwesomeKit={this.props.fontAwesomeKit}
+          fontAwesomeApiKey={this.props.fontAwesomeApiKey}
+          updateFontAwesomeKit={this.props.updateFontAwesomeKit}
+          updateFontAwesomeApiKey={this.props.updateFontAwesomeApiKey} />
         <div style={{flex: 1}}></div>
         <DTButton
           label="Create"
           color={DTButtonColor.primary}
-          onClick={() => {
+          onClick={async() => {
             if (!this.props.tokenGroup) return;
             if (this.validator.validate().length === 0) {
               const finalTokenGroup = {
@@ -65,8 +68,12 @@ export default class IconsFirstRun extends React.Component<CoreProps> {
                 // just the name so we can build from styles
                 name: this.state.name,
               };
-              this.props.updateTokenGroup(finalTokenGroup);
-              this.props.updateFontAwesomeApiKey(this.state.fontAwesomeApiKey);
+              await this.props.updateTokenGroup(
+                finalTokenGroup
+              );
+              await postMessagePromise(
+                MessageRequest.refreshIconTokens, {}
+              );
               return;
             }
           }}></DTButton>

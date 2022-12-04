@@ -55,8 +55,14 @@ export const sizing = {
   headerHeight: 70,
   defaultWidgetWidth: 480,
   // icons
-  iconDisplaySize: 90,
-  iconHorizontalSpacing: 21.5,
-  iconVerticalSpacing: 47,
-  iconCompsetPadding: 10,
+  iconDisplaySize: 60,
+  iconHorizontalSpacing: 33,
+  iconVerticalSpacing: 52.5,
+  iconCompsetPadding: 20,
+  minIconsCols: 5,
+  maxIconsRows: 7,
+}
+
+export const effects = {
+  modalShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
 }

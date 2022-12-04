@@ -6,6 +6,7 @@ import { DSysSvgToken } from "../../../../../shared/types/designSystemTypes";
 import { cleanAndSortTokensAlphabetical } 
   from "../../../../../shared/utils/cleanAndSortTokens";
 import DetailModal from "../../../../components/DetailModal/DetailModal";
+import Input from "../../../../components/Input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import IconsDetail from "../../details/iconsDetail";
@@ -55,10 +56,10 @@ export default class IconsList extends React.Component<CoreProps> {
         <ListHeader
           title="Icon Tokens"
           onAdd={() =>{
-            if (tokens.length >= 96) {
+            if (tokens.length >= 133) {
               postMessagePromise(
                 MessageRequest.notify,
-                {message: 'Only 96 icons allowed. Create another token set.', error: true}
+                {message: 'Only 133 icons allowed. Create another token set.', error: true}
               );
               return;
             }
@@ -73,25 +74,39 @@ export default class IconsList extends React.Component<CoreProps> {
           }} />
         <div className="dsys-list-body scroll-bar">
           {tokens.map(tokenInfo => {
-            // const prop = tokenInfo[0];
+            const prop = tokenInfo[0];
             const iconToken = tokenInfo[1] as unknown as DSysSvgToken;
+            const componentId = iconToken.$extensions['dsys.componentId'];
             return (
               <div
                 className="dsys-row icons-list-row"
-                key={`color-${iconToken.$extensions['dsys.componentSetId']}`}
-                data-key={`color-${iconToken.$extensions['dsys.componentSetId']}`}
-                onClick={() => {
-                  this.setState({
-                    detailModalOpen: true,
-                    focusedToken: iconToken,
-                  });
-                }}>
+                key={`color-${componentId}`}
+                data-key={`color-${componentId}`}>
                 <div className="icons-list-row-icon"
-                  dangerouslySetInnerHTML={{__html:iconToken.$value.svg}}>
+                  dangerouslySetInnerHTML={{__html:iconToken.$value.svg}}
+                  onClick={() => {
+                    /* this.setState({
+                      detailModalOpen: true,
+                      focusedToken: iconToken,
+                    });*/
+                  }}>
                 </div>
                 <div className="icons-list-row-name">
-                  {iconToken.$extensions["dsys.name"]}
-                </div>
+                    <Input
+                      hideLabel hideBorder
+                      label="property"
+                      value={prop}
+                      onEnterOrBlur={(newName: string) => {
+                        if (prop === newName) return;
+                        postMessagePromise(
+                          MessageRequest.changeIconTokenName,
+                          {
+                            componentId,
+                            newName
+                          }
+                        );
+                      }} />
+                  </div>
                 {/* <div className="icons-list-line"></div>
                 <div className="icons-list-row-style">
                   {iconToken.$value.style}
@@ -112,10 +127,12 @@ export default class IconsList extends React.Component<CoreProps> {
                         await postMessagePromise(
                           MessageRequest.deleteIcon,
                           {
-                            componentSetId: 
-                              iconToken.$extensions['dsys.componentSetId']
+                            componentId
                           }
                         );
+                        this.setState({
+                          isDeleting: false
+                        });
                       }
                     }}>
                     <div className="dsys-row-deleting-icon"

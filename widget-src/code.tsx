@@ -26,6 +26,24 @@ const {
   useWidgetId,
 } = widget;
 
+export function getFullPluginState(
+  nodeId: string,
+  thisWidget: WidgetNode
+) {
+  return {
+    nodeId,
+    globalData: thisWidget.widgetSyncedState.globalData,
+    tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
+    fontAwesomeApiKey:
+      thisWidget.widgetSyncedState.fontAwesomeApiKey,
+    fontAwesomeKit:
+      thisWidget.widgetSyncedState.fontAwesomeKit,
+    iconSizes:
+      thisWidget.widgetSyncedState.iconSizes,
+  }
+}
+
+
 function Widget() {
   const nodeId = useWidgetId();
 
@@ -84,15 +102,7 @@ function Widget() {
               case MessageRequest.stateUpdate:
                 {
                   const thisWidget = findWidget(nodeId);
-                  bounceBack(message, {
-                    nodeId,
-                    globalData: thisWidget.widgetSyncedState.globalData,
-                    tokenGroup: thisWidget.widgetSyncedState.tokenGroup,
-                    fontAwesomeApiKey:
-                      thisWidget.widgetSyncedState.fontAwesomeApiKey,
-                    fontAwesomeKit:
-                      thisWidget.widgetSyncedState.fontAwesomeKit,
-                  });
+                  bounceBack(message, getFullPluginState(nodeId, thisWidget));
                 }
                 break;
               case MessageRequest.getStyles:

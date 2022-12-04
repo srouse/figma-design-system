@@ -20,6 +20,6 @@ export default async function addSvgAsIcon(
   const component = createComponent(svgFrame);
   component.appendChild(svgFrame);
   compSet.appendChild(component);
-  component.name = `name=${finalName}, style=${style}`;
+  component.name = `name=${finalName}`;// , style=${style}`;
   return {success: true};
 }

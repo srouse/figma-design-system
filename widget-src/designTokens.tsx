@@ -81,7 +81,7 @@ export default function designSystem() {
       horizontalAlignItems="center"
       verticalAlignItems="start"
       spacing={14}
-      padding={{top: 0,left: 0,bottom: 15,right: 0}}
+      padding={{top: 0,left: 0,bottom: 0,right: 0}}
       effect={isWindowUIOpen ? [{
         "type":"drop-shadow",
         "blur":10,

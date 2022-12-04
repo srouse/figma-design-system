@@ -30,6 +30,18 @@ export default async function postMessagePromise(
   });
 }
 
+const listeners: ((msg: any) => void)[] = [];
+export function addMessageListener(listener: (msg: any) => void) {
+  listeners.push(listener);
+}
+
+export function removeMessageListener(listener: (msg: any) => void) {
+  const listenerIndex = listeners.indexOf(listener);
+  if ( listenerIndex !== -1) {
+    listeners.splice(listenerIndex, 1);
+  }
+}
+
 onmessage = (evt: any) => {
   const msg = evt.data.pluginMessage;
   if (msg && messagePromiseCallbacks[msg.promiseId]) {
@@ -37,6 +49,7 @@ onmessage = (evt: any) => {
     messagePromiseCallbacks[msg.promiseId](msg);
     delete messagePromiseCallbacks[msg.promiseId];
   }else{
+    listeners.map(listener => listener(msg));
     // con sole.log('RECIEVE MSG BOUNCE BACK (FAIL)', msg);
   }
 }

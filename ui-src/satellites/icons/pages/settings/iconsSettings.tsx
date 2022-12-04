@@ -4,7 +4,6 @@ import {
   MessageRequest
 } from "../../../../../shared";
 import Input from "../../../../components/Input";
-import Select from "../../../../components/Select";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import FontAwesomeKitButton from "../addNewIcon/fontAwesome/kits/fontAwesomeKitButton";
 
@@ -31,6 +30,24 @@ export default class IconsSettings extends React.Component<CoreProps> {
             ...this.props.tokenGroup,
             name: value,
           });
+        }} />
+      <Input
+        label="Sizes (For Export)" 
+        value={this.props.iconSizes?.join(', ')}
+        onEnterOrBlur={async (value: string) => {
+          if (!this.props.tokenGroup) return;
+          const iconSizes = value.split(',').map(val => {
+            return parseInt(val);
+          }) as number[];
+          await postMessagePromise(
+            MessageRequest.setIconSizes,
+            {
+              iconSizes
+            }
+          );
+          this.props.updateIconSizes(
+            iconSizes,
+          );
         }} />
       <FontAwesomeKitButton
         style={{marginBottom: 20}}

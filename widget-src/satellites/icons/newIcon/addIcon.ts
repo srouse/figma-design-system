@@ -43,7 +43,7 @@ export default async function addIcon(
 
 export function createComponent(newIcon: VectorNode | FrameNode | GroupNode) {
   const component = figma.createComponent();
-  component.name = `name=${newIcon.name}, style=regular`;
+  component.name = `name=${newIcon.name}`;// , style=regular`;
   component.resizeWithoutConstraints(
     newIcon.width,
     newIcon.height

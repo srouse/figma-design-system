@@ -102,6 +102,7 @@ export default class FontAwesomeKitModal
           <Input
             label="Font Awesome API Key"
             placeholder="Input your key and we'll find your kits"
+            type="password"
             value={this.state.fontAwesomeApiKey}
             onEnterOrBlur={async (fontAwesomeApiKey: string) => {
               if (this.state.fontAwesomeApiKey === fontAwesomeApiKey) return;

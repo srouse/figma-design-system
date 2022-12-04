@@ -10,8 +10,10 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    inset: 10px;
+    left: 30px; right: 30px;
+    top: 30px;
     padding: 30px;
+    box-shadow: var( --modal-shadow );
   }
 
   .create-icon-confirm-body > *:not(:last-child) {
@@ -53,6 +55,8 @@
       align-items: center;
       justify-content: center;
       color: var( --text-color-lightest );
+      margin-left: auto;
+      margin-right: auto;
     }
 
       .create-icon-confirm .icon-preview svg {

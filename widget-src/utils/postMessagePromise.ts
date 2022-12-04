@@ -15,3 +15,15 @@ export default function bounceBack(
     ...args,
   });
 }
+
+// send generic message to the UI from Widget
+export function postPluginMessage(args: {}) {
+  try {
+    figma.ui.postMessage({
+      ...args,
+    });
+  }catch(err: any) {
+    // post message could be sent w/o a plugin
+    console.error(err);
+  };
+}

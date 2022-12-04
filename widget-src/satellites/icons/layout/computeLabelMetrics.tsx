@@ -7,6 +7,7 @@ export type LabelMetric = {
   name: string,
   x: number,
   y: number,
+  iconHeight: number,
 };
 
 export default function computeLabelMetrics(
@@ -22,7 +23,9 @@ export default function computeLabelMetrics(
       metrics.push({
         name: nameObj.name,
         x: child.x + sizing.iconCompsetPadding,
-        y: child.y + child.height + sizing.iconCompsetPadding,
+        // y: child.y + child.height + sizing.iconCompsetPadding,
+        y: child.y + sizing.iconCompsetPadding,
+        iconHeight: child.height,
       });
     })
   }

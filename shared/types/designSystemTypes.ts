@@ -355,7 +355,8 @@ export interface DSysSvgToken extends DTSvgToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
-    'dsys.componentSetId' : string,
+    'dsys.componentId' : string,
+    'dsys.sizes' : number[],
   },
 }
 

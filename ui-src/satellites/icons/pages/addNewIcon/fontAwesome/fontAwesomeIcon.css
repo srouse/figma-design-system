@@ -1,9 +1,8 @@
 
 
 .font-awesome-icon {
-  position: absolute;
+  position: fixed;
   inset: 0px;
-  top: calc( ( var( --satellite-header-height ) + var( --dttabs-height ) ) * -1 );
   background-color: rgba(0,0,0,.2);
 }
 
@@ -15,6 +14,7 @@
     flex-direction: column;
     inset: 20px;
     padding: 30px 20px;
+    box-shadow: var( --modal-shadow );
   }
 
   .font-awesome-icon-body > *:not(:last-child) {

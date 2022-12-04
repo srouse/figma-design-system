@@ -1,5 +1,5 @@
 import toKebabCase from "../../shared/toKebobCase";
-import { colors, typography } from "../../shared/styles";
+import { colors, effects, sizing, typography } from "../../shared/styles";
 
 export function renderCssVariables() {
   document.head.insertAdjacentHTML("beforeend", `<style>${
@@ -16,10 +16,20 @@ export function cssVariables() {
     return `--${toKebabCase(entry[0])}: ${entry[1]};`;
   });
 
+  const sizingCssVars = Object.entries(sizing).map(entry => {
+    return `--${toKebabCase(entry[0])}: ${entry[1]};`;
+  });
+
+  const effectsCssVars = Object.entries(effects).map(entry => {
+    return `--${toKebabCase(entry[0])}: ${entry[1]};`;
+  });
+
   const css = `
 :root {
   ${colorCssVars.join('\n')}
   ${typographyCssVars.join('\n')}
+  ${sizingCssVars.join('\n')}
+  ${effectsCssVars.join('\n')}
 }`;
 
   return css;
