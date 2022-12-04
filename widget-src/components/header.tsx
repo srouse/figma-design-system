@@ -106,8 +106,7 @@ export default function header(
               figma.viewport.scrollAndZoomIntoView([base]);
             }
           }}>
-          <Text 
-            name="SCU"
+          <Text
             fontFamily={typography.primaryFont}
             fontWeight="normal"
             fontSize={18}

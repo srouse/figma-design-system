@@ -54,7 +54,7 @@ export default class IconsList extends React.Component<CoreProps> {
         icons-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <ListHeader
-          title="Icon Tokens"
+          title={`Icon Tokens (${tokens.length} of 133)`}
           onAdd={() =>{
             if (tokens.length >= 133) {
               postMessagePromise(
