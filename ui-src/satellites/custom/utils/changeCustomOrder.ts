@@ -1,6 +1,6 @@
 import {
-  DSysSpacingToken,
-  DSysSpacingTokenset,
+  DSysCustomToken,
+  DSysCustomTokenset,
   isToken,
   MessageRequest,
   TokenGroup
@@ -8,7 +8,7 @@ import {
 // import outputTokenIndexes from "../../../utils/outputTokenIndexes";
 import postMessagePromise from "../../../utils/postMessagePromise";
 
-export function changeSpacingOrder(
+export function changeCustomOrder(
   rowIndex: number,
   dropIndex: number,
   tokenGroup: TokenGroup | undefined,
@@ -20,10 +20,10 @@ export function changeSpacingOrder(
     !updateTokenGroup
   ) return;
 
-  const tokenset = tokenGroup.tokensets[0] as DSysSpacingTokenset;
+  const tokenset = tokenGroup.tokensets[0] as DSysCustomTokenset;
   Object.values(tokenset).map((value: any) => {
     if (isToken(value)) {
-      const token = value as DSysSpacingToken;
+      const token = value as DSysCustomToken;
       const tokenIndex = token.$extensions['dsys.index'];
       if (tokenIndex === rowIndex) {
         token.$extensions["dsys.index"] = dropIndex;

@@ -5,6 +5,7 @@ import "./ListHeader.css";
 interface ListHeaderProps {
   title: string,
   onDelete: () => void,
+  onDeleteClose: () => void,
   onAdd: () => void,
 }
 
@@ -29,6 +30,7 @@ export default class ListHeader extends React.Component<ListHeaderProps> {
           <div
             className="list-header-btn plus"
             onClick={() =>{
+              if (this.props.onDeleteClose) this.props.onDeleteClose();
               if (this.props.onAdd) this.props.onAdd();
             }} dangerouslySetInnerHTML={{__html:getIcon(Icons.plus)}}>
           </div>

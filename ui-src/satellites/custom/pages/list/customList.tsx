@@ -9,14 +9,14 @@ import {
 import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
 import Input from "../../../../components/Input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
-import "./spacingList.css";
-import updateSpacingToken from "../../utils/updateSpacingToken";
-import { DSysSpacingToken } from "../../../../../shared/types/designSystemTypes";
-import { addSpacingToken } from "../../utils/addSpacingToken";
-import { changeSpacingOrder } from "../../utils/changeSpacingOrder";
-import deleteSpacingToken from "../../utils/deleteSpacingToken";
+import { DSysCustomToken } from "../../../../../shared/types/designSystemTypes";
+import "./customList.css";
+import { addCustomToken } from "../../utils/addCustomToken";
+import updateCustomToken from "../../utils/updateCustomToken";
+import { changeCustomOrder } from "../../utils/changeCustomOrder";
+import deleteCustomToken from "../../utils/deleteCustomToken";
 
-export default class SpacingList extends React.Component<CoreProps> {
+export default class CustomList extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
@@ -40,9 +40,9 @@ export default class SpacingList extends React.Component<CoreProps> {
         dsys-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <ListHeader
-          title="Spacing Tokens"
+          title="Custom Tokens"
           onAdd={() =>{
-            addSpacingToken(
+            addCustomToken(
               this.props.tokenGroup,
               this.props.updateTokenGroup,
             );
@@ -64,7 +64,7 @@ export default class SpacingList extends React.Component<CoreProps> {
               rowIndex: number,
               dropIndex: number
             ) => {
-              changeSpacingOrder(
+              changeCustomOrder(
                 rowIndex, dropIndex,
                 this.props.tokenGroup,
                 this.props.updateTokenGroup,
@@ -77,12 +77,12 @@ export default class SpacingList extends React.Component<CoreProps> {
               onMouseUpCapture,
             ) => {
               const prop = tokenInfo[0];
-              const spacingToken = tokenInfo[1] as DSysSpacingToken;
+              const customToken = tokenInfo[1] as DSysCustomToken;
               return (
                 <div
                   className="dsys-row"
-                  key={`color-${spacingToken.$extensions['dsys.uid']}`}
-                  data-key={`color-${spacingToken.$extensions['dsys.uid']}`}>
+                  key={`color-${customToken.$extensions['dsys.uid']}`}
+                  data-key={`color-${customToken.$extensions['dsys.uid']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -98,57 +98,42 @@ export default class SpacingList extends React.Component<CoreProps> {
                       label="property"
                       value={prop}
                       onEnterOrBlur={(newName: string) => {
-                        updateSpacingToken(
+                        updateCustomToken(
                           {
-                            ...spacingToken,
+                            ...customToken,
                             $extensions: {
-                              ...spacingToken.$extensions,
+                              ...customToken.$extensions,
                               "dsys.name": newName,
                             }
                           },
                           this.props.tokenGroup,
                           this.props.updateTokenGroup,
-                        )
+                        );
                       }} />
                   </div>
                   <div className="spacing-row-size">
                     <Input
                       label="size" 
                       hideLabel hideBorder
-                      type="number"
-                      value={`${spacingToken.$value}`}
-                      textAlign="right"
-                      selectAllOnFocus={true}
-                      onArrowUpOrDown={(
-                        value: string,
-                        increment: number
-                      ) => {
-                        updateSpacingToken(
-                          {
-                            ...spacingToken,
-                            $value: Math.max(0, parseFloat(value) + increment)
-                          },
-                          this.props.tokenGroup,
-                          this.props.updateTokenGroup,
-                        )
-                      }}
+                      type="text"
+                      value={`${customToken.$value}`}
                       onEnterOrBlur={(value: string) => {
-                        updateSpacingToken(
+                        updateCustomToken(
                           {
-                            ...spacingToken,
-                            $value: Math.max(0, parseFloat(value)),
+                            ...customToken,
+                            $value: value,
                           },
                           this.props.tokenGroup,
                           this.props.updateTokenGroup,
-                        )
+                        );
                       }} />
                   </div>
                   <div className="dsys-row-deleting"
                     onClick={() => {
                       if (this.state.isDeleting) {
                         if (!this.props.tokenGroup) return;
-                        deleteSpacingToken(
-                          spacingToken,
+                        deleteCustomToken(
+                          customToken,
                           this.props.tokenGroup,
                           this.props.updateTokenGroup,
                         );

@@ -1,11 +1,11 @@
 import {
-  DSysSpacingToken,
+  DSysCustomToken,
   isToken,
   TokenGroup,
 } from '../../../../shared';
 
-export default function deleteSpacingToken(
-  token: DSysSpacingToken,
+export default function deleteCustomToken(
+  token: DSysCustomToken,
   tokenGroup?: TokenGroup,
   updateTokenGroup?: (tokenGroup: TokenGroup) => void
 ) {
@@ -18,7 +18,7 @@ export default function deleteSpacingToken(
   // now reindex
   Object.values(tokenset).map((value: any) => {
     if (isToken(value)) {
-      const token = value as DSysSpacingToken;
+      const token = value as DSysCustomToken;
       const tokenIndex = token.$extensions['dsys.index'];
       if (tokenIndex > deletedIndex) {
         token.$extensions['dsys.index'] -= 1;

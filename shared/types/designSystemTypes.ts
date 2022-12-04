@@ -3,6 +3,7 @@ import {
   DTBorderToken,
   DTColorToken,
   DTCubicBezierToken,
+  DTCustomToken,
   DTDimensionToken,
   DTDurationToken,
   DTFileToken,
@@ -47,23 +48,23 @@ export interface DSysSheet {
   effects?: DSysEffectGroup,
   icons?: DSysIconGroup,
   components?: DSysComponentsGroup,
+  custom?: DSysCustomGroup,
+  // breakpoints
   spacing?: DSysSpacingGroup,
-  layout?: DSysLayoutGroup,
-  columnLayout?: DSysColumnLayoutGroup,
   undetermined?: DSysUndeterminedGroup,
 };
 
 // ALL THE GROUPS
 export enum DSysGroupType {
   Base = 'Base',
+  BreakpointSet = 'BreakpointSet',
   ColorSet = 'ColorSet',
-  TypographySet = 'TypographySet',
+  ComponentSet = 'ComponentSet',
+  CustomSet = 'CustomSet',
   EffectSet = 'EffectSet',
   IconSet = 'IconSet',
-  ComponentSet = 'ComponentSet',
   Spacing = 'Spacing',
-  LayoutSet = 'LayoutSet',
-  ColumnLayoutSet = 'ColumnLayoutSet',
+  TypographySet = 'TypographySet',
   Undetermined = 'Undetermined'
 }
 
@@ -97,14 +98,9 @@ export type DSysSpacingGroup = DSysGroup<
   DSysSpacingTokenset
 >;
 
-export type DSysLayoutGroup = DSysGroup<
-  DSysGroupType.LayoutSet,
-  DSysLayoutTokenset
->;
-
-export type DSysColumnLayoutGroup = DSysGroup<
-  DSysGroupType.ColumnLayoutSet,
-  DSysColumnLayoutTokenset
+export type DSysCustomGroup = DSysGroup<
+  DSysGroupType.CustomSet,
+  DSysCustomTokenset
 >;
 
 export type DSysUndeterminedGroup = DSysGroup<
@@ -131,13 +127,12 @@ export interface DSysGroup<GroupType, Tokenset> {
 // ============= VALUE SETS ======================
 export type DSysTokenset = 
   DSysColorTokenset |
+  DSysCustomTokenset |
   DSysTypographyTokenset |
   DSysEffectTokenset |
   DSysIconTokenset |
   DSysComponentsTokenset |
   DSysSpacingTokenset |
-  DSysLayoutTokenset |
-  DSysColumnLayoutTokenset |
   DSysUndeterminedTokenset;
 
 export type DSysColorTokenset = DSysTokensetBase<
@@ -164,6 +159,11 @@ export type DSysIconTokenset = DSysTokensetBase<
   DSysSvgToken 
 >;
 
+export type DSysCustomTokenset = DSysTokensetBase<
+  DSysGroupType.CustomSet,
+  DSysCustomToken 
+>;
+
 export type DSysComponentsTokenset = DSysTokensetBase<// todo
   DSysGroupType.ComponentSet,
   DSysBorderToken |
@@ -174,16 +174,6 @@ export type DSysComponentsTokenset = DSysTokensetBase<// todo
 export type DSysSpacingTokenset = DSysTokensetBase<
   DSysGroupType.Spacing,
   DSysSpacingToken
->;
-
-export type DSysLayoutTokenset = DSysTokensetBase<
-  DSysGroupType.LayoutSet,
-  DSysDimensionToken
->;
-
-export type DSysColumnLayoutTokenset = DSysTokensetBase<
-  DSysGroupType.ColumnLayoutSet,
-  DSysDimensionToken
 >;
 
 export type DSysUndeterminedTokenset = DSysTokensetBase<
@@ -214,6 +204,7 @@ export interface DSysTokensetBase<GroupType, TokenType> {
 // GENERIC TOKENS TO DSYS TOKENS
 export type DSysToken = 
   DSysColorToken |
+  DSysCustomToken |
   DSysDimensionToken |
   DSysTypographyToken |
   DSysFontFamilyToken |
@@ -236,6 +227,14 @@ export interface DSysColorToken extends DTColorToken {
     'dsys.name'     : string,
     'dsys.index'    : number,
     'dsys.styleId'  : string,
+  },
+}
+export interface DSysCustomToken extends DTCustomToken {
+  $extensions : {
+    'dsys.level' : DSysLevel.token,
+    'dsys.name'  : string,
+    'dsys.index' : number,
+    'dsys.uid'  : string,
   },
 }
 export interface DSysDimensionToken extends DTDimensionToken {

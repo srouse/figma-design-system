@@ -111,19 +111,10 @@ export default function defaultSatellite() {
               width={1} height="fill-parent"
               fill={colors.borderGrey} />
             {firstRunButton(
-              'components', Icons.component,
-              () => clickTypeButton(
-                tokenGroup, setTokenGroup,
-                DSysGroupType.ComponentSet, setIsWindowUIOpen
-              ))}
-            <Rectangle
-              width={1} height="fill-parent"
-              fill={colors.borderGrey} />
-            {firstRunButton(
               'breakpoints', Icons.breakpoint,
               () => clickTypeButton(
                 tokenGroup, setTokenGroup,
-                DSysGroupType.Spacing, setIsWindowUIOpen
+                DSysGroupType.BreakpointSet, setIsWindowUIOpen
               ))}
             <Rectangle
               width={1} height="fill-parent"
@@ -132,7 +123,16 @@ export default function defaultSatellite() {
               'custom', Icons.custom,
               () => clickTypeButton(
                 tokenGroup, setTokenGroup,
-                DSysGroupType.Spacing, setIsWindowUIOpen
+                DSysGroupType.CustomSet, setIsWindowUIOpen
+              ))}
+            <Rectangle
+              width={1} height="fill-parent"
+              fill={colors.borderGrey} />
+            {firstRunButton(
+              'component', Icons.component,
+              () => clickTypeButton(
+                tokenGroup, setTokenGroup,
+                DSysGroupType.ComponentSet, setIsWindowUIOpen
               ))}
           </AutoLayout>
         </AutoLayout>

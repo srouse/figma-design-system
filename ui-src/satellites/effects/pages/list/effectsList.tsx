@@ -22,7 +22,7 @@ import {
   deleteEffectToken,
   updateEffect
 } from "../effectActions";
-import EffectsDetail from "../EffectsDetail/EffectsDetail";
+import EffectsDetail from "../effectsDetail/EffectsDetail";
 import DetailModal from "../../../../components/DetailModal/DetailModal";
 import "./effectsRow.css";
 import "./effectsList.css";
@@ -101,6 +101,11 @@ export default class EffectsList extends React.Component<CoreProps> {
           onDelete={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
+            });
+          }}
+          onDeleteClose={() => {
+            this.setState({
+              isDeleting: false
             });
           }} />
         <div className="dsys-list-body scroll-bar">

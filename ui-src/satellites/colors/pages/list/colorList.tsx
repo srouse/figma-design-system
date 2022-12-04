@@ -135,6 +135,11 @@ export default class ColorSteps extends React.Component<CoreProps> {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+          }}
+          onDeleteClose={() => {
+            this.setState({
+              isDeleting: false
+            });
           }} />
         <div className="dsys-list-body scroll-bar">
           <DragAndDropList

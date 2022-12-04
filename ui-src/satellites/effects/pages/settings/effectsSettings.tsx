@@ -1,7 +1,7 @@
 import React from "react";
-import { CoreProps, DSysGroupType, MessageRequest } from "../../../shared";
-import Input from "../../components/Input";
-import postMessagePromise from "../../utils/postMessagePromise";
+import { CoreProps, DSysGroupType, MessageRequest } from "../../../../../shared";
+import Input from "../../../../components/Input";
+import postMessagePromise from "../../../../utils/postMessagePromise";
 
 export default class EffectsSettings extends React.Component<CoreProps> {
 

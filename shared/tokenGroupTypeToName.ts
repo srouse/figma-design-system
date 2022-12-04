@@ -23,10 +23,6 @@ export default function tokenGroupTypeToName(
       return 'Components';
     case DSysGroupType.Spacing:
       return 'Spacing';
-    case DSysGroupType.LayoutSet:
-      return 'Layouts';
-    case DSysGroupType.ColumnLayoutSet:
-      return 'Column Layouts';
     default:
       return tokenGroup.type;
   }

@@ -87,6 +87,11 @@ export default class TypographyList extends React.Component<TypographyProps> {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+          }}
+          onDeleteClose={() => {
+            this.setState({
+              isDeleting: false
+            });
           }} />
         <div className="dsys-list-body scroll-bar">
           <DragAndDropList

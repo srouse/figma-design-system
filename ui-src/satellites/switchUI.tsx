@@ -2,12 +2,10 @@ import React from "react";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import BaseUI from "./baseUI";
 import ColorsUI from "./colors/colorsUI";
-import ColumnLayoutUI from "./columnLayoutUI";
-import ComponentsUI from "./componentsUI";
+import ComponentsUI from "./components/componentsUI";
 import { CoreProps } from "../../shared/types/types";
 import EffectsUI from "./effects/effectsUI";
 import IconsUI from "./icons/iconsUI";
-import LayoutUI from "./layoutUI";
 import SpacingUI from "./spacing/spacingUI";
 import "./switchUI.css";
 import TypographyUI from "./typography/typographyUI";
@@ -17,9 +15,12 @@ import Deployment from "../deployment/deployment";
 import Settings from "../settings/settings";
 import ColorsSettings from "./colors/pages/settings/colorsSettings";
 import TypographySettings from "./typography/typographySettings";
-import EffectsSettings from "./effects/effectsSettings";
+import EffectsSettings from "./effects/pages/settings/effectsSettings";
 import SpacingSettings from "./spacing/pages/settings/spacingSettings";
 import IconsSettings from "./icons/pages/settings/iconsSettings";
+import BreakpointsUI from "./breakpoints/breakpointsUI";
+import CustomUI from "./custom/customUI";
+import CustomSettings from "./custom/pages/settings/customSettings";
 
 export default class SwitchUI extends React.Component<CoreProps> {
 
@@ -69,6 +70,9 @@ export default class SwitchUI extends React.Component<CoreProps> {
       case DSysGroupType.ColorSet :
         localSettings = <ColorsSettings {...this.props} />;
         break;
+      case DSysGroupType.CustomSet :
+        localSettings = <CustomSettings {...this.props} />;
+        break;
       case DSysGroupType.TypographySet :
         localSettings = <TypographySettings {...this.props} />;
         break;
@@ -83,12 +87,6 @@ export default class SwitchUI extends React.Component<CoreProps> {
         break;
       case DSysGroupType.Spacing :
         localSettings = <SpacingSettings {...this.props} />;
-        break;
-      case DSysGroupType.LayoutSet :
-        localSettings = undefined;
-        break;
-      case DSysGroupType.ColumnLayoutSet :
-        localSettings = undefined;
         break;
     }
     return (
@@ -112,16 +110,30 @@ export default class SwitchUI extends React.Component<CoreProps> {
               display: this.state.page === 'tokens' ? 'block' : 'none',
             }} {...this.props} />
         );
+      case DSysGroupType.BreakpointSet :
+        return (
+          <BreakpointsUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
+        );
       case DSysGroupType.ColorSet :
         return (
           <ColorsUI
-          style={{
-            display: this.state.page === 'tokens' ? 'block' : 'none',
-          }} {...this.props} />
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
         );
-      case DSysGroupType.TypographySet :
+      case DSysGroupType.ComponentSet :
         return (
-          <TypographyUI
+          <ComponentsUI
+            style={{
+              display: this.state.page === 'tokens' ? 'block' : 'none',
+            }} {...this.props} />
+        );
+      case DSysGroupType.CustomSet :
+        return (
+          <CustomUI
             style={{
               display: this.state.page === 'tokens' ? 'block' : 'none',
             }} {...this.props} />
@@ -140,13 +152,6 @@ export default class SwitchUI extends React.Component<CoreProps> {
               display: this.state.page === 'tokens' ? 'block' : 'none',
             }} {...this.props} />
         );
-      case DSysGroupType.ComponentSet :
-        return (
-          <ComponentsUI
-            style={{
-              display: this.state.page === 'tokens' ? 'block' : 'none',
-            }} {...this.props} />
-        );
       case DSysGroupType.Spacing :
         return (
           <SpacingUI
@@ -154,16 +159,9 @@ export default class SwitchUI extends React.Component<CoreProps> {
               display: this.state.page === 'tokens' ? 'block' : 'none',
             }} {...this.props} />
         );
-      case DSysGroupType.LayoutSet :
+      case DSysGroupType.TypographySet :
         return (
-          <LayoutUI
-            style={{
-              display: this.state.page === 'tokens' ? 'block' : 'none',
-            }} {...this.props} />
-        );
-      case DSysGroupType.ColumnLayoutSet :
-        return (
-          <ColumnLayoutUI
+          <TypographyUI
             style={{
               display: this.state.page === 'tokens' ? 'block' : 'none',
             }} {...this.props} />
