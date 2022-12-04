@@ -37,6 +37,7 @@ export enum DTTokenType {
   percent = 'percent',
   file = 'file',
   svg = 'svg',
+  component = 'component',
 }
 
 type DTTokenBase = {
@@ -226,6 +227,12 @@ export interface DTFileToken extends DTTokenBase {
     mime: string,
   },
   '$type' : DTTokenType.file
+}
+
+// Component
+export interface DTComponentToken extends DTTokenBase {
+  '$value': string,
+  '$type' : DTTokenType.component
 }
 
 // Svg

@@ -5,7 +5,6 @@ import {
   DSysLevel,
   Validator,
   DSysBreakpointTokenset,
-  DSysBreakpointToken,
   DTTokenType,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";

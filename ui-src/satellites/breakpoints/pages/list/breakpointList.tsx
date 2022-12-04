@@ -115,28 +115,7 @@ export default class BreakpointList extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
-                  <div className="breakpoint-direction-cell">
-                    <Select
-                      label=" "
-                      value={breakpointToken.$direction}
-                      cellDisplay={true}
-                      dropdown={[
-                        {name:'up', value:'up'},
-                        {name:'down', value:'down'},
-                      ]}
-                      onChange={(direction: string) => {
-                        updateBreakpointToken(
-                          {
-                            ...breakpointToken,
-                            $direction: direction as 'up' | 'down',
-                          },
-                          this.props.tokenGroup,
-                          this.props.updateTokenGroup,
-                        )
-                      }}>
-                    </Select>
-                  </div>
-                  <div className="breakpoint-row-size">
+                  <div className="breakpoint-size-cell">
                     <Input
                       label="size" 
                       hideLabel hideBorder
@@ -167,6 +146,27 @@ export default class BreakpointList extends React.Component<CoreProps> {
                           this.props.updateTokenGroup,
                         );
                       }} />
+                  </div>
+                  <div className="breakpoint-direction-cell">
+                    <Select
+                      label=" "
+                      value={breakpointToken.$direction}
+                      cellDisplay={true}
+                      dropdown={[
+                        {name:'up', value:'up'},
+                        {name:'down', value:'down'},
+                      ]}
+                      onChange={(direction: string) => {
+                        updateBreakpointToken(
+                          {
+                            ...breakpointToken,
+                            $direction: direction as 'up' | 'down',
+                          },
+                          this.props.tokenGroup,
+                          this.props.updateTokenGroup,
+                        )
+                      }}>
+                    </Select>
                   </div>
                   <div className="dsys-row-deleting"
                     onClick={() => {

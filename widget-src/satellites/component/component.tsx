@@ -1,8 +1,9 @@
 import {
-  defaultTokenGroup,
+  defaultTokenGroup, MessageName, MessageRequest,
 } from "../../../shared/index";
 import { colors, typography } from "../../../shared/styles";
 import header from "../../components/header";
+import bounceBack from "../../utils/postMessagePromise";
 
 const { widget } = figma;
 const {
@@ -22,16 +23,50 @@ export default function componentsSatellite() {
     defaultTokenGroup
   );
 
-  const [effectsInitialized, setEffectsInitialized] = useSyncedState(
-    'effectsInitialized',
+  const [componentInitialized, setComponentInitialized] = useSyncedState(
+    'componentInitialized',
     false
   );
 
   useEffect(() => {
-    if (!effectsInitialized) {
-      setEffectsInitialized(true);
+    if (!componentInitialized) {
+      setComponentInitialized(true);
       // first run ever
     }
+  });
+
+  useEffect(() => {
+    const onMessageHandler = async (message: any) => {
+      switch (message.name) {
+        case MessageName.promiseBounce :
+            switch (message.request) {
+              case MessageRequest.getComponentList :
+                let components: {name:string, value:string}[] = [];
+                figma.skipInvisibleInstanceChildren = true;
+                figma.root.children.map((page: PageNode) => {
+                  const pageComponentNodes = page.findAllWithCriteria({
+                    types: ['COMPONENT_SET', 'COMPONENT']
+                  });
+                  pageComponentNodes.map(node => {
+                    if (
+                      node.type === 'COMPONENT' &&
+                      node.parent &&
+                      node.parent.type === 'COMPONENT_SET') {
+                      return
+                    }
+                    components.push({
+                      name: node.name,
+                      value: node.id,
+                    })
+                  })
+                });
+                bounceBack(message, {components});
+                break;
+            }
+      }
+    };
+    figma.ui.on('message', onMessageHandler);
+    return () => figma.ui.off('message', onMessageHandler);
   });
 
   return (
@@ -46,7 +81,7 @@ export default function componentsSatellite() {
         overflow="visible">
         {header(
           () => {
-            setEffectsInitialized(false);
+            setComponentInitialized(false);
           },
           () => {
             

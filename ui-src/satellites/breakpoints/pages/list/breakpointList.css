@@ -14,12 +14,16 @@
   flex: 1;
 }
 
-.breakpoint-row-size {
+.breakpoint-size-cell {
   width: 80px;
+  align-self: stretch;
+  border-right: 1px solid var( --grey-lightest );
+  display: flex;
+  align-items: center;
+  justify-content: start;
 }
 
 .breakpoint-direction-cell {
   width: 80px;
-  border-right: 1px solid var( --grey-lightest );
 }
 

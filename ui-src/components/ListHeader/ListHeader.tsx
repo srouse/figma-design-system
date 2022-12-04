@@ -18,23 +18,23 @@ export default class ListHeader extends React.Component<ListHeaderProps> {
   render() {
     return (
       <div className="list-header">
-          {this.props.title}
-          <div style={{flex: 1}}></div>
-          <div
-            className="list-header-btn delete"
-            onClick={() => {
-              if (this.props.onDelete) this.props.onDelete();
-            }}
-            dangerouslySetInnerHTML={{__html:getIcon(Icons.delete)}}>
-          </div>
-          <div
-            className="list-header-btn plus"
-            onClick={() =>{
-              if (this.props.onDeleteClose) this.props.onDeleteClose();
-              if (this.props.onAdd) this.props.onAdd();
-            }} dangerouslySetInnerHTML={{__html:getIcon(Icons.plus)}}>
-          </div>
+        {this.props.title}
+        <div style={{flex: 1}}></div>
+        <div
+          className="list-header-btn delete"
+          onClick={() => {
+            if (this.props.onDelete) this.props.onDelete();
+          }}
+          dangerouslySetInnerHTML={{__html:getIcon(Icons.delete)}}>
         </div>
+        <div
+          className="list-header-btn plus"
+          onClick={() =>{
+            if (this.props.onDeleteClose) this.props.onDeleteClose();
+            if (this.props.onAdd) this.props.onAdd();
+          }} dangerouslySetInnerHTML={{__html:getIcon(Icons.plus)}}>
+        </div>
+      </div>
     );
   }
 }

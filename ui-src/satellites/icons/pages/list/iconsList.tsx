@@ -13,6 +13,8 @@ import IconsDetail from "../../details/iconsDetail";
 import AddNewIcon from "../addNewIcon/addNewIcon";
 import "./iconsList.css";
 
+export const MAX_ICONS = 63;
+
 export default class IconsList extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
@@ -54,12 +56,16 @@ export default class IconsList extends React.Component<CoreProps> {
         icons-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <ListHeader
-          title={`Icon Tokens (${tokens.length} of 133)`}
+          title={`Icon Tokens (${tokens.length} of ${MAX_ICONS})`}
           onAdd={() =>{
-            if (tokens.length >= 133) {
+            if (tokens.length >= MAX_ICONS) {
               postMessagePromise(
                 MessageRequest.notify,
-                {message: 'Only 133 icons allowed. Create another token set.', error: true}
+                {message:
+                  `Only ${MAX_ICONS} icons allowed. 
+                  Create another token set.`,
+                  error: true
+                }
               );
               return;
             }

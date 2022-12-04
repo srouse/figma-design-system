@@ -234,7 +234,7 @@ export default function iconsSatellite() {
               <AutoLayout
                 key={`${labelMetric.name}`}
                 width="hug-contents"
-                x={labelMetric.x - 12}
+                x={labelMetric.x - 8}
                 y={labelMetric.y - 8}
                 padding={{
                   top: labelMetric.iconHeight + 10,
@@ -245,7 +245,7 @@ export default function iconsSatellite() {
                 <Text
                   fontFamily={typography.primaryFont}
                   fontSize={9}
-                  width={sizing.iconDisplaySize + 20}
+                  width={sizing.iconDisplaySize + 16}
                   height={32}
                   horizontalAlignText="center"
                   fill={colors.textColor}>

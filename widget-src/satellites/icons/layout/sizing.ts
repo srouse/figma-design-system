@@ -19,10 +19,14 @@ export function resizeComponentSet(
   );
 
   // Component Set Width
+  const totalWidthPadding = sizing.iconCompsetPadding*2;
   const compWidth = Math.max(
-    sizing.defaultWidgetWidth,
-    ( iconsPerRow * (sizing.iconDisplaySize + (sizing.iconHorizontalSpacing))) + 
-    ( sizing.iconCompsetPadding*2 )
+    sizing.defaultWidgetWidth - totalWidthPadding,
+    ( 
+      iconsPerRow *
+      (sizing.iconDisplaySize + (sizing.iconHorizontalSpacing))
+    ) + 
+    totalWidthPadding
     - sizing.iconHorizontalSpacing // there is one too many 
   );
 

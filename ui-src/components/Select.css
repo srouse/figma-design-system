@@ -75,7 +75,8 @@
 /* displayed within a table cell */
 .selectComp.selectComp-cell-display {
   margin-bottom: 0;
-  height: 100%;
+  /* height: 100%; */
+  align-self: stretch;
 }
 
   .selectComp.selectComp-cell-display .selectComp-select  {

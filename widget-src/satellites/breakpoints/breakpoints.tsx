@@ -145,19 +145,19 @@ function renderList(
             <Text
               width={60}
               fontFamily={typography.monotype}
-              fontSize={14}
-              horizontalAlignText="right"
-              fill={colors.textColor}>
-              {direction}
-            </Text>
-            <Text
-              width={60}
-              fontFamily={typography.monotype}
               fontWeight="light"
               horizontalAlignText="right"
               fontSize={12}
               fill={colors.textColor}>
               {value}
+            </Text>
+            <Text
+              width={50}
+              fontFamily={typography.monotype}
+              fontSize={14}
+              horizontalAlignText="left"
+              fill={colors.textColor}>
+              {direction}
             </Text>
           </AutoLayout>
           {index < tokens.length-1 ? (

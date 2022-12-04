@@ -38,6 +38,9 @@ export enum MessageRequest {
   deleteIcon = 'deleteIcon',
   changeIconTokenName = 'changeIconTokenName',
   setIconSizes = 'setIconSizes',
+
+  // component
+  getComponentList = 'getComponentList'
 }
 
 export enum MessageRequestStyle {

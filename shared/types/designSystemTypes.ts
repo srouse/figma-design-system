@@ -3,6 +3,7 @@ import {
   DTBorderToken,
   DTBreakpointToken,
   DTColorToken,
+  DTComponentToken,
   DTCubicBezierToken,
   DTCustomToken,
   DTDimensionToken,
@@ -176,11 +177,9 @@ export type DSysBreakpointTokenset = DSysTokensetBase<
   DSysBreakpointToken 
 >;
 
-export type DSysComponentsTokenset = DSysTokensetBase<// todo
+export type DSysComponentsTokenset = DSysTokensetBase<
   DSysGroupType.ComponentSet,
-  DSysBorderToken |
-  DSysColorToken |
-  DSysFileToken 
+  DSysComponentToken
 >;
 
 export type DSysSpacingTokenset = DSysTokensetBase<
@@ -368,6 +367,13 @@ export interface DSysFileToken extends DTFileToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.index' : number,
+  },
+}
+
+export interface DSysComponentToken extends DTComponentToken {
+  $extensions : {
+    'dsys.level' : DSysLevel.token,
+    'dsys.name'  : string,
   },
 }
 
