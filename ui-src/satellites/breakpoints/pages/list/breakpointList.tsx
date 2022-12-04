@@ -5,18 +5,19 @@ import {
   CoreProps,
   getIcon,
   Icons,
+  DSysBreakpointToken,
 } from "../../../../../shared";
 import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
 import Input from "../../../../components/Input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
-import { DSysCustomToken } from "../../../../../shared/types/designSystemTypes";
-import "./customList.css";
-import { addCustomToken } from "../../utils/addCustomToken";
-import updateCustomToken from "../../utils/updateCustomToken";
-import { changeCustomOrder } from "../../utils/changeCustomOrder";
-import deleteCustomToken from "../../utils/deleteCustomToken";
+import "./breakpointList.css";
+import { addBreakpointToken } from "../../utils/addBreakpointToken";
+import updateBreakpointToken from "../../utils/updateBreakpointToken";
+import { changeBreakpointOrder } from "../../utils/changeBreakpointOrder";
+import deleteBreakpointToken from "../../utils/deleteBreakpointToken";
+import Select from "../../../../components/Select";
 
-export default class CustomList extends React.Component<CoreProps> {
+export default class BreakpointList extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
@@ -40,9 +41,9 @@ export default class CustomList extends React.Component<CoreProps> {
         dsys-list
         ${this.state.isDeleting ? 'is-deleting' : ''}`}>
         <ListHeader
-          title="Custom Tokens"
+          title="Breakpoint Tokens"
           onAdd={() =>{
-            addCustomToken(
+            addBreakpointToken(
               this.props.tokenGroup,
               this.props.updateTokenGroup,
             );
@@ -58,13 +59,16 @@ export default class CustomList extends React.Component<CoreProps> {
             });
           }} />
         <div className="dsys-list-body scroll-bar">
+        {tokens && tokens.length === 0 ? (
+          <div className="no-tokens">no tokens</div>
+        ) : null}
         <DragAndDropList
             rowHeight={48}
             onChange={(
               rowIndex: number,
               dropIndex: number
             ) => {
-              changeCustomOrder(
+              changeBreakpointOrder(
                 rowIndex, dropIndex,
                 this.props.tokenGroup,
                 this.props.updateTokenGroup,
@@ -77,12 +81,12 @@ export default class CustomList extends React.Component<CoreProps> {
               onMouseUpCapture,
             ) => {
               const prop = tokenInfo[0];
-              const customToken = tokenInfo[1] as DSysCustomToken;
+              const breakpointToken = tokenInfo[1] as DSysBreakpointToken;
               return (
                 <div
                   className="dsys-row"
-                  key={`color-${customToken.$extensions['dsys.uid']}`}
-                  data-key={`color-${customToken.$extensions['dsys.uid']}`}>
+                  key={`color-${breakpointToken.$extensions['dsys.uid']}`}
+                  data-key={`color-${breakpointToken.$extensions['dsys.uid']}`}>
                   <div className="dsys-row-dragger"
                     dangerouslySetInnerHTML={{ __html: 
                       getIcon(Icons.drag, colors.greyLight) 
@@ -92,17 +96,17 @@ export default class CustomList extends React.Component<CoreProps> {
                   </div>
                   <div className="
                     dsys-row-name
-                    custom-row-name">
+                    breakpoint-row-name">
                     <Input
                       hideLabel hideBorder
                       label="property"
                       value={prop}
                       onEnterOrBlur={(newName: string) => {
-                        updateCustomToken(
+                        updateBreakpointToken(
                           {
-                            ...customToken,
+                            ...breakpointToken,
                             $extensions: {
-                              ...customToken.$extensions,
+                              ...breakpointToken.$extensions,
                               "dsys.name": newName,
                             }
                           },
@@ -111,17 +115,53 @@ export default class CustomList extends React.Component<CoreProps> {
                         );
                       }} />
                   </div>
-                  <div className="custom-row-size">
+                  <div className="breakpoint-direction-cell">
+                    <Select
+                      label=" "
+                      value={breakpointToken.$direction}
+                      cellDisplay={true}
+                      dropdown={[
+                        {name:'up', value:'up'},
+                        {name:'down', value:'down'},
+                      ]}
+                      onChange={(direction: string) => {
+                        updateBreakpointToken(
+                          {
+                            ...breakpointToken,
+                            $direction: direction as 'up' | 'down',
+                          },
+                          this.props.tokenGroup,
+                          this.props.updateTokenGroup,
+                        )
+                      }}>
+                    </Select>
+                  </div>
+                  <div className="breakpoint-row-size">
                     <Input
                       label="size" 
                       hideLabel hideBorder
-                      type="text"
-                      value={`${customToken.$value}`}
-                      onEnterOrBlur={(value: string) => {
-                        updateCustomToken(
+                      type="number"
+                      value={`${breakpointToken.$value}`}
+                      textAlign="right"
+                      selectAllOnFocus={true}
+                      onArrowUpOrDown={(
+                        value: string,
+                        increment: number
+                      ) => {
+                        updateBreakpointToken(
                           {
-                            ...customToken,
-                            $value: value,
+                            ...breakpointToken,
+                            $value: Math.max(0, parseInt(value) + increment)
+                          },
+                          this.props.tokenGroup,
+                          this.props.updateTokenGroup,
+                        );
+                      }}
+                      onEnterOrBlur={(value: string) => {
+                        updateBreakpointToken(
+                          {
+                            ...breakpointToken,
+                            $value: parseInt(value),
                           },
                           this.props.tokenGroup,
                           this.props.updateTokenGroup,
@@ -132,8 +172,8 @@ export default class CustomList extends React.Component<CoreProps> {
                     onClick={() => {
                       if (this.state.isDeleting) {
                         if (!this.props.tokenGroup) return;
-                        deleteCustomToken(
-                          customToken,
+                        deleteBreakpointToken(
+                          breakpointToken,
                           this.props.tokenGroup,
                           this.props.updateTokenGroup,
                         );

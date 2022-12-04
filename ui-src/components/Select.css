@@ -71,3 +71,13 @@
 .selectComp.dark .selectComp-label {
   color: var( --text-color-white );
 }
+
+/* displayed within a table cell */
+.selectComp.selectComp-cell-display {
+  margin-bottom: 0;
+  height: 100%;
+}
+
+  .selectComp.selectComp-cell-display .selectComp-select  {
+    border: 0;
+  }

@@ -1,12 +1,7 @@
 import {
-  cleanAndSortTokens,
   defaultTokenGroup,
-  DTTokenType,
-  TokenGroup
 } from "../../../shared/index";
 import { colors, typography } from "../../../shared/styles";
-import { DSysBlurToken, DSysShadowToken } from "../../../shared/types/designSystemTypes";
-import { hexToRgbObj, RGBType } from "../../../shared/utils/colorUtils";
 import header from "../../components/header";
 
 const { widget } = figma;
@@ -69,15 +64,28 @@ export default function componentsSatellite() {
             left: 20, right: 20
           }}
           overflow="visible">
-          <Text
-            fontFamily={typography.primaryFont}
-            fontWeight="light"
-            fontSize={18}
-            width="hug-contents"
-            horizontalAlignText="center"
-            fill={colors.textColorLightest}>
-            Component Not Found
-          </Text>
+          <AutoLayout 
+            height="hug-contents"
+            direction="vertical"
+            width="fill-parent"
+            horizontalAlignItems="center"
+            verticalAlignItems="center"
+            spacing={0}
+            padding={{
+              top: 10, bottom: 10,
+              left: 20, right: 20
+            }}
+            overflow="visible">
+            <Text
+              fontFamily={typography.primaryFont}
+              fontWeight="light"
+              fontSize={18}
+              width="hug-contents"
+              horizontalAlignText="center"
+              fill={colors.textColorLightest}>
+              No Component Token
+            </Text>
+          </AutoLayout>
         </AutoLayout>
       </AutoLayout>
   );

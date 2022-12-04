@@ -42,7 +42,8 @@ export function normalizeIconComponentNames(
     child.name = `${nameStr}`;//, ${styleStr}`;
   });
 
-  // sort by name...
+  // adjust order of components so they show up alphabetically...
+  // Dropdown selection doesn't seem to be effected by this...pisha
   icons.sort((a, b) => a.name.localeCompare(b.name));
   icons.map((icon, index) => {
     compSet.insertChild(index, icon.icon);

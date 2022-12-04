@@ -1,0 +1,25 @@
+
+
+
+.no-tokens {
+  font-size: 12;
+  margin: 30px auto;
+  font-family: var( --primary-ui-font );
+  color: var( --text-color-lightest );
+  text-align: center;
+  font-weight: lighter;
+}
+
+.breakpoint-row-name {
+  flex: 1;
+}
+
+.breakpoint-row-size {
+  width: 80px;
+}
+
+.breakpoint-direction-cell {
+  width: 80px;
+  border-right: 1px solid var( --grey-lightest );
+}
+

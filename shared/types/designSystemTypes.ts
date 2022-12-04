@@ -1,6 +1,7 @@
 import {
   DTBlurToken,
   DTBorderToken,
+  DTBreakpointToken,
   DTColorToken,
   DTCubicBezierToken,
   DTCustomToken,
@@ -103,6 +104,11 @@ export type DSysCustomGroup = DSysGroup<
   DSysCustomTokenset
 >;
 
+export type DSysBreakpointGroup = DSysGroup<
+  DSysGroupType.BreakpointSet,
+  DSysBreakpointTokenset
+>;
+
 export type DSysUndeterminedGroup = DSysGroup<
   DSysGroupType.Undetermined,
   DSysUndeterminedTokenset
@@ -128,6 +134,7 @@ export interface DSysGroup<GroupType, Tokenset> {
 export type DSysTokenset = 
   DSysColorTokenset |
   DSysCustomTokenset |
+  DSysBreakpointTokenset |
   DSysTypographyTokenset |
   DSysEffectTokenset |
   DSysIconTokenset |
@@ -162,6 +169,11 @@ export type DSysIconTokenset = DSysTokensetBase<
 export type DSysCustomTokenset = DSysTokensetBase<
   DSysGroupType.CustomSet,
   DSysCustomToken 
+>;
+
+export type DSysBreakpointTokenset = DSysTokensetBase<
+  DSysGroupType.BreakpointSet,
+  DSysBreakpointToken 
 >;
 
 export type DSysComponentsTokenset = DSysTokensetBase<// todo
@@ -205,6 +217,7 @@ export interface DSysTokensetBase<GroupType, TokenType> {
 export type DSysToken = 
   DSysColorToken |
   DSysCustomToken |
+  DSysBreakpointToken |
   DSysDimensionToken |
   DSysTypographyToken |
   DSysFontFamilyToken |
@@ -230,6 +243,14 @@ export interface DSysColorToken extends DTColorToken {
   },
 }
 export interface DSysCustomToken extends DTCustomToken {
+  $extensions : {
+    'dsys.level' : DSysLevel.token,
+    'dsys.name'  : string,
+    'dsys.index' : number,
+    'dsys.uid'  : string,
+  },
+}
+export interface DSysBreakpointToken extends DTBreakpointToken {
   $extensions : {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,

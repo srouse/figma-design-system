@@ -12,6 +12,7 @@ interface SelectProps {
   className?: string,
   readOnly? : boolean,
   centerIcon? : boolean,
+  cellDisplay? : boolean,
   dropdown: {value:string, name: string}[],
   validation?: ValidationWorker,
 }
@@ -69,8 +70,9 @@ export default class Select extends React.Component<SelectProps> {
   render() {
     return (
       <div className={`
-        ${this.props.className}
-        ${this.props.background}
+        ${this.props.className || ''}
+        ${this.props.background || ''}
+        ${this.props.cellDisplay ? 'selectComp-cell-display' : ''}
         ${this.props.centerIcon ? 'center-icon' : ''}
         ${this.state.valid ? 'valid' : 'invalid'}
         selectComp`}>

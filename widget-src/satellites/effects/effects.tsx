@@ -44,6 +44,7 @@ export default function effectsSatellite() {
 
   const effectList = getEffectList(tokenGroup);
 
+  console.log('effectList', effectList);
   return (
     <AutoLayout 
         name="base-page"
@@ -74,20 +75,34 @@ export default function effectsSatellite() {
           verticalAlignItems="center"
           spacing={0}
           padding={{
-            top: 0, bottom: 10,
+            top: 0, bottom: 20,
             left: 20, right: 20
           }}
           overflow="visible">
-          {effectList ? effectList : (
-            <Text
-              fontFamily={typography.primaryFont}
-              fontWeight="light"
-              fontSize={18}
-              width="hug-contents"
-              horizontalAlignText="center"
-              fill={colors.textColorLightest}>
-              Effect Tokens Not Found
-            </Text>
+          {effectList && effectList.length ? 
+            effectList : (
+            <AutoLayout 
+              height="hug-contents"
+              direction="vertical"
+              width="fill-parent"
+              horizontalAlignItems="center"
+              verticalAlignItems="center"
+              spacing={0}
+              padding={{
+                top: 10, bottom: 10,
+                left: 20, right: 20
+              }}
+              overflow="visible">
+              <Text
+                fontFamily={typography.primaryFont}
+                fontWeight="light"
+                fontSize={18}
+                width="hug-contents"
+                horizontalAlignText="center"
+                fill={colors.textColorLightest}>
+                No Effect Tokens
+              </Text>
+            </AutoLayout>
           )}
         </AutoLayout>
       </AutoLayout>

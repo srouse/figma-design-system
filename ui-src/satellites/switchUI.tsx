@@ -21,6 +21,7 @@ import IconsSettings from "./icons/pages/settings/iconsSettings";
 import BreakpointsUI from "./breakpoints/breakpointsUI";
 import CustomUI from "./custom/customUI";
 import CustomSettings from "./custom/pages/settings/customSettings";
+import BreakpointSettings from "./breakpoints/pages/settings/breakpointSettings";
 
 export default class SwitchUI extends React.Component<CoreProps> {
 
@@ -87,6 +88,9 @@ export default class SwitchUI extends React.Component<CoreProps> {
         break;
       case DSysGroupType.Spacing :
         localSettings = <SpacingSettings {...this.props} />;
+        break;
+      case DSysGroupType.BreakpointSet :
+        localSettings = <BreakpointSettings {...this.props} />;
         break;
     }
     return (

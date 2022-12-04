@@ -1,7 +1,8 @@
 import React from "react";
 import "./breakpointsUI.css";
-import SatelliteHeaderUI from "../../components/SatelliteHeaderUI";
 import { CoreProps } from "../../../shared/types/types";
+import BreakpointFirstRun from "./pages/firstRun/breakpointFirstRun";
+import BreakpointList from "./pages/list/breakpointList";
 
 export default class BreakpointsUI extends React.Component<CoreProps> {
 
@@ -9,15 +10,25 @@ export default class BreakpointsUI extends React.Component<CoreProps> {
     super(props);
   }
 
-  render() { 
+  render() {
     return (
-      <div className="satellite"
+      <div
+        className="ui-list"
         style={this.props.style}>
-        <SatelliteHeaderUI
-          {...this.props}
-           />
-        breakpoints
+        {this.renderPage()}
       </div>
     );
+  }
+
+  renderPage() {
+    if (!this.props.tokenGroup?.name) {
+      return (
+        <BreakpointFirstRun {...this.props} />
+      );
+    }else{
+      return (
+        <BreakpointList {...this.props} />
+      );
+    }
   }
 }

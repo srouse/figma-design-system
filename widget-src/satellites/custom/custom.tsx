@@ -57,7 +57,7 @@ export default function customSatellite() {
             
           }
         )}
-      {customList ? (
+      {customList && customList.length ? (
         <AutoLayout
           height="hug-contents"
           width="fill-parent"
@@ -95,7 +95,7 @@ export default function customSatellite() {
             width="hug-contents"
             horizontalAlignText="center"
             fill={colors.textColorLightest}>
-            Custom Tokenset Not Found
+            No Custom Tokens
           </Text>
         </AutoLayout>
       )}
