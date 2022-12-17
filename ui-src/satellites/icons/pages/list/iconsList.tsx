@@ -92,36 +92,20 @@ export default class IconsList extends React.Component<CoreProps> {
               <div
                 className="dsys-row icons-list-row"
                 key={`color-${componentId}`}
-                data-key={`color-${componentId}`}>
-                <div className="icons-list-row-icon"
-                  dangerouslySetInnerHTML={{__html:iconToken.$value.svg}}
-                  onClick={() => {
-                    /* this.setState({
-                      detailModalOpen: true,
-                      focusedToken: iconToken,
-                    });*/
-                  }}>
+                data-key={`color-${componentId}`}
+                onClick={() => {
+                  this.setState({
+                    detailModalOpen: true,
+                    focusedToken: iconToken,
+                  });
+                }}>
+                <div
+                  className="icons-list-row-icon"
+                  dangerouslySetInnerHTML={{__html:iconToken.$value.svg}}>
                 </div>
                 <div className="icons-list-row-name">
-                    <Input
-                      hideLabel hideBorder
-                      label="property"
-                      value={prop}
-                      onEnterOrBlur={(newName: string) => {
-                        if (prop === newName) return;
-                        postMessagePromise(
-                          MessageRequest.changeIconTokenName,
-                          {
-                            componentId,
-                            newName
-                          }
-                        );
-                      }} />
-                  </div>
-                {/* <div className="icons-list-line"></div>
-                <div className="icons-list-row-style">
-                  {iconToken.$value.style}
-                </div>*/}
+                  {prop}
+                </div>
                 <div className="dsys-row-deleting"
                     onClick={async() => {
                       if (tokens.length <= 1) {
@@ -155,28 +139,34 @@ export default class IconsList extends React.Component<CoreProps> {
             );
           })}
         </div>
-        <DetailModal
-          title={this.state.focusedToken?.$extensions["dsys.name"]}
-          onClose={() => {
-            this.setState({
-              detailModalOpen: false
-            })
-          }}
-          open={this.state.detailModalOpen}
-          body={(
-            <IconsDetail
-              token={this.state.focusedToken}
-              updateToken={(token : DSysSvgToken) => {
-                console.log('token', token);
-                /* updateEffect(
-                  token,
-                  this.props.refreshTokens
-                );
-                this.setState({
-                  focusedToken: token,
-                });*/
-              }} />
-          )} />
+          <DetailModal
+            title={this.state.focusedToken?.$extensions["dsys.name"]}
+            onClose={async () => {
+              await postMessagePromise(
+                MessageRequest.refreshIconTokens,
+              );
+              this.setState({
+                detailModalOpen: false,
+                focusedToken: undefined,
+              })
+            }}
+            open={this.state.detailModalOpen}
+            body={
+              this.state.focusedToken ? (
+                <IconsDetail
+                  token={this.state.focusedToken}
+                  updateToken={(token : DSysSvgToken) => {
+                    console.log('token', token);
+                    /* updateEffect(
+                      token,
+                      this.props.refreshTokens
+                    );
+                    this.setState({
+                      focusedToken: token,
+                    });*/
+                  }} />
+                ) : <div></div>
+            } />
         {this.state.newIconModalOpen ? (
           <AddNewIcon 
             {...this.props}

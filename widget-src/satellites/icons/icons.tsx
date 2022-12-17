@@ -9,6 +9,7 @@ import refreshLayout from "./layout/refreshLayout";
 import { sizing } from "../../../shared/styles";
 import { getSelectionSvg } from "./newIcon/addIcon";
 import {
+  buildIconComponentToken,
   pullTokensFromIconComponentSet
 } from "./iconComponentUtils";
 import bounceBack, { postPluginMessage } from "../../utils/postMessagePromise";
@@ -18,6 +19,7 @@ import { findWidget } from "../../utils";
 import { LabelMetric } from "./layout/computeLabelMetrics";
 import changeIconCompName from "./utils/changeIconCompName";
 import { getFullPluginState } from "../../code";
+import { resizeIconCompChildren } from "./layout/sizing";
 
 const { widget } = figma;
 const {
@@ -93,14 +95,6 @@ export default function iconsSatellite() {
     );
   };
 
-  /* useEffect(() => {
-    const logSelection = () => {
-      console.log('figma.currentPage.selection', figma.currentPage.selection);
-    }
-    figma.on('selectionchange', logSelection)
-    return () => figma.off('selectionchange', logSelection)
-  })*/
-
   useEffect(() => {
     const onMessageHandler = async (message: any) => {
       switch (message.name) {
@@ -173,6 +167,7 @@ export default function iconsSatellite() {
               // refresh tokens
               case MessageRequest.refreshIconTokens:
                 await rebuildTokens();
+                bounceBack(message, {});
                 break;
 
               // delete token
@@ -200,6 +195,60 @@ export default function iconsSatellite() {
                 });
                 await rebuildTokens();
                 bounceBack(message, {});
+                break;
+              }
+
+              // Change token scale
+              case MessageRequest.setIconScale: {
+                const thisWidget = findWidget(nodeId);
+                const compSet = findComponentSet(thisWidget);
+                const comp = compSet?.children.find(child => {
+                  return child.id === message.componentId;
+                });
+                if (comp) {
+                  comp.setPluginData('scale', `${message.scale}`);
+                  resizeIconCompChildren(comp as ComponentNode);
+                }
+                const newToken = await buildIconComponentToken(
+                  comp as ComponentNode,
+                );
+                bounceBack(message, {icon: newToken});
+                break;
+              }
+
+              // Change token X offset
+              case MessageRequest.setIconOffsetX: {
+                const thisWidget = findWidget(nodeId);
+                const compSet = findComponentSet(thisWidget);
+                const comp = compSet?.children.find(child => {
+                  return child.id === message.componentId;
+                });
+                if (comp) {
+                  comp.setPluginData('offsetX', `${message.offsetX}`);
+                  resizeIconCompChildren(comp as ComponentNode);
+                }
+                const newToken = await buildIconComponentToken(
+                  comp as ComponentNode,
+                );
+                bounceBack(message, {icon: newToken});
+                break;
+              }
+
+              // Change token Y offset
+              case MessageRequest.setIconOffsetY: {
+                const thisWidget = findWidget(nodeId);
+                const compSet = findComponentSet(thisWidget);
+                const comp = compSet?.children.find(child => {
+                  return child.id === message.componentId;
+                });
+                if (comp) {
+                  comp.setPluginData('offsetY', `${message.offsetY}`);
+                  resizeIconCompChildren(comp as ComponentNode);
+                }
+                const newToken = await buildIconComponentToken(
+                  comp as ComponentNode,
+                );
+                bounceBack(message, {icon: newToken});
                 break;
               }
             }

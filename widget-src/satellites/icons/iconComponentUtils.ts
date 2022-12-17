@@ -47,35 +47,16 @@ export async function compSetToDSysTokenset(
     $description: `${name} icon tokens`,
   };
 
-  const promiseAllArr: Promise<void>[] = [];
   const errorLog: string[] = [];
-  compSet.children.map((child) => {
-    const comp = child as ComponentNode;
-    const props = nameToProps(child.name);
-    if (!props.name) return;
-    const tokenInfo: DSysSvgToken = {
-      $extensions: {
-        'dsys.level'            : DSysLevel.token,
-        'dsys.name'             : props.name,
-        'dsys.componentId'      : comp.id,
-        'dsys.sizes'            : [],
-      },
-      $value: {
-        svg: '',
-        // style: props.style || 'regular',
-        sizes: [12, 24, 32],
-      },
-      $type: DTTokenType.svg
-    };
-    promiseAllArr.push(
-      (async () => {
-        const svg = await getSvg(comp, errorLog);
-        tokenInfo.$value.svg = svg || '';
-      })()
-    )
-    tokenset[props.name] = tokenInfo;
-  });
-  await Promise.all(promiseAllArr);
+  await Promise.all(
+    compSet.children.map((child) => {
+      return buildIconComponentToken(
+        child as ComponentNode,
+        tokenset,
+        errorLog,
+      );
+    })
+  );
   if (errorLog.length > 0)
     console.error('errors in processing icons', errorLog);
   return tokenset;
@@ -129,4 +110,37 @@ function Utf8ArrayToStr(array: Uint8Array | undefined | void) {
   }
 
   return out;
+}
+
+export async function buildIconComponentToken(
+  comp: ComponentNode,
+  tokenset?: DSysIconTokenset,
+  errorLog?: string[],
+) {
+  const props = nameToProps(comp.name);
+  if (!props.name) return;
+  const scale = comp.getPluginData('scale');
+  const offsetX = comp.getPluginData('offsetX');
+  const offsetY = comp.getPluginData('offsetY');
+  const tokenInfo: DSysSvgToken = {
+    $extensions: {
+      'dsys.level'            : DSysLevel.token,
+      'dsys.name'             : props.name,
+      'dsys.componentId'      : comp.id,
+      'dsys.scale'            : scale ? parseFloat(scale) : 0.1,
+      'dsys.offsetX'          : offsetX ? parseFloat(offsetX) : 0.0,
+      'dsys.offsetY'          : offsetY ? parseFloat(offsetY) : 0.0,
+      'dsys.sizes'            : [],
+    },
+    $value: {
+      svg: '',
+      // style: props.style || 'regular',
+      sizes: [12, 24, 32],
+    },
+    $type: DTTokenType.svg
+  };
+  const svg = await getSvg(comp, errorLog || []);
+  tokenInfo.$value.svg = svg || '';
+  if (tokenset) tokenset[props.name] = tokenInfo;
+  return tokenInfo;
 }

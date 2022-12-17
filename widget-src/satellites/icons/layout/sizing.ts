@@ -47,7 +47,7 @@ export function resizeComponentSet(
 
   compSet.children.map((child, index) => {
     const childComp = child as ComponentNode;
-    formatVectorsIntoComponent(childComp);
+    resizeIconCompChildren(childComp);
 
     const col = index % iconsPerRow;
     childComp.x = sizing.iconCompsetPadding + (
@@ -66,7 +66,7 @@ export function resizeComponentSet(
   }
 }
 
-export function setIconPadding(
+/* export function setIconPadding(
   thisWidget: WidgetNode,
   padding: number
 ) {
@@ -88,21 +88,42 @@ export function setIconPadding(
       vector.y = sizing.iconDisplaySize/2 - vector.height/2;
     });
   });
-}
+}*/
 
-function formatVectorsIntoComponent(
+export function resizeIconCompChildren(
   comp: ComponentNode
 ) {
+  /*
   if (
     comp.width !== sizing.iconDisplaySize ||
-    comp.height !== sizing.iconDisplaySize
+    comp.height !== sizing.iconDisplaySize || true
   ) {
-    // we know that the component is probably new (or has been messed with)
-    // so a component could be different proportion...
-    const largestSize = (comp.width > comp.height) ? 
-      comp.width : comp.height;
+  */
+
     // adding a little whitespace around icon
-    const percentDiff = (sizing.iconDisplaySize-8) / largestSize;
+    const scale = comp.getPluginData('scale') ?
+      parseFloat(comp.getPluginData('scale')) : 0.1;
+    const offsetX = comp.getPluginData('offsetX') ?
+      parseFloat(comp.getPluginData('offsetX')) : 0.0;
+    let offsetY = parseFloat(comp.getPluginData('offsetY'));
+    offsetY = offsetY || 0.0;
+
+    const targetSize = sizing.iconDisplaySize -
+      (sizing.iconDisplaySize * scale);
+
+    // find largest dimension and it's size difference...
+    let maxDimension = 0;
+    comp.children.map(compChild => {
+      maxDimension = Math.max(
+        compChild.width, maxDimension,
+      );
+      maxDimension = Math.max(
+        compChild.height, maxDimension,
+      );
+    });
+    const diff = targetSize - maxDimension;
+    const percentDiff = 1 + diff / maxDimension;
+
     comp.children.map(compChild => {
       const compChildVector = (compChild as VectorNode);
       compChildVector.resize(
@@ -115,13 +136,19 @@ function formatVectorsIntoComponent(
         vertical: 'MIN',
       };
       // center them
-      compChildVector.x = sizing.iconDisplaySize/2 - compChildVector.width/2;
-      compChildVector.y = sizing.iconDisplaySize/2 - compChildVector.height/2;
+      const offsetXPixels = offsetX * sizing.iconDisplaySize;
+      compChildVector.x =
+        sizing.iconDisplaySize/2 - compChildVector.width/2 + offsetXPixels;
+      const offsetYPixels = offsetY * sizing.iconDisplaySize;
+      compChildVector.y =
+        sizing.iconDisplaySize/2 - compChildVector.height/2 + offsetYPixels;
     });
+
     comp.resize(
       sizing.iconDisplaySize,
       sizing.iconDisplaySize
     );
+  
     // gotta reset to stretch unforch
     comp.children.map(compChild => {
       const compChildVector = (compChild as VectorNode);
@@ -130,5 +157,5 @@ function formatVectorsIntoComponent(
         vertical: 'STRETCH',
       };
     });
-  }
+  // }
 }

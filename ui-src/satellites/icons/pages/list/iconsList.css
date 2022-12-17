@@ -9,9 +9,9 @@
     overflow-x: hidden;
   }
 
-  /* .icons-list .icons-list-row:hover {
+  .icons-list .icons-list-row:hover {
     cursor: pointer;
-  }*/
+  }
 
     .icons-list-row-icon {
       width: 30px;

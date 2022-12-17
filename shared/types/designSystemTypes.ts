@@ -382,6 +382,9 @@ export interface DSysSvgToken extends DTSvgToken {
     'dsys.level' : DSysLevel.token,
     'dsys.name'  : string,
     'dsys.componentId' : string,
+    'dsys.scale' : number,
+    'dsys.offsetX' : number,
+    'dsys.offsetY' : number,
     'dsys.sizes' : number[],
   },
 }

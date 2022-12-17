@@ -1,0 +1,34 @@
+
+
+
+.icon-preview-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  margin-bottom: 10px;
+}
+
+  .icon-preview {
+    border: 1px solid var( --border-grey );
+    width: 320px; height: 320px;
+    margin: 0px auto;
+  }
+
+    .icon-preview svg {
+      width: 100%;
+      height: 100%;
+    }
+
+.icon-editors {
+  display: flex;
+  flex-direction: row;
+}
+
+  .icon-editors > *:not(:last-child) {
+    margin-right: 10px;
+  }
+
+  .name-input {
+    margin-bottom: 0;
+  }
