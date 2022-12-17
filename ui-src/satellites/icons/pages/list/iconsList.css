@@ -10,12 +10,13 @@
   }
 
   .icons-list .icons-list-row:hover {
+    background-color: var( --primary-lightest );
     cursor: pointer;
   }
 
     .icons-list-row-icon {
       width: 30px;
-      margin-right: 10px;
+      margin-right: 16px;
     }
 
       .icons-list-row-icon svg {

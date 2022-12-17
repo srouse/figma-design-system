@@ -1,0 +1,19 @@
+
+
+
+.component-list {
+  padding: 20px;
+}
+
+  .focus-box {
+    display: flex;
+    flex-direction: row;
+  }
+
+    .focus-component-btn {
+      flex: 1;
+    }
+
+    .focus-component-btn:first-child {
+      margin-right: 10px;
+    }

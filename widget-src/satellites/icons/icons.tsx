@@ -188,13 +188,16 @@ export default function iconsSatellite() {
               case MessageRequest.changeIconTokenName: {
                 const thisWidget = findWidget(nodeId);
                 const compSet = findComponentSet(thisWidget);
-                compSet?.children.map(child => {
-                  if (child.id === message.componentId) {
-                    child.name = `name=${message.newName}`;
-                  }
+                const comp = compSet?.children.find(child => {
+                  return child.id === message.componentId;
                 });
-                await rebuildTokens();
-                bounceBack(message, {});
+                if (comp) {
+                  comp.name = `name=${message.newName}`;
+                }
+                const newToken = await buildIconComponentToken(
+                  comp as ComponentNode,
+                );
+                bounceBack(message, {icon: newToken});
                 break;
               }
 

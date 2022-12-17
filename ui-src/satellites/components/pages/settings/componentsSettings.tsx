@@ -1,7 +1,9 @@
 import React from "react";
-import { CoreProps, DSysComponentToken, MessageRequest } from "../../../../../shared";
+import { CoreProps, DSysComponentToken, MessageRequest, SelectDropDown } from "../../../../../shared";
 import Select from "../../../../components/Select";
 import postMessagePromise from "../../../../utils/postMessagePromise";
+import getComponentToken from "../../utils/getComponentToken";
+import updateComponent from "../../utils/updateComponent";
 
 export default class ComponentsSettings extends React.Component<CoreProps> {
 
@@ -16,6 +18,7 @@ export default class ComponentsSettings extends React.Component<CoreProps> {
   state: {
     components: {name:string, value:string}[],
     selectedComponentId?: string,
+    selectedComponentObj?: SelectDropDown | undefined,
   }
 
   async getComponentList() {
@@ -34,34 +37,30 @@ export default class ComponentsSettings extends React.Component<CoreProps> {
     }
   }
 
-  getCompToken(): DSysComponentToken | undefined {
-    if (
-      this.props.tokenGroup &&
-      this.props.tokenGroup.tokensets &&
-      this.props.tokenGroup.tokensets.length > 0
-    ) {
-      const tokenSet = this.props.tokenGroup.tokensets[0];
-      const token = tokenSet['component'] as DSysComponentToken;
-      return token;
-    }
-    return undefined;
-  }
-
   render() { 
-
-    const token = this.getCompToken();
-    console.log('token', token);
-
+    const token = getComponentToken(this.props.tokenGroup);
     return (<>
       <Select
         label="Component"
-        value={token ? token['$value'] : this.state.selectedComponentId}
-        onChange={(value: string) => {
-          /* this.setState({
+        value={
+          token ?
+            token['$value'] :
+            this.state.selectedComponentId
+        }
+        onChange={(value: string, valueObj?: SelectDropDown | undefined) => {
+          this.setState({
             selectedComponentId: value,
-          })*/
+            selectedComponentObj: valueObj,
+          })
+          updateComponent(
+            this.props.tokenGroup,
+            valueObj,
+            this.props.updateTokenGroup,
+          );
         }}
-        dropdown={this.state.components} />
+        dropdown={
+          this.state.components
+        } />
     </>);
   }
 }

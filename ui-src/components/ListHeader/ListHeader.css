@@ -23,7 +23,8 @@
       cursor: pointer;
     }
 
-    .list-header-btn.delete {
+    .list-header-btn.delete,
+    .list-header-btn.refresh {
       margin-right: 6px;
     }
 
@@ -33,4 +34,10 @@
 
     .list-header-btn.delete svg {
       width: 14px;
+    }
+
+    .list-header .refreshing {
+      font-weight: normal;
+      font-size: 10px;
+      color: var( --text-color-lighter );
     }

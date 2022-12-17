@@ -43,7 +43,6 @@ export function getFullPluginState(
   }
 }
 
-
 function Widget() {
   const nodeId = useWidgetId();
 
@@ -66,7 +65,7 @@ function Widget() {
     // only the open widget should listen to events...
     if (isWindowUIOpen) {
       figma.ui.onmessage = async (message) => {
-        console.log('RECIEVE MSG', message);
+        console.log('-> RECIEVE MSG', message);
         switch (message.name) {
           case MessageName.globalDataUpdate:
             setGlobalData(message.globalData);
@@ -182,7 +181,6 @@ function Widget() {
       }
     }
   })
-
   return designSystem();
 }
 widget.register(Widget);

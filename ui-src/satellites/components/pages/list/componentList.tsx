@@ -1,44 +1,95 @@
 import React from "react";
 import {
-  cleanAndSortTokens,
   CoreProps,
+  MessageRequest,
+  SelectDropDown,
 } from "../../../../../shared";
-import ListHeaderMinimal from "../../../../components/ListHeader/ListHeaderMinimal";
+import DTButton, { DTButtonColor } from "../../../../components/DTButton";
+import Select from "../../../../components/Select";
+import postMessagePromise from "../../../../utils/postMessagePromise";
+import getComponentToken from "../../utils/getComponentToken";
+import updateComponent from "../../utils/updateComponent";
 import "./componentList.css";
-// import { addBreakpointToken } from "../../utils/addBreakpointToken";
-// import updateBreakpointToken from "../../utils/updateBreakpointToken";
-// import { changeBreakpointOrder } from "../../utils/changeBreakpointOrder";
-// import deleteBreakpointToken from "../../utils/deleteBreakpointToken";
 
 export default class ComponentList extends React.Component<CoreProps> {
 
   constructor(props: CoreProps | Readonly<CoreProps>) {
     super(props);
     this.state = {
-      isDeleting: false,
-    };
+      components: []
+    }
+    this.getComponentList();
   }
 
-  state : {
-    isDeleting: boolean,
+  state: {
+    components: {name:string, value:string}[],
+    selectedComponentId?: string,
+    selectedComponentObj?: SelectDropDown | undefined,
+  }
+
+  async getComponentList() {
+    const results = await postMessagePromise(
+      MessageRequest.getComponentList
+    ) as any;
+    if (
+      results &&
+      results.components &&
+      results.components.length > 0
+    ) {
+      this.setState({
+        components: results.components,
+        selectedComponentId: results.components[0].value,
+      });
+    }
   }
 
   render() {
-    if (!this.props.tokenGroup) return (<div>No Steps Found</div>);
-    const tokenset = this.props.tokenGroup.tokensets[0];
-    if (!tokenset) return (<div>No Steps Found</div>);
-    // const tokens = cleanAndSortTokens(tokenset);
-
-    return (<>
-      <div className={`
-        dsys-list
-        ${this.state.isDeleting ? 'is-deleting' : ''}`}>
-        <ListHeaderMinimal
-          title="Component Token" />
-        <div className="dsys-list-body scroll-bar">
-         <div>hi ya</div>
+    const token = getComponentToken(this.props.tokenGroup);
+    return (
+      <div className="component-list">
+        <Select
+          label="Component"
+          value={
+            token ?
+              token['$value'] :
+              this.state.selectedComponentId
+          }
+          onChange={(value: string, valueObj?: SelectDropDown | undefined) => {
+            this.setState({
+              selectedComponentId: value,
+              selectedComponentObj: valueObj,
+            })
+            updateComponent(
+              this.props.tokenGroup,
+              valueObj,
+              this.props.updateTokenGroup,
+            );
+          }}
+          dropdown={
+            this.state.components
+          } />
+        <div className="focus-box">
+          <DTButton
+            label="Find Component"
+            className="focus-component-btn"
+            color={DTButtonColor.primary}
+            onClick={() => {
+              postMessagePromise(
+                MessageRequest.focusOnComponent,
+              );
+            }} />
+          <DTButton
+            label="Find Token"
+            className="focus-component-btn"
+            color={DTButtonColor.primary}
+            onClick={() => {
+              postMessagePromise(
+                MessageRequest.focusOnComponentToken,
+              );
+            }} />
         </div>
+        
       </div>
-    </>);
+    );
   }
 }

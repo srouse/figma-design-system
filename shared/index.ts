@@ -53,6 +53,7 @@ import {
   TokenSetType,
   TokenSetCategory,
   FigmaPaintStyle,
+  SelectDropDown,
 } from './types/types';
 import {
   DTToken,
@@ -138,6 +139,7 @@ export type {
   AdaColorContrastResult,
 
   FigmaPaintStyle,
+  SelectDropDown,
 
   State,
   CoreProps,

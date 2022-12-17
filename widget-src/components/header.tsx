@@ -67,6 +67,8 @@ export default function header(
 
   title = `${title}`;// | ${touch}`;
 
+  console.log('tokenGroup.type', tokenGroup.type);
+
   return (
     <AutoLayout 
       name="token-set-header"
@@ -158,24 +160,28 @@ export default function header(
               />
             </AutoLayout>
           ) : null}
-          <AutoLayout
-            padding={6}
-            cornerRadius={4}
-            hoverStyle={{
-              fill: isWindowUIOpen ? 
-                colors.hoverBgColorDark : colors.hoverBgColorLight
-            }}
-            onClick={() => {
-              if (refreshCallback) refreshCallback();
-            }}>
-            <SVG
-              src={getIcon(
-                Icons.refresh,
-                isWindowUIOpen ? colors.white : colors.textColor
-              )}
-            />
-          </AutoLayout>
-          {tokenGroup.type !== DSysGroupType.Undetermined ? 
+          {refreshCallback ? (
+            <AutoLayout
+              padding={6}
+              cornerRadius={4}
+              hoverStyle={{
+                fill: isWindowUIOpen ? 
+                  colors.hoverBgColorDark : colors.hoverBgColorLight
+              }}
+              onClick={() => {
+                if (refreshCallback) refreshCallback();
+              }}>
+              <SVG
+                src={getIcon(
+                  Icons.refresh,
+                  isWindowUIOpen ? colors.white : colors.textColor
+                )}
+              />
+            </AutoLayout>) : null }
+          {(
+            tokenGroup.type !== DSysGroupType.Undetermined // &&
+            // tokenGroup.type !== DSysGroupType.Base
+          ) ? 
             (<AutoLayout
               padding={6}
               cornerRadius={4}

@@ -1,14 +1,14 @@
 import
   React from "react";
-import { MessageRequest } from "../../../../shared";
+import { Icons, MessageRequest } from "../../../../shared";
 import { DSysSvgToken } from "../../../../shared/types/designSystemTypes";
+import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import Input from "../../../components/Input";
 import postMessagePromise from "../../../utils/postMessagePromise";
 import "./iconsDetail.css";
 
 interface IconsDetailProps {
-  token?: DSysSvgToken,
-  updateToken: (token: DSysSvgToken) => void
+  token?: DSysSvgToken
 }
 
 export default class IconsDetail extends React.Component<IconsDetailProps> {
@@ -17,11 +17,31 @@ export default class IconsDetail extends React.Component<IconsDetailProps> {
     super(props);
     this.state = {
       token: props.token,
+      updating: false,
     }
   }
 
   state: {
     token?: DSysSvgToken,
+    updating: boolean,
+  }
+
+  async changeName(
+    newName: string,
+    componentId: string
+  ) {
+    const result = await postMessagePromise(
+      MessageRequest.changeIconTokenName,
+      {
+        componentId,
+        newName,
+      }
+    ) as any;
+    if (result && result.icon) {
+      this.setState({
+        token: result.icon,
+      });
+    }
   }
 
   async changeScale(
@@ -98,105 +118,120 @@ export default class IconsDetail extends React.Component<IconsDetailProps> {
     let svg = this.state.token.$value.svg;
     svg = svg ? svg.replace(/clip-path/g, 'clip-path-off') : '';
 
+    const scale = this.state.token.$extensions["dsys.scale"] || 0.1;
+    const offsetX = this.state.token.$extensions["dsys.offsetX"] || 0.0;
+    const offsetY = this.state.token.$extensions["dsys.offsetY"] || 0.0;
+
     return (
       <div className="effects-detail">
-        <div className="icon-preview-box">
-          <div
-            className="icon-preview"
-            dangerouslySetInnerHTML={{__html:svg}}>
-          </div>
-        </div>
-        <div
-          className="icon-editors">
-          <Input
-            label="Scale"
-            type="number"
-            value={`${
-              this.state.token.$extensions["dsys.scale"].toFixed(2)
-            }`}
-            increments={{
-              shifted: 0.1,
-              unshifted: 0.01,
-            }}
-            onArrowUpOrDown={async (
-              value: string,
-              increment: number,
-            ) => {
-              this.changeScale(
-                parseFloat(value) + increment,
-                componentId
-              );
-            }}
-            onEnterOrBlur={async (scale: string) => {
-              this.changeScale(
-                parseFloat( scale ),
-                componentId
-              );
-            }} />
-          <Input
-            label="X Offset"
-            type="number"
-            value={`${
-              this.state.token.$extensions["dsys.offsetX"].toFixed(2)
-            }`}
-            increments={{
-              shifted: 0.1,
-              unshifted: 0.01,
-            }}
-            onArrowUpOrDown={(
-              offsetX: string,
-              increment: number,
-            ) => {
-              this.changeOffsetX(
-                parseFloat(offsetX) + increment,
-                componentId
-              );
-            }}
-            onEnterOrBlur={(offsetX: string) => {
-              this.changeOffsetX(
-                parseFloat( offsetX ),
-                componentId
-              );
-            }} />
-          <Input
-            label="Y Offset"
-            type="number"
-            value={`${
-              this.state.token.$extensions["dsys.offsetY"].toFixed(2)
-            }`}
-            increments={{
-              shifted: 0.1,
-              unshifted: 0.01,
-            }}
-            onArrowUpOrDown={(
-              offsetY: string,
-              increment: number,
-            ) => {
-              this.changeOffsetY(
-                parseFloat(offsetY) + increment,
-                componentId
-              );
-            }}
-            onEnterOrBlur={(offsetY: string) => {
-              this.changeOffsetY(
-                parseFloat( offsetY ),
-                componentId
-              );
-            }} />
-        </div>
         <Input
           className="name-input"
           label="Name"
           value={this.state.token.$extensions["dsys.name"]}
           onEnterOrBlur={(newName: string) => {
-            postMessagePromise(
-              MessageRequest.changeIconTokenName,
-              {
-                componentId,
-                newName
-              }
+            this.changeName(
+              newName,
+              componentId
             );
           }} />
+        <div className="icon-preview-box">
+          <div
+            className="icon-preview"
+            dangerouslySetInnerHTML={{__html:svg}}>
+          </div>
+          <div
+            className="icon-editors">
+            <Input
+              label="Scale"
+              type="number"
+              value={`${
+                scale.toFixed(2)
+              }`}
+              increments={{
+                shifted: 0.1,
+                unshifted: 0.01,
+              }}
+              onArrowUpOrDown={async (
+                value: string,
+                increment: number,
+              ) => {
+                this.changeScale(
+                  parseFloat(value) + increment,
+                  componentId
+                );
+              }}
+              onEnterOrBlur={async (scale: string) => {
+                this.changeScale(
+                  parseFloat( scale ),
+                  componentId
+                );
+              }} />
+            <Input
+              label="X Offset"
+              type="number"
+              value={`${
+                offsetX.toFixed(2)
+              }`}
+              increments={{
+                shifted: 0.1,
+                unshifted: 0.01,
+              }}
+              onArrowUpOrDown={(
+                offsetX: string,
+                increment: number,
+              ) => {
+                this.changeOffsetX(
+                  parseFloat(offsetX) + increment,
+                  componentId
+                );
+              }}
+              onEnterOrBlur={(offsetX: string) => {
+                this.changeOffsetX(
+                  parseFloat( offsetX ),
+                  componentId
+                );
+              }} />
+            <Input
+              label="Y Offset"
+              type="number"
+              value={`${
+                offsetY.toFixed(2)
+              }`}
+              increments={{
+                shifted: 0.1,
+                unshifted: 0.01,
+              }}
+              onArrowUpOrDown={(
+                offsetY: string,
+                increment: number,
+              ) => {
+                this.changeOffsetY(
+                  parseFloat(offsetY) + increment,
+                  componentId
+                );
+              }}
+              onEnterOrBlur={(offsetY: string) => {
+                this.changeOffsetY(
+                  parseFloat( offsetY ),
+                  componentId
+                );
+              }} />
+          </div>
+        </div>
+        <DTButton
+          label={this.state.updating ? 'Loading...' : 'Save'}
+          color={DTButtonColor.primary}
+          onClick={async () => {
+            this.setState({
+              updating: true,
+            });
+            await postMessagePromise(
+              MessageRequest.refreshIconTokens,
+            );
+            this.setState({
+              updating: false,
+            });
+          }}/>
       </div>
     );
   }

@@ -6,7 +6,6 @@ import { DSysSvgToken } from "../../../../../shared/types/designSystemTypes";
 import { cleanAndSortTokensAlphabetical } 
   from "../../../../../shared/utils/cleanAndSortTokens";
 import DetailModal from "../../../../components/DetailModal/DetailModal";
-import Input from "../../../../components/Input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import IconsDetail from "../../details/iconsDetail";
@@ -82,6 +81,11 @@ export default class IconsList extends React.Component<CoreProps> {
             this.setState({
               isDeleting: false
             });
+          }}
+          onRefresh={async () => {
+            await postMessagePromise(
+              MessageRequest.refreshIconTokens,
+            );
           }} />
         <div className="dsys-list-body scroll-bar">
           {tokens.map(tokenInfo => {
@@ -103,38 +107,40 @@ export default class IconsList extends React.Component<CoreProps> {
                   className="icons-list-row-icon"
                   dangerouslySetInnerHTML={{__html:iconToken.$value.svg}}>
                 </div>
-                <div className="icons-list-row-name">
+                <div
+                  className="icons-list-row-name">
                   {prop}
                 </div>
                 <div className="dsys-row-deleting"
-                    onClick={async() => {
-                      if (tokens.length <= 1) {
-                        postMessagePromise(
-                          MessageRequest.notify,
-                          {
-                            message: 'You must have at least one icon in this set',
-                            error: true
-                          }
-                        );
-                        return;
-                      }
-                      if (this.state.isDeleting) {
-                        await postMessagePromise(
-                          MessageRequest.deleteIcon,
-                          {
-                            componentId
-                          }
-                        );
-                        this.setState({
-                          isDeleting: false
-                        });
-                      }
-                    }}>
-                    <div className="dsys-row-deleting-icon"
-                      dangerouslySetInnerHTML={{ __html: 
-                        getIcon(Icons.delete) 
-                      }}></div>
-                  </div>
+                  onClick={async(evt) => {
+                    evt.stopPropagation();
+                    if (tokens.length <= 1) {
+                      postMessagePromise(
+                        MessageRequest.notify,
+                        {
+                          message: 'You must have at least one icon in this set',
+                          error: true
+                        }
+                      );
+                      return;
+                    }
+                    if (this.state.isDeleting) {
+                      await postMessagePromise(
+                        MessageRequest.deleteIcon,
+                        {
+                          componentId
+                        }
+                      );
+                      this.setState({
+                        isDeleting: false
+                      });
+                    }
+                  }}>
+                  <div className="dsys-row-deleting-icon"
+                    dangerouslySetInnerHTML={{ __html: 
+                      getIcon(Icons.delete) 
+                    }}></div>
+                </div>
               </div>
             );
           })}
@@ -142,9 +148,9 @@ export default class IconsList extends React.Component<CoreProps> {
           <DetailModal
             title={this.state.focusedToken?.$extensions["dsys.name"]}
             onClose={async () => {
-              await postMessagePromise(
+              /* await postMessagePromise(
                 MessageRequest.refreshIconTokens,
-              );
+              ); */
               this.setState({
                 detailModalOpen: false,
                 focusedToken: undefined,
@@ -154,17 +160,7 @@ export default class IconsList extends React.Component<CoreProps> {
             body={
               this.state.focusedToken ? (
                 <IconsDetail
-                  token={this.state.focusedToken}
-                  updateToken={(token : DSysSvgToken) => {
-                    console.log('token', token);
-                    /* updateEffect(
-                      token,
-                      this.props.refreshTokens
-                    );
-                    this.setState({
-                      focusedToken: token,
-                    });*/
-                  }} />
+                  token={this.state.focusedToken} />
                 ) : <div></div>
             } />
         {this.state.newIconModalOpen ? (

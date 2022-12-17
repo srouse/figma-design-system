@@ -231,7 +231,7 @@ export interface DTFileToken extends DTTokenBase {
 
 // Component
 export interface DTComponentToken extends DTTokenBase {
-  '$value': string,
+  '$value': string,// id of figma component...
   '$type' : DTTokenType.component
 }
 

@@ -67,14 +67,31 @@ export async function getSvg(
   errorLog: string[],
 ) {
   if (!comp) return;
-  const bytes = await comp.exportAsync({ format: 'SVG' })
-    .catch(err => {
+  const bytes = await comp.exportAsync({
+    format: 'SVG',
+  }).catch(err => {
       errorLog.push(comp.name);
       console.log(err, comp.name );
     });
   const str = Utf8ArrayToStr(bytes);
   return str;
 }
+
+/* export async function getPng(
+  comp: ComponentNode | VectorNode | SceneNode,
+  errorLog: string[],
+) {
+  if (!comp) return;
+  const bytes = await comp.exportAsync({
+    format: 'PNG',
+  }).catch(err => {
+      errorLog.push(comp.name);
+      console.log(err, comp.name );
+    });
+  const str = Utf8ArrayToStr(bytes);
+  Buffer.from(u8).toString('base64');
+  return str;
+}*/
 
 function Utf8ArrayToStr(array: Uint8Array | undefined | void) {
   if (!array) return;

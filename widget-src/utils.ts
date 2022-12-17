@@ -1,7 +1,5 @@
 import { DSysGroupType } from "../shared/types/designSystemTypes";
 
-figma.skipInvisibleInstanceChildren = true;
-
 export function findAllWidgets(
   excludeId: string = ''
 ): WidgetNode[] {
@@ -49,6 +47,7 @@ export function findFirstWidgetOfType(type: DSysGroupType) {
 function _findAllWidgets() {
   // need them from anywhere within the document...
   let widgetNodes: WidgetNode[] = [];
+  figma.skipInvisibleInstanceChildren = true;
   figma.root.children.map((page: PageNode) => {
     const pageWidgetNodes = page.findAllWithCriteria({
       types: ['WIDGET']
@@ -58,6 +57,8 @@ function _findAllWidgets() {
       ...pageWidgetNodes
     ]
   });
+  figma.skipInvisibleInstanceChildren = false;
+
   // now take only those that are design token widgets
   widgetNodes = widgetNodes.filter(node => {
     return node.widgetId === figma.widgetId;
@@ -75,32 +76,3 @@ export function findNodeParentPage(node: BaseNode) {
   }
   return parent;
 }
-
-/*
-export function sortIntoCategories(
-  widgets: WidgetNode,
-) : TokenSetCategory[] {
-  const categorizedTokensets: TokenSetCategory[] = [];
-  const createdCategories: {[key:string]: TokenSetCategory} = {};
-  
-  tokensets.map((tokenset: TokenSet) => {
-    if (!createdCategories[tokenset.type]) {
-      const category: TokenSetCategory = {
-        type: tokenset.type,
-        tokensets: []
-      }
-      createdCategories[tokenset.type] = category;
-      categorizedTokensets.push(category);
-    }
-    createdCategories[tokenset.type].tokensets.push(tokenset);
-  });
-  categorizedTokensets.sort((
-    a: TokenSetCategory, b: TokenSetCategory
-  ) => {
-    const x = a.type.toLowerCase();
-    const y = b.type.toLowerCase();
-    return x < y ? -1 : x > y ? 1 : 0;
-  });
-  return categorizedTokensets;
-}
-*/

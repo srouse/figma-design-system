@@ -44,7 +44,6 @@ export default function effectsSatellite() {
 
   const effectList = getEffectList(tokenGroup);
 
-  console.log('effectList', effectList);
   return (
     <AutoLayout 
         name="base-page"

@@ -1,5 +1,10 @@
 import React from "react";
-import { ValidationLocation, ValidationWorker, ValidatorSuccess } from "../../shared";
+import {
+  ValidationLocation,
+  ValidationWorker,
+  ValidatorSuccess,
+  SelectDropDown,
+} from "../../shared";
 
 import "./Select.css";
 
@@ -7,13 +12,13 @@ interface SelectProps {
   label: string,
   value: string | undefined,
   feedbackValue?: string | undefined,
-  onChange?: (value: string) => void
+  onChange?: (value: string, valueObj?: SelectDropDown | undefined) => void
   background?: 'light' | 'dark',
   className?: string,
   readOnly? : boolean,
   centerIcon? : boolean,
   cellDisplay? : boolean,
-  dropdown: {value:string, name: string}[],
+  dropdown: SelectDropDown[],
   validation?: ValidationWorker,
 }
 
@@ -100,8 +105,26 @@ export default class Select extends React.Component<SelectProps> {
                   }
                 }}
                 onChange={(evt: any) => {
+                  const value = evt.target.value;
+                  let selectedValue: SelectDropDown | undefined; 
+                  this.props.dropdown.find(valueObj => {
+                    if (valueObj.children) {
+                      valueObj.children.find(childValueObj => {
+                        if (childValueObj.value === value) {
+                          selectedValue = childValueObj;
+                          return true;
+                        }
+                        return false;
+                      })
+                    }
+                    if (valueObj.value === value) {
+                      selectedValue = valueObj;
+                      return true;
+                    }
+                    return false;
+                  });
                   if (this.props.onChange)
-                    this.props.onChange(evt.target.value);
+                    this.props.onChange(value, selectedValue);
 
                   setTimeout(() => {
                     if (this.props.validation) {
@@ -112,13 +135,33 @@ export default class Select extends React.Component<SelectProps> {
                   }, 0);
                 }}>
                 {this.props.dropdown.map(dropdown => {
-                  return (
-                    <option
-                      value={dropdown.value} 
-                      key={`dropdown_${this.uid}_${dropdown.value}`}>
-                      {dropdown.name}
-                    </option> 
-                  );
+                  if (dropdown.children) {
+                    return (
+                      <optgroup
+                        label={dropdown.name}
+                        key={`dropdown_${this.uid}_${dropdown.value}`}>
+                        {dropdown.children.map(dropdownChild => {
+                          return (
+                            <option
+                              value={dropdownChild.value} 
+                              key={`dropdown_${this.uid}_${
+                                  dropdown.value}_${
+                                  dropdownChild.value}`}>
+                              {dropdownChild.name}
+                            </option> 
+                          );
+                        })}
+                      </optgroup> 
+                    );
+                  }else{
+                    return (
+                      <option
+                        value={dropdown.value} 
+                        key={`dropdown_${this.uid}_${dropdown.value}`}>
+                        {dropdown.name}
+                      </option> 
+                    );
+                  }
                 })}
               </select>
               <svg

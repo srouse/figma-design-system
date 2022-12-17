@@ -10,6 +10,12 @@ export enum MessageName {
   promiseBounce = 'promiseBounce',
 }
 
+export type SelectDropDown = {
+  value: string,
+  name: string,
+  children?: SelectDropDown[],
+};
+
 export enum MessageRequest {
   stateUpdate = 'stateUpdate',
   getStyles = 'getStyles',
@@ -43,7 +49,9 @@ export enum MessageRequest {
   setIconOffsetY = 'setIconOffsetY',
 
   // component
-  getComponentList = 'getComponentList'
+  getComponentList = 'getComponentList',
+  focusOnComponent = 'focusOnComponent',
+  focusOnComponentToken = 'focusOnComponentToken',
 }
 
 export enum MessageRequestStyle {
@@ -115,6 +123,7 @@ export interface TokenGroup {
 export type TokenGroupLookup = {
   widgetId: string,
   tokenGroupName: string | undefined,
+  tokenGroupType: string | undefined,
 }
 
 // ============== DEFAULTS ====================

@@ -4,7 +4,7 @@ export default function bounceBack(
   message: {promiseId: string, request: MessageRequest},
   args: {}
 ) {
-  console.log('SENDING MSG', {
+  console.log('<- SENDING MSG', {
     request: message.request,
     promiseId: message.promiseId,
     ...args,

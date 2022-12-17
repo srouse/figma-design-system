@@ -1,4 +1,4 @@
-import { colors, typography } from '../../shared/styles';
+import { colors } from '../../shared/styles';
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import { defaultTokenGroup, TokenGroup } from '../../shared/types/types';
 import header from '../components/header';
@@ -47,13 +47,6 @@ export default function defaultSatellite() {
           left: 40, right: 40
         }}
         overflow="visible">
-        {/* <Text
-          fontSize={18}
-          fontFamily={typography.primaryFont}
-          fontWeight="light"
-          fill={colors.textColor}>
-          New Token Set
-        </Text>*/}
         <AutoLayout
           direction="vertical"
           width="fill-parent"

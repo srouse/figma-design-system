@@ -6,6 +6,7 @@ import {
   DSysComponentsTokenset,
   MessageRequest,
   DTTokenType,
+  SelectDropDown,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import InputHeader from "../../../../components/InputHeader";
@@ -39,8 +40,9 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
   }
 
   state: {
-    components: {name:string, value:string}[],
+    components: SelectDropDown[],
     selectedComponentId?: string,
+    selectedComponentObj?: SelectDropDown | undefined,
   }
 
   render() {
@@ -48,29 +50,13 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
       <div className="first-run">
         <InputHeader
           label="Create Component Token" />
-        {/* <Input
-          label="Name"
-          value={this.state.name}
-          onEnterOrBlur={(name: string) => {
-            this.setState({name});
-          }} 
-          validation={
-            this.validator.register(
-              'name',
-              () => {
-                return {
-                  success: this.state.name ? true : false,
-                  message: 'Name is required'
-                }
-              }
-            )
-          } /> */}
         <Select
           label="Component"
           value={this.state.selectedComponentId}
-          onChange={(value: string) => {
+          onChange={(value: string, valueObj: SelectDropDown | undefined) => {
             this.setState({
               selectedComponentId: value,
+              selectedComponentObj: valueObj,
             })
           }}
           dropdown={this.state.components} />
@@ -79,17 +65,7 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
           label="Create"
           color={DTButtonColor.primary}
           onClick={() => {
-            if (!this.state.selectedComponentId) {
-              postMessagePromise(
-                MessageRequest.notify,
-                {message: 'No component selected', error: true}
-              )
-              return;
-            }
-            const comp = this.state.components.find(comp => {
-              return comp.value === this.state.selectedComponentId;
-            });
-            if (!comp) {
+            if (!this.state.selectedComponentObj) {
               postMessagePromise(
                 MessageRequest.notify,
                 {
@@ -107,7 +83,7 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
               $extensions: {
                 'dsys.level': DSysLevel.tokenset,
                 'dsys.type': DSysGroupType.ComponentSet,
-                "dsys.name": comp.name,
+                "dsys.name": this.state.selectedComponentObj.name,
                 "dsys.nodeId": '?'
               },
               $description: 'a component token',
@@ -116,15 +92,15 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
             tokenset['component'] = {// easier to find...there is only one
               $extensions: {
                 'dsys.level': DSysLevel.token,
-                "dsys.name": comp.name,
+                "dsys.name": this.state.selectedComponentObj.name,
               },
               $type: DTTokenType.component,
-              $value: comp.value,
+              $value: this.state.selectedComponentObj.value,
             };
 
             const finalTokenGroup = {
               ...this.props.tokenGroup,
-              name: comp.name,
+              name: this.state.selectedComponentObj.name,
               tokensets: [tokenset]
             };
             this.props.updateTokenGroup(finalTokenGroup);

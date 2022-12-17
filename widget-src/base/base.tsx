@@ -18,7 +18,7 @@ export default function base() {
 
   const nodeId = useWidgetId();
 
-  const [tokenGroupLookup, setTokenGroupLookup] = useSyncedState(
+  const [tokenGroupLookup, ] = useSyncedState(
     'tokenGroupLookup',
     defaultTokenGroupLookup
   );
@@ -32,7 +32,11 @@ export default function base() {
       horizontalAlignItems="start"
       verticalAlignItems="start"
       spacing={26}>
-      {header()}
+      {header(
+        () => {
+          triggerAllWidgetRefresh()
+        }
+      )}
       <AutoLayout 
         height="hug-contents"
         direction="vertical"
@@ -41,13 +45,12 @@ export default function base() {
         verticalAlignItems="start"
         spacing={10}
         padding={{
-          top: 0, bottom: 10,
+          top: 0, bottom: 20,
           left: 20, right: 20
         }}
         overflow="visible">
         <Text>Base Widget</Text>
         {renderWidgetList(tokenGroupLookup, nodeId)}
-        {button('Refresh All', () => triggerAllWidgetRefresh())}
       </AutoLayout>
     </AutoLayout>
   );
@@ -59,14 +62,15 @@ function renderWidgetList(
   nodeId: string,
 ) {
 
-  const [globalData, setGlobalData] = useSyncedState(
+  const [globalData,] = useSyncedState(
     'globalData',
     defaultGlobalData
   );
 
   const html: any[] = [];
   allTokenGroups?.map(tokenGroup => {
-    if (tokenGroup.widgetId === nodeId) return;
+    if (tokenGroup.widgetId === nodeId) return;// it's the base
+
     html.push(
       <AutoLayout
         width="fill-parent"
@@ -95,7 +99,7 @@ function renderWidgetList(
           fontSize={14}
           width="fill-parent"
           fill={colors.textColor}>
-          {tokenGroup.tokenGroupName}
+          {`${tokenGroup.tokenGroupName} ${tokenGroup.tokenGroupType}`}
         </Text>
         <Text
           fontFamily={typography.primaryFont}

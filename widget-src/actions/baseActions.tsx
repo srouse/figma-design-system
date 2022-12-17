@@ -1,5 +1,5 @@
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
-import { TokenGroupLookup } from "../../shared/types/types";
+import { TokenGroup, TokenGroupLookup } from "../../shared/types/types";
 import {
   findAllWidgets,
   findBaseWidget,
@@ -49,9 +49,11 @@ export function updateBaseWidgetTokenGroupLookup() {
     const newTokenGroupLookup: TokenGroupLookup[] = [];
     const allOtherWidgets = findAllWidgets();
     allOtherWidgets.map(widget => {
+      const widgetTokenGroup = widget.widgetSyncedState.tokenGroup as TokenGroup;
       newTokenGroupLookup.push({
         widgetId: widget.id,
-        tokenGroupName: widget.widgetSyncedState.tokenGroup?.name,
+        tokenGroupName: widgetTokenGroup?.name,
+        tokenGroupType: widgetTokenGroup?.type,
       });
     });
     baseWidget?.setWidgetSyncedState({

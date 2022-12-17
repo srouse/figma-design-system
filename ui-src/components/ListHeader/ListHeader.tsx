@@ -7,12 +7,20 @@ interface ListHeaderProps {
   onDelete: () => void,
   onDeleteClose: () => void,
   onAdd: () => void,
+  onRefresh?: () => void,
 }
 
 export default class ListHeader extends React.Component<ListHeaderProps> {
 
   constructor(props: ListHeaderProps | Readonly<ListHeaderProps>) {
     super(props);
+    this.state = {
+      isRefreshing: false,
+    }
+  }
+
+  state: {
+    isRefreshing: boolean
   }
 
   render() {
@@ -20,6 +28,22 @@ export default class ListHeader extends React.Component<ListHeaderProps> {
       <div className="list-header">
         {this.props.title}
         <div style={{flex: 1}}></div>
+        {this.state.isRefreshing ? (
+          <div className="refreshing">refreshing...</div>
+        ) : null}
+        {this.props.onRefresh ? (
+          <div
+            className="list-header-btn refresh"
+            onClick={async () => {
+              this.setState({isRefreshing: true});
+              setTimeout(async () => {
+                if (this.props.onRefresh) await this.props.onRefresh();
+                this.setState({isRefreshing: false});
+              }, 0);
+            }}
+            dangerouslySetInnerHTML={{__html:getIcon(Icons.refresh)}}>
+          </div>
+        ) : null}
         <div
           className="list-header-btn delete"
           onClick={() => {
@@ -34,6 +58,7 @@ export default class ListHeader extends React.Component<ListHeaderProps> {
             if (this.props.onAdd) this.props.onAdd();
           }} dangerouslySetInnerHTML={{__html:getIcon(Icons.plus)}}>
         </div>
+
       </div>
     );
   }

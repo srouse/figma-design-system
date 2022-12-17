@@ -1,18 +1,25 @@
 import {
-  defaultTokenGroup, MessageName, MessageRequest,
+  defaultTokenGroup,
+  DSysComponentToken,
+  MessageName,
+  MessageRequest,
+  SelectDropDown,
 } from "../../../shared/index";
-import { colors, typography } from "../../../shared/styles";
+import {sizing} from "../../../shared/styles";
 import header from "../../components/header";
 import bounceBack from "../../utils/postMessagePromise";
+import { getSvg } from "../icons/iconComponentUtils";
+import focusOnComponent from "./actions/focusOnComponent";
+import updateComponentName from "./actions/updateComponentName";
+import noComponent from "./noComponent";
 
 const { widget } = figma;
 const {
   AutoLayout,
-  Text,
   useSyncedState,
-  useWidgetId,
   useEffect,
-  Rectangle
+  SVG,
+  useWidgetId,
 } = widget;
 
 export default function componentsSatellite() {
@@ -28,10 +35,59 @@ export default function componentsSatellite() {
     false
   );
 
+  const [componentImage, setComponentImage] = useSyncedState(
+    'componentImage',
+    ''
+  );
+
+  const [, setWidgetWidth] = useSyncedState(
+    'widgetWidth', sizing.defaultWidgetWidth
+  );
+
   useEffect(() => {
     if (!componentInitialized) {
       setComponentInitialized(true);
-      // first run ever
+
+      // first run
+      if (tokenGroup && tokenGroup.tokensets.length > 0) {
+        (async () => {
+          const tokenset = tokenGroup.tokensets[0];
+          const componentInfo = tokenset.component as DSysComponentToken;
+          let node = figma.getNodeById(componentInfo.$value)as
+            ComponentNode | ComponentSetNode;
+          if (node) {
+            const errorLog: string[] = [];
+            if (
+              node.type === 'COMPONENT_SET' &&
+              ( node.width > 1000 || node.height > 1000 ) &&
+              node.children && node.children.length > 0
+            ) {
+              node = node.children[0] as ComponentNode;
+            }
+            const svg = await getSvg(node, errorLog);
+            if (svg) {
+              setComponentImage(svg);
+              const nodeWidthWithPadding = node.width + 40;
+              if (nodeWidthWithPadding > sizing.defaultWidgetWidth) {
+                setWidgetWidth(nodeWidthWithPadding);
+              }else{
+                setWidgetWidth(sizing.defaultWidgetWidth);
+              }
+            }else{
+              setComponentImage('');
+              setWidgetWidth(sizing.defaultWidgetWidth);
+            }
+
+            if (tokenGroup.name !== node.name) {
+              updateComponentName(
+                tokenGroup,
+                node.name,
+                setTokenGroup,
+              )
+            }
+          }
+        })();
+      }
     }
   });
 
@@ -47,6 +103,12 @@ export default function componentsSatellite() {
                   const pageComponentNodes = page.findAllWithCriteria({
                     types: ['COMPONENT_SET', 'COMPONENT']
                   });
+                  const optSet: SelectDropDown = {
+                    name: page.name,
+                    value: page.id,
+                    children: [],
+                  }
+                  components.push(optSet);
                   pageComponentNodes.map(node => {
                     if (
                       node.type === 'COMPONENT' &&
@@ -54,14 +116,36 @@ export default function componentsSatellite() {
                       node.parent.type === 'COMPONENT_SET') {
                       return
                     }
-                    components.push({
+                    optSet.children?.push({
                       name: node.name,
                       value: node.id,
-                    })
+                    });
                   })
                 });
+                figma.skipInvisibleInstanceChildren = false;
                 bounceBack(message, {components});
                 break;
+              case MessageRequest.refreshTokensFromStyles :
+                setComponentInitialized(false);
+                bounceBack(message, {});
+                break;
+              case MessageRequest.focusOnComponent :
+                focusOnComponent(tokenGroup);
+                bounceBack(message, {});
+                break;
+              case MessageRequest.focusOnComponentToken :
+                let node = figma.getNodeById(nodeId);
+                if (node) {
+                  let page = node.parent;
+                  while (page && (page.type !== 'PAGE')) {
+                    page = page.parent;
+                  }
+                  if (page) figma.currentPage = page;
+                  figma.viewport.scrollAndZoomIntoView([node]);
+                }
+                bounceBack(message, {});
+                break;
+                
             }
       }
     };
@@ -69,15 +153,15 @@ export default function componentsSatellite() {
     return () => figma.ui.off('message', onMessageHandler);
   });
 
-  return (
-    <AutoLayout 
+  if (tokenGroup && tokenGroup.tokensets.length > 0) {
+    return (
+      <AutoLayout 
         name="base-page"
         height="hug-contents"
         width="fill-parent"
         direction="vertical"
         horizontalAlignItems="start"
         verticalAlignItems="start"
-        spacing={24}
         overflow="visible">
         {header(
           () => {
@@ -95,34 +179,23 @@ export default function componentsSatellite() {
           verticalAlignItems="center"
           spacing={0}
           padding={{
-            top: 0, bottom: 20,
-            left: 20, right: 20
+            top: 20, bottom: 20,
+            left: 40, right: 40
           }}
-          overflow="visible">
-          <AutoLayout 
-            height="hug-contents"
-            direction="vertical"
-            width="fill-parent"
-            horizontalAlignItems="center"
-            verticalAlignItems="center"
-            spacing={0}
-            padding={{
-              top: 10, bottom: 10,
-              left: 20, right: 20
-            }}
-            overflow="visible">
-            <Text
-              fontFamily={typography.primaryFont}
-              fontWeight="light"
-              fontSize={18}
-              width="hug-contents"
-              horizontalAlignText="center"
-              fill={colors.textColorLightest}>
-              No Component Token
-            </Text>
-          </AutoLayout>
+          overflow="visible"
+          onClick={() => {
+            focusOnComponent(tokenGroup);
+          }}>
+          {componentImage ? (
+            <SVG src={componentImage} />
+          ) : null}
         </AutoLayout>
       </AutoLayout>
+    );
+  }
+  
+  return (
+    noComponent(setComponentInitialized)
   );
 }
 
