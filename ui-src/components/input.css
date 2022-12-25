@@ -43,6 +43,11 @@
       line-height: 22px;
     }
 
+      .inputComp-readonly a {
+        text-decoration: none;
+        color: var( --primary );
+      }
+
     .inputComp-input {
       width: 100%;
       padding: 11px 10px;

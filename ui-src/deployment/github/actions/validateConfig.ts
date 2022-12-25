@@ -1,6 +1,9 @@
 import { GitHubSettings } from "../../../../shared/types/types";
+import { FDST_CONFIG_FILENAME } from "../files/DesignTokensConfigFile";
 import gitHubClient from "../gitHubClient";
 import { GithubSuccess, JSONConfig } from "../types";
+
+export const FDST_IDENTIFIER = 'figma-design-system-tokens';
 
 export default async function validateConfig(
   gitHubSettings: GitHubSettings
@@ -26,7 +29,7 @@ export default async function validateConfig(
     { 
       owner: gitHubSettings.username,
       repo: gitHubSettings.repositoryAndNPMPackageName,
-      path: 'design-tokens.config.json'
+      path: FDST_CONFIG_FILENAME
     }
   ).catch((err: Error) => {
     loadSuccess = false;
@@ -52,12 +55,12 @@ export default async function validateConfig(
     message: 'Configuration file did not parse correctly (json).',
   }
   
-  if (configJson && configJson.builtWith === 'figma-design-tokens') {
+  if (configJson && configJson.builtWith === FDST_IDENTIFIER) {
     return {success: true}
   }
   return {
     success: false,
-    message: 'The builtWith property was not for figma-design-tokens',
+    message: `The builtWith property was not for ${FDST_IDENTIFIER}`,
   };
 }
 

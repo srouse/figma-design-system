@@ -1,9 +1,16 @@
-import { GitHubSettings } from "../../../shared/types/types";
+import {
+  FileCreateResults,
+  GitHubSettings
+} from "../../../shared/types/types";
 import repositoryExists from "./actions/repositoryExists";
 import validateConfig from "./actions/validateConfig";
 import uploadFiles from "./actions/uploadFiles";
 import createRelease from "./actions/createRelease";
-import { GithubResult, ResponseStatus, VersionIncrements } from "./types";
+import {
+  GithubResult,
+  ResponseStatus,
+  VersionIncrements,
+} from "./types";
 import getVersion from "./actions/getVersion";
 import semvar from "./semver";
 
@@ -54,9 +61,11 @@ export default async function deployToRepo(
 
   // UPLOAD FILES
   // need to make sure everything will work and has the correct version...
+  const fileCreationResults: FileCreateResults = {};
   const uploadFilesResults = await uploadFiles(
     newGitHubSettings,
-    updateFeedback
+    fileCreationResults,
+    updateFeedback,
   );
   if (uploadFilesResults.success !== true) {
     return {
@@ -64,6 +73,9 @@ export default async function deployToRepo(
       message: uploadFilesResults.message,
     }
   }
+
+  // TRANSFORM
+  console.log('fileCreationResults', fileCreationResults);
 
   // RELEASE
   updateFeedback('creating release');

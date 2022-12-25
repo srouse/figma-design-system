@@ -64,7 +64,7 @@ export default function effectsSatellite() {
               setTokenGroup,
               nodeId
             );
-          }
+          },
         )}
         <AutoLayout 
           height="hug-contents"

@@ -1,7 +1,7 @@
 {
-  "name": "figma-design-system",
+  "name": "figma-design-system-tokens",
   "version": "1.0.0",
-  "description": "figma-design-system",
+  "description": "figma-design-system-tokens",
   "scripts": {
     "test": "npm run tsc && npm run build",
     "format": "prettier --write .",

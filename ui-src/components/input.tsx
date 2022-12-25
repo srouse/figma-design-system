@@ -40,6 +40,7 @@ interface InputProps {
   className?: string,
   type? : 'text' | 'number' | 'password',
   readOnly? : boolean,
+  href?: string,// for readOnly only
   hideLabel? : boolean,
   hideBorder? : boolean,
   helpText? : string,
@@ -112,7 +113,11 @@ export default class Input extends React.Component<InputProps> {
         <div className="inputComp-input-box">
           {this.props.readOnly ? (
               <div className="inputComp-readonly">
-                {this.props.value}
+                {this.props.href ? (
+                  <a href={this.props.href} target="_new">
+                    {this.props.value}
+                  </a>
+                ) : this.props.value}
               </div>
             ) : (
               <input

@@ -1,5 +1,9 @@
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
-import { TokenGroup, TokenGroupLookup } from "../../shared/types/types";
+import {
+  TokenGroup,
+  TokenGroupCategorizedLookup,
+  TokenGroupLookup
+} from "../../shared/types/types";
 import {
   findAllWidgets,
   findBaseWidget,
@@ -33,10 +37,12 @@ export function triggerBaseRefresh() {
 export function triggerAllWidgetRefresh() {
   const allWidgets = findAllWidgets();
   const baseWidget = findBaseWidget();
+  const globalData = baseWidget?.widgetSyncedState.globalData;
   allWidgets.map(widget => {
     if (widget === baseWidget) return;
     widget.setWidgetSyncedState({
       ...widget.widgetSyncedState,
+      globalData,
       touch: widget.widgetSyncedState.touch + 1,
     })
   });
@@ -48,17 +54,53 @@ export function updateBaseWidgetTokenGroupLookup() {
   if (baseWidget) {
     const newTokenGroupLookup: TokenGroupLookup[] = [];
     const allOtherWidgets = findAllWidgets();
+
+    const newTokenGroupCategorizedLookup : TokenGroupCategorizedLookup = {
+      colors: [],
+      typography: [],
+      effects: [],
+      icons: [],
+      breakpoints: [],
+      custom: [],
+      spacing: [],
+      components: [],
+    }
+
     allOtherWidgets.map(widget => {
-      const widgetTokenGroup = widget.widgetSyncedState.tokenGroup as TokenGroup;
-      newTokenGroupLookup.push({
-        widgetId: widget.id,
-        tokenGroupName: widgetTokenGroup?.name,
-        tokenGroupType: widgetTokenGroup?.type,
-      });
+      const widgetTokenGroup = widget.widgetSyncedState.tokenGroup;
+      if (widgetTokenGroup) {
+        const tokenGroup = widgetTokenGroup as TokenGroup;
+        const tokenGroupLookup = {
+          nodeId: widget.id,
+          tokenGroupName: tokenGroup.name,
+          tokenGroupType: tokenGroup.type,
+        };
+        newTokenGroupLookup.push(tokenGroupLookup);
+  
+        if (tokenGroup.type == DSysGroupType.ColorSet) {
+          newTokenGroupCategorizedLookup.colors.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.TypographySet) {
+          newTokenGroupCategorizedLookup.typography.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.EffectSet) {
+          newTokenGroupCategorizedLookup.effects.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.IconSet) {
+          newTokenGroupCategorizedLookup.icons.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.BreakpointSet) {
+          newTokenGroupCategorizedLookup.breakpoints.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.CustomSet) {
+          newTokenGroupCategorizedLookup.custom.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.Spacing) {
+          newTokenGroupCategorizedLookup.spacing.push(tokenGroupLookup);
+        }else if (tokenGroup.type == DSysGroupType.ComponentSet) {
+          newTokenGroupCategorizedLookup.components.push(tokenGroupLookup);
+        }
+      }
     });
+
     baseWidget?.setWidgetSyncedState({
       ...baseWidget.widgetSyncedState,
       tokenGroupLookup: newTokenGroupLookup,
+      tokenGroupCategorizedLookup: newTokenGroupCategorizedLookup,
       touch: baseWidget.widgetSyncedState.touch + 1,
     });
   }

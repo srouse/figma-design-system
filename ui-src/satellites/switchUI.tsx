@@ -41,7 +41,10 @@ export default class SwitchUI extends React.Component<CoreProps> {
         <SatelliteHeaderUI
           {...this.props}
            />
-        {this.props.tokenGroup?.name ? (
+        {(
+          this.props.tokenGroup?.name || 
+          this.props.tokenGroup?.type == DSysGroupType.Base
+        ) ? (
           <DTTabs 
             tabs={[
               {name: 'Tokens', value: 'tokens'},

@@ -23,6 +23,7 @@ export default function header(
   refreshCallback?: () => void,
   openEditorCallback?:  () => void,
   addCallback?: () => void,
+  navItems?: () => AutoLayout,
 ) {
   // const nodeId = useWidgetId();
 
@@ -47,27 +48,18 @@ export default function header(
   );
 
   let title = tokenGroup?.name || 'No Name';
-  const hasName = tokenGroup?.name ? true : false;
-  // let subtitle = '';
+  let hasName = tokenGroup?.name ? true : false;
   switch( tokenGroup?.type ) {
     case DSysGroupType.Base:
       title = globalData?.fullName || '';
-      // subtitle = 'Design Tokens';
+      hasName = true;
       break;
     case DSysGroupType.Undetermined:
       title = globalData?.fullName || '';
-      // subtitle = 'Design Tokens';
-      break;
-    case DSysGroupType.ColorSet:
-    case DSysGroupType.TypographySet:
-    default :
-      // subtitle = tokenGroupTypeToName(tokenGroup);
       break;
   }
 
-  title = `${title}`;// | ${touch}`;
-
-  console.log('tokenGroup.type', tokenGroup.type);
+  title = `${title}`;
 
   return (
     <AutoLayout 
@@ -134,13 +126,20 @@ export default function header(
           fontSize={hasName ? 18 : 16}
           width="fill-parent"
           height="hug-contents"
-          fill={isWindowUIOpen ? 
-            colors.white : 
-            hasName ? colors.textColor : colors.greyLighter}>
+          fill={
+            isWindowUIOpen ? 
+              colors.white : 
+                hasName ? 
+                  colors.textColor :
+                  colors.greyLighter
+          }>
           {title}
         </Text>
         <AutoLayout
+          verticalAlignItems="center"
           spacing={2}>
+          {navItems ? navItems() : null}
+          {navItems ? <Rectangle width={8} height={1} /> : null}
           {addCallback ? (
             <AutoLayout
               padding={6}

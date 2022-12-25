@@ -10,6 +10,15 @@ export enum MessageName {
   promiseBounce = 'promiseBounce',
 }
 
+export type DesignTokensResult = {
+  tokens: DSys,
+  errors: string[],
+}
+
+export type FileCreateResults = {
+  tokenResults?: DesignTokensResult
+}
+
 export type SelectDropDown = {
   value: string,
   name: string,
@@ -52,6 +61,10 @@ export enum MessageRequest {
   getComponentList = 'getComponentList',
   focusOnComponent = 'focusOnComponent',
   focusOnComponentToken = 'focusOnComponentToken',
+
+  // base
+  getCategorizedTokenGroups = 'getCategorizedTokenGroups',
+  focusOnToken = 'focusOnToken',
 }
 
 export enum MessageRequestStyle {
@@ -109,6 +122,7 @@ export type GitHubSettings = {
   accessToken?: string,
   version: string,// semvar
   connected: boolean,
+  deployed: boolean,
 }
 
 export interface TokenGroup {
@@ -121,9 +135,20 @@ export interface TokenGroup {
 }
 
 export type TokenGroupLookup = {
-  widgetId: string,
+  nodeId: string,
   tokenGroupName: string | undefined,
   tokenGroupType: string | undefined,
+}
+
+export type TokenGroupCategorizedLookup = {
+  colors: TokenGroupLookup[],
+  typography: TokenGroupLookup[],
+  effects: TokenGroupLookup[],
+  icons: TokenGroupLookup[],
+  breakpoints: TokenGroupLookup[],
+  custom: TokenGroupLookup[],
+  spacing: TokenGroupLookup[],
+  components: TokenGroupLookup[],
 }
 
 // ============== DEFAULTS ====================
@@ -141,10 +166,22 @@ export const defaultGlobalData: GlobalData = {
   gitHubSettings: {
     version: '0.0.0',
     connected: false,
+    deployed: false,
   }
 }
 
 export const defaultTokenGroupLookup: TokenGroupLookup[] = [];
+
+export const defaultTokenGroupCategorizedLookup: TokenGroupCategorizedLookup = {
+  colors: [],
+  typography: [],
+  effects: [],
+  icons: [],
+  breakpoints: [],
+  custom: [],
+  spacing: [],
+  components: [],
+};
 
 export const widgetVersion = 3;
 

@@ -4,7 +4,7 @@ import {
   MessageName,
   MessageRequest,
 } from "../shared/types/types";
-import { updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
+import { triggerAllWidgetRefresh, updateBaseWidgetTokenGroupLookup } from "./actions/baseActions";
 import createDesignTokens from "./actions/createDesignTokens";
 import getStyles, { getColorStyles, getEffectStyles, getTextStyles, paintStyles } from "./actions/getStyles";
 import designSystem from "./designTokens";
@@ -69,14 +69,7 @@ function Widget() {
         switch (message.name) {
           case MessageName.globalDataUpdate:
             setGlobalData(message.globalData);
-            // distribute to others...
-            const allWidgets = findAllWidgets(nodeId);
-            allWidgets.map(widget => {
-              widget.setWidgetSyncedState({
-                ...widget.widgetSyncedState,
-                globalData: message.globalData,
-              })
-            });
+            triggerAllWidgetRefresh();
             break;
           case MessageName.tokenGroupUpdate:
             // update base's token group lookup for index display...
@@ -136,10 +129,8 @@ function Widget() {
                 break;
               case MessageRequest.getFinalTokens:
                 (async () => {
-                  const tokens = await createDesignTokens();
-                  bounceBack(message, {
-                    tokens,
-                  });
+                  const designTokenResults = await createDesignTokens();
+                  bounceBack(message, {designTokenResults});
                 })();
                 break;
               case MessageRequest.moveStyle:

@@ -42,18 +42,31 @@ interface DSysSheetExtensions {
   'dsys.fullName' : string,
   'dsys.baseId'   : string,
 }
+
+export enum DSysSheetGroupNames {
+  colors          = 'colors',
+  typography      = 'typography',
+  effects         = 'effects',
+  icons           = 'icons',
+  components      = 'components',
+  custom          = 'custom',
+  breakpoints     = 'breakpoints',
+  spacing         = 'spacing',
+  undetermined    = 'undetermined',
+}
+
 export interface DSysSheet {
   $extensions: DSysSheetExtensions,
   $description?: string,
-  colors?: DSysColorGroup,
-  typography?: DSysTypographyGroup,
-  effects?: DSysEffectGroup,
-  icons?: DSysIconGroup,
-  components?: DSysComponentsGroup,
-  custom?: DSysCustomGroup,
-  // breakpoints
-  spacing?: DSysSpacingGroup,
-  undetermined?: DSysUndeterminedGroup,
+  [DSysSheetGroupNames.colors]?: DSysColorGroup,
+  [DSysSheetGroupNames.typography]?: DSysTypographyGroup,
+  [DSysSheetGroupNames.effects]?: DSysEffectGroup,
+  [DSysSheetGroupNames.icons]?: DSysIconGroup,
+  [DSysSheetGroupNames.components]?: DSysComponentsGroup,
+  [DSysSheetGroupNames.custom]?: DSysCustomGroup,
+  [DSysSheetGroupNames.breakpoints]?: DSysBreakpointGroup,
+  [DSysSheetGroupNames.spacing]?: DSysSpacingGroup,
+  [DSysSheetGroupNames.undetermined]?: DSysUndeterminedGroup,
 };
 
 // ALL THE GROUPS
@@ -231,7 +244,8 @@ export type DSysToken =
   DSysTransitionToken |
   DSysGradientToken |
   DSysPercentToken |
-  DSysFileToken;
+  DSysFileToken |
+  DSysSpacingToken;
 
 export interface DSysColorToken extends DTColorToken {
   $extensions : {

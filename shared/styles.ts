@@ -25,7 +25,7 @@ export const colors = {
   errorLightest: '#FFE8E8',
   error: '#C90606',
 
-  borderGrey: '#DCDCDC',
+  borderGrey: '#DADCDF',
   borderDark: '#8F8F8F',
   borderError: '#FBACBA',
 

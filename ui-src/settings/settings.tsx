@@ -22,17 +22,17 @@ export default class Settings extends React.Component<SettingsProps> {
       <div
         className="settings scroll-bar"
         style={this.props.style || {}}>
-        <InputHeader
-          label="Token Group" />
-        {this.props.tokenGroup?.type === DSysGroupType.Base
-          ? (null) : 
-          this.props.localSettings ? this.props.localSettings : null}
-        <Input
-          label="Token Type" 
-          readOnly
-          value={
-            tokenGroupTypeToName(this.props.tokenGroup)
-          } />
+        {this.props.localSettings ? (<>
+          <InputHeader
+            label="Token Group" />
+          {this.props.localSettings}
+          <Input
+            label="Token Type" 
+            readOnly
+            value={
+              tokenGroupTypeToName(this.props.tokenGroup)
+            } />
+        </>) : null}
         <InputHeader
           label="Global" />
         <Input

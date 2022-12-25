@@ -18,7 +18,7 @@ export default async function connectToRepo(
   const repositoryExistsResults = await repositoryExists(gitHubSettings);
   if (!repositoryExistsResults.success) {
     // Does NOT exist, so we can make it...
-    gitHubSettings.version = '0.0.1';// always starts here...
+    gitHubSettings.version = '0.0.0';// always starts here...
 
     // lets create one...
     updateFeedback('creating repo');
@@ -69,7 +69,7 @@ export default async function connectToRepo(
       ...gitHubSettings,
       version: versionResults.value ? 
         versionResults.value.replace('v', '') :
-        '0.0.1',
+        '0.0.0',
     }
   }
 }

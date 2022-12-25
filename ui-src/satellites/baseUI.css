@@ -1,13 +1,47 @@
 
 .base {
-  
+  position: relative;
 }
 
-  .base-prefix {
-    width: 60px;
-    margin-right: 10px;
+  .base-group {
+    position: relative
   }
 
-  .base-full-name {
-    flex: 1;
-  }
+    .dsys-row.base-group-title {
+      text-transform: uppercase;
+      font-size: 12px;
+      color: var( --text-color );
+      align-items: end;
+      padding-bottom: 4px;
+    }
+
+    .base-no-tokensets {
+      font-size: 12px;
+      font-style: italic;
+      font-weight: lighter;
+      color: var( --text-color-lightest );
+    }
+
+    .dsys-row.base-list-row,
+    .dsys-row.base-group-title {
+      position: relative;
+    }
+
+    .dsys-row.base-list-row:hover {
+      cursor: pointer;
+      background-color: var( --primary-lightest );
+    }
+
+    .base-list-footer-padding {
+      height: 120px;
+    }
+
+    .base-nav {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+      padding: 20px;
+      z-index: 100;
+      background-color: var( --white );
+    }
+    

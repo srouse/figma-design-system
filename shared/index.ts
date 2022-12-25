@@ -31,6 +31,8 @@ import colorContrastAda,
 import isToken from './utils/isToken';
 import {
   MessageName,
+  DesignTokensResult,
+  FileCreateResults,
   MessageRequest,
   MessageRequestStyle,
   State,
@@ -39,6 +41,7 @@ import {
   GitHubSettings,
   TokenGroup,
   TokenGroupLookup,
+  TokenGroupCategorizedLookup,
   defaultTokenGroup,
   defaultGlobalData,
   defaultTokenGroupLookup,
@@ -84,6 +87,7 @@ import {
 import {
   DSys,
   DSysLevel,
+  DSysSheetGroupNames,
   DSysSheet,
   DSysGroupType,
   DSysColorGroup,
@@ -134,8 +138,10 @@ import {
 
 export type {
   ValidatorSuccess, 
-  Validation, 
-
+  Validation,
+  DesignTokensResult,
+  FileCreateResults,
+  
   AdaColorContrastResult,
 
   FigmaPaintStyle,
@@ -147,6 +153,7 @@ export type {
   GitHubSettings,
   TokenGroup,
   TokenGroupLookup,
+  TokenGroupCategorizedLookup,
   widgetVersion,
   SetterString,
   SetterNumber,
@@ -233,6 +240,7 @@ export {
   ValidationWorker,
   ValidationLocation,
   DSysLevel,
+  DSysSheetGroupNames,
   DSysGroupType,
   DTTokenType,
   MessageRequest,

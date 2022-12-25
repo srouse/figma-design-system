@@ -2,6 +2,8 @@ import deployToRepo from "./github/deployToRepo";
 import { ResponseStatus } from "./github/types";
 import { stripIndent } from 'common-tags';
 import DeployModal from "./modal/deployModal";
+import { FDST_IDENTIFIER } from "./github/actions/validateConfig";
+import { FDST_CONFIG_FILENAME } from "./github/files/DesignTokensConfigFile";
 
 export default async function deployRepoClick(
   comp: DeployModal
@@ -12,7 +14,7 @@ export default async function deployRepoClick(
   });
   if (!comp.props.globalData?.gitHubSettings) return;
 
-  const expectedTotal = 9;
+  const expectedTotal = 11;
   let total = 0;
   const results = await deployToRepo(
     comp.props.globalData?.gitHubSettings,
@@ -31,9 +33,9 @@ export default async function deployRepoClick(
       comp.setState({
         feedback: undefined,
         error: `Error. This repository is not for use with the Design Tokens
-        widget, it doesn't have the appropriate design-tokens.config.json 
+        widget, it doesn't have the appropriate ${FDST_CONFIG_FILENAME} 
         file. Choose an empty repository or check the 
-        design-tokens.config.json file {builtWith:'figma-design-tokens'}`
+        ${FDST_CONFIG_FILENAME} file {builtWith:'${FDST_IDENTIFIER}'}`
       });
       comp.props.updateGlobalData({
         ...comp.props.globalData,
@@ -66,6 +68,7 @@ export default async function deployRepoClick(
           ...comp.props.globalData,
           gitHubSettings: {
             ...results.value,
+            deployed: true,
           }
         });
         comp.setState({

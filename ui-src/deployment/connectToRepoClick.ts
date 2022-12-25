@@ -1,4 +1,6 @@
+import { FDST_IDENTIFIER } from "./github/actions/validateConfig";
 import connectToRepo from "./github/connectToRepo";
+import { FDST_CONFIG_FILENAME } from "./github/files/DesignTokensConfigFile";
 import { ResponseStatus } from "./github/types";
 import DeployModal from "./modal/deployModal";
 
@@ -34,7 +36,7 @@ export default async function connectToRepoClick(
         error: `Error. This appears to be a pre-existing
         repository or one not for use with the Design Tokens
         widget. Choose an empty repository or check the 
-        design-tokens.config.json file {builtWith:'figma-design-tokens'}`
+        ${FDST_CONFIG_FILENAME} file {builtWith:'${FDST_IDENTIFIER}'}`
       });
       break;
     case ResponseStatus.ReleaseFailed :
@@ -55,6 +57,7 @@ export default async function connectToRepoClick(
         gitHubSettings: {
           ...newGitHubSettings,
           connected: true,
+          deployed: newGitHubSettings.version != '0.0.0',
         }
       });
       comp.setState({

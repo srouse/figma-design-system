@@ -58,7 +58,7 @@ export default class SpacingList extends React.Component<CoreProps> {
             });
           }} />
         <div className="dsys-list-body scroll-bar">
-        <DragAndDropList
+          <DragAndDropList
             rowHeight={48}
             onChange={(
               rowIndex: number,

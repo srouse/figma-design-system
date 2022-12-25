@@ -1,6 +1,8 @@
-import { GitHubSettings, MessageRequest } from "../../../../shared/types/types";
+import {
+  GitHubSettings,
+  MessageRequest,
+} from "../../../../shared/";
 import File from "./File";
-import { stripIndent } from 'common-tags';
 import postMessagePromise from "../../../utils/postMessagePromise";
 
 class DesignTokensFile extends File {
@@ -11,12 +13,29 @@ class DesignTokensFile extends File {
     gitHubSettings: GitHubSettings,
   ) : Promise<string> {
 
-    const tokens: any = await postMessagePromise(
+    const tokensResults: any = await postMessagePromise(
       MessageRequest.getFinalTokens
     );
 
-    if (tokens && tokens.tokens) {
-      return JSON.stringify(tokens.tokens, null, 2);
+    if (this.fileCreationResults) {
+      this.fileCreationResults.tokenResults = tokensResults.designTokenResults;
+    }
+
+    /*if (
+      tokensResult &&
+      tokensResult.designTokenResults &&
+      tokensResult.designTokenResults.errors &&
+      tokensResult.designTokenResults.errors.length > 0
+    ) {
+      return tokensResult.designTokenResults.errors[0];
+    }*/
+
+    if (
+      tokensResults &&
+      tokensResults.designTokenResults &&
+      tokensResults.designTokenResults.tokens
+    ) {
+      return JSON.stringify(tokensResults.designTokenResults.tokens, null, 2);
     }
     return 'Error, tokens not found'
   }

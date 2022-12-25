@@ -48,6 +48,7 @@ export default class DeployModal extends React.Component<DeploymentModalProps> {
   render() {
 
     let title: string;
+    let titleFeedback: string = '';
     if (this.props.action === DeploymentModalActions.connect) {
       if (this.state.finished) {
         if (!this.state.error) {
@@ -62,6 +63,7 @@ export default class DeployModal extends React.Component<DeploymentModalProps> {
       if (this.state.finished) {
         if (!this.state.error) {
           title = `Deployed v${this.props.globalData?.gitHubSettings.version}`;
+          titleFeedback = 'It may take a couple minutes to create the NPM package.';
         }else{
           title = 'Deploy Failed';
         }
@@ -78,6 +80,11 @@ export default class DeployModal extends React.Component<DeploymentModalProps> {
           {title}
           </div>
           <div className="deploy-modal-msg">
+            {titleFeedback ? (
+              <div className="deploy-modal-msg-feedback">
+                {titleFeedback}
+              </div>
+            ) : null}
             {this.state.feedback && !this.state.finished ? (
               <div className="deploy-modal-msg-feedback">
                 {this.state.feedback}

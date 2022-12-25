@@ -1,13 +1,19 @@
 import React from "react";
 import {
   Icons,
-  CoreProps
+  CoreProps,
+  MessageRequest,
 } from "../../shared";
-import DTButton, { DTButtonColor, DTButtonDesign } from "../components/DTButton";
+import DTButton, {
+  DTButtonColor,
+} from "../components/DTButton";
 import Input from "../components/Input";
 import InputHeader from "../components/InputHeader";
 import Select from "../components/Select";
+import postMessagePromise from "../utils/postMessagePromise";
 import "./deployment.css";
+// import cssAtomsTransformation from "./github/actions/transformations/cssAtomsTransformation";
+import cssVariablesTransformation from "./github/actions/transformations/cssVariablesTransformation";
 import { VersionIncrements } from "./github/types";
 import DeployModal, { DeploymentModalActions } from "./modal/deployModal";
 
@@ -47,8 +53,27 @@ export default class Deployment extends React.Component<DeploymentProps> {
         style={this.props.style || {}}>
         <InputHeader
           label="GitHub Deploy"
-          linkLabel="How Does This Work?"
-          onLinkClick={() => console.log('do something')} />
+          linkLabel="Detach from Repo"
+          onLinkClick={async () => {
+            const tokensResult: any = await postMessagePromise(
+              MessageRequest.getFinalTokens
+            );
+            console.log('tokensResult', tokensResult);
+            // cssAtomsTransformation(tokensResult.designTokenResults.tokens);
+            cssVariablesTransformation(tokensResult.designTokenResults.tokens);
+
+            /*
+            if (!this.props.globalData) return;
+            this.props.updateGlobalData({
+              ...this.props.globalData,
+              gitHubSettings: {
+                ...this.props.globalData.gitHubSettings,
+                connected: false,
+                deployed: false,
+                version: '0.0.0',
+              }
+            });*/
+          }} />
         {this.state.modalAction !== DeploymentModalActions.closed ? (
           <DeployModal 
             {...this.props}
@@ -66,46 +91,37 @@ export default class Deployment extends React.Component<DeploymentProps> {
   }
 
   renderContent() {
-    if (this.props.globalData?.gitHubSettings.connected === true) {
-      const settings = this.props.globalData?.gitHubSettings;
+    const settings = this.props.globalData?.gitHubSettings;
+    if (!settings) {
+      return (<div>no settings found</div>);
+    }
+    if (settings.connected === true) {
       const repository = `https://github.com/${settings.username}/${settings.repositoryAndNPMPackageName}`;
-      const npmPackage = `https://github.com/${settings.username}/${settings.repositoryAndNPMPackageName}/pkgs/npm/${settings.repositoryAndNPMPackageName}`;
+      const npmPackage = settings.deployed ? 
+        `https://github.com/${settings.username}/${settings.repositoryAndNPMPackageName}/pkgs/npm/${settings.repositoryAndNPMPackageName}`
+        : 'Not Deployed';
+      const versionStr = settings.deployed ? `v${settings.version}` : 'Not Deployed';
       return (<>
         <Input
           label="Repository" 
           readOnly
-          value={repository} />
+          value={repository}
+          href={repository} />
         <Input
           label="NPM Package (via GitHub)" 
           readOnly
-          value={npmPackage} />
+          value={npmPackage}
+          href={settings.deployed ? npmPackage : ''} />
         <Input
           label="Version" 
           readOnly
-          value={`v${this.props.globalData?.gitHubSettings?.version}`} />
-        <DTButton
-          label="Detach"
-          color={DTButtonColor.grey}
-          design={DTButtonDesign.border}
-          style={{width: '100%'}}
-          icon={Icons.unlink}
-          onClick={async () => {
-            if (!this.props.globalData) return;
-            this.props.updateGlobalData({
-              ...this.props.globalData,
-              gitHubSettings: {
-                ...this.props.globalData.gitHubSettings,
-                connected: false,
-                version: '0.0.0',
-              }
-            })
-          }}/>
+          value={versionStr} />
       </>);
     }else{
       return (<>
         <Input
           label="Username" 
-          value={this.props.globalData?.gitHubSettings?.username}
+          value={settings.username}
           onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
@@ -119,7 +135,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
           }} />
         <Input
           label="Repository / NPM Package Name (ex: my-design-tokens)" 
-          value={this.props.globalData?.gitHubSettings?.repositoryAndNPMPackageName}
+          value={settings.repositoryAndNPMPackageName}
           onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
@@ -134,7 +150,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
         <Input
           label="Access Token"
           type="password"
-          value={this.props.globalData?.gitHubSettings?.accessToken}
+          value={settings.accessToken}
           onEnterOrBlur={(value: string) => {
             if (this.props.globalData) {
               this.props.updateGlobalData({
