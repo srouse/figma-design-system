@@ -68,10 +68,12 @@ export function textStyles(folder?: string): FigmaTextStyle[] {
     if (folder && style.name.indexOf(`${folder}/`) !== 0) {
       return;
     }
+
     /*
     Missing: (can find via REST API however...)
     opentypeFlags
     */
+
     finalStyles.push({
       id: style.id,
       name: style.name,

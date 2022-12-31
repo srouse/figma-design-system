@@ -44,13 +44,13 @@ interface DSysSheetExtensions {
 }
 
 export enum DSysSheetGroupNames {
-  colors          = 'colors',
-  typography      = 'typography',
-  effects         = 'effects',
-  icons           = 'icons',
-  components      = 'components',
+  color           = 'color',
+  type            = 'type',
+  effect          = 'effect',
+  icons           = 'icon',
+  component       = 'component',
   custom          = 'custom',
-  breakpoints     = 'breakpoints',
+  breakpoint      = 'breakpoint',
   spacing         = 'spacing',
   undetermined    = 'undetermined',
 }
@@ -58,13 +58,13 @@ export enum DSysSheetGroupNames {
 export interface DSysSheet {
   $extensions: DSysSheetExtensions,
   $description?: string,
-  [DSysSheetGroupNames.colors]?: DSysColorGroup,
-  [DSysSheetGroupNames.typography]?: DSysTypographyGroup,
-  [DSysSheetGroupNames.effects]?: DSysEffectGroup,
+  [DSysSheetGroupNames.color]?: DSysColorGroup,
+  [DSysSheetGroupNames.type]?: DSysTypographyGroup,
+  [DSysSheetGroupNames.effect]?: DSysEffectGroup,
   [DSysSheetGroupNames.icons]?: DSysIconGroup,
-  [DSysSheetGroupNames.components]?: DSysComponentsGroup,
+  [DSysSheetGroupNames.component]?: DSysComponentsGroup,
   [DSysSheetGroupNames.custom]?: DSysCustomGroup,
-  [DSysSheetGroupNames.breakpoints]?: DSysBreakpointGroup,
+  [DSysSheetGroupNames.breakpoint]?: DSysBreakpointGroup,
   [DSysSheetGroupNames.spacing]?: DSysSpacingGroup,
   [DSysSheetGroupNames.undetermined]?: DSysUndeterminedGroup,
 };

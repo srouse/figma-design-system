@@ -40,11 +40,11 @@ export const spacingSteps = [
     value: SpacingStepTypes.tshirtSizes
   },
   {
-    name: '0, 1, 2, 3, 4, ...8',
+    name: '0, 1, 2, 3, 4, ...12',
     value: SpacingStepTypes.sequenceSizes
   },
   {
-    name: '0, 1[-3,-6,-9], 2[-3,-6,-9], 3, 4, ...8',
+    name: '0, 1[-3,-6,-9], 2[-3,-6,-9], 3, 4, ...12',
     value: SpacingStepTypes.sequenceWithFractionsSizes
   },
   {
@@ -97,6 +97,11 @@ export const spacingStepBaseOptions: {[key:string]:SpacingStepMetrics} =
       {name:'6',   value:'6'},
       {name:'7',   value:'7'},
       {name:'8',   value:'8'},
+      {name:'8',   value:'8'},
+      {name:'9',   value:'9'},
+      {name:'10',   value:'10'},
+      {name:'11',   value:'11'},
+      {name:'12',   value:'12'},
     ],
     multiplier: multiplierIncremental
   },
@@ -118,6 +123,10 @@ export const spacingStepBaseOptions: {[key:string]:SpacingStepMetrics} =
       {name:'6',    value:'6',    multiplier: 6},
       {name:'7',    value:'7',    multiplier: 7},
       {name:'8',    value:'8',    multiplier: 8},
+      {name:'9',    value:'9',    multiplier: 9},
+      {name:'10',   value:'10',   multiplier: 10},
+      {name:'11',   value:'11',   multiplier: 11},
+      {name:'12',   value:'12',   multiplier: 12},
     ],
     multiplier: multiplierIncremental
   },

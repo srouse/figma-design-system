@@ -60,8 +60,8 @@ export default class Deployment extends React.Component<DeploymentProps> {
             );
             console.log('tokensResult', tokensResult);
             // cssAtomsTransformation(tokensResult.designTokenResults.tokens);
-            cssVariablesTransformation(tokensResult.designTokenResults.tokens);
-
+            const results = await cssVariablesTransformation(tokensResult.designTokenResults.tokens);
+            console.log('results', results);
             /*
             if (!this.props.globalData) return;
             this.props.updateGlobalData({

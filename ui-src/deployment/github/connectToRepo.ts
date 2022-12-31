@@ -32,6 +32,7 @@ export default async function connectToRepo(
 
     const uploadFilesResults = await uploadFiles(
       gitHubSettings,
+      {},
       updateFeedback
     );
     if (!uploadFilesResults.success) {

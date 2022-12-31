@@ -87,6 +87,8 @@ export default async function deployToRepo(
     }
   }
 
+  console.log('versionResults', versionResults);
+
   return {
     status:ResponseStatus.RepoValid,
     value: newGitHubSettings,

@@ -3,7 +3,6 @@ import "./App.css";
 import "./satellites/satellites.css";
 import {
   State,
-  MessageName,
   GlobalData,
   TokenGroup,
   MessageRequest
@@ -65,12 +64,14 @@ export default class App extends React.Component<{}> {
   updateGlobalData(
     globalData: GlobalData,
   ) {
-    // v1 messaging format...leave for now
-    parent?.postMessage?.({pluginMessage: {
-      name: MessageName.globalDataUpdate,
-      globalData
-    }}, "*");
-
+    // keep all children talking to this function
+    // because it is more than just sending promise
+    postMessagePromise(
+      MessageRequest.globalDataUpdate,
+      {
+        globalData
+      }
+    )
     this.setState({
       ...this.state,
       globalData

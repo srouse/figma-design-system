@@ -60,6 +60,7 @@ export default async function connectToRepoClick(
           deployed: newGitHubSettings.version != '0.0.0',
         }
       });
+      
       comp.setState({
         feedback: undefined
       });

@@ -8,6 +8,7 @@ import getIcon, {Icons} from './icons';
 import findTokenViaIndex from './utils/findTokenViaIndex';
 import cleanName from './utils/cleanName';
 import findToken, {findTokenViaStyleId} from './utils/findToken';
+import roundToDecimal from './utils/roundToDecimal';
 import Validator, {
   ValidatorSuccess,
   Validation,
@@ -249,6 +250,7 @@ export {
   findToken,
   findTokenViaStyleId,
   MessageName,
+  roundToDecimal,
 
   cleanName,
 

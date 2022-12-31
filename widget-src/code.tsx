@@ -8,7 +8,7 @@ import { triggerAllWidgetRefresh, updateBaseWidgetTokenGroupLookup } from "./act
 import createDesignTokens from "./actions/createDesignTokens";
 import getStyles, { getColorStyles, getEffectStyles, getTextStyles, paintStyles } from "./actions/getStyles";
 import designSystem from "./designTokens";
-import { findAllWidgets, findWidget } from "./utils";
+import { findAllWidgets, findBaseWidget, findWidget } from "./utils";
 import bounceBack from "./utils/postMessagePromise";
 import { updateStyle } from "./actions/updateStyle";
 import refreshTokensFromStyles from "./actions/refreshTokensFromStyles";
@@ -51,11 +51,6 @@ function Widget() {
     defaultTokenGroup
   );
 
-  const [, setGlobalData] = useSyncedState(
-    'globalData',
-    defaultGlobalData
-  );
-
   const [isWindowUIOpen,] = useSyncedState(
     'isWindowUIOpen',
     false
@@ -67,10 +62,6 @@ function Widget() {
       figma.ui.onmessage = async (message) => {
         console.log('-> RECIEVE MSG', message);
         switch (message.name) {
-          case MessageName.globalDataUpdate:
-            setGlobalData(message.globalData);
-            triggerAllWidgetRefresh();
-            break;
           case MessageName.tokenGroupUpdate:
             // update base's token group lookup for index display...
             // tell the base something changed
@@ -96,6 +87,16 @@ function Widget() {
                   const thisWidget = findWidget(nodeId);
                   bounceBack(message, getFullPluginState(nodeId, thisWidget));
                 }
+                break;
+              case MessageRequest.globalDataUpdate:
+                const rootWidget = findBaseWidget();
+                if (!rootWidget) return;
+                rootWidget.setWidgetSyncedState({
+                  ...rootWidget.widgetSyncedState,
+                  globalData: message.globalData,
+                });
+                triggerAllWidgetRefresh();
+                // setGlobalData()
                 break;
               case MessageRequest.getStyles:
                 getStyles(message);

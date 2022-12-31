@@ -47,21 +47,21 @@ export default async function createDesignTokens()
       case DSysGroupType.BreakpointSet:
         _createGroup(
           dsysSheet,
-          DSysSheetGroupNames.breakpoints, DSysGroupType.BreakpointSet,
+          DSysSheetGroupNames.breakpoint, DSysGroupType.BreakpointSet,
           tokensetName, widgetTokenGroup.tokensets[0], errors,
         );
         break;
       case DSysGroupType.ColorSet:
         _createGroup(
           dsysSheet,
-          DSysSheetGroupNames.colors, DSysGroupType.ColorSet,
+          DSysSheetGroupNames.color, DSysGroupType.ColorSet,
           tokensetName, widgetTokenGroup.tokensets[0], errors,
         );
         break;
       case DSysGroupType.ComponentSet:
         _createGroup(
           dsysSheet,
-          DSysSheetGroupNames.components, DSysGroupType.ComponentSet,
+          DSysSheetGroupNames.component, DSysGroupType.ComponentSet,
           tokensetName, widgetTokenGroup.tokensets[0], errors,
         );
         break;
@@ -75,7 +75,7 @@ export default async function createDesignTokens()
       case DSysGroupType.EffectSet:
         _createGroup(
           dsysSheet,
-          DSysSheetGroupNames.effects, DSysGroupType.EffectSet,
+          DSysSheetGroupNames.effect, DSysGroupType.EffectSet,
           tokensetName, widgetTokenGroup.tokensets[0], errors,
         );
         break;
@@ -96,7 +96,7 @@ export default async function createDesignTokens()
       case DSysGroupType.TypographySet:
         _createGroup(
           dsysSheet,
-          DSysSheetGroupNames.typography, DSysGroupType.TypographySet,
+          DSysSheetGroupNames.type, DSysGroupType.TypographySet,
           tokensetName, widgetTokenGroup.tokensets[0], errors,
         );
         break;

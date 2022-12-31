@@ -26,6 +26,7 @@ export type SelectDropDown = {
 };
 
 export enum MessageRequest {
+  globalDataUpdate = 'globalDataUpdate',
   stateUpdate = 'stateUpdate',
   getStyles = 'getStyles',
   getColorStyles = 'getColorStyles',
