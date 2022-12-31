@@ -15,8 +15,14 @@ export type DesignTokensResult = {
   errors: string[],
 }
 
+export type CssVarsLookup = {[key:string]: {
+  category: string,
+  value: string,
+}}
+
 export type FileCreateResults = {
-  tokenResults?: DesignTokensResult
+  tokenResults?: DesignTokensResult,
+  cssVarsLookup? : CssVarsLookup,
 }
 
 export type SelectDropDown = {

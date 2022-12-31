@@ -1,5 +1,5 @@
 import { FileCreateResults, GitHubSettings } from "../../../../shared/types/types";
-import CssVarsTransformationFile from "../files/CssVarsTransformationFile";
+import CssVarsFile from "../files/transformations/fdst-web/CssVarsFile";
 import DesignTokensConfigFile from "../files/DesignTokensConfigFile";
 import DesignTokensFile from "../files/DesignTokensFile";
 import NpmrcFile from "../files/NpmrcFile";
@@ -8,6 +8,7 @@ import PackageLockFile from "../files/PackageLockFile";
 import ReadMeFile from "../files/ReadMeFile";
 import WorkflowReleasePackageFile from "../files/WorkflowReleasePackageFile";
 import { GithubSuccess } from "../types";
+import CssVarsTypingsFile from "../files/transformations/fdst-web/CssVarsTypingsFile";
 
 export default async function uploadFiles(
   gitHubSettings: GitHubSettings,
@@ -26,7 +27,12 @@ export default async function uploadFiles(
   results.push( await DesignTokensFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
-  results.push( await CssVarsTransformationFile.upload(
+
+  // Transformations
+  results.push( await CssVarsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await CssVarsTypingsFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
 

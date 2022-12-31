@@ -1,4 +1,4 @@
-import { DSys } from "../../../../../shared";
+import { DSys } from "../../../../../../../shared";
 
 export default async function cssAtomsTransformation (
   tokens: DSys
