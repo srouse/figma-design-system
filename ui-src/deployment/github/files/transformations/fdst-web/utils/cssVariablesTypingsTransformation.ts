@@ -24,6 +24,7 @@ export default async function cssVariablesTypingsTransformation (
 
   const categoryTypings: {[key:string]: string[]} = {};
   
+  // organize into categories
   Object.entries(fileCreationResults.cssVarsLookup).map(entry => {
     const varName = entry[0] as string;
     const info = entry[1] as {
@@ -35,6 +36,7 @@ export default async function cssVariablesTypingsTransformation (
     categoryTypings[info.category].push(output);
   });
   
+  // render typings relative to category
   const categoryNames: string[] = [];
   Object.entries(categoryTypings).map(entry => {
     const category = entry[0] as string;
@@ -49,6 +51,7 @@ export default async function cssVariablesTypingsTransformation (
     cssTypings.push( '' );
   });
 
+  // render an umbrella typing
   cssTypings.push(`export type ${prefix.toUpperCase()}Value =`);
   cssTypings.push( `  ${categoryNames.join(' |\n  ')};` );
   cssTypings.push( '' );

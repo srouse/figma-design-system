@@ -9,6 +9,8 @@ import ReadMeFile from "../files/ReadMeFile";
 import WorkflowReleasePackageFile from "../files/WorkflowReleasePackageFile";
 import { GithubSuccess } from "../types";
 import CssVarsTypingsFile from "../files/transformations/fdst-web/CssVarsTypingsFile";
+import CssAtomsFile from "../files/transformations/fdst-web/CssAtomsFile";
+import CssAtomsTypingsFile from "../files/transformations/fdst-web/CssAtomsTypingsFile";
 
 export default async function uploadFiles(
   gitHubSettings: GitHubSettings,
@@ -33,6 +35,12 @@ export default async function uploadFiles(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
   results.push( await CssVarsTypingsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await CssAtomsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await CssAtomsTypingsFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
 

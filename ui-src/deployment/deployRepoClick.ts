@@ -1,4 +1,4 @@
-import deployToRepo from "./github/deployToRepo";
+import deployToRepo, { TOTAL_FILES_TO_DEPLOY } from "./github/deployToRepo";
 import { ResponseStatus } from "./github/types";
 import { stripIndent } from 'common-tags';
 import DeployModal from "./modal/deployModal";
@@ -14,7 +14,6 @@ export default async function deployRepoClick(
   });
   if (!comp.props.globalData?.gitHubSettings) return;
 
-  const expectedTotal = 12;
   let total = 0;
   const results = await deployToRepo(
     comp.props.globalData?.gitHubSettings,
@@ -23,7 +22,7 @@ export default async function deployRepoClick(
       total++;
       comp.setState({
         feedback: update,
-        percentDone: total/expectedTotal
+        percentDone: total/TOTAL_FILES_TO_DEPLOY
       });
     }
   );

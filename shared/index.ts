@@ -15,6 +15,7 @@ import Validator, {
   ValidationLocation,
 } from './validator/Validator';
 import ValidationWorker from './validator/ValidationWorker';
+import snakeToCamelCase from './utils/snakeToCamelCase';
 import {
   dtColorToCss,
   validColor,
@@ -30,10 +31,14 @@ import colorContrastAda,
   AdaColorContrastResult,
 } from './utils/adaCompliance';
 import isToken from './utils/isToken';
+import findTokenGroup from './utils/findTokenGroup';
+import findTokensSheet from './utils/findTokensSheet';
 import {
   MessageName,
   DesignTokensResult,
   FileCreateResults,
+  CssAtomsLookup,
+  CssVarsLookup,
   MessageRequest,
   MessageRequestStyle,
   State,
@@ -142,6 +147,8 @@ export type {
   Validation,
   DesignTokensResult,
   FileCreateResults,
+  CssAtomsLookup,
+  CssVarsLookup,
   
   AdaColorContrastResult,
 
@@ -271,8 +278,11 @@ export {
   hexAlphaToCss,
 
   isToken,
+  findTokenGroup,
+  findTokensSheet,
   cleanAndSortTokens,
   colorContrastAda,
+  snakeToCamelCase,
   
   defaultTokenGroup,
   defaultGlobalData,

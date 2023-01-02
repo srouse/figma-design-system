@@ -179,7 +179,7 @@ function addToOutput(
   prefix: string,
   cssVars: string[],
   cssVarsLookup: CssVarsLookup,
-  category: string,
+  category: DSysSheetGroupNames,
   name: string,
   value: string,
 ) {

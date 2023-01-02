@@ -1,6 +1,7 @@
 import {
   DSys,
   DSysGroupType,
+  DSysSheetGroupNames,
   DSysTokenset
 } from './designSystemTypes';
 
@@ -16,13 +17,18 @@ export type DesignTokensResult = {
 }
 
 export type CssVarsLookup = {[key:string]: {
-  category: string,
+  category: DSysSheetGroupNames,
   value: string,
+}}
+
+export type CssAtomsLookup = {[key:string]: {
+  category: DSysSheetGroupNames | true,
 }}
 
 export type FileCreateResults = {
   tokenResults?: DesignTokensResult,
   cssVarsLookup? : CssVarsLookup,
+  cssAtomsLookup? : CssAtomsLookup,
 }
 
 export type SelectDropDown = {

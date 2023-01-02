@@ -1,10 +1,10 @@
 import { GitHubSettings } from "../../../../../../shared/types/types";
 import File from "../../File";
-import cssVariablesTransformation from "./utils/cssVariablesTransformation";
+import cssAtomsTypingsTransformation from "./utils/cssAtomsTypingsTransformation";
 
-class CssVarsFile extends File {
+class CssAtomsTypingsFile extends File {
 
-  path: string = 'transformations/fdst-web/css-vars.css';
+  path: string = 'transformations/fdst-web/css-atoms.d.ts';
 
   async getContent(
     gitHubSettings: GitHubSettings,
@@ -13,7 +13,7 @@ class CssVarsFile extends File {
       this.fileCreationResults &&
       this.fileCreationResults.tokenResults
     ) {
-      const transformationResults = await cssVariablesTransformation(
+      const transformationResults = await cssAtomsTypingsTransformation(
         this.fileCreationResults
       );
       return transformationResults?.content || 'tokens not found';
@@ -23,4 +23,4 @@ class CssVarsFile extends File {
   }
 }
 
-export default new CssVarsFile();
+export default new CssAtomsTypingsFile();

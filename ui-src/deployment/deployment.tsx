@@ -13,6 +13,8 @@ import InputHeader from "../components/InputHeader";
 import Select from "../components/Select";
 import postMessagePromise from "../utils/postMessagePromise";
 import "./deployment.css";
+import cssAtomsTransformation from "./github/files/transformations/fdst-web/utils/cssAtomsTransformation";
+import cssAtomsTypingsTransformation from "./github/files/transformations/fdst-web/utils/cssAtomsTypingsTransformation";
 // import cssAtomsTransformation from "./github/actions/transformations/cssAtomsTransformation";
 import cssVariablesTransformation from "./github/files/transformations/fdst-web/utils/cssVariablesTransformation";
 import cssVariablesTypingsTransformation from "./github/files/transformations/fdst-web/utils/cssVariablesTypingsTransformation";
@@ -55,7 +57,7 @@ export default class Deployment extends React.Component<DeploymentProps> {
         style={this.props.style || {}}>
         <InputHeader
           label="GitHub Deploy"
-          linkLabel="Detach from Repo"
+          linkLabel="TESTING"
           onLinkClick={async () => {
             const tokensResult: any = await postMessagePromise(
               MessageRequest.getFinalTokens
@@ -63,19 +65,18 @@ export default class Deployment extends React.Component<DeploymentProps> {
             const fileCreateResults: FileCreateResults = {
               tokenResults: tokensResult.designTokenResults,
             }
-            console.log('tokensResult', tokensResult);
-            // cssAtomsTransformation(tokensResult.designTokenResults.tokens);
-            const results = await cssVariablesTransformation(
+
+            await cssVariablesTransformation(
               fileCreateResults
             );
-            console.log('fileCreateResults', fileCreateResults);
+            await cssAtomsTransformation(
+              fileCreateResults
+            );
+            const results = await cssAtomsTypingsTransformation(
+              fileCreateResults
+            );
             console.log('results', results);
 
-            const results2 = await cssVariablesTypingsTransformation(
-              fileCreateResults
-            );
-
-            console.log('results2', results2);
             /*
             if (!this.props.globalData) return;
             this.props.updateGlobalData({
