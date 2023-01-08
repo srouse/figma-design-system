@@ -1,4 +1,5 @@
 import {
+  cleanAndSortTokens,
   DSysBreakpointGroup,
   DSysBreakpointToken,
   DSysBreakpointTokenset,
@@ -45,7 +46,7 @@ export default async function cssAtomsTransformation (
     dsys,
     DSysSheetGroupNames.breakpoint,
   ) as DSysBreakpointGroup;
-  console.log('breakpoints', breakpoints);
+
   const output: string[] = [];
   const properties: string[] = [];
   const cssAtomsLookup = fileCreationResults.cssAtomsLookup;
@@ -60,17 +61,15 @@ export default async function cssAtomsTransformation (
     const name = entry[0];
     if (name.indexOf('$') !== 0) {
       const breakpointTokenSet = entry[1] as DSysBreakpointTokenset;
-      Object.entries(breakpointTokenSet).map(entry => {
-        const name = entry[0];
-        if (name.indexOf('$') !== 0) {
-          const breakpointToken = entry[1] as DSysBreakpointToken;
-          output.push( createAlignments(prefix, breakpointToken, cssAtomsLookup));
-          output.push( createColors(prefix, breakpointToken, cssAtomsLookup));
-          output.push( createFont(prefix, breakpointToken, cssAtomsLookup));
-          output.push( createLayouts(prefix, breakpointToken, cssAtomsLookup));
-          output.push( createSizeMetrics(prefix, breakpointToken, cssAtomsLookup));
-          output.push( createEffects(prefix, breakpointToken, cssAtomsLookup));
-        }
+      const breakpointsSorted = cleanAndSortTokens(breakpointTokenSet);
+      breakpointsSorted.map(entry => {
+        const breakpointToken = entry[1] as DSysBreakpointToken;
+        output.push( createAlignments(prefix, breakpointToken, cssAtomsLookup));
+        output.push( createColors(prefix, breakpointToken, cssAtomsLookup));
+        output.push( createFont(prefix, breakpointToken, cssAtomsLookup));
+        output.push( createLayouts(prefix, breakpointToken, cssAtomsLookup));
+        output.push( createSizeMetrics(prefix, breakpointToken, cssAtomsLookup));
+        output.push( createEffects(prefix, breakpointToken, cssAtomsLookup));
       });
     }
   })

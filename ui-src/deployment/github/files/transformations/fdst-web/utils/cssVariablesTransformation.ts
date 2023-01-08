@@ -9,6 +9,7 @@ import {
   DSysSheetGroupNames,
   roundToDecimal,
   FileCreateResults,
+  loopDesignSystemTokens,
 } from "../../../../../../../shared";
 import { CssVarsLookup } from "../../../../../../../shared/types/types";
 
@@ -22,7 +23,7 @@ export default async function cssVariablesTransformation (
   const cssVars: string[] = [':root {'];
   let prefix: string = '';
 
-  loopDsys(
+  loopDesignSystemTokens(
     tokens,
     (tokensSheet: DSysSheet) => {
       // will always be called first
@@ -103,9 +104,9 @@ export default async function cssVariablesTransformation (
             token.$value.offsetX}px ${
             token.$value.offsetY}px ${
             token.$value.radius}px ${
-            token.$value.spread}px rgba(${hexToRGBA(
+            token.$value.spread}px ${hexToRGBA(
               token.$value.color, token.$value.alpha
-            )})`
+            )}`
         );
       }
       // BREAKPOINTS
@@ -197,51 +198,9 @@ function hexToRGBA(hex: string, alpha?: number) {
     var r = parseInt(hex.slice(1, 3), 16),
       g = parseInt(hex.slice(3, 5), 16),
       b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${roundToDecimal(alpha, 3)}`;
+    return `rgba(${r}, ${g}, ${b}, ${roundToDecimal(alpha, 3)})`;
   } else {
       return hex;
   }
 }
 
-function loop(obj: {}, callback: (vaue: any) => void ) {
-  Object.entries(obj).map(entry => {
-    const name = entry[0];
-    const value = entry[1];
-    if (name.indexOf('$') != 0) {
-      callback(value);
-    }
-  });
-}
-
-function loopDsys(
-  dSys: DSys,
-  tokensSheetCallback?: (tokensSheet: DSysSheet) => void,
-  tokenGroupCallback?: (tokenGroup: DSysGroup<any, any>) => void,
-  tokenSetCallback?: (tokenset: DSysTokenset) => void,
-  tokenCallback?: (token: DSysToken) => void,
-) {
-  loop(dSys,
-    (tokensSheet: any) => {
-      if (tokensSheetCallback)
-        tokensSheetCallback(tokensSheet);
-      loop(tokensSheet,
-        (tokenGroup: any) => {
-          if (tokenGroupCallback)
-            tokenGroupCallback(tokenGroup as DSysGroup<any, any>);
-          loop(tokenGroup,
-            (tokenSet: any) => {
-              if (tokenSetCallback)
-                tokenSetCallback(tokenSet as DSysTokenset);
-              loop(tokenSet,
-                (token: any) => {
-                  if (tokenCallback)
-                    tokenCallback(token as DSysToken);
-                }
-              );
-            }
-          );
-        }
-      );
-    }
-  );
-}

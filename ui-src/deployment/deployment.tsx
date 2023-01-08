@@ -18,6 +18,7 @@ import cssAtomsTypingsTransformation from "./github/files/transformations/fdst-w
 // import cssAtomsTransformation from "./github/actions/transformations/cssAtomsTransformation";
 import cssVariablesTransformation from "./github/files/transformations/fdst-web/utils/cssVariablesTransformation";
 import cssVariablesTypingsTransformation from "./github/files/transformations/fdst-web/utils/cssVariablesTypingsTransformation";
+import cssFontsTransformation from "./github/files/transformations/fdst-web/utils/cssFontsTransformation";
 import { VersionIncrements } from "./github/types";
 import DeployModal, { DeploymentModalActions } from "./modal/deployModal";
 
@@ -72,10 +73,15 @@ export default class Deployment extends React.Component<DeploymentProps> {
             await cssAtomsTransformation(
               fileCreateResults
             );
-            const results = await cssAtomsTypingsTransformation(
+            /*const results = await cssAtomsTypingsTransformation(
               fileCreateResults
-            );
-            console.log('results', results);
+            );*/
+
+            const fontsResutls = await cssFontsTransformation(
+              fileCreateResults
+            )
+
+            console.log('fontsResutls', fontsResutls);
 
             /*
             if (!this.props.globalData) return;

@@ -18,8 +18,8 @@ export default async function deployRepoClick(
   const results = await deployToRepo(
     comp.props.globalData?.gitHubSettings,
     comp.props.versionIncrement,
-    (update: string) => {
-      total++;
+    (update: string, doUpdatePercentDone: boolean = true) => {
+      if (doUpdatePercentDone) total++;
       comp.setState({
         feedback: update,
         percentDone: total/TOTAL_FILES_TO_DEPLOY

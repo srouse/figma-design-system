@@ -33,6 +33,9 @@ import colorContrastAda,
 import isToken from './utils/isToken';
 import findTokenGroup from './utils/findTokenGroup';
 import findTokensSheet from './utils/findTokensSheet';
+import loopDesignSystemTokens from './utils/loopDesignSystemTokens';
+import typeTokenToGoogleFontsUrl from './utils/typeTokenToGoogleFontsUrl';
+import PromiseSequence from './utils/PromiseSequence';
 import {
   MessageName,
   DesignTokensResult,
@@ -280,6 +283,9 @@ export {
   isToken,
   findTokenGroup,
   findTokensSheet,
+  loopDesignSystemTokens,
+  typeTokenToGoogleFontsUrl,
+  PromiseSequence,
   cleanAndSortTokens,
   colorContrastAda,
   snakeToCamelCase,

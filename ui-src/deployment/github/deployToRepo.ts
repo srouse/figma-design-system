@@ -14,7 +14,7 @@ import {
 import getVersion from "./actions/getVersion";
 import semvar from "./semver";
 
-export const TOTAL_FILES_TO_DEPLOY = 14;
+export const TOTAL_FILES_TO_DEPLOY = 20;
 
 export default async function deployToRepo(
   gitHubSettings: GitHubSettings,

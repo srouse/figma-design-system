@@ -1,0 +1,12 @@
+@import "https://fonts.googleapis.com/css?family=Inter:regular&display=swap&subset=latin";
+  
+ h1 {
+     color:green;  
+ }
+  
+.css1 {
+  color:black;
+  background-image: linear-gradient(to right, #DFF1DF, #11A00C);
+  position:static; 
+  font-family: 'Inter';
+ }

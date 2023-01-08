@@ -1,4 +1,7 @@
-import { DTTypographyToken } from "../../../../../shared";
+import {
+  DTTypographyToken,
+  typeTokenToGoogleFontsUrl,
+} from "../../../../../shared";
 
 export default function typeIframeContent(
   token: DTTypographyToken,
@@ -7,40 +10,25 @@ export default function typeIframeContent(
   padding: number = 0,
 ) {
 
-  const style = token.$value.figmaFontObj.style.toLowerCase();
-  const styleArr = style.split(' ');
-  
-  const allCombos = styleArr.flatMap(
-    (v, i) => styleArr.slice(i+1).map( w => v + w )
-  );
-  const finalStyles = [
-    ...styleArr,
-    ...allCombos
-  ];
-  if (styleArr.length > 2) {
-    finalStyles.push(style.replace(/ /g, ''))
-  }
-
   const loadedLetters = `${
     exampleText.toUpperCase()}${
       exampleText.toLowerCase()
   }`;
+
+  const googleFontsUrl = typeTokenToGoogleFontsUrl(
+    token,
+    loadedLetters,
+  );
 
   return `
     <html>
       <head>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=${
-          token.$value.figmaFontObj.family.replace(/ /g, '+')}:${
-          finalStyles.join(',')
-        }&display=swap&subset=latin&text=${loadedLetters}"
+        href="${googleFontsUrl}"
       />
       <script>
-        fetch("https://fonts.googleapis.com/css?family=${
-          token.$value.figmaFontObj.family.replace(/ /g, '+')}:${
-          finalStyles.join(',')
-        }&display=swap&subset=latin&text=${loadedLetters}")
+        fetch("${googleFontsUrl}")
           .then(response=>{
               // cons ole.log('found font:', response.ok);
               response.text();

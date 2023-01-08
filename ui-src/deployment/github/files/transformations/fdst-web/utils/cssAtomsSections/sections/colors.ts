@@ -20,6 +20,7 @@ export function createColors(
   _createStyle(prefix, 'color',                   [`--color: ${replaceVar};`, `color: var( --color );`], result, '', breakpoint, cssAtomsLookup);
   _createStyle(prefix, 'color-hover',             [`color: ${replaceVar};`], result, ':hover', breakpoint, cssAtomsLookup);
   _createStyle(prefix, 'border-color',            [`border-color: ${replaceVar};`], result, '', breakpoint, cssAtomsLookup);
+  _createStyle(prefix, 'border',                  [`border: 1px solid ${replaceVar};`], result, '', breakpoint, cssAtomsLookup);
   _createStyle(prefix, 'border-top',              [`border-top: 1px solid ${replaceVar};`], result, '', breakpoint, cssAtomsLookup);
   _createStyle(prefix, 'border-bottom',           [`border-bottom: 1px solid ${replaceVar};`], result, '', breakpoint, cssAtomsLookup);
   _createStyle(prefix, 'border-left',             [`border-left: 1px solid ${replaceVar};`], result, '', breakpoint, cssAtomsLookup);

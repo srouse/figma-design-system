@@ -11,6 +11,12 @@ import { GithubSuccess } from "../types";
 import CssVarsTypingsFile from "../files/transformations/fdst-web/CssVarsTypingsFile";
 import CssAtomsFile from "../files/transformations/fdst-web/CssAtomsFile";
 import CssAtomsTypingsFile from "../files/transformations/fdst-web/CssAtomsTypingsFile";
+import TSStyleFile from "../files/transformations/fdst-web/TSStyleFile";
+import TSReactStyleFile from "../files/transformations/fdst-web/TSReactStyleFile";
+import CssFontsFile from "../files/transformations/fdst-web/CssFontsFile";
+import CssFile from "../files/transformations/fdst-web/CssFile";
+import IconsFiles from "../files/transformations/fdst-web/iconFiles/IconsFiles";
+import IconWebComponentFile from "../files/transformations/fdst-web/IconWebComponentFile";
 
 export default async function uploadFiles(
   gitHubSettings: GitHubSettings,
@@ -43,6 +49,26 @@ export default async function uploadFiles(
   results.push( await CssAtomsTypingsFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
+  results.push( await CssFontsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await TSStyleFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await TSReactStyleFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await CssFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  // ICONS
+  results.push( await IconsFiles.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await IconWebComponentFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  
 
   const errors = results.find((result : GithubSuccess ) => result.success === false);
   if (errors) {

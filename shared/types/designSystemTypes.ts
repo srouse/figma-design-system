@@ -245,6 +245,7 @@ export type DSysToken =
   DSysGradientToken |
   DSysPercentToken |
   DSysFileToken |
+  DSysSvgToken |
   DSysSpacingToken;
 
 export interface DSysColorToken extends DTColorToken {
@@ -400,6 +401,7 @@ export interface DSysSvgToken extends DTSvgToken {
     'dsys.offsetX' : number,
     'dsys.offsetY' : number,
     'dsys.sizes' : number[],
+    'dsys.index' : number,
   },
 }
 

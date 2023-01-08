@@ -148,6 +148,7 @@ export async function buildIconComponentToken(
       'dsys.offsetX'          : offsetX ? parseFloat(offsetX) : 0.0,
       'dsys.offsetY'          : offsetY ? parseFloat(offsetY) : 0.0,
       'dsys.sizes'            : [],
+      'dsys.index'            : 0,// icons are not sorted this way, but needed for typings
     },
     $value: {
       svg: '',
