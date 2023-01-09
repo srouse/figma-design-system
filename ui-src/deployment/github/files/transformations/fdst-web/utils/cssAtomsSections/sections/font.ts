@@ -5,7 +5,7 @@ import {
   DSysBreakpointToken,
   DSysSheetGroupNames
 } from "../../../../../../../../../shared";
-import { breakpointEnd, breakpointStart } from "./utils";
+import { breakpointEnd, breakpointStart } from "./breakpoints";
 
 export function createFont(
   prefixRaw: string,

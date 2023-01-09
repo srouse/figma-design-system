@@ -3,7 +3,7 @@ import {
   CssAtomsLookup,
   DSysBreakpointToken
 } from "../../../../../../../../../shared";
-import { breakpointEnd, breakpointStart } from "./utils";
+import { breakpointEnd, breakpointStart } from "./breakpoints";
 
 export function createAlignments(
   prefixRaw: string,

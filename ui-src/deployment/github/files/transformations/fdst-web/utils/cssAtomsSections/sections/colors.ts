@@ -6,7 +6,7 @@ import {
 import {
   breakpointEnd,
   breakpointStart,
-} from "./utils";
+} from "./breakpoints";
 
 export function createColors(
   prefixRaw: string,
