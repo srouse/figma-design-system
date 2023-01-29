@@ -21,6 +21,11 @@ export type CssVarsLookup = {[key:string]: {
   value: string,
 }}
 
+export type ScssVarsLookup = {[key in DSysSheetGroupNames]?: {
+  name: string,
+  value: string,
+}[]}
+
 export type CssAtomsLookup = {[key:string]: {
   category: DSysSheetGroupNames | true,
 }}
@@ -29,6 +34,7 @@ export type FileCreateResults = {
   tokenResults?: DesignTokensResult,
   cssVarsLookup? : CssVarsLookup,
   cssAtomsLookup? : CssAtomsLookup,
+  scssVarsLookup? : ScssVarsLookup,
 }
 
 export type SelectDropDown = {

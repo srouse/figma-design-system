@@ -66,6 +66,7 @@ import {
   TokenSetCategory,
   FigmaPaintStyle,
   SelectDropDown,
+  ScssVarsLookup,
 } from './types/types';
 import {
   DTToken,
@@ -157,6 +158,7 @@ export type {
 
   FigmaPaintStyle,
   SelectDropDown,
+  ScssVarsLookup,
 
   State,
   CoreProps,

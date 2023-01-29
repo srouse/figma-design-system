@@ -28,7 +28,7 @@ class TSStyleFile extends File {
     const prefixUpper = prefix.toUpperCase();
 
     return `/* eslint-disable */
-import { ${prefix.toUpperCase()}Prop } from "./css-atoms.d.ts";
+import { ${prefix.toUpperCase()}Prop } from "./css-atoms";
 import type * as CSS from 'csstype';
 
 /**
@@ -43,16 +43,24 @@ export default function style(
   dsysStyles: ${prefixUpper}Prop,
   otherStyles: CSS.Properties = {},
 ) : string {
+  const toKebab =
+    (str) => str.replace(/([a-z0–9])([A-Z])/g, "$1-$2").toLowerCase();
   return \`style="$\{
     Object.entries(dsysStyles).map((entry) => {
-      if (entry[1] === true) {
-        return \`--${prefixLower}-$\{entry[0]}: 1;\`;
+      const name = toKebab(entry[0]);
+      const value = entry[1];
+      if (value === true) {
+        return \`--${prefixLower}-$\{name}: 1;\`;
+      }else if (!isNaN(value as any)) {
+        return \`--${prefixLower}-$\{name}: $\{value};\`;
       }else{
-        return \`--${prefixLower}-$\{entry[0]}: var( --${prefixLower}-$\{entry[1]} );\`;
+        return \`--${prefixLower}-$\{name}: var( --${prefixLower}-$\{value} );\`;
       }
     }).join('\\n  ')}$\{
     Object.entries(otherStyles).map((entry) => {
-      return \`$\{entry[0]}: $\{entry[1]};\`;
+      if (!entry[0]) return '';
+      const name = toKebab(entry[0]);
+      return \`$\{name}: $\{entry[1]};\`;
     }).join('\\n  ')
   }"\`;
 }

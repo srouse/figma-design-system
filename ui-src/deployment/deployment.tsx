@@ -4,6 +4,7 @@ import {
   CoreProps,
   MessageRequest,
   FileCreateResults,
+  DSysSheetGroupNames,
 } from "../../shared";
 import DTButton, {
   DTButtonColor,
@@ -16,11 +17,12 @@ import "./deployment.css";
 import cssAtomsTransformation from "./github/files/transformations/fdst-web/utils/cssAtomsTransformation";
 import cssAtomsTypingsTransformation from "./github/files/transformations/fdst-web/utils/cssAtomsTypingsTransformation";
 // import cssAtomsTransformation from "./github/actions/transformations/cssAtomsTransformation";
-import cssVariablesTransformation from "./github/files/transformations/fdst-web/utils/cssVariablesTransformation";
+import variablesTransformation from "./github/files/transformations/fdst-web/utils/variablesTransformation";
 import cssVariablesTypingsTransformation from "./github/files/transformations/fdst-web/utils/cssVariablesTypingsTransformation";
 import cssFontsTransformation from "./github/files/transformations/fdst-web/utils/cssFontsTransformation";
 import { VersionIncrements } from "./github/types";
 import DeployModal, { DeploymentModalActions } from "./modal/deployModal";
+import scssMixinsTransformation from "./github/files/transformations/fdst-web/utils/scssMixinsTransformation";
 
 interface DeploymentProps extends CoreProps {
   style?: object
@@ -58,8 +60,10 @@ export default class Deployment extends React.Component<DeploymentProps> {
         style={this.props.style || {}}>
         <InputHeader
           label="GitHub Deploy"
-          linkLabel="TESTING"
+          linkLabel="TESTING 2"
           onLinkClick={async () => {
+            console.clear();
+
             const tokensResult: any = await postMessagePromise(
               MessageRequest.getFinalTokens
             );
@@ -67,21 +71,54 @@ export default class Deployment extends React.Component<DeploymentProps> {
               tokenResults: tokensResult.designTokenResults,
             }
 
-            await cssVariablesTransformation(
+            // VARS
+            const cssVarsResults = await variablesTransformation(
               fileCreateResults
             );
-            await cssAtomsTransformation(
+            console.log('cssVarsResults', cssVarsResults);
+
+            const scssVarsResults = await variablesTransformation(
+              fileCreateResults, true
+            );
+            console.log('scssVarsResults', scssVarsResults);
+            
+            // TYPINGS
+            const cssTypingsResult = await cssVariablesTypingsTransformation(
               fileCreateResults
             );
-            /*const results = await cssAtomsTypingsTransformation(
-              fileCreateResults
-            );*/
+            console.log('cssTypingsResult', cssTypingsResult);
+            
+            
 
-            const fontsResutls = await cssFontsTransformation(
+            // ATOMS / MIXINS
+            /*const cssAtomsResults = await cssAtomsTransformation(
               fileCreateResults
-            )
+            );
+            console.log('cssAtomsResults', cssAtomsResults);
+  
+            const scssMixinsResults = await scssMixinsTransformation(
+              fileCreateResults, DSysSheetGroupNames.color
+            );
+            console.log('scssMixinsResults', scssMixinsResults);
+            */
 
-            console.log('fontsResutls', fontsResutls);
+            
+            
+            /*
+            const cssAtomTypingsResults = await cssAtomsTypingsTransformation(
+              fileCreateResults
+            );
+            console.log('cssAtomTypingsResults', cssAtomTypingsResults);
+            */
+
+            /*
+            const fontsResults = await cssFontsTransformation(
+              fileCreateResults
+            );
+            console.log('fontsResults', fontsResults);
+            */
+
+            console.log('fileCreateResults', fileCreateResults);
 
             /*
             if (!this.props.globalData) return;

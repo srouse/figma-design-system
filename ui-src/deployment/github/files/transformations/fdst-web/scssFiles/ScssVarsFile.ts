@@ -1,10 +1,10 @@
-import { GitHubSettings } from "../../../../../../shared/types/types";
-import File from "../../File";
-import variablesTransformation from "./utils/variablesTransformation";
+import { GitHubSettings } from "../../../../../../../shared/types/types";
+import File from "../../../File";
+import variablesTransformation from "../utils/variablesTransformation";
 
-class CssVarsFile extends File {
+class ScssVarsFile extends File {
 
-  path: string = 'transformations/fdst-web/css-vars.css';
+  path: string = 'transformations/fdst-web/scss/scss-vars.scss';
 
   async getContent(
     gitHubSettings: GitHubSettings,
@@ -14,7 +14,7 @@ class CssVarsFile extends File {
       this.fileCreationResults.tokenResults
     ) {
       const transformationResults = await variablesTransformation(
-        this.fileCreationResults
+        this.fileCreationResults, true
       );
       return transformationResults?.content || 'tokens not found';
     }else{
@@ -23,4 +23,4 @@ class CssVarsFile extends File {
   }
 }
 
-export default new CssVarsFile();
+export default new ScssVarsFile();

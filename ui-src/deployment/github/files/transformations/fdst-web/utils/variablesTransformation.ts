@@ -1,8 +1,5 @@
 import {
-  DSys,
   DSysSheet,
-  DSysGroup,
-  DSysTokenset,
   DSysToken,
   DTTokenType,
   toKebobCase,
@@ -10,18 +7,32 @@ import {
   roundToDecimal,
   FileCreateResults,
   loopDesignSystemTokens,
+  CssVarsLookup,
+  ScssVarsLookup,
 } from "../../../../../../../shared";
-import { CssVarsLookup } from "../../../../../../../shared/types/types";
 
-export default async function cssVariablesTransformation (
+export default async function variablesTransformation (
   fileCreationResults: FileCreateResults,
+  isScss: boolean = false,
 ) {
   if (!fileCreationResults || !fileCreationResults.tokenResults) return;
   const tokens = fileCreationResults.tokenResults.tokens;
-  fileCreationResults.cssVarsLookup = {};
-  const cssVarsLookup = fileCreationResults.cssVarsLookup;
-  const cssVars: string[] = [':root {'];
+
+  let lookup = {};
+  if (isScss) {
+    fileCreationResults.scssVarsLookup = {};
+    lookup = fileCreationResults.scssVarsLookup;
+  }else{
+    fileCreationResults.cssVarsLookup = {};
+    lookup = fileCreationResults.cssVarsLookup;
+  }
+  
+  const output: string[] = [];
+  if (!isScss) output.push(':root {');
+
   let prefix: string = '';
+
+  const outputFunk = isScss ? addToScssOutput : addToCssOutput;
 
   loopDesignSystemTokens(
     tokens,
@@ -34,8 +45,8 @@ export default async function cssVariablesTransformation (
     (token: DSysToken) => {
       // COLOR
       if (token.$type === DTTokenType.color) {
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.color,
           toKebobCase(token.$extensions["dsys.name"]),
           `${
@@ -47,8 +58,8 @@ export default async function cssVariablesTransformation (
       }
       // CUSTOM
       if (token.$type === DTTokenType.custom) {
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.custom,
           toKebobCase(token.$extensions["dsys.name"]),
           `${token.$value}`
@@ -56,8 +67,8 @@ export default async function cssVariablesTransformation (
       }
       // SPACING
       if (token.$type === DTTokenType.spacing) {
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.spacing,
           toKebobCase(token.$extensions["dsys.name"]),
           `${token.$value}px`
@@ -74,8 +85,8 @@ export default async function cssVariablesTransformation (
         }
         const finalSize = token.$value.fontSize / 16;
         const finalLineHeight = lineHeight / 16;
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.type,
           toKebobCase(token.$extensions["dsys.name"]),
           `${
@@ -88,16 +99,16 @@ export default async function cssVariablesTransformation (
       }
       // EFFECTS
       if (token.$type === DTTokenType.blur) {
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.effect,
           `${toKebobCase(token.$extensions["dsys.name"])}-blur-radius`,
           `${token.$value.radius}px`
         );
       }
       if (token.$type === DTTokenType.shadow) {
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.effect,
           `${toKebobCase(token.$extensions["dsys.name"])}-shadow`,
           `${
@@ -111,8 +122,8 @@ export default async function cssVariablesTransformation (
       }
       // BREAKPOINTS
       if (token.$type === DTTokenType.breakpoint) {
-        addToOutput(
-          prefix, cssVars, cssVarsLookup,
+        outputFunk(
+          prefix, output, lookup,
           DSysSheetGroupNames.breakpoint,
           `${toKebobCase(token.$extensions["dsys.name"])}-${token.$direction}`,
           `${token.$value}px`
@@ -150,8 +161,8 @@ export default async function cssVariablesTransformation (
   colSteps.map(step => {
     const name = step[0];
     const multiplier = step[1];
-    addToOutput(
-      prefix, cssVars, cssVarsLookup,
+    outputFunk(
+      prefix, output, lookup,
       DSysSheetGroupNames.spacing,
       `col-${name}`,
       `${roundToDecimal((multiplier * (100/12)), 4)}%`
@@ -160,25 +171,25 @@ export default async function cssVariablesTransformation (
   colSteps.map(step => {
     const name = step[0];
     const multiplier = step[1];
-    addToOutput(
-      prefix, cssVars, cssVarsLookup,
+    outputFunk(
+      prefix, output, lookup,
       DSysSheetGroupNames.spacing,
       `colvw-${name}`,
       `${roundToDecimal((multiplier * (100/12)), 4)}vw`
     );
   });
 
-  cssVars.push('}')
+  if (!isScss) output.push('}');
 
   return {
-    content: cssVars.join('\n'),
+    content: output.join('\n'),
     errors: [],
   }
 }
 
-function addToOutput(
+function addToCssOutput(
   prefix: string,
-  cssVars: string[],
+  output: string[],
   cssVarsLookup: CssVarsLookup,
   category: DSysSheetGroupNames,
   name: string,
@@ -186,11 +197,31 @@ function addToOutput(
 ) {
   const finalCategory = name.indexOf(category) === 0 ? '' : `${category}-`;
   const varName = `--${prefix}-${finalCategory}${name}`;
-  cssVars.push(`  ${varName}: ${value};`);
+  output.push(`  ${varName}: ${value};`);
   cssVarsLookup[varName] = {
     category,
     value
   };
+}
+
+function addToScssOutput(
+  prefix: string,
+  output: string[],
+  scssVarsLookup: ScssVarsLookup,
+  category: DSysSheetGroupNames,
+  name: string,
+  value: string,
+) {
+  const finalCategory = name.indexOf(category) === 0 ? '' : `${category}-`;
+  const varName = `$${prefix}-${finalCategory}${name}`;
+  output.push(`${varName}: ${value};`);
+  if (!scssVarsLookup[category]) {
+    scssVarsLookup[category] = [];
+  }
+  scssVarsLookup[category]?.push({
+    name,
+    value
+  });
 }
 
 function hexToRGBA(hex: string, alpha?: number) {

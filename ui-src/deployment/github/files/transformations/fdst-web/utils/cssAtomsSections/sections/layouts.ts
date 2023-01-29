@@ -2,54 +2,59 @@ import {
   CssAtomsLookup,
   DSysBreakpointToken,
 } from "../../../../../../../../../shared";
+import BracketedString from "./bracketedString";
 import { breakpointEnd, breakpointStart } from "./breakpoints";
 
 export function createLayouts(
   prefixRaw: string,
   breakpoint? : DSysBreakpointToken,
   cssAtomsLookup? : CssAtomsLookup,
+  isScss: boolean = false,
 ) {
   const result: string[] = [];
   const prefix = prefixRaw.toLowerCase();
-  _createStyle(prefix, 'element', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'layout', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'text', `${element}\n  display: inline-block;`, result, '', breakpoint, cssAtomsLookup);
 
-  _createStyle(prefix, 'stack', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'stack', stackNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'stack', stackLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup);
+  const createFunk = isScss ? _createMixin : _createAtom;
+  const createSimpleFunk = isScss ? _createSimpleAtom : _createSimpleMixin;
 
-  _createStyle(prefix, 'layout', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'layout', stackNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'layout', stackLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'element', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'layout', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'text', `${element}\n  display: inline-block;`, result, '', breakpoint, cssAtomsLookup);
 
-  _createStyle(prefix, 'flex-h', `${element}${flexElement}${flexH}`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'flex-h', flexHNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'flex-h', flexHLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'stack', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup, '', ['-children', '-last-child']);
+  createFunk(prefix, 'stack', stackNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup, '-children');
+  createFunk(prefix, 'stack', stackLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup, '-last-child');
 
-  _createStyle(prefix, 'flex-v', `${element}${flexElement}${flexV}`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'flex-v', flexVNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'flex-v', flexVLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'layout', `${element}\n  display: block;`, result, '', breakpoint, cssAtomsLookup, '', ['-children', '-last-child']);
+  createFunk(prefix, 'layout', stackNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup, '-children');
+  createFunk(prefix, 'layout', stackLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup, '-last-child');
 
-  _createStyle(prefix, 'center', `${element}${flexElement}${center}`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'center', centerNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'center', centerLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'flex-h', `${element}${flexElement}${flexH}`, result, '', breakpoint, cssAtomsLookup, '', ['-children', '-last-child']);
+  createFunk(prefix, 'flex-h', flexHNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup, '-children');
+  createFunk(prefix, 'flex-h', flexHLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup, '-last-child');
 
-  _createStyle(prefix, 'float', `${element}${float}`, result, '', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'float', floatNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'float', floatLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup);
-  _createStyle(prefix, 'float', floatAfter, result, '::after', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'flex-v', `${element}${flexElement}${flexV}`, result, '', breakpoint, cssAtomsLookup, '', ['-children', '-last-child']);
+  createFunk(prefix, 'flex-v', flexVNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup, '-children');
+  createFunk(prefix, 'flex-v', flexVLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup, '-last-child');
 
-  _createSimpleStyle(prefix, 'float-left', `\n  float: left;\n`, result, '', breakpoint, cssAtomsLookup);
-  _createSimpleStyle(prefix, 'float-right', `\n  float: right;\n`, result, '', breakpoint, cssAtomsLookup);
-  _createSimpleStyle(prefix, 'float-clear-left', `\n  clear: left;\n  float: left;\n`, result, '', breakpoint, cssAtomsLookup);
-  _createSimpleStyle(prefix, 'float-clear-right', `\n  clear: right;\n  float: right;\n`, result, '', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'center', `${element}${flexElement}${center}`, result, '', breakpoint, cssAtomsLookup, '', ['-children', '-last-child']);
+  createFunk(prefix, 'center', centerNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup, '-children');
+  createFunk(prefix, 'center', centerLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup, '-last-child');
 
-  _createSimpleStyle(prefix, 'fill-children', `\n  flex: 1;\n`, result, ' > *', breakpoint, cssAtomsLookup);
-  _createSimpleStyle(prefix, 'children-fill', `\n  flex: 1;\n`, result, ' > *', breakpoint, cssAtomsLookup);
+  createFunk(prefix, 'float', `${element}${float}`, result, '', breakpoint, cssAtomsLookup, '', ['-children', '-last-child', '-after']);
+  createFunk(prefix, 'float', floatNthChild, result, ' > *:nth-child(n)', breakpoint, cssAtomsLookup, '-children');
+  createFunk(prefix, 'float', floatLastChild, result, ' > *:last-child', breakpoint, cssAtomsLookup, '-last-child');
+  createFunk(prefix, 'float', floatAfter, result, '::after', breakpoint, cssAtomsLookup, '-after');
 
+  createSimpleFunk(prefix, 'float-left', `\n  float: left;\n`, result, '', breakpoint, cssAtomsLookup);
+  createSimpleFunk(prefix, 'float-right', `\n  float: right;\n`, result, '', breakpoint, cssAtomsLookup);
+  createSimpleFunk(prefix, 'float-clear-left', `\n  clear: left;\n  float: left;\n`, result, '', breakpoint, cssAtomsLookup);
+  createSimpleFunk(prefix, 'float-clear-right', `\n  clear: right;\n  float: right;\n`, result, '', breakpoint, cssAtomsLookup);
 
-  _createSimpleStyle(prefix, 'hide', `\n  display: none;\n`, result, '', breakpoint, cssAtomsLookup);
+  createSimpleFunk(prefix, 'fill-children', `\n  flex: 1;\n`, result, ' > *', breakpoint, cssAtomsLookup);
+  createSimpleFunk(prefix, 'children-fill', `\n  flex: 1;\n`, result, ' > *', breakpoint, cssAtomsLookup);
+
+  createSimpleFunk(prefix, 'hide', `\n  display: none;\n`, result, '', breakpoint, cssAtomsLookup);
   return result.join('\n');
 }
 
@@ -168,7 +173,9 @@ const flexElement = `
   justify-content: var( --justify-content , var( --jc-int, flex-start ) );
 `;
 
-function _createStyle(
+
+// ===== CSS ===================================================================
+function _createAtom(
   prefix: string,
   name: string,
   content: string,
@@ -176,17 +183,20 @@ function _createStyle(
   suffix: string = '',
   breakpoint? : DSysBreakpointToken,
   cssAtomsLookup? : CssAtomsLookup,
+  scssSuffix: string = '',
+  scssIncludes: string[] = [],
 ) {
   const finalName = breakpoint ?
     `${name}-${breakpoint.$extensions["dsys.name"]}` : name;
+  const nodeSelector = breakpoint ? `` : `${prefix}-${finalName}${suffix},\n`;
 
-  const nodeSelector = breakpoint ?
-    `` : `${prefix}-${finalName}${suffix},\n`;
-
-  result.push(`
-${breakpointStart(breakpoint)}${nodeSelector}[style~="--${prefix}-${finalName}:"]${suffix} {${
-  content
-}}${breakpointEnd(breakpoint)}`);
+  const bracketStr = new BracketedString();
+  bracketStr.addBracket(breakpointStart(breakpoint));
+  bracketStr.addBracket(
+    `${nodeSelector}[style~="--${prefix}-${finalName}:"]${suffix}`
+  );
+  bracketStr.addEntry(content);
+  result.push(bracketStr.render());
 
   if (cssAtomsLookup && !cssAtomsLookup[finalName]) {
     cssAtomsLookup[finalName] = {
@@ -195,7 +205,7 @@ ${breakpointStart(breakpoint)}${nodeSelector}[style~="--${prefix}-${finalName}:"
   }
 }
 
-function _createSimpleStyle(
+function _createSimpleAtom(
   prefix: string,
   name: string,
   content: string,
@@ -207,14 +217,65 @@ function _createSimpleStyle(
   const finalName = breakpoint ?
     `${name}-${breakpoint.$extensions["dsys.name"]}` : name;
 
-  result.push(`
-${breakpointStart(breakpoint)}[style~="--${prefix}-${finalName}:"]${suffix} {${
-  content
-}}${breakpointEnd(breakpoint)}`);
+  const bracketStr = new BracketedString();
+  bracketStr.addBracket(breakpointStart(breakpoint));
+  bracketStr.addBracket(
+    `[style~="--${prefix}-${finalName}:"]${suffix}`
+  );
+  bracketStr.addEntry(content);
+  result.push(bracketStr.render());
 
   if (cssAtomsLookup && !cssAtomsLookup[finalName]) {
     cssAtomsLookup[finalName] = {
       category: true,
     }
   }
+}
+
+// ===== SASS ==================================================================
+function _createMixin(
+  prefix: string,
+  name: string,
+  content: string,
+  result: string[],
+  suffix: string = '',
+  breakpoint? : DSysBreakpointToken,
+  cssAtomsLookup? : CssAtomsLookup,
+  scssSuffix: string = '',
+  scssIncludeSuffixes: string[] = [],
+) {
+  if (scssSuffix && breakpoint) return;
+
+  const finalName = breakpoint ?
+    `${name}-${breakpoint.$extensions["dsys.name"]}` : name;
+
+  const bracketStr = new BracketedString();
+  bracketStr.addBracket(`@mixin ${prefix}-${finalName}${scssSuffix}`);
+  bracketStr.addBracket(breakpointStart(breakpoint));
+  bracketStr.addBracket(suffix ? `&${suffix}` : undefined);
+  bracketStr.addEntry(content);
+  scssIncludeSuffixes?.map(includeSuffix => {
+    bracketStr.addEntry(`@include ${prefix}-${name}${scssSuffix}${includeSuffix};`);
+  });
+  result.push(bracketStr.render());
+}
+
+function _createSimpleMixin(
+  prefix: string,
+  name: string,
+  content: string,
+  result: string[],
+  suffix: string = '',
+  breakpoint? : DSysBreakpointToken,
+  cssAtomsLookup? : CssAtomsLookup,
+) {
+  const finalName = breakpoint ?
+    `${name}-${breakpoint.$extensions["dsys.name"]}` : name;
+
+  const bracketStr = new BracketedString();
+  bracketStr.addBracket(`@mixin ${prefix}-${finalName}`);
+  bracketStr.addBracket(breakpointStart(breakpoint));
+  bracketStr.addBracket(suffix ? `&${suffix}` : undefined);
+  bracketStr.addEntry(content);
+  result.push(bracketStr.render());
 }

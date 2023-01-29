@@ -28,7 +28,7 @@ class TSReactStyleFile extends File {
     const prefixUpper = prefix.toUpperCase();
 
     return `/* eslint-disable */
-import { ${prefixUpper}Prop } from "./css-atoms.d.ts";
+import { ${prefixUpper}Prop } from "./css-atoms";
 import type * as CSS from 'csstype';
 
 /**

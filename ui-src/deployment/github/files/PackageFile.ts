@@ -14,7 +14,10 @@ class NpmrcFile extends File {
         "name": "@${gitHubSettings.username}/${gitHubSettings.repositoryAndNPMPackageName}",
         "version": "v${gitHubSettings.version}",
         "main": "index.js",
-        "repository": "git@github.com:${gitHubSettings.username}/${gitHubSettings.repositoryAndNPMPackageName}.git"
+        "repository": "git@github.com:${gitHubSettings.username}/${gitHubSettings.repositoryAndNPMPackageName}.git",
+        "dependencies": {
+          "csstype": "^3.1.1"
+        }
       }
     `;
   }

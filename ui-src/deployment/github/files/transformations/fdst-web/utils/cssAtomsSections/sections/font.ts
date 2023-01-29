@@ -1,24 +1,31 @@
-// import { GroupIds, TokenPattern, TokenSheet } from "../../../types";
-// import { findGroupViaType } from "../../../utils/tokenSheetAccessors";
 import {
   CssAtomsLookup,
   DSysBreakpointToken,
-  DSysSheetGroupNames
+  DSysSheetGroupNames,
+  ScssVarsLookup,
 } from "../../../../../../../../../shared";
-import { breakpointEnd, breakpointStart } from "./breakpoints";
+import BracketedString from "./bracketedString";
+import { breakpointStart } from "./breakpoints";
 
 export function createFont(
   prefixRaw: string,
   // tokens: TokenSheet, // in case we get further info
   breakpoint? : DSysBreakpointToken,
   cssAtomsLookup? : CssAtomsLookup,
+  scssVarsLookup? : ScssVarsLookup,
+  isScss: boolean = false,
 ) {
   const result: string[] = [];
   const prefix = prefixRaw.toLowerCase();
   
-  _createStyle(prefix, result, breakpoint, cssAtomsLookup);
+  if (isScss) {
+    _createMixin(prefix, result, breakpoint, scssVarsLookup);
+  }else{
+    _createAtom(prefix, result, breakpoint, cssAtomsLookup);
+  }
 
   /*
+  // IF Figma gave enough info...
   const typographyGroup = findGroupViaType( tokens, GroupIds.TYPOGRAPHY );
   typographyGroup?.patterns.map(pattern => {
     pattern.valuesets.map(value => {
@@ -31,7 +38,8 @@ export function createFont(
   return result.join('\n');
 }
 
-function _createStyle(
+// ===== CSS ===================================================================
+function _createAtom(
   prefix: string,
   result: string[],
   breakpoint? : DSysBreakpointToken,
@@ -40,15 +48,45 @@ function _createStyle(
   const finalName = breakpoint ?
     `font-${breakpoint.$extensions["dsys.name"]}` : 'font';
 
-  result.push(`
-${breakpointStart(breakpoint)}[style*="--${prefix}-${finalName}: var("] {
-  font: var( --${prefix}-${finalName} );
-}${breakpointEnd(breakpoint)}`);
+  const bracketStr = new BracketedString();
+  bracketStr.addBracket(breakpointStart(breakpoint));
+  bracketStr.addBracket(`[style~="--${prefix}-${finalName}:"]`);
+  bracketStr.addEntry(`font: var( --${prefix}-${finalName} );`);
+  result.push(bracketStr.render());
 
   if (cssAtomsLookup && !cssAtomsLookup[finalName]) {
     cssAtomsLookup[finalName] = {
       category: DSysSheetGroupNames.type,
     }
+  }
+}
+
+// ===== SASS ==================================================================
+function _createMixin(
+  prefix: string,
+  result: string[],
+  breakpoint? : DSysBreakpointToken,
+  scssVarsLookup? : ScssVarsLookup,
+) {
+  if (
+    scssVarsLookup &&
+    scssVarsLookup.type
+  ) {
+    const finalName = breakpoint ?
+      `font-${breakpoint.$extensions["dsys.name"]}` : 'font';
+    const propName = `--${prefix}-type`;
+
+    // Loop through all the colors and create a mixin for each...
+    scssVarsLookup.type.map(type => {
+      const fullName = `${finalName}${type.name ? `-${type.name}` : ''}`;
+      const fullVarName = `${propName}${type.name ? `-${type.name}` : ''}`;
+
+      const bracketStr = new BracketedString();
+      bracketStr.addBracket(`@mixin ${fullName}`);
+      bracketStr.addBracket(breakpointStart(breakpoint));
+      bracketStr.addEntry(`font: var( ${fullVarName} );`);
+      result.push(bracketStr.render());
+    });
   }
 }
 

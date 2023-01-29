@@ -30,7 +30,7 @@ export default async function cssAtomsTypingsTransformation (
   ${prefixUpper}TypeValue,
   ${prefixUpper}EffectValue,
   ${prefixUpper}SpacingValue,
-} from './css-vars.d.ts';
+} from './css-vars';
 `);
   cssTypings.push(`export type ${prefixUpper}Prop = {`);
   Object.entries(fileCreationResults.cssAtomsLookup).map(entry => {

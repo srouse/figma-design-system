@@ -1,5 +1,6 @@
 import { FileCreateResults, GitHubSettings } from "../../../../shared/types/types";
 import CssVarsFile from "../files/transformations/fdst-web/CssVarsFile";
+import ScssVarsFile from '../files/transformations/fdst-web/scssFiles/ScssVarsFile';
 import DesignTokensConfigFile from "../files/DesignTokensConfigFile";
 import DesignTokensFile from "../files/DesignTokensFile";
 import NpmrcFile from "../files/NpmrcFile";
@@ -17,6 +18,11 @@ import CssFontsFile from "../files/transformations/fdst-web/CssFontsFile";
 import CssFile from "../files/transformations/fdst-web/CssFile";
 import IconsFiles from "../files/transformations/fdst-web/iconFiles/IconsFiles";
 import IconWebComponentFile from "../files/transformations/fdst-web/IconWebComponentFile";
+import ScssMixinsColorFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsColorFile";
+import ScssMixinsLayoutAlignmentFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsLayoutAlignmentFile";
+import ScssMixinsTypeFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsTypeFile";
+import ScssMixinsSpacingFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsSpacingFile";
+import ScssMixinsEffectFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsEffectFile";
 
 export default async function uploadFiles(
   gitHubSettings: GitHubSettings,
@@ -37,6 +43,8 @@ export default async function uploadFiles(
   ));
 
   // Transformations
+
+  // CSS
   results.push( await CssVarsFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
@@ -52,6 +60,28 @@ export default async function uploadFiles(
   results.push( await CssFontsFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
+
+  // SCSS
+  results.push( await ScssVarsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await ScssMixinsLayoutAlignmentFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await ScssMixinsColorFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await ScssMixinsTypeFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await ScssMixinsSpacingFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await ScssMixinsEffectFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+
+  // TypeScript
   results.push( await TSStyleFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
@@ -61,6 +91,7 @@ export default async function uploadFiles(
   results.push( await CssFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
+
   // ICONS
   results.push( await IconsFiles.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
@@ -68,9 +99,10 @@ export default async function uploadFiles(
   results.push( await IconWebComponentFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
-  
 
-  const errors = results.find((result : GithubSuccess ) => result.success === false);
+  const errors = results.find(
+    (result : GithubSuccess ) => result.success === false
+   );
   if (errors) {
     return {
       success: false,

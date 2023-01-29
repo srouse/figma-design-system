@@ -18,7 +18,6 @@ import { createSizeMetrics } from "./cssAtomsSections/sections/sizeMetrics";
 export default async function cssAtomsTransformation (
   fileCreationResults: FileCreateResults,
 ) {
-  console.log('fileCreationResults', fileCreationResults);
   if (!fileCreationResults.tokenResults) return {
     content: '',
     errors: ['no token results'],
@@ -48,7 +47,6 @@ export default async function cssAtomsTransformation (
   ) as DSysBreakpointGroup;
 
   const output: string[] = [];
-  const properties: string[] = [];
   const cssAtomsLookup = fileCreationResults.cssAtomsLookup;
   output.push( createAlignments(prefix, undefined, cssAtomsLookup));
   output.push( createColors(prefix, undefined, cssAtomsLookup));
@@ -73,7 +71,6 @@ export default async function cssAtomsTransformation (
       });
     }
   })
-  console.log('properties', properties);
 
   return {
     content: output.join('\n'),

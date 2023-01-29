@@ -1,5 +1,4 @@
 import {
-  DSysSheet,
   DSysToken,
   DTTokenType,
   FileCreateResults,
@@ -27,7 +26,6 @@ export default async function cssFontsTransformation (
         const cssUrl = typeTokenToGoogleFontsUrl(token);
         if (cssUrl)
           fontUrlLookup[cssUrl] = true;
-        console.log('cssUrl', cssUrl);
       }
     },
   );

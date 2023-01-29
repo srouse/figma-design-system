@@ -31,7 +31,8 @@ export default async function cssVariablesTypingsTransformation (
       category: string,
       value: string
     };
-    const output = `  '${varName.replace(`--${prefix}-`, '')}'`;
+    const varPrefix = `--${prefix.toLowerCase()}-`;
+    const output = `  '${varName.replace(varPrefix, '')}'`;
     if (!categoryTypings[info.category]) categoryTypings[info.category] = []
     categoryTypings[info.category].push(output);
   });

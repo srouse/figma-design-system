@@ -1,6 +1,12 @@
 import React from "react";
 import "./baseUI.css";
-import { CoreProps, defaultTokenGroupCategorizedLookup, MessageRequest, TokenGroupCategorizedLookup, TokenGroupLookup } from "../../shared/types/types";
+import {
+  CoreProps,
+  defaultTokenGroupCategorizedLookup,
+  MessageRequest,
+  TokenGroupCategorizedLookup,
+  TokenGroupLookup
+} from "../../shared/types/types";
 import postMessagePromise from "../utils/postMessagePromise";
 import DTButton, { DTButtonColor } from "../components/DTButton";
 import { Icons } from "../../shared";

@@ -10,7 +10,7 @@ import {
   dtColorToCss,
   DTColor,
   DSysColorToken,
- } from '../../../shared/index';
+} from '../../../shared/index';
 import header from '../../components/header';
 import {
   pullTokensFromColorStyles
