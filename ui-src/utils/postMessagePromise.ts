@@ -1,5 +1,6 @@
 import {
   MessageName,
+  MessagePromiseResult,
   MessageRequest
 } from "../../shared/types/types";
 
@@ -8,11 +9,11 @@ let promiseBounceId = 0;
 export default async function postMessagePromise(
   request: MessageRequest,
   args: any = {},
-) {
-  if (!parent?.postMessage) return;
+) : Promise<MessagePromiseResult | false> {
+  if (!parent?.postMessage) return false;
   if (args['name'] !== undefined) {
     console.error('Can not send "name" to messagePromise');
-    return;
+    return false;
   }
 
   return new Promise((resolve) => {

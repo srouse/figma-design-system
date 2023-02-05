@@ -36,6 +36,7 @@ import findTokensSheet from './utils/findTokensSheet';
 import loopDesignSystemTokens from './utils/loopDesignSystemTokens';
 import typeTokenToGoogleFontsUrl from './utils/typeTokenToGoogleFontsUrl';
 import PromiseSequence from './utils/PromiseSequence';
+import {designTokenTypes, designSystemTypes} from './types/typeExports';
 import {
   MessageName,
   DesignTokensResult,
@@ -295,4 +296,7 @@ export {
   defaultTokenGroup,
   defaultGlobalData,
   defaultTokenGroupLookup,
+
+  designTokenTypes,
+  designSystemTypes,
 };

@@ -43,6 +43,12 @@ export type SelectDropDown = {
   children?: SelectDropDown[],
 };
 
+export type MessagePromiseResult = {
+  request: MessageRequest,
+  promiseId: string,
+  [key: string]: any,
+}
+
 export enum MessageRequest {
   globalDataUpdate = 'globalDataUpdate',
   stateUpdate = 'stateUpdate',
@@ -80,6 +86,7 @@ export enum MessageRequest {
   getComponentList = 'getComponentList',
   focusOnComponent = 'focusOnComponent',
   focusOnComponentToken = 'focusOnComponentToken',
+  getComponentScss = 'getComponentScss',
 
   // base
   getCategorizedTokenGroups = 'getCategorizedTokenGroups',

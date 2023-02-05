@@ -1,5 +1,4 @@
 import { 
-  defaultGlobalData,
   defaultTokenGroup,
   MessageName,
   MessageRequest,
@@ -16,6 +15,7 @@ import createStyle from "./actions/createStyle";
 import changeStylesFolder from "./actions/changeStylesFolder";
 import updateTokenGroup from "./actions/updateTokenGroup";
 import moveStyle from "./actions/moveStyle";
+import componentScss from "./actions/componentScss";
 
 const { 
   widget,
@@ -167,6 +167,10 @@ function Widget() {
               case MessageRequest.getAvailableFonts :
                 const fonts = await figma.listAvailableFontsAsync();
                 bounceBack(message, {fonts});
+              case MessageRequest.getComponentScss :
+                // we have to transform the components in the widget
+                const componentScssResults = await componentScss( message.componentId );
+                bounceBack(message, {results:componentScssResults});
             }
             break;
         }

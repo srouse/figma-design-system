@@ -23,10 +23,10 @@ export default class InputHeader extends React.Component<InputHeaderProps> {
         <div className="inputHeader-label">
           {this.props.label}
         </div>
-        <div className="inputHeader-link"
+        {/*<div className="inputHeader-link"
           onClick={this.props.onLinkClick}>
           {this.props.linkLabel}
-        </div>
+        </div>*/}
       </div>
     );
   }

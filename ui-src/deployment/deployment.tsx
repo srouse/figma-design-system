@@ -23,6 +23,7 @@ import cssFontsTransformation from "./github/files/transformations/fdst-web/util
 import { VersionIncrements } from "./github/types";
 import DeployModal, { DeploymentModalActions } from "./modal/deployModal";
 import scssMixinsTransformation from "./github/files/transformations/fdst-web/utils/scssMixinsTransformation";
+import CompScssFiles from "./github/files/transformations/fdst-web/componentScss/CompScssFiles";
 
 interface DeploymentProps extends CoreProps {
   style?: object
@@ -64,6 +65,9 @@ export default class Deployment extends React.Component<DeploymentProps> {
           onLinkClick={async () => {
             console.clear();
 
+            const gitHubSettings = this.props.globalData?.gitHubSettings;
+            if (!gitHubSettings) return;
+
             const tokensResult: any = await postMessagePromise(
               MessageRequest.getFinalTokens
             );
@@ -88,7 +92,15 @@ export default class Deployment extends React.Component<DeploymentProps> {
             );
             console.log('cssTypingsResult', cssTypingsResult);
             
-            
+            console.log('TEST');
+            // COMPONENT SCSS
+            await CompScssFiles.upload(
+              gitHubSettings,
+              () => {},
+              fileCreateResults,
+            )
+
+
 
             // ATOMS / MIXINS
             /*const cssAtomsResults = await cssAtomsTransformation(

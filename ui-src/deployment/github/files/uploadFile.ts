@@ -22,7 +22,6 @@ export default async function uploadFile(
     auth: gitHubSettings.accessToken,
   });
 
-  console.log('path', path);
   const sha = await getSHA(octokit, gitHubSettings, path);
   let success = true;
   let message = `uploaded file: ${path}`;

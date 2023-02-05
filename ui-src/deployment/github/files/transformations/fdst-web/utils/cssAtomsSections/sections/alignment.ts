@@ -27,6 +27,7 @@ export function createAlignments(
     ['center','flex-start','flex-start','center'],
     result, breakpoint, cssAtomsLookup
   );
+
   createFunk(prefix,
     ['alignment-center-right', 'alignment-right-center'],
     ['center','flex-end','flex-end','center'],
@@ -70,13 +71,24 @@ export function createAlignments(
   );
 
   createFunk(prefix,
-    ['alignment-stretch', 'alignment-stretch-left', 'alignment-left-stretch', 'alignment-stretch-top', 'alignment-top-stretch'],
+    [
+      'alignment-stretch',
+      'alignment-stretch-left',
+      'alignment-left-stretch',
+      'alignment-stretch-top',
+      'alignment-top-stretch',
+    ],
     ['stretch','flex-start','stretch','flex-start'],
     result, breakpoint, cssAtomsLookup
   );
 
   createFunk(prefix,
-    ['alignment-stretch-right', 'alignment-right-stretch', 'alignment-stretch-bottom', 'alignment-bottom-stretch'],
+    [
+      'alignment-stretch-right',
+      'alignment-right-stretch',
+      'alignment-stretch-bottom',
+      'alignment-bottom-stretch',
+    ],
     ['stretch','flex-end','stretch','flex-end'],
     result, breakpoint, cssAtomsLookup
   );

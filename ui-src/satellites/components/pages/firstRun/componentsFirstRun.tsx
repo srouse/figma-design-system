@@ -92,7 +92,8 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
             tokenset['component'] = {// easier to find...there is only one
               $extensions: {
                 'dsys.level': DSysLevel.token,
-                "dsys.name": this.state.selectedComponentObj.name,
+                'dsys.name': this.state.selectedComponentObj.name,
+                'dsys.index': 0, // needed for typing, but there is no sorting
               },
               $type: DTTokenType.component,
               $value: this.state.selectedComponentObj.value,

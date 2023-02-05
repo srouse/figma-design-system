@@ -1,4 +1,9 @@
 
+type DTTokenBase = {
+  $extension?: any,
+  $description? : string,
+}
+
 export type DTToken =
   DTColorToken |
   DTDimensionToken |
@@ -40,21 +45,16 @@ export enum DTTokenType {
   component = 'component',
 }
 
-type DTTokenBase = {
-  $description? : string,
+// Color
+export interface DTColorToken extends DTTokenBase {
+  '$value' : DTColor,
+  '$type' : DTTokenType.color
 }
 
 export type DTColor = {
   hex: string,
   alpha: number,
 };
-
-// Color
-export interface DTColorToken extends DTTokenBase {
-  // '$value': string,
-  '$value' : DTColor,
-  '$type' : DTTokenType.color
-}
 
 // Shadow
 export interface DTShadowToken extends DTTokenBase {
@@ -71,7 +71,7 @@ export interface DTShadowToken extends DTTokenBase {
   '$type' : DTTokenType.shadow
 }
 
-// blur
+// Blur
 export interface DTBlurToken extends DTTokenBase {
   '$value': 
     {

@@ -32,7 +32,7 @@ export default class BreakpointFirstRun extends React.Component<CoreProps> {
 
   render() {
     return (
-      <div className="first-run">
+      <div className="first-run breakpoint">
         <InputHeader
           label="Create Breakpoint Tokens" />
         <Input
@@ -52,6 +52,11 @@ export default class BreakpointFirstRun extends React.Component<CoreProps> {
               }
             )
           } />
+        <div
+          className="defaults">
+          sm, md, lg, and xlg will be created as a default,
+          but can be changed later.
+        </div>
         <div style={{flex: "1"}}></div>
         <DTButton
           label="Create"
@@ -70,60 +75,49 @@ export default class BreakpointFirstRun extends React.Component<CoreProps> {
             }
 
             // put together a usable default...
-            tokenset['phone-only'] = {
+            tokenset['sm'] = {
               $extensions: {
                 'dsys.level': DSysLevel.token,
-                "dsys.name": 'phone-only',
+                "dsys.name": 'sm',
                 "dsys.index": 0,
                 "dsys.uid": uid()
               },
               $type: DTTokenType.breakpoint,
-              $direction: 'down',
-              $value: 599,
+              $direction: 'up',
+              $value: 576,
             };
-            tokenset['tablet-portrat-up'] = {
+            tokenset['md'] = {
               $extensions: {
                 'dsys.level': DSysLevel.token,
-                "dsys.name": 'tablet-portrat-up',
+                "dsys.name": 'md',
                 "dsys.index": 1,
                 "dsys.uid": uid()
               },
               $type: DTTokenType.breakpoint,
               $direction: 'up',
-              $value: 600,
+              $value: 768,
             };
-            tokenset['tablet-landscape-up'] = {
+            tokenset['lg'] = {
               $extensions: {
                 'dsys.level': DSysLevel.token,
-                "dsys.name": 'tablet-landscape-up',
+                "dsys.name": 'lg',
                 "dsys.index": 2,
                 "dsys.uid": uid()
               },
               $type: DTTokenType.breakpoint,
               $direction: 'up',
-              $value: 900,
+              $value: 992,
             };
-            tokenset['desktop-up'] = {
+            tokenset['xlg'] = {
               $extensions: {
                 'dsys.level': DSysLevel.token,
-                "dsys.name": 'desktop-up',
+                "dsys.name": 'xlg',
                 "dsys.index": 3,
                 "dsys.uid": uid()
               },
               $type: DTTokenType.breakpoint,
               $direction: 'up',
               $value: 1200,
-            };
-            tokenset['big-desktop-up'] = {
-              $extensions: {
-                'dsys.level': DSysLevel.token,
-                "dsys.name": 'big-desktop-up',
-                "dsys.index": 4,
-                "dsys.uid": uid()
-              },
-              $type: DTTokenType.breakpoint,
-              $direction: 'up',
-              $value: 1800,
             };
 
             const finalTokenGroup = {

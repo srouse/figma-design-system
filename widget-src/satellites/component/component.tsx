@@ -182,10 +182,7 @@ export default function componentsSatellite() {
             top: 20, bottom: 20,
             left: 40, right: 40
           }}
-          overflow="visible"
-          onClick={() => {
-            focusOnComponent(tokenGroup);
-          }}>
+          overflow="visible">
           {componentImage ? (
             <SVG src={componentImage} />
           ) : null}

@@ -13,9 +13,9 @@
   z-index: 100;
 }
 
-  /* .color-picker-thumb:hover {
+  .color-picker-thumb:hover {
     cursor: pointer; 
-  }*/
+  }
 
   .color-picker-thumb-inner {
     position: absolute; inset: 0px;
@@ -35,9 +35,9 @@
   z-index: 90;
 }
 
-  /* .color-picker-small-thumb:hover {
+  .color-picker-small-thumb:hover {
     cursor: pointer;
-  }*/
+  }
 
   .color-picker-small-thumb-inner {
     position: absolute; inset: 0px;

@@ -19,7 +19,6 @@ export default async function scssMixinsTransformation (
   fileCreationResults: FileCreateResults,
   group: DSysSheetGroupNames
 ) {
-  console.log('scssMixinsTransformation fileCreationResults', fileCreationResults);
   if (!fileCreationResults.tokenResults) return {
     content: '',
     errors: ['no token results'],

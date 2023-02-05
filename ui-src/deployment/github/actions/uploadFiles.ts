@@ -1,4 +1,7 @@
-import { FileCreateResults, GitHubSettings } from "../../../../shared/types/types";
+import {
+  FileCreateResults,
+  GitHubSettings,
+} from "../../../../shared/types/types";
 import CssVarsFile from "../files/transformations/fdst-web/CssVarsFile";
 import ScssVarsFile from '../files/transformations/fdst-web/scssFiles/ScssVarsFile';
 import DesignTokensConfigFile from "../files/DesignTokensConfigFile";
@@ -23,6 +26,9 @@ import ScssMixinsLayoutAlignmentFile from "../files/transformations/fdst-web/scs
 import ScssMixinsTypeFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsTypeFile";
 import ScssMixinsSpacingFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsSpacingFile";
 import ScssMixinsEffectFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsEffectFile";
+import CompScssFiles from "../files/transformations/fdst-web/componentScss/CompScssFiles";
+import DesignSystemTypesFile from "../files/DesignSystemTypesFile";
+import DesignTokenTypesFile from "../files/DesignTokenTypesFile";
 
 export default async function uploadFiles(
   gitHubSettings: GitHubSettings,
@@ -91,12 +97,23 @@ export default async function uploadFiles(
   results.push( await CssFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
+  results.push( await DesignTokenTypesFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+  results.push( await DesignSystemTypesFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
 
   // ICONS
   results.push( await IconsFiles.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
   results.push( await IconWebComponentFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+
+  // COMPONENT SCSS
+  results.push( await CompScssFiles.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
 

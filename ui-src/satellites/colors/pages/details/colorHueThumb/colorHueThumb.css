@@ -9,9 +9,9 @@
   overflow: hidden;
 }
 
-  /* .color-picker-hue-thumb:hover {
+  .color-picker-hue-thumb:hover {
     cursor: pointer; 
-  }*/
+  }
 
   .color-picker-hue-thumb-inner {
     position: absolute; inset: 2px;
