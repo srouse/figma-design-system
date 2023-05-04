@@ -5,7 +5,7 @@ import {
   Validator,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import InputHeader from "../../../../components/InputHeader";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import FontAwesomeKitButton from "../addNewIcon/fontAwesome/kits/fontAwesomeKitButton";

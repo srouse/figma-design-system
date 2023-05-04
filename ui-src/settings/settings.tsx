@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import tokenGroupTypeToName from "../../shared/tokenGroupTypeToName";
 import { CoreProps } from "../../shared/types/types";
-import Input from "../components/Input";
+import Input from "../components/input";
 import InputHeader from "../components/InputHeader";
 import "./settings.css";
 import { version } from "../../shared";

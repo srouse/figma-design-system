@@ -1,6 +1,6 @@
 import React from "react";
 import { DSysTypographyToken, TokenGroup } from "../../../../../shared";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import { FontWithStyles } from "../typographyList";
 import "./TypographyDetail.css";
 import Select from "../../../../components/Select";

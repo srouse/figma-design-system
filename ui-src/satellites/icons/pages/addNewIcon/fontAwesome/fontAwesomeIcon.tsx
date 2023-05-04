@@ -4,7 +4,7 @@ import {
   getIcon,
   Icons,
 } from "../../../../../../shared";
-import Input from "../../../../../components/Input";
+import Input from "../../../../../components/input";
 import Select from "../../../../../components/Select";
 import "./fontAwesomeIcon.css";
 import resultsCss from './fontAweseomIcon.css';

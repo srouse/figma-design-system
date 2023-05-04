@@ -1,6 +1,6 @@
 import React from "react";
 import { CoreProps } from "../../../../../shared";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 
 export default class CustomSettings extends React.Component<CoreProps> {
 

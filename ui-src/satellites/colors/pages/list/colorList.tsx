@@ -13,7 +13,7 @@ import {
   MessageRequest,
   findTokenViaStyleId,
 } from "../../../../../shared";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import "./colorList.css";
 import "./colorRow.css";
 import renderAda from "./renderAda";

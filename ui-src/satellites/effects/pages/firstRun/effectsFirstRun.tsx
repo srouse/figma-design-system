@@ -7,7 +7,7 @@ import {
   Validator,
 } from "../../../../../shared";
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import InputHeader from "../../../../components/InputHeader";
 import * as mixpanel from '../../../../utils/mixpanel';
 

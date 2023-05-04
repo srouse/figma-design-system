@@ -1,7 +1,7 @@
 import React from "react";
 import { getIcon, Icons } from "../../../../../../../shared";
 import DTButton, { DTButtonDesign } from "../../../../../../components/DTButton";
-import Input from "../../../../../../components/Input";
+import Input from "../../../../../../components/input";
 import Select from "../../../../../../components/Select";
 import { FREE_ICONS } from "../../../../utils/addFontAwesomeKit";
 import { findAuthKey, findKits, FontAwesomeKit } from "../findFontAwesomeKit";

@@ -12,7 +12,7 @@ import Colr from 'colr';
 import ColorThumb from "./colorThumb/colorThumb";
 import { changeColor } from "../../utils/colorActions";
 import ColorHueThumb from "./colorHueThumb/colorHueThumb";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import Checkbox from "../../../../components/Checkbox";
 import * as mixpanel from '../../../../utils/mixpanel';
 

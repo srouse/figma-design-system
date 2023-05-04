@@ -6,7 +6,7 @@ import {
   MessageRequest
 } from "../../../../../shared";
 import DTButton, { DTButtonDesign } from "../../../../components/DTButton";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import "./uploadIcon.css";
 

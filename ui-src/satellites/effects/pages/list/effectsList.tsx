@@ -11,7 +11,7 @@ import {
   MessageRequest
 } from "../../../../../shared";
 import { DSysBlurToken } from "../../../../../shared/types/designSystemTypes";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
 import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
 import {

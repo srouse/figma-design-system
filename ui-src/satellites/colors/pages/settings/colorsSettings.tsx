@@ -1,6 +1,6 @@
 import React from "react";
 import { CoreProps, DSysGroupType, MessageRequest } from "../../../../../shared";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 
 export default class ColorsSettings extends React.Component<CoreProps> {

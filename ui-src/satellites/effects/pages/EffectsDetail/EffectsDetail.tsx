@@ -8,7 +8,7 @@ import {
   DTTokenType,
   hexAlphaToCss
 } from "../../../../../shared";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import "./EffectsDetail.css";
 
 interface EffectsDetailProps {

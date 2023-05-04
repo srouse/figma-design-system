@@ -3,7 +3,7 @@ import
 import { Icons, MessageRequest } from "../../../../shared";
 import { DSysSvgToken } from "../../../../shared/types/designSystemTypes";
 import DTButton, { DTButtonColor } from "../../../components/DTButton";
-import Input from "../../../components/Input";
+import Input from "../../../components/input";
 import postMessagePromise from "../../../utils/postMessagePromise";
 import "./iconsDetail.css";
 

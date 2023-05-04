@@ -7,7 +7,7 @@ import {
   Icons,
 } from "../../../../../shared";
 import DragAndDropList from "../../../../components/DragAndDropList/dragAndDropList";
-import Input from "../../../../components/Input";
+import Input from "../../../../components/input";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
 import "./spacingList.css";
 import updateSpacingToken from "../../utils/updateSpacingToken";
