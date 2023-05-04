@@ -16,6 +16,7 @@ import updateBreakpointToken from "../../utils/updateBreakpointToken";
 import { changeBreakpointOrder } from "../../utils/changeBreakpointOrder";
 import deleteBreakpointToken from "../../utils/deleteBreakpointToken";
 import Select from "../../../../components/Select";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class BreakpointList extends React.Component<CoreProps> {
 
@@ -24,6 +25,9 @@ export default class BreakpointList extends React.Component<CoreProps> {
     this.state = {
       isDeleting: false,
     };
+    mixpanel.track(`list-${props.tokenGroup?.type}`,
+      {name: props.tokenGroup?.name}
+    );
   }
 
   state : {
@@ -47,11 +51,14 @@ export default class BreakpointList extends React.Component<CoreProps> {
               this.props.tokenGroup,
               this.props.updateTokenGroup,
             );
+            mixpanel.track(`add-${this.props.tokenGroup?.type}`
+            );
           }}
           onDelete={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+            mixpanel.track(`delete-${this.props.tokenGroup?.type}`);
           }}
           onDeleteClose={() => {
             this.setState({
@@ -73,6 +80,7 @@ export default class BreakpointList extends React.Component<CoreProps> {
                 this.props.tokenGroup,
                 this.props.updateTokenGroup,
               );
+              mixpanel.track(`reorder-${this.props.tokenGroup?.type}`);
             }}
             rowList={tokens}
             rowGenerator={(

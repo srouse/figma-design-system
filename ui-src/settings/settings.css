@@ -2,3 +2,23 @@
   padding: var( --page-padding );
   overflow-y: scroll;
 }
+
+  .version {
+    font-family: var( --primary-ui-font );
+    color: var( --text-color-lightest );
+    font-size: 11px;
+  }
+
+  .version-out-of-date {
+    font-family: var( --primary-ui-font );
+    color: var( --error );
+    font-size: 11px;
+  }
+
+    .version-out-of-date *:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    .version-out-of-date .title {
+      font-size: 16px;
+    }

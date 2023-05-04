@@ -27,6 +27,7 @@ import DetailModal from "../../../../components/DetailModal/DetailModal";
 import "./effectsRow.css";
 import "./effectsList.css";
 import postMessagePromise from "../../../../utils/postMessagePromise";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class EffectsList extends React.Component<CoreProps> {
 
@@ -36,6 +37,9 @@ export default class EffectsList extends React.Component<CoreProps> {
       isDeleting: false,
       detailModalOpen: false,
     };
+    mixpanel.track(`list-${props.tokenGroup?.type}`,
+      {name: props.tokenGroup?.name}
+    );
   }
 
   state : {
@@ -75,6 +79,9 @@ export default class EffectsList extends React.Component<CoreProps> {
                       }
                     });
                     this.props.closePrompt();
+                    mixpanel.track(`add-${this.props.tokenGroup?.type}`,
+                      {type: 'shadow'}
+                    );
                   }}>
                   Shadow Effect
                 </div>
@@ -92,6 +99,9 @@ export default class EffectsList extends React.Component<CoreProps> {
                       }
                     });
                     this.props.closePrompt();
+                    mixpanel.track(`add-${this.props.tokenGroup?.type}`,
+                      {type: 'blur'}
+                    );
                   }}>
                   Blur Effect
                 </div>
@@ -102,6 +112,7 @@ export default class EffectsList extends React.Component<CoreProps> {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+            mixpanel.track(`delete-${this.props.tokenGroup?.type}`);
           }}
           onDeleteClose={() => {
             this.setState({
@@ -120,6 +131,7 @@ export default class EffectsList extends React.Component<CoreProps> {
                 this.props.tokenGroup,
                 this.props.refreshTokens,
               );
+              mixpanel.track(`reorder-${this.props.tokenGroup?.type}`);
             }}
             rowList={tokens}
             rowGenerator={(

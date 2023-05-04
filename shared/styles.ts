@@ -8,6 +8,7 @@ export const colors = {
   textColorError: '#E42222',
 
   white: '#ffffff',
+  black: '#000000',
 
   primaryLightest: '#F6F2FC',
   primaryLighter: '#EFE3FF',
@@ -42,7 +43,8 @@ export const colors = {
   pagePadding: '30px 30px',
 
   buttonMinHeight: '42px',
-  dttabsHeight: '44px'
+  dttabsHeight: '44px',
+  dttabsSmallHeight: '36px'
 }
 
 export const typography = {

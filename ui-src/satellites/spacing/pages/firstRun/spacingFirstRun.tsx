@@ -18,6 +18,7 @@ import {
   SpacingStepTypes
 } from "../../utils/spacingStepping";
 import "./spacingFirstRun.css";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class SpacingFirstRun extends React.Component<CoreProps> {
 
@@ -31,6 +32,7 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
       spaceStepsBaseMetrics: undefined
     }
     this.validator = new Validator();
+    mixpanel.track(`firstRun-${props.tokenGroup?.type}`);
   }
 
   validator: Validator;
@@ -192,7 +194,14 @@ export default class SpacingFirstRun extends React.Component<CoreProps> {
                 this.state.spaceStepsBaseMetrics,
                 this.props.tokenGroup,
                 this.props.updateTokenGroup,
-              )
+              );
+
+              mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+                {
+                  name: this.state.name,
+                  baseSpaceSize: this.state.baseSpaceSize,
+                }
+              );
             }
           }}></DTButton>
       </div>

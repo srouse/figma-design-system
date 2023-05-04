@@ -24,9 +24,9 @@ import postMessagePromise from "../../../utils/postMessagePromise";
 import DetailModal from "../../../components/DetailModal/DetailModal";
 import TypographyDetail from "./detail/TypographyDetail";
 import typeIframeContent from "./utils/TypeIframeContent";
-import DTButton, { DTButtonColor } from "../../../components/DTButton";
 import './typographyList.css';
 import './typographyRow.css';
+import * as mixpanel from '../../../utils/mixpanel';
 
 export type FontWithStyles = {family: string, styles: string[]};
 export type FigmaFontLookup = {[key:string]:{family: string, style: string}};
@@ -43,6 +43,9 @@ export default class TypographyList extends React.Component<TypographyProps> {
       isDeleting: false,
       detailModalOpen: false,
     }
+    mixpanel.track(`list-${props.tokenGroup?.type}`,
+      {name: props.tokenGroup?.name}
+    );
   }
 
   state : {
@@ -82,11 +85,13 @@ export default class TypographyList extends React.Component<TypographyProps> {
                 );
               }
             });
+            mixpanel.track(`add-${this.props.tokenGroup?.type}`);
           }}
           onDelete={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+            mixpanel.track(`delete-${this.props.tokenGroup?.type}`);
           }}
           onDeleteClose={() => {
             this.setState({
@@ -105,6 +110,7 @@ export default class TypographyList extends React.Component<TypographyProps> {
                 this.props.tokenGroup,
                 this.props.refreshTokens,
               );
+              mixpanel.track(`reorder-${this.props.tokenGroup?.type}`);
             }}
             rowList={tokens}
             rowGenerator={(
@@ -252,6 +258,7 @@ export default class TypographyList extends React.Component<TypographyProps> {
         body={this.state.focusedToken ? (
           <TypographyDetail
             token={this.state.focusedToken}
+            tokenGroup={this.props.tokenGroup}
             fonts={this.props.fonts}
             updateToken={(token : DSysTypographyToken) => {
               updateTypographyToken(

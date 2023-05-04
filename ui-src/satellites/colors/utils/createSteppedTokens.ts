@@ -51,7 +51,8 @@ export default async function createSteppedTokens(
               ...option,
               value: val,// flatten values for multiplier
             },
-            colorStepsBaseMetrics.options
+            colorStepsBaseMetrics.options,
+            colorStepsBaseMetrics,
           ),
         });
       })
@@ -61,7 +62,8 @@ export default async function createSteppedTokens(
         color: colorStepsBaseMetrics.multiplier(
           baseColor, centerIndex, index, 
           option,
-          colorStepsBaseMetrics.options
+          colorStepsBaseMetrics.options,
+          colorStepsBaseMetrics,
         ),
       });
     }

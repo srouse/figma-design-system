@@ -2,8 +2,8 @@ import {
   FileCreateResults,
   GitHubSettings,
 } from "../../../../shared/types/types";
-import CssVarsFile from "../files/transformations/fdst-web/CssVarsFile";
-import ScssVarsFile from '../files/transformations/fdst-web/scssFiles/ScssVarsFile';
+import CssVarsFile from "../files/transformations/fds-web/CssVarsFile";
+import ScssVarsFile from '../files/transformations/fds-web/scssFiles/ScssVarsFile';
 import DesignTokensConfigFile from "../files/DesignTokensConfigFile";
 import DesignTokensFile from "../files/DesignTokensFile";
 import NpmrcFile from "../files/NpmrcFile";
@@ -12,23 +12,25 @@ import PackageLockFile from "../files/PackageLockFile";
 import ReadMeFile from "../files/ReadMeFile";
 import WorkflowReleasePackageFile from "../files/WorkflowReleasePackageFile";
 import { GithubSuccess } from "../types";
-import CssVarsTypingsFile from "../files/transformations/fdst-web/CssVarsTypingsFile";
-import CssAtomsFile from "../files/transformations/fdst-web/CssAtomsFile";
-import CssAtomsTypingsFile from "../files/transformations/fdst-web/CssAtomsTypingsFile";
-import TSStyleFile from "../files/transformations/fdst-web/TSStyleFile";
-import TSReactStyleFile from "../files/transformations/fdst-web/TSReactStyleFile";
-import CssFontsFile from "../files/transformations/fdst-web/CssFontsFile";
-import CssFile from "../files/transformations/fdst-web/CssFile";
-import IconsFiles from "../files/transformations/fdst-web/iconFiles/IconsFiles";
-import IconWebComponentFile from "../files/transformations/fdst-web/IconWebComponentFile";
-import ScssMixinsColorFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsColorFile";
-import ScssMixinsLayoutAlignmentFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsLayoutAlignmentFile";
-import ScssMixinsTypeFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsTypeFile";
-import ScssMixinsSpacingFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsSpacingFile";
-import ScssMixinsEffectFile from "../files/transformations/fdst-web/scssFiles/ScssMixinsEffectFile";
-import CompScssFiles from "../files/transformations/fdst-web/componentScss/CompScssFiles";
+import CssVarsTypingsFile from "../files/transformations/fds-web/CssVarsTypingsFile";
+import CssAtomsFile from "../files/transformations/fds-web/CssAtomsFile";
+import CssAtomsTypingsFile from "../files/transformations/fds-web/CssAtomsTypingsFile";
+import TSStyleFile from "../files/transformations/fds-web/TSStyleFile";
+import TSReactStyleFile from "../files/transformations/fds-web/TSReactStyleFile";
+import CssFontsFile from "../files/transformations/fds-web/CssFontsFile";
+import CssFile from "../files/transformations/fds-web/CssFile";
+import IconsFiles from "../files/transformations/fds-web/iconFiles/IconsFiles";
+import IconWebComponentFile from "../files/transformations/fds-web/IconWebComponentFile";
+import ScssMixinsColorFile from "../files/transformations/fds-web/scssFiles/ScssMixinsColorFile";
+import ScssMixinsLayoutAlignmentFile from "../files/transformations/fds-web/scssFiles/ScssMixinsLayoutAlignmentFile";
+import ScssMixinsTypeFile from "../files/transformations/fds-web/scssFiles/ScssMixinsTypeFile";
+import ScssMixinsSpacingFile from "../files/transformations/fds-web/scssFiles/ScssMixinsSpacingFile";
+import ScssMixinsEffectFile from "../files/transformations/fds-web/scssFiles/ScssMixinsEffectFile";
+import CompScssFiles from "../files/transformations/fds-web/componentScss/CompScssFiles";
 import DesignSystemTypesFile from "../files/DesignSystemTypesFile";
 import DesignTokenTypesFile from "../files/DesignTokenTypesFile";
+import JavaScriptVarsFile from "../files/transformations/fds-web/JavascriptVarsFile";
+import TypescriptVarsFile from "../files/transformations/fds-web/TypescriptVarsFile";
 
 export default async function uploadFiles(
   gitHubSettings: GitHubSettings,
@@ -87,7 +89,15 @@ export default async function uploadFiles(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));
 
+  // Javascript
+  results.push( await JavaScriptVarsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
+
   // TypeScript
+  results.push( await TypescriptVarsFile.upload(
+    gitHubSettings, updateFeedback, fileCreationResults,
+  ));
   results.push( await TSStyleFile.upload(
     gitHubSettings, updateFeedback, fileCreationResults,
   ));

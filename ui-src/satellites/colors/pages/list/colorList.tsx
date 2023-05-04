@@ -29,6 +29,7 @@ import postMessagePromise from "../../../../utils/postMessagePromise";
 import ListHeader from "../../../../components/ListHeader/ListHeader";
 import DetailModal from "../../../../components/DetailModal/DetailModal";
 import ColorDetail from "../details/colorDetail";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 type CustomEvents<K extends string> = { [key in K] : (event: CustomEvent) => void };
 type CustomElement<T, K extends string> = Partial<T & DOMAttributes<T> & { children: any } & CustomEvents<`on${K}`>>;
@@ -53,6 +54,9 @@ export default class ColorSteps extends React.Component<CoreProps> {
       pickerAlpha: '100',
       detailModalOpen: false,
     };
+    mixpanel.track(`list-${props.tokenGroup?.type}`,
+      {name: props.tokenGroup?.name}
+    );
   }
 
   componentDidUpdate(prevProps: CoreProps) {
@@ -130,11 +134,13 @@ export default class ColorSteps extends React.Component<CoreProps> {
                 );
               }
             });
+            mixpanel.track(`add-${this.props.tokenGroup?.type}`);
           }}
           onDelete={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+            mixpanel.track(`delete-${this.props.tokenGroup?.type}`);
           }}
           onDeleteClose={() => {
             this.setState({
@@ -153,6 +159,7 @@ export default class ColorSteps extends React.Component<CoreProps> {
                 this.props.tokenGroup,
                 this.props.refreshTokens,
               );
+              mixpanel.track(`reorder-${this.props.tokenGroup?.type}`);
             }}
             rowList={tokens}
             rowGenerator={(

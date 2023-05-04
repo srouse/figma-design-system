@@ -16,6 +16,7 @@ import {
 } from "../../utils/colorStepping";
 import createSteppedTokens from "../../utils/createSteppedTokens";
 import "./colorFirstRun.css";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class FirstRun extends React.Component<CoreProps> {
 
@@ -29,6 +30,7 @@ export default class FirstRun extends React.Component<CoreProps> {
       colorStepsBaseMetrics: undefined
     }
     this.validator = new Validator();
+    mixpanel.track(`firstRun-${props.tokenGroup?.type}`);
   }
 
   validator: Validator;
@@ -143,13 +145,19 @@ export default class FirstRun extends React.Component<CoreProps> {
                 this.props.refreshTokens();
                 return;
               }
-              
               createSteppedTokens(
                 this.state.name!,
                 this.state.baseColor!,
                 this.state.colorStepsBaseMetrics,
                 this.props.tokenGroup,
                 this.props.updateTokenGroup,
+              );
+              mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+                {
+                  name: this.state.name,
+                  baseColor: this.state.baseColor,
+                  colorStepsType: this.state.colorStepsType
+                }
               );
             }
           }}></DTButton>

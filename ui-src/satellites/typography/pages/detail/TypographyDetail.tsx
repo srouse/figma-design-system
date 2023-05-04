@@ -1,13 +1,23 @@
 import React from "react";
-import { DSysTypographyToken } from "../../../../../shared";
+import { DSysTypographyToken, TokenGroup } from "../../../../../shared";
 import Input from "../../../../components/Input";
 import { FontWithStyles } from "../typographyList";
 import "./TypographyDetail.css";
 import Select from "../../../../components/Select";
 import typeIframeContent from "../utils/TypeIframeContent";
+import Checkbox from "../../../../components/Checkbox";
+import updateFamily from "./actions/updateFamily";
+import updateStyle from "./actions/updateStyle";
+import updateLetterSpacing from "./actions/updateLetterSpacing";
+import updateLetterSpacingUnit from "./actions/updateLetterSpacingUnit";
+import updateLineHeight from "./actions/updateLineHeight";
+import updateTextCase from "./actions/updateTextCase";
+import updateTextDecoration from "./actions/updateTextDecoration";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 interface TypographyDetailProps {
   token?: DSysTypographyToken,
+  tokenGroup?: TokenGroup,
   fonts: FontWithStyles[],
   updateToken: (token: DSysTypographyToken) => void
 }
@@ -21,7 +31,11 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
       fontStyles: this._updateStyles(
         this.props.token?.$value.figmaFontObj.family
       ),
+      updateAll: false,
     }
+    mixpanel.track(`details-${props.tokenGroup?.type}`,
+      {name: props.token?.$extensions["dsys.name"]}
+    );
   }
 
   componentDidUpdate(prevProps: Readonly<TypographyDetailProps>): void {
@@ -66,7 +80,8 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
 
   state: {
     fontFamilies: {name:string, value:string}[];
-    fontStyles: {name:string, value:string}[]; 
+    fontStyles: {name:string, value:string}[];
+    updateAll: boolean,
   }
 
   render() {
@@ -84,21 +99,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             value={this.props.token.$value.figmaFontObj.family}
             dropdown={this.state.fontFamilies}
             onChange={(value) => {
-              const styles = this._updateStyles(value, true);
-              let regular = styles.find(style => {
-                return style.name === 'Regular' || style.name === 'Normal'
-              });
-              const finalStyle = regular ? regular.value : styles[0].value;
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  figmaFontObj: {
-                    family: value,
-                    style: finalStyle,
-                  },
-                }
-              });
+              updateFamily(this, value, token, this.state.updateAll);
             }} />
           <Select
             label="Style"
@@ -106,18 +107,9 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
             value={this.props.token.$value.figmaFontObj.style}
             dropdown={this.state.fontStyles}
             onChange={(value) => {
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  figmaFontObj: {
-                    ...token.$value.figmaFontObj,
-                    style: value,
-                  },
-                }
-              });
+              updateStyle(this, value, token, this.state.updateAll);
             }} />
-          <Input
+          {/*<Input
             label="Size"
             className="typography-detail-font-size"
             value={`${token.$value.fontSize}`}
@@ -127,6 +119,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               value: string,
               increment: number,
             ) => {
+              // UPDATE
               const finalValue = parseInt(value) + increment;
               this.props.updateToken({
                 ...token,
@@ -137,6 +130,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               }); 
             }}
             onEnterOrBlur={(value) => {
+              // UPDATE
               this.props.updateToken({
                 ...token,
                 $value: {
@@ -144,7 +138,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
                   fontSize: parseInt(value),
                 }
               });
-            }} />
+            }} /> */}
         </div>
         <div className="typography-detail-row">
           <Input
@@ -157,28 +151,16 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               increment: number,
             ) => {
               const finalValue = parseInt(value) + increment;
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  letterSpacing: {
-                    ...token.$value.letterSpacing,
-                    value: finalValue,
-                  }
-                }
-              }); 
+              updateLetterSpacing(
+                this, finalValue,
+                token, this.state.updateAll
+              );
             }}
             onEnterOrBlur={(value) => {
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  letterSpacing: {
-                    ...token.$value.letterSpacing,
-                    value: parseInt(value),
-                  },
-                }
-              });
+              updateLetterSpacing(
+                this, parseInt(value),
+                token, this.state.updateAll
+              );
             }} />
           <Select
             label="Unit"
@@ -189,16 +171,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               {value:'PIXELS', name: 'px'},
             ]}
             onChange={(value) => {
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  letterSpacing: {
-                    ...token.$value.letterSpacing,
-                    unit: value as any,
-                  },
-                }
-              });
+              updateLetterSpacingUnit(this, value, token, this.state.updateAll);
             }} />
           <Input
             label="Line Height"
@@ -219,45 +192,30 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               }else{
                 finalValue = parseFloat(value) + increment;
               }
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  lineHeight: {
-                    unit: token.$value.lineHeight.unit === 'AUTO' ? 
-                      'PIXELS' : token.$value.lineHeight.unit,
-                    value: Math.max(0, finalValue),
-                  }
-                }
-              }); 
+              const lineHeightUnit = token.$value.lineHeight.unit === 'AUTO' ? 
+                'PIXELS' : token.$value.lineHeight.unit;
+              updateLineHeight(
+                this, finalValue, lineHeightUnit,
+                token, this.state.updateAll
+              );
             }}
             onEnterOrBlur={(value) => {
+              // UPDATE
               if (!value) {
-                this.props.updateToken({
-                  ...token,
-                  $value: {
-                    ...token.$value,
-                    lineHeight: {
-                      unit: 'AUTO',
-                    },
-                  }
-                });
+                updateLineHeight(
+                  this, undefined, 'AUTO',
+                  token, this.state.updateAll
+                );
                 return;
               }
               let lineHeightUnit = token.$value.lineHeight.unit;
               if (token.$value.lineHeight.unit === 'AUTO') {
                 lineHeightUnit = 'PIXELS';
               }
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  lineHeight: {
-                    unit: lineHeightUnit,
-                    value: parseInt(value),
-                  },
-                }
-              });
+              updateLineHeight(
+                this, parseInt(value), lineHeightUnit,
+                token, this.state.updateAll
+              );
             }} />
           <Select
             label="Unit"
@@ -269,6 +227,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               {value:'AUTO', name: 'auto'},
             ]}
             onChange={(value) => {
+              // UPDATE
               if (value === 'AUTO') {
                 this.props.updateToken({
                   ...token,
@@ -305,13 +264,7 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               {value:'TITLE', name: 'Title Case'},
             ]}
             onChange={(value) => {
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  textCase: value as any
-                }
-              });
+              updateTextCase(this, value, token, this.state.updateAll);
             }} />
           <Select
             label="Text Decoration"
@@ -323,12 +276,17 @@ export default class TypographyDetail extends React.Component<TypographyDetailPr
               {value:'STRIKETHROUGH', name: 'Strikethrough'},
             ]}
             onChange={(value) => {
-              this.props.updateToken({
-                ...token,
-                $value: {
-                  ...token.$value,
-                  textDecoration: value as any
-                }
+              updateTextDecoration(this, value, token, this.state.updateAll);
+            }} />
+        </div>
+        <div className="color-detail-row">
+          <Checkbox
+            className="lockHueCheckbox" 
+            label="Update All Set Tokens"
+            value={this.state.updateAll}
+            onChange={(value: boolean) => {
+              this.setState({
+                updateAll: value,
               });
             }} />
         </div>

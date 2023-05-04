@@ -6,6 +6,7 @@ import Select from "../../../../../../components/Select";
 import { FREE_ICONS } from "../../../../utils/addFontAwesomeKit";
 import { findAuthKey, findKits, FontAwesomeKit } from "../findFontAwesomeKit";
 import "./fontAwesomeKitModal.css";
+import * as mixpanel from '../../../../../../utils/mixpanel';
 
 interface FontAwesomeKitModalProps {
   onClose: () => void,
@@ -158,6 +159,7 @@ export default class FontAwesomeKitModal
                     );
                     this.setState({loading: false});
                     this.props.onClose();
+                    mixpanel.track(`fontAwesomeApiKit`);
                   })();
                 }} />
               </>) : null}
@@ -181,6 +183,7 @@ export default class FontAwesomeKitModal
                 await this.props.updateFontAwesomeKit(FREE_ICONS);
                 this.setState({loading: false});
                 this.props.onClose();
+                mixpanel.track(`fontAwesomeFreeKit`);
               })();
             }} />
 

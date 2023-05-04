@@ -1,27 +1,7 @@
 
 .deployment {
-  padding: 30px 30px;
-  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-
-  .deployment-nav {
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
-    padding: 20px;
-    z-index: 100;
-  }
-
-  .deployment-error {
-    font-size: 13px;
-    color: var( --text-color-error );
-    margin-bottom: 20px;
-  }
-
-  .deployment-feedback {
-    font-size: 13px;
-    text-align: center;
-    color: var( --text-color );
-    margin-bottom: 20px;
-  }

@@ -15,6 +15,7 @@ import { addCustomToken } from "../../utils/addCustomToken";
 import updateCustomToken from "../../utils/updateCustomToken";
 import { changeCustomOrder } from "../../utils/changeCustomOrder";
 import deleteCustomToken from "../../utils/deleteCustomToken";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class CustomList extends React.Component<CoreProps> {
 
@@ -23,6 +24,9 @@ export default class CustomList extends React.Component<CoreProps> {
     this.state = {
       isDeleting: false,
     };
+    mixpanel.track(`list-${props.tokenGroup?.type}`,
+      {name: props.tokenGroup?.name}
+    );
   }
 
   state : {
@@ -46,11 +50,13 @@ export default class CustomList extends React.Component<CoreProps> {
               this.props.tokenGroup,
               this.props.updateTokenGroup,
             );
+            mixpanel.track(`add-${this.props.tokenGroup?.type}`);
           }}
           onDelete={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+            mixpanel.track(`delete-${this.props.tokenGroup?.type}`);
           }}
           onDeleteClose={() => {
             this.setState({
@@ -69,6 +75,7 @@ export default class CustomList extends React.Component<CoreProps> {
                 this.props.tokenGroup,
                 this.props.updateTokenGroup,
               );
+              mixpanel.track(`reorder-${this.props.tokenGroup?.type}`);
             }}
             rowList={tokens}
             rowGenerator={(

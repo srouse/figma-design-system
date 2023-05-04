@@ -9,6 +9,7 @@ import { DSysCustomTokenset } from "../../../../../shared/types/designSystemType
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class CustomFirstRun extends React.Component<CoreProps> {
 
@@ -73,6 +74,12 @@ export default class CustomFirstRun extends React.Component<CoreProps> {
             };
             this.props.updateTokenGroup(finalTokenGroup);
             this.props.refreshTokens();
+
+            mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+              {
+                name: this.state.name
+              }
+            );
           }}></DTButton>
       </div>
     );

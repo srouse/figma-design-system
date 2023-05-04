@@ -11,6 +11,7 @@ import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
 import uid from "../../../../utils/uid";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class BreakpointFirstRun extends React.Component<CoreProps> {
 
@@ -21,6 +22,7 @@ export default class BreakpointFirstRun extends React.Component<CoreProps> {
       baseName: '',
     }
     this.validator = new Validator();
+    mixpanel.track(`firstRun-${this.props.tokenGroup?.type}`);
   }
 
   validator: Validator;
@@ -127,6 +129,12 @@ export default class BreakpointFirstRun extends React.Component<CoreProps> {
             };
             this.props.updateTokenGroup(finalTokenGroup);
             this.props.refreshTokens();
+
+            mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+              {
+                name: this.state.name
+              }
+            );
           }}></DTButton>
       </div>
     );

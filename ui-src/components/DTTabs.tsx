@@ -6,7 +6,8 @@ interface DTTabsProps {
   value: string,
   onValueChange?: (value: string) => void,
   className?: string,
-  style?: object
+  style?: object,
+  design?: 'regular' | 'small' | undefined
 }
 
 export default class DTTabs extends React.Component<DTTabsProps> {
@@ -26,7 +27,8 @@ export default class DTTabs extends React.Component<DTTabsProps> {
       <div
         className={`
           ${this.props.className || ''}
-          dttabs`}
+          dttabs
+          design-${this.props.design}`}
         style={this.props.style || {}}>
         {this.props.tabs.map(tab => {
           return (

@@ -5,6 +5,7 @@ import {
 import "./SatelliteHeaderUI.css";
 import tokenGroupTypeToName from '../../shared/tokenGroupTypeToName';
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
+import HelpLink from "./HelpLink";
 
 export default class SatelliteHeaderUI extends React.Component<CoreProps> {
 
@@ -31,6 +32,12 @@ export default class SatelliteHeaderUI extends React.Component<CoreProps> {
             {title}
           </div>
         </div>
+        <HelpLink
+          style={{marginRight: '10px'}}
+          content="view docs"
+          invert={true}
+          link="https://figmadesignsystem.app/">
+        </HelpLink>
      </div>
     );
   }

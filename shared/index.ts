@@ -30,6 +30,7 @@ import colorContrastAda,
 { 
   AdaColorContrastResult,
 } from './utils/adaCompliance';
+import version from './version';
 import isToken from './utils/isToken';
 import findTokenGroup from './utils/findTokenGroup';
 import findTokensSheet from './utils/findTokensSheet';
@@ -299,4 +300,6 @@ export {
 
   designTokenTypes,
   designSystemTypes,
+
+  version,
 };

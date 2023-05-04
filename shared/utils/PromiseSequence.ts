@@ -1,5 +1,3 @@
-
-
 /**
  * PromiseSequence
  * Runs a collection of promises in sequence...

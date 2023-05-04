@@ -14,7 +14,7 @@ import {
 import getVersion from "./actions/getVersion";
 import semvar from "./semver";
 
-export const TOTAL_FILES_TO_DEPLOY = 28;
+export const TOTAL_FILES_TO_DEPLOY = 30;
 
 export default async function deployToRepo(
   gitHubSettings: GitHubSettings,
@@ -77,7 +77,7 @@ export default async function deployToRepo(
   }
 
   // TRANSFORM
-  console.log('fileCreationResults', fileCreationResults);
+  // cons ole.log('fileCreationResults', fileCreationResults);
 
   // RELEASE
   updateFeedback('creating release');
@@ -89,7 +89,7 @@ export default async function deployToRepo(
     }
   }
 
-  console.log('versionResults', versionResults);
+  // cons ole.log('versionResults', versionResults);
 
   return {
     status:ResponseStatus.RepoValid,

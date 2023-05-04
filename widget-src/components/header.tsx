@@ -9,6 +9,7 @@ import { findBaseWidget, findNodeParentPage } from "../utils";
 import { colors, sizing, typography } from "../../shared/styles";
 import { DSysGroupType } from "../../shared/types/designSystemTypes";
 import getIcon, { Icons } from "../../shared/icons";
+import uuid from "../utils/uuid";
 
 const { widget } = figma;
 const {
@@ -32,7 +33,7 @@ export default function header(
     defaultTokenGroup
   );
 
-  const [globalData, ] = useSyncedState(
+  const [globalData, setGlobalData] = useSyncedState(
     'globalData',
     defaultGlobalData
   );
@@ -193,6 +194,15 @@ export default function header(
                 if (openEditorCallback) {
                   openEditorCallback();
                 }
+                // uuid was added 2023-03-30, 
+                // so need to catch earlier un-uuid'ed widgets
+                if (!globalData.uuid) {
+                  setGlobalData({
+                    ...globalData,
+                    uuid: uuid()
+                  });
+                }
+                // OPEN EDITOR
                 return openEditor();
               }}>
               <SVG

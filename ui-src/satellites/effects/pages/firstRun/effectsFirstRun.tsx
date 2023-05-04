@@ -9,7 +9,7 @@ import {
 import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
-// import "./EffectsFirstRun.css";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class EffectsFirstRun extends React.Component<CoreProps> {
 
@@ -20,6 +20,7 @@ export default class EffectsFirstRun extends React.Component<CoreProps> {
       baseName: '',
     }
     this.validator = new Validator();
+    mixpanel.track(`firstRun-${props.tokenGroup?.type}`);
   }
 
   validator: Validator;
@@ -74,6 +75,12 @@ export default class EffectsFirstRun extends React.Component<CoreProps> {
             };
             this.props.updateTokenGroup(finalTokenGroup);
             this.props.refreshTokens();
+
+            mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+              {
+                name: this.state.name
+              }
+            );
           }}></DTButton>
       </div>
     );

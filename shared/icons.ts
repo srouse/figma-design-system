@@ -3,9 +3,11 @@ import { colors } from './styles';
 export enum Icons {
   add = 'add',
   close = 'close',
+  copy = 'copy',
   plus = 'plus',
   drag = 'drag',
   config = 'config',
+  help = 'help',
   delete = 'delete',
   deleteCancel = 'deleteCancel',
   edit = 'edit',
@@ -40,6 +42,18 @@ export default function getIcon(
   color = colors.greyDark,
 ): string {
   switch (icon ) {
+    case Icons.help :
+      return `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+        <path fill="${color}" d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336c-13.3 0-24 10.7-24 24s10.7 24 24 24h80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-8V248c0-13.3-10.7-24-24-24H216c-13.3 0-24 10.7-24 24s10.7 24 24 24h24v64H216zm40-144a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/>
+      </svg>`;
+    case Icons.copy :
+      return `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+          <path fill="${color}" d="M448 368H288c-26.5 0-48-21.5-48-48V64c0-26.5 21.5-48 48-48H396.1c8.5 0 16.6 3.4 22.6 9.4l67.9 67.9c6 6 9.4 14.1 9.4 22.6V320c0 26.5-21.5 48-48 48zM288 384H448c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L430.1 14.1c-9-9-21.2-14.1-33.9-14.1H288c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H224c35.3 0 64-28.7 64-64V416H272v32c0 26.5-21.5 48-48 48H64c-26.5 0-48-21.5-48-48V192c0-26.5 21.5-48 48-48H192V128H64z"/>
+        </svg>`;
     case Icons.close :
       return `
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 320 512">

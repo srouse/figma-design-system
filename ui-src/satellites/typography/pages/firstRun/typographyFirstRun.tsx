@@ -18,6 +18,7 @@ import {
   TypographyStepTypes
 } from "../utils/typographyStepping";
 import "./TypographyFirstRun.css";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 interface TypographyProps extends CoreProps {
   fonts: FontWithStyles[]
@@ -38,6 +39,7 @@ export default class FirstRun extends React.Component<TypographyProps> {
       fontStyles: undefined,
     }
     this.validator = new Validator();
+    mixpanel.track(`firstRun-${props.tokenGroup?.type}`);
   }
 
   componentDidUpdate(prevProps: Readonly<TypographyProps>): void {
@@ -280,6 +282,16 @@ export default class FirstRun extends React.Component<TypographyProps> {
                   this.props.updateTokenGroup,
                 );
                 this.props.refreshTokens();
+
+                mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+                  {
+                    name: this.state.name,
+                    baseFontFamily: this.state.baseFontFamily,
+                    baseFontStyle: this.state.baseFontStyle,
+                    baseSize: this.state.baseSize,
+                    typographyStepsType: this.state.typographyStepsType,
+                  }
+                );
               })()
             }
           }}></DTButton>

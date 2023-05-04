@@ -14,6 +14,7 @@ import { changeColor } from "../../utils/colorActions";
 import ColorHueThumb from "./colorHueThumb/colorHueThumb";
 import Input from "../../../../components/Input";
 import Checkbox from "../../../../components/Checkbox";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 interface ColorDetailProps {
   token?: DSysColorToken,
@@ -45,7 +46,11 @@ export default class ColorDetail extends React.Component<ColorDetailProps> {
         h:index, s:100,v:100
       }).toHex()} ${((index/360)*100).toFixed(4)}%`);
     });
-    this.hueGrad = hueGradArr.join(', ')
+    this.hueGrad = hueGradArr.join(', ');
+
+    mixpanel.track(`details-${props.tokenGroup?.type}`,
+      {colorValue, name: color?.$extensions["dsys.name"]}
+    );
   }
 
   hueGrad: string;

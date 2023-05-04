@@ -96,7 +96,6 @@ function Widget() {
                   globalData: message.globalData,
                 });
                 triggerAllWidgetRefresh();
-                // setGlobalData()
                 break;
               case MessageRequest.getStyles:
                 getStyles(message);

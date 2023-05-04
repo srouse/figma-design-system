@@ -9,6 +9,7 @@ import Input from "../../../../components/Input";
 import InputHeader from "../../../../components/InputHeader";
 import postMessagePromise from "../../../../utils/postMessagePromise";
 import FontAwesomeKitButton from "../addNewIcon/fontAwesome/kits/fontAwesomeKitButton";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class IconsFirstRun extends React.Component<CoreProps> {
 
@@ -19,6 +20,7 @@ export default class IconsFirstRun extends React.Component<CoreProps> {
       fontAwesomeApiKey: '',
     }
     this.validator = new Validator();
+    mixpanel.track(`firstRun-${props.tokenGroup?.type}`);
   }
 
   validator: Validator;
@@ -73,6 +75,11 @@ export default class IconsFirstRun extends React.Component<CoreProps> {
               );
               await postMessagePromise(
                 MessageRequest.refreshIconTokens, {}
+              );
+              mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+                {
+                  name: this.state.name
+                }
               );
               return;
             }

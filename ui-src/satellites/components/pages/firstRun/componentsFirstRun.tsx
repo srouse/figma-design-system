@@ -12,6 +12,7 @@ import DTButton, { DTButtonColor } from "../../../../components/DTButton";
 import InputHeader from "../../../../components/InputHeader";
 import Select from "../../../../components/Select";
 import postMessagePromise from "../../../../utils/postMessagePromise";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class ComponentsFirstRun extends React.Component<CoreProps> {
 
@@ -21,6 +22,7 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
       components: []
     }
     this.getComponentList();
+    mixpanel.track(`firstRun-${props.tokenGroup?.type}`);
   }
 
   async getComponentList() {
@@ -98,6 +100,12 @@ export default class ComponentsFirstRun extends React.Component<CoreProps> {
               $type: DTTokenType.component,
               $value: this.state.selectedComponentObj.value,
             };
+
+            mixpanel.track(`createSet-${this.props.tokenGroup?.type}`,
+              {
+                name: this.state.selectedComponentObj.name
+              }
+            );
 
             const finalTokenGroup = {
               ...this.props.tokenGroup,

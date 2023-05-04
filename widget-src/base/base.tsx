@@ -119,7 +119,7 @@ export default function base() {
                 padding={{horizontal: 20, vertical: 9}}
                 hoverStyle={{
                   fill: isWindowUIOpen ? 
-                    colors.hoverBgColorDark : colors.hoverBgColorLight,
+                  colors.hoverBgColorDark : colors.hoverBgColorLight,
                 }}
                 onClick={() => {
                   createNewTokenset(nodeId)
@@ -288,19 +288,13 @@ function renderCategory(
             left: 34, right: 0,
             top: 4, bottom: 4,
           }}
-          cornerRadius={4}
-          onClick={() => {
-            createNewTokenset(nodeId);
-          }}>
+          cornerRadius={4}>
           <Text
             fontFamily={typography.primaryFont}
-            fontSize={14}
+            fontSize={12}
             width="fill-parent"
-            fill={colors.primaryLight}
-            hoverStyle={{
-              fill: colors.primary,
-            }}>
-            add tokenset 
+            fill={colors.greyLighter}>
+            no tokensets found
           </Text>
         </AutoLayout>
       ) : null}

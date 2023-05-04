@@ -10,6 +10,7 @@ import postMessagePromise from "../../../../utils/postMessagePromise";
 import getComponentToken from "../../utils/getComponentToken";
 import updateComponent from "../../utils/updateComponent";
 import "./componentList.css";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export default class ComponentList extends React.Component<CoreProps> {
 
@@ -19,6 +20,8 @@ export default class ComponentList extends React.Component<CoreProps> {
       components: []
     }
     this.getComponentList();
+    mixpanel.track(`list-${props.tokenGroup?.type}`
+    );
   }
 
   state: {
@@ -58,7 +61,12 @@ export default class ComponentList extends React.Component<CoreProps> {
             this.setState({
               selectedComponentId: value,
               selectedComponentObj: valueObj,
-            })
+            });
+            mixpanel.track(`update-${this.props.tokenGroup?.type}`,
+              {
+                name: valueObj?.name
+              }
+            );
             updateComponent(
               this.props.tokenGroup,
               valueObj,

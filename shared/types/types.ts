@@ -18,12 +18,12 @@ export type DesignTokensResult = {
 
 export type CssVarsLookup = {[key:string]: {
   category: DSysSheetGroupNames,
-  value: string,
+  value: string | number,
 }}
 
 export type ScssVarsLookup = {[key in DSysSheetGroupNames]?: {
   name: string,
-  value: string,
+  value: string | number,
 }[]}
 
 export type CssAtomsLookup = {[key:string]: {
@@ -66,6 +66,7 @@ export enum MessageRequest {
   changeStylesFolder = 'changeStylesFolder',
   updateTokenGroup = 'updateTokenGroup',
   getAvailableFonts = 'getAvailableFonts',
+  setUUID = 'setUUID',
 
   // icons
   createIconFromSVG = 'createIconFromSVG',
@@ -139,7 +140,10 @@ export type CoreProps = {
 export interface GlobalData {
   prefix: string,
   fullName: string,
-  gitHubSettings: GitHubSettings
+  uuid: string,
+  gitHubSettings: GitHubSettings,
+  lastUpdate?: string,
+  versionAlerted?: string,
 }
 
 export type GitHubSettings = {
@@ -189,6 +193,7 @@ export const defaultTokenGroup : TokenGroup = {
 export const defaultGlobalData: GlobalData = {
   prefix: '',
   fullName: '',
+  uuid: '',
   gitHubSettings: {
     version: '0.0.0',
     connected: false,
@@ -332,3 +337,13 @@ export interface TokenSetCategory {
   tokensets: TokenSet[]
 }
 // =========END V1======================
+
+
+export enum FileTypes {
+  Tokens = 'tokens',
+  CssVars = 'cssVars',
+  CssFonts = 'cssFonts',
+  CssAtoms = 'cssAtoms',
+  CssCluster = 'cssCluster',
+  JavaScript = 'javaScript'
+}

@@ -11,6 +11,7 @@ import postMessagePromise from "../../../../utils/postMessagePromise";
 import IconsDetail from "../../details/iconsDetail";
 import AddNewIcon from "../addNewIcon/addNewIcon";
 import "./iconsList.css";
+import * as mixpanel from '../../../../utils/mixpanel';
 
 export const MAX_ICONS = 63;
 
@@ -25,6 +26,7 @@ export default class IconsList extends React.Component<CoreProps> {
       svgExample: '',
       detailModalOpen: false,
     }
+    mixpanel.track(`list-${props.tokenGroup?.type}`);
   }
 
   state: {
@@ -71,11 +73,13 @@ export default class IconsList extends React.Component<CoreProps> {
             this.setState({
               newIconModalOpen: true,
             });
+            mixpanel.track(`add-${this.props.tokenGroup?.type}`);
           }}
           onDelete={() => {
             this.setState({
               isDeleting: !this.state.isDeleting
             });
+            mixpanel.track(`delete-${this.props.tokenGroup?.type}`);
           }}
           onDeleteClose={() => {
             this.setState({

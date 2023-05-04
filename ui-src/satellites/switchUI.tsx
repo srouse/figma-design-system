@@ -23,6 +23,7 @@ import CustomUI from "./custom/customUI";
 import CustomSettings from "./custom/pages/settings/customSettings";
 import BreakpointSettings from "./breakpoints/pages/settings/breakpointSettings";
 import ComponentsSettings from "./components/pages/settings/componentsSettings";
+import * as mixpanel from '../utils/mixpanel';
 
 export default class SwitchUI extends React.Component<CoreProps> {
 
@@ -31,6 +32,8 @@ export default class SwitchUI extends React.Component<CoreProps> {
     this.state = {
       page: 'tokens',
     };
+
+    mixpanel.identify(props.globalData?.uuid);
   }
 
   state: {page: string};
@@ -45,14 +48,17 @@ export default class SwitchUI extends React.Component<CoreProps> {
           this.props.tokenGroup?.name || 
           this.props.tokenGroup?.type == DSysGroupType.Base
         ) ? (
-          <DTTabs 
+          <DTTabs
             tabs={[
               {name: 'Tokens', value: 'tokens'},
-              {name: 'Deploy', value: 'deployment'},
+              {name: 'Code', value: 'deployment'},
               {name: 'Settings', value: 'settings'},
             ]}
             value={this.state.page}
-            onValueChange={(value: string) => this.setState({page:value})} />
+            onValueChange={(value: string) => {
+              mixpanel.track(`modal-tab-change-${value}`);
+              this.setState({page:value});
+            }} />
         ) : '' }
         {this.renderTokenContent()}
         <Deployment
@@ -68,6 +74,7 @@ export default class SwitchUI extends React.Component<CoreProps> {
 
   renderSettings() {
     let localSettings = undefined;
+    mixpanel.track(`edit-${this.props.tokenGroup?.type}`);
     switch (this.props.tokenGroup?.type) {
       case DSysGroupType.Base :
         localSettings = undefined;

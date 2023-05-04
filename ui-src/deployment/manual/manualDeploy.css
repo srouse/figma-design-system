@@ -1,0 +1,52 @@
+
+.manual-deploy {
+  padding: 10px 30px 30px 30px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+  .manual-deploy-code {
+    flex: 1;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+    .manual-deploy-code-container {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow-y: auto;
+      background-color: var( --black );
+    }
+
+    .manual-deploy-code-container::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+     
+    .manual-deploy-code-container::-webkit-scrollbar-track {
+      box-shadow: none;/*inset 0 0 6px rgba(0, 0, 0, 0.3);*/
+    }
+     
+    .manual-deploy-code-container::-webkit-scrollbar-thumb {
+      background-color: var( --border-grey );
+      border-radius: 6px;
+      border: 3px solid black;
+    }
+
+    .manual-deploy-code-container::-webkit-scrollbar-corner {
+      background-color: black;
+    }
+
+
+      .manual-deploy-code-content {
+        color: var( --white );
+        font-size: 11px;
+        font-weight: 400;
+        padding: 10px;
+        margin: 0px;
+      }

@@ -1,6 +1,7 @@
 import { defaultGlobalData } from "../../../shared/index";
 import { colors } from "../../../shared/styles";
 import { triggerAllWidgetRefresh } from "../../actions/baseActions";
+import uuid from "../../utils/uuid";
 
 const { widget } = figma;
 const {
@@ -8,7 +9,6 @@ const {
   Text,
   Input,
   useSyncedState,
-  useEffect,
 } = widget;
 
 export default function baseFirstRun() {
@@ -138,6 +138,7 @@ export default function baseFirstRun() {
             ...globalData,
             fullName: localFullName,
             prefix: localPrefix,
+            // uuid: uuid(), // added 2023-03-30
           });
           triggerAllWidgetRefresh();
         }}>
