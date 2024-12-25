@@ -2,10 +2,9 @@
   "name": "Figma Design System",
   "id": "1219461874726507820",
   "api": "1.0.0",
+  "widgetApi": "1.0.0",
   "editorType": ["figma"],
-  "permissions": [],
   "containsWidget": true,
   "main": "dist/code.js",
-  "ui": "dist/index.html",
-  "widgetApi": "1.0.0"
+  "ui": "dist/index.html"
 }

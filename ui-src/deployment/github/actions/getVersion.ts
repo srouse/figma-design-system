@@ -42,7 +42,7 @@ export default async function getVersion(
   let jsonError = false;
   let packageJson : PackageJson | undefined;
   try {
-    packageJson = JSON.parse(atob(results.data.content));
+    packageJson = JSON.parse(atob((results as any).data.content));
   }catch(error) {
     jsonError = true;
     console.error('getVersion error', error);

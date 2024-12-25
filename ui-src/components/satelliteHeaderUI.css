@@ -23,10 +23,19 @@
     padding-left: 14px;
     margin-left: 14px;
     border-left: 1px solid rgba(255,255,255, 0.25);
+    position: relative;
+    height: 21px;
   }
 
     .satellite-header .groupSummary .name {
-      font-size: 18px;
+      font-size: 16px;
+      overflow: hidden;
+      white-space: nowrap;
+      align-items: center;
+      text-overflow: ellipsis;
+      position: absolute;
+      left: 14px; right: 10px;
+      top: 0; bottom: 0;
     }
 
     .satellite-header .groupSummary .type {

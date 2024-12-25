@@ -35,8 +35,10 @@ export default async function connectToRepoClick(
         feedback: undefined,
         error: `Error. This appears to be a pre-existing
         repository or one not for use with the Design Tokens
-        widget. Choose an empty repository or check the 
-        ${FDST_CONFIG_FILENAME} file {builtWith:'${FDST_IDENTIFIER}'}`
+        widget. The widget will create and configure your Github repo
+        for you, so enter a name of a repository that does NOT exist or
+        check that your configuration file has not been changed:
+        ${FDST_CONFIG_FILENAME} {builtWith:'${FDST_IDENTIFIER}'}`
       });
       break;
     case ResponseStatus.ReleaseFailed :

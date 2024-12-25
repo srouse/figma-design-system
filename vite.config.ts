@@ -11,8 +11,9 @@ export default defineConfig({
     assetsInlineLimit: 100000000,
     chunkSizeWarningLimit: 100000000,
     cssCodeSplit: false,
-    brotliSize: false,
+    // brotliSize: false,
     outDir: "../dist",
+    // modulePreload: false,
     rollupOptions: {
       inlineDynamicImports: true,
       output: {

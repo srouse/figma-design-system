@@ -12,6 +12,7 @@
     font-family: var( --primary-ui-font );
     font-size: 12px;
     font-weight: 500;
+    white-space: nowrap;
   }
   .help-link.invert {
     color: var( --white );

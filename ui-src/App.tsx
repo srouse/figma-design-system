@@ -117,6 +117,7 @@ export default class App extends React.Component<{}> {
       .then(response => response.json())
       .catch(error => console.error(error));
 
+    // version alerted acknowledges that the version check has failed once
     const versionAlerted = this.state.globalData?.versionAlerted;
 
     if (versionResult.version !== version ) {

@@ -9,7 +9,7 @@ import IconsUI from "./icons/iconsUI";
 import SpacingUI from "./spacing/spacingUI";
 import "./switchUI.css";
 import TypographyUI from "./typography/typographyUI";
-import SatelliteHeaderUI from "../components/SatelliteHeaderUI";
+import SatelliteHeaderUI from "../components/satelliteHeaderUI";
 import DTTabs from "../components/DTTabs";
 import Deployment from "../deployment/deployment";
 import Settings from "../settings/settings";

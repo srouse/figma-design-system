@@ -22,7 +22,7 @@ import {
   deleteEffectToken,
   updateEffect
 } from "../effectActions";
-import EffectsDetail from "../effectsDetail/EffectsDetail";
+import EffectsDetail from "../EffectsDetail/EffectsDetail";
 import DetailModal from "../../../../components/DetailModal/DetailModal";
 import "./effectsRow.css";
 import "./effectsList.css";
